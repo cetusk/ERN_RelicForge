@@ -1,0 +1,5020 @@
+{
+  "info": "Item ID mappings extracted from items.ts",
+  "items": {
+    "11": {
+      "key": "sovereignSigil",
+      "color": null,
+      "type": "Misc"
+    },
+    "20": {
+      "key": "scenicFlatstone",
+      "color": null,
+      "type": "Misc"
+    },
+    "30": {
+      "key": "largeScenicFlatstone",
+      "color": null,
+      "type": "Misc"
+    },
+    "100": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "101": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "102": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "103": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "104": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "105": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "106": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "107": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "108": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "109": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "110": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "111": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "112": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "113": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "114": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "115": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "116": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "117": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "118": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "119": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "120": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "121": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "122": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "123": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "124": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "125": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "126": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "127": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "128": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "129": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "130": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "131": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "132": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "133": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "134": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "135": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "200": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "201": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "202": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "203": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "204": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "205": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "206": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "207": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "208": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "209": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "210": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "211": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "212": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "213": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "214": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "215": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "216": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "217": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "218": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "219": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "220": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "221": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "222": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "223": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "224": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "225": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "226": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "227": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "228": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "229": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "230": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "231": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "232": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "233": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "234": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "235": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1010": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1020": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1030": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1040": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1050": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1060": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1070": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1080": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1090": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1100": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1110": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1120": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1130": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1140": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1150": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1160": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1170": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1180": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1190": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1200": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1210": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1220": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1230": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1240": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1250": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1260": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1270": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1300": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1310": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1400": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1410": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1420": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1430": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1440": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1450": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1460": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1470": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1480": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1490": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1500": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1510": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1520": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1600": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1610": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1620": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1630": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1640": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1650": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1660": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1670": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1680": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1690": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1700": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1710": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1720": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1730": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1740": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1750": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1800": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1820": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1830": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1850": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1860": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1870": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1880": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1890": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1900": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1920": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "2000": {
+      "key": "nightOfTheBeast",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "2001": {
+      "key": "darkNightOfTheBeast",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "2010": {
+      "key": "nightOfTheBaron",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "2011": {
+      "key": "darkNightOfTheBaron",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "2020": {
+      "key": "nightOfTheWise",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "2021": {
+      "key": "darkNightOfTheWise",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "2030": {
+      "key": "nightOfTheFathom",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "2031": {
+      "key": "darkNightOfTheFathom",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "2040": {
+      "key": "nightOfTheDemon",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "2041": {
+      "key": "darkNightOfTheDemon",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "2050": {
+      "key": "nightOfTheChampion",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "2051": {
+      "key": "darkNightOfTheChampion",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "2060": {
+      "key": "nightOfTheMiasma",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "2061": {
+      "key": "darkNightOfTheMiasma",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "2070": {
+      "key": "theWillOfTheBalancers",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "2071": {
+      "key": "theWillOfTheBalance",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "2080": {
+      "key": "theNightOfDregs",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "2100": {
+      "key": "nightOfTheLord",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "10000": {
+      "key": "oldPocketwatch",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "10001": {
+      "key": "besmirchedFrame",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "10002": {
+      "key": "fellOmenFetish",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "11000": {
+      "key": "slateWhetstone",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "11001": {
+      "key": "theWyldersEarring",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "11002": {
+      "key": "silverTear",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "11003": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "11004": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "12000": {
+      "key": "thirdVolume",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "12001": {
+      "key": "stoneStake",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "12002": {
+      "key": "witchsBrooch",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "12003": {
+      "key": "crackedWitchsBrooch",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "12004": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "12005": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "12006": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "12007": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "13000": {
+      "key": "fineArrowhead",
+      "color": null,
+      "type": "Misc"
+    },
+    "13001": {
+      "key": "crackedSealingWax",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "13002": {
+      "key": "edgeOfOrder",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "14000": {
+      "key": "goldenDew",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "14001": {
+      "key": "crownMedal",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "14002": {
+      "key": "blessedIronCoin",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "15000": {
+      "key": "tornBraidedCord",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "15002": {
+      "key": "blackClawNecklace",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "16000": {
+      "key": "bladeOfNightFragment",
+      "color": null,
+      "type": "Misc"
+    },
+    "16001": {
+      "key": "smallMakeupBrush",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "16002": {
+      "key": "oldPortrait",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "16961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "16962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "16971": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "16972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "16982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "17000": {
+      "key": "nightShard",
+      "color": null,
+      "type": "Misc"
+    },
+    "17001": {
+      "key": "vestigeOfNight",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "17002": {
+      "key": "boneLikeStone",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "17061": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "17071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "17081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "17160": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "17162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "17171": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "17181": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "17182": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "17261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "17262": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "17271": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "17272": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "17281": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "17282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "17961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "17962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "17971": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "17972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "17981": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "17982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "18000": {
+      "key": "blessedFlowers",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "18001": {
+      "key": "goldenShell",
+      "color": null,
+      "type": "Misc"
+    },
+    "18002": {
+      "key": "goldenSprout",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "18071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "18072": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "18081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "18082": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "18161": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "18162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "18171": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "18172": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "18181": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "18182": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "18261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "18262": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "18271": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "18272": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "18281": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "18282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "18962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "18971": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "18972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "18982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "19000": {
+      "key": "cleansingTear",
+      "color": "Red",
+      "type": "UniqueRelic"
+    },
+    "19001": {
+      "key": "noteMyDearSuccessor",
+      "color": "Yellow",
+      "type": "UniqueRelic"
+    },
+    "19050": {
+      "key": "leatherMonocleCase",
+      "color": "Blue",
+      "type": "UniqueRelic"
+    },
+    "19051": {
+      "key": "glassNecklace",
+      "color": "Green",
+      "type": "UniqueRelic"
+    },
+    "19062": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "19071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "19072": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "19080": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "19081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "19082": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "19160": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19161": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19171": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19172": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19181": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19182": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "19261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "19272": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "19281": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "19282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "19961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "19962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "19972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "19981": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "19982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20003": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20004": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20005": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20006": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20007": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20008": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20009": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20010": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20011": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20012": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20013": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20014": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20015": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20016": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20017": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20018": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20019": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20020": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20021": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20022": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20023": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20024": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20025": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20026": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20027": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20028": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20029": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20030": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20031": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20032": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20033": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20034": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20035": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20060": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20061": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20062": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20072": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20082": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "20162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20172": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "20261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "20961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20971": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20981": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "20982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "21061": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "21062": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "21072": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "21081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "21082": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "21161": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21171": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21172": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21180": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21181": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21182": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "21261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "21262": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "21271": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "21281": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "21282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "21961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "21962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "21971": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "21972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "21981": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "21982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "22062": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "22071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "22072": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "22081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "22082": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "22161": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22171": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22172": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22180": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22181": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22182": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "22262": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "22271": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "22272": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "22281": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "22282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "22961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "22972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "22981": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "23061": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "23062": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "23071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "23072": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "23081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "23082": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "23261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "23262": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "23271": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "23272": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "23281": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "23282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "23961": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "23962": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "23971": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "23972": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "23981": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "23982": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "24061": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "24062": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "24071": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "24081": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "24162": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "24172": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "24181": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "24182": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "24261": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "24262": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "24272": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "24282": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "30000": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30003": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30004": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30005": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30006": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30007": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30008": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "30009": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30010": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30011": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30012": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30013": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30014": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30015": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30016": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30017": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "30018": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30019": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30020": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30021": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30022": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30023": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30024": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30025": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30026": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "30027": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30028": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30029": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30030": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30031": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30032": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30033": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30034": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "30035": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "1000000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1000100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1000200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1000300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1000322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1001100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1001200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1001300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1001322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1002100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1002200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1002300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1002322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1003100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1003200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1003300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1003322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1004100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1004200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1004300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1004322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1005100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1005200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1005300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1005322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1006100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1006200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1006300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1006322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1007100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1007200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1007300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1007322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1008100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1008200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1008300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1008322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009000": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009001": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009002": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009010": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009011": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009012": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009020": {
+      "key": "delicateBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009021": {
+      "key": "polishedBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009022": {
+      "key": "grandBurningScene",
+      "color": "Red",
+      "type": "Relic"
+    },
+    "1009100": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009101": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009102": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009110": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009111": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009112": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009120": {
+      "key": "delicateDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009121": {
+      "key": "polishedDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009122": {
+      "key": "grandDrizzlyScene",
+      "color": "Blue",
+      "type": "Relic"
+    },
+    "1009200": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009201": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009202": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009210": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009211": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009212": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009220": {
+      "key": "delicateLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009221": {
+      "key": "polishedLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009222": {
+      "key": "grandLuminousScene",
+      "color": "Yellow",
+      "type": "Relic"
+    },
+    "1009300": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009301": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009302": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009310": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009311": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009312": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009320": {
+      "key": "delicateTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009321": {
+      "key": "polishedTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "1009322": {
+      "key": "grandTranquilScene",
+      "color": "Green",
+      "type": "Relic"
+    },
+    "2000000": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000010": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000011": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000020": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000021": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2000100": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000101": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000110": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000111": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000120": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000121": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2000200": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000201": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000210": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000211": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000220": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000221": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2000300": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000301": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000310": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000311": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000320": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000321": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2000322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2001001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2001002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2001011": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2001012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2001021": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2001022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2001101": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2001102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2001111": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2001112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2001121": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2001122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2001201": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2001202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2001211": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2001212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2001221": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2001222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2001301": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2001302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2001311": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2001312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2001321": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2001322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2002002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2002012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2002022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2002102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2002112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2002122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2002202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2002212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2002222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2002302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2002312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2002322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003000": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003010": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003011": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003020": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003021": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2003100": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003101": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003110": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003111": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003120": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003121": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2003200": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003201": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003210": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003211": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003220": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003221": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2003300": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003301": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003310": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003311": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003320": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003321": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2003322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010000": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010010": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010011": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010020": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010021": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2010100": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010101": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010110": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010111": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010120": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010121": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2010200": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010201": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010210": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010211": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010220": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010221": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2010300": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010301": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010310": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010311": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010320": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010321": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2010322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2011001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2011002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2011011": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2011012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2011021": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2011022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2011101": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2011102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2011111": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2011112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2011121": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2011122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2011201": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2011202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2011211": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2011212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2011221": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2011222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2011301": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2011302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2011311": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2011312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2011321": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2011322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2012002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2012012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2012022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2012102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2012112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2012122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2012202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2012212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2012222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2012302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2012312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2012322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013000": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013001": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013002": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013010": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013011": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013012": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013020": {
+      "key": "deepDelicateBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013021": {
+      "key": "deepPolishedBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013022": {
+      "key": "deepGrandBurningScene",
+      "color": "Red",
+      "type": "DeepRelic"
+    },
+    "2013100": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013101": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013102": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013110": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013111": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013112": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013120": {
+      "key": "deepDelicateDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013121": {
+      "key": "deepPolishedDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013122": {
+      "key": "deepGrandDrizzlyScene",
+      "color": "Blue",
+      "type": "DeepRelic"
+    },
+    "2013200": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013201": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013202": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013210": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013211": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013212": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013220": {
+      "key": "deepDelicateLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013221": {
+      "key": "deepPolishedLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013222": {
+      "key": "deepGrandLuminousScene",
+      "color": "Yellow",
+      "type": "DeepRelic"
+    },
+    "2013300": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013301": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013302": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013310": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013311": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013312": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013320": {
+      "key": "deepDelicateTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013321": {
+      "key": "deepPolishedTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    },
+    "2013322": {
+      "key": "deepGrandTranquilScene",
+      "color": "Green",
+      "type": "DeepRelic"
+    }
+  }
+}

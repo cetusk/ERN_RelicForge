@@ -1,0 +1,78 @@
+{
+  "file": "sample_save.sl2",
+  "characterName": "Tarnished",
+  "totalRelics": 3,
+  "relics": [
+    {
+      "id": 3229615531,
+      "itemId": 132,
+      "itemKey": "grandTranquilScene",
+      "itemColor": "Green",
+      "itemType": "Relic",
+      "effects": [
+        [
+          {
+            "id": 7034500,
+            "key": "executorUnlockingCursedSwordRestoresHP",
+            "name": "Executor Unlocking Cursed Sword Restores HP"
+          }
+        ]
+      ],
+      "coordinates": [0, 0],
+      "coordinatesByColor": [0, 0],
+      "sortKey": 65350
+    },
+    {
+      "id": 3229615532,
+      "itemId": 226,
+      "itemKey": "polishedHeavenlyScene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+        [
+          {
+            "id": 7031300,
+            "key": "executorGuardCounterDealsMoreDamage",
+            "name": "Executor Guard Counter Deals More Damage"
+          }
+        ],
+        [
+          {
+            "id": 7001401,
+            "key": "nightmaiden2HandingWeaponUpsAttack",
+            "name": "Nightmaiden 2 Handing Weapon Ups Attack"
+          }
+        ]
+      ],
+      "coordinates": [0, 1],
+      "coordinatesByColor": [0, 0],
+      "sortKey": 65340
+    },
+    {
+      "id": 3229615533,
+      "itemId": 2000321,
+      "itemKey": "deepPolishedTranquilScene",
+      "itemColor": "Green",
+      "itemType": "DeepRelic",
+      "effects": [
+        [
+          {
+            "id": 7005600,
+            "key": "duchessAttackingStaggeredEnemiesUpsDamage",
+            "name": "Duchess Attacking Staggered Enemies Ups Damage"
+          }
+        ],
+        [
+          {
+            "id": 6001501,
+            "key": "nightmaidenAirAttackDealsMoreDamage",
+            "name": "Nightmaiden Air Attack Deals More Damage"
+          }
+        ]
+      ],
+      "coordinates": [0, 0],
+      "coordinatesByColor": [0, 0],
+      "sortKey": 65330
+    }
+  ]
+}

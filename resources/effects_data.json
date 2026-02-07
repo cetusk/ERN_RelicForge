@@ -1,0 +1,4473 @@
+{
+  "info": "Effect ID mappings with human-readable names",
+  "effects": {
+    "10000": {
+      "key": "fpRestorationUponSuccessiveAttacks",
+      "name": "Fp Restoration Upon Successive Attacks"
+    },
+    "10001": {
+      "key": "takingAttacksImprovesAttackPower",
+      "name": "Taking Attacks Improves Attack Power"
+    },
+    "10002": {
+      "key": "switchingWeaponsBoostsAttackPower",
+      "name": "Switching Weapons Boosts Attack Power"
+    },
+    "11000": {
+      "key": "wylderAdditionalCharacterSkillUse",
+      "name": "Wylder Additional Character Skill Use"
+    },
+    "11002": {
+      "key": "wylderArtGaugeGreatlyFilledWhenAbilityActivated",
+      "name": "Wylder Art Gauge Greatly Filled When Ability Activated"
+    },
+    "12002": {
+      "key": "guardianSlowlyRestoresNearbyAlliesHP",
+      "name": "Guardian Slowly Restores Nearby Allies Hp"
+    },
+    "16002": {
+      "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+      "name": "Revenant Expend Own Hpto Fully Heal Nearby Allies"
+    },
+    "17002": {
+      "key": "recluseSufferBloodLossAndIncreaseAttackPower",
+      "name": "Recluse Suffer Blood Loss And Increase Attack Power"
+    },
+    "19001": {
+      "key": "scholarAlliesTargetedByCharacterSkillGainBoostedAttack",
+      "name": "Scholar Allies Targeted By Character Skill Gain Boosted Attack"
+    },
+    "100000": {
+      "key": "takingAttacksImprovesAttackPower",
+      "name": "Taking Attacks Improves Attack Power"
+    },
+    "310000": {
+      "key": "increasedMaximumHP",
+      "name": "Increased Maximum Hp"
+    },
+    "310100": {
+      "key": "increasedMaximumFP",
+      "name": "Increased Maximum Fp"
+    },
+    "310200": {
+      "key": "increasedMaximumStamina",
+      "name": "Increased Maximum Stamina"
+    },
+    "310400": {
+      "key": "increasedMaximumHP",
+      "name": "Increased Maximum Hp"
+    },
+    "310401": {
+      "key": "increasedMaximumStamina",
+      "name": "Increased Maximum Stamina"
+    },
+    "311000": {
+      "key": "improvedItemDiscovery",
+      "name": "Improved Item Discovery"
+    },
+    "311100": {
+      "key": "moreRunesFromDefeatedEnemies",
+      "name": "More Runes From Defeated Enemies"
+    },
+    "311500": {
+      "key": "improvedStaminaRecovery",
+      "name": "Improved Stamina Recovery"
+    },
+    "311600": {
+      "key": "improvedBloodLossResistance",
+      "name": "Improved Blood Loss Resistance"
+    },
+    "311601": {
+      "key": "improvedFrostResistance",
+      "name": "Improved Frost Resistance"
+    },
+    "311700": {
+      "key": "improvedPoisonResistance",
+      "name": "Improved Poison Resistance"
+    },
+    "311701": {
+      "key": "improvedRotResistance",
+      "name": "Improved Rot Resistance"
+    },
+    "311800": {
+      "key": "improvedSleepResistance",
+      "name": "Improved Sleep Resistance"
+    },
+    "311801": {
+      "key": "improvedMadnessResistance",
+      "name": "Improved Madness Resistance"
+    },
+    "311900": {
+      "key": "improvedDeathBlightResistance",
+      "name": "Improved Death Blight Resistance"
+    },
+    "312000": {
+      "key": "improvedPoisonRotResistance",
+      "name": "Improved Poison Rot Resistance"
+    },
+    "312001": {
+      "key": "improvedBloodLossAndFrostResistance",
+      "name": "Improved Blood Loss And Frost Resistance"
+    },
+    "312002": {
+      "key": "improvedSleepMadnessResistance",
+      "name": "Improved Sleep Madness Resistance"
+    },
+    "312100": {
+      "key": "improvedPoise",
+      "name": "Improved Poise"
+    },
+    "312300": {
+      "key": "improvedSkillAttackPower",
+      "name": "Improved Skill Attack Power"
+    },
+    "312500": {
+      "key": "improvedDexterity",
+      "name": "Improved Dexterity"
+    },
+    "312501": {
+      "key": "successiveAttacksBoostAttackPower",
+      "name": "Successive Attacks Boost Attack Power"
+    },
+    "320000": {
+      "key": "improvedMagicAttackPower",
+      "name": "Improved Magic Attack Power"
+    },
+    "320001": {
+      "key": "impairedPhysicalDamageNegation",
+      "name": "Impaired Physical Damage Negation"
+    },
+    "320100": {
+      "key": "improvedLightningAttackPower",
+      "name": "Improved Lightning Attack Power"
+    },
+    "320101": {
+      "key": "impairedPhysicalDamageNegation",
+      "name": "Impaired Physical Damage Negation"
+    },
+    "320200": {
+      "key": "improvedFireAttackPower",
+      "name": "Improved Fire Attack Power"
+    },
+    "320201": {
+      "key": "impairedPhysicalDamageNegation",
+      "name": "Impaired Physical Damage Negation"
+    },
+    "320300": {
+      "key": "improvedHolyAttackPower",
+      "name": "Improved Holy Attack Power"
+    },
+    "320301": {
+      "key": "impairedPhysicalDamageNegation",
+      "name": "Impaired Physical Damage Negation"
+    },
+    "320400": {
+      "key": "improvedAttackPowerAtLowHP",
+      "name": "Improved Attack Power At Low Hp"
+    },
+    "320500": {
+      "key": "improvedAttackPowerAtFullHP",
+      "name": "Improved Attack Power At Full Hp"
+    },
+    "320600": {
+      "key": "improvedThrustingCounterattack",
+      "name": "Improved Thrusting Counterattack"
+    },
+    "320700": {
+      "key": "improvedGuardBreaking",
+      "name": "Improved Guard Breaking"
+    },
+    "320800": {
+      "key": "successiveAttacksBoostAttackPower",
+      "name": "Successive Attacks Boost Attack Power"
+    },
+    "320900": {
+      "key": "improvedCriticalHits",
+      "name": "Improved Critical Hits"
+    },
+    "321000": {
+      "key": "projectileDamageDropOffReduced",
+      "name": "Projectile Damage Drop Off Reduced"
+    },
+    "321200": {
+      "key": "improvedChainAttackFinishers",
+      "name": "Improved Chain Attack Finishers"
+    },
+    "321300": {
+      "key": "improvedChargeAttacks",
+      "name": "Improved Charge Attacks"
+    },
+    "321500": {
+      "key": "improvedRangedWeaponAttacks",
+      "name": "Improved Ranged Weapon Attacks"
+    },
+    "321600": {
+      "key": "bloodLossInVicinityIncreasesAttackPower",
+      "name": "Blood Loss In Vicinity Increases Attack Power"
+    },
+    "321700": {
+      "key": "poisonAndRotImprovesAttackPower",
+      "name": "Poison And Rot Improves Attack Power"
+    },
+    "321800": {
+      "key": "improvedJumpAttacks",
+      "name": "Improved Jump Attacks"
+    },
+    "321900": {
+      "key": "improvedRoarAndBreathAttacks",
+      "name": "Improved Roar And Breath Attacks"
+    },
+    "322000": {
+      "key": "improvedGuardCounters",
+      "name": "Improved Guard Counters"
+    },
+    "322100": {
+      "key": "improvedThrowingPots",
+      "name": "Improved Throwing Pots"
+    },
+    "322200": {
+      "key": "improvedPerfumingArts",
+      "name": "Improved Perfuming Arts"
+    },
+    "330000": {
+      "key": "improvedSorceries",
+      "name": "Improved Sorceries"
+    },
+    "330400": {
+      "key": "improvedIncantations",
+      "name": "Improved Incantations"
+    },
+    "330600": {
+      "key": "extendedSpellDuration",
+      "name": "Extended Spell Duration"
+    },
+    "330700": {
+      "key": "improvedSpellCastingSpeed",
+      "name": "Improved Spell Casting Speed"
+    },
+    "330800": {
+      "key": "reducedSpellFpCost",
+      "name": "Reduced Spell Fp Cost"
+    },
+    "330801": {
+      "key": "maximumHpDown",
+      "name": "Maximum Hp Down"
+    },
+    "330900": {
+      "key": "improvedChargedSpellsAndSkills",
+      "name": "Improved Charged Spells And Skills"
+    },
+    "340000": {
+      "key": "improvedPhysicalDamageNegation",
+      "name": "Improved Physical Damage Negation"
+    },
+    "340100": {
+      "key": "improvedMagicDamageNegation",
+      "name": "Improved Magic Damage Negation"
+    },
+    "340200": {
+      "key": "improvedFireDamageNegation",
+      "name": "Improved Fire Damage Negation"
+    },
+    "340300": {
+      "key": "improvedLightningDamageNegation",
+      "name": "Improved Lightning Damage Negation"
+    },
+    "340400": {
+      "key": "improvedHolyDamageNegation",
+      "name": "Improved Holy Damage Negation"
+    },
+    "340500": {
+      "key": "improvedNonPhysicalDamageNegation",
+      "name": "Improved Non Physical Damage Negation"
+    },
+    "340700": {
+      "key": "improvedDodging",
+      "name": "Improved Dodging"
+    },
+    "340701": {
+      "key": "impairedDamageNegation",
+      "name": "Impaired Damage Negation"
+    },
+    "340800": {
+      "key": "improvedDamageNegationAtLowHP",
+      "name": "Improved Damage Negation At Low Hp"
+    },
+    "340900": {
+      "key": "improvedDamageNegationAtFullHP",
+      "name": "Improved Damage Negation At Full Hp"
+    },
+    "341000": {
+      "key": "improvedGuardingAbility",
+      "name": "Improved Guarding Ability"
+    },
+    "350000": {
+      "key": "improvedFlaskHPRestoration",
+      "name": "Improved Flask Hprestoration"
+    },
+    "350200": {
+      "key": "continuousHpRecovery",
+      "name": "Continuous Hp Recovery"
+    },
+    "350300": {
+      "key": "defeatingEnemiesRestoresHP",
+      "name": "Defeating Enemies Restores Hp"
+    },
+    "350400": {
+      "key": "successiveAttackHpRestoration",
+      "name": "Successive Attack Hp Restoration"
+    },
+    "350500": {
+      "key": "criticalHitHPRestoration",
+      "name": "Critical Hit Hprestoration"
+    },
+    "350600": {
+      "key": "criticalHitFPRestoration",
+      "name": "Critical Hit Fprestoration"
+    },
+    "360200": {
+      "key": "reducedSkillFpCost",
+      "name": "Reduced Skill Fp Cost"
+    },
+    "360700": {
+      "key": "noRuneLossOrLevelDownUponDeath",
+      "name": "No Rune Loss Or Level Down Upon Death"
+    },
+    "361100": {
+      "key": "defeatingEnemiesRestoresFP",
+      "name": "Defeating Enemies Restores Fp"
+    },
+    "370000": {
+      "key": "improvedItemDiscovery",
+      "name": "Improved Item Discovery"
+    },
+    "370001": {
+      "key": "moreRunesFromDefeatedEnemies",
+      "name": "More Runes From Defeated Enemies"
+    },
+    "370002": {
+      "key": "continuousHPLoss",
+      "name": "Continuous Hploss"
+    },
+    "6000800": {
+      "key": "characterSkillCooldownReductionPlus4",
+      "name": "Character Skill Cooldown Reduction Plus 4"
+    },
+    "6000801": {
+      "key": "characterSkillCooldownReductionPlus5",
+      "name": "Character Skill Cooldown Reduction Plus 5"
+    },
+    "6000900": {
+      "key": "ultimateArtAutoChargePlus4",
+      "name": "Ultimate Art Auto Charge Plus 4"
+    },
+    "6000901": {
+      "key": "ultimateArtAutoChargePlus5",
+      "name": "Ultimate Art Auto Charge Plus 5"
+    },
+    "6001000": {
+      "key": "poisePlus4",
+      "name": "Poise Plus 4"
+    },
+    "6001001": {
+      "key": "poisePlus5",
+      "name": "Poise Plus 5"
+    },
+    "6001400": {
+      "key": "physicalAttackUpPlus3",
+      "name": "Physical Attack Up Plus 3"
+    },
+    "6001401": {
+      "key": "physicalAttackUpPlus4",
+      "name": "Physical Attack Up Plus 4"
+    },
+    "6001500": {
+      "key": "magicAttackPowerUpPlus3",
+      "name": "Magic Attack Power Up Plus 3"
+    },
+    "6001501": {
+      "key": "magicAttackPowerUpPlus4",
+      "name": "Magic Attack Power Up Plus 4"
+    },
+    "6001600": {
+      "key": "fireAttackPowerUpPlus3",
+      "name": "Fire Attack Power Up Plus 3"
+    },
+    "6001601": {
+      "key": "fireAttackPowerUpPlus4",
+      "name": "Fire Attack Power Up Plus 4"
+    },
+    "6001700": {
+      "key": "lightningAttackPowerUpPlus3",
+      "name": "Lightning Attack Power Up Plus 3"
+    },
+    "6001701": {
+      "key": "lightningAttackPowerUpPlus4",
+      "name": "Lightning Attack Power Up Plus 4"
+    },
+    "6001800": {
+      "key": "holyAttackPowerUpPlus3",
+      "name": "Holy Attack Power Up Plus 3"
+    },
+    "6001801": {
+      "key": "holyAttackPowerUpPlus4",
+      "name": "Holy Attack Power Up Plus 4"
+    },
+    "6002600": {
+      "key": "improvedMagicDamageNegationPlus1",
+      "name": "Improved Magic Damage Negation Plus 1"
+    },
+    "6002601": {
+      "key": "improvedMagicDamageNegationPlus2",
+      "name": "Improved Magic Damage Negation Plus 2"
+    },
+    "6002700": {
+      "key": "improvedFireDamageNegationPlus1",
+      "name": "Improved Fire Damage Negation Plus 1"
+    },
+    "6002701": {
+      "key": "improvedFireDamageNegationPlus2",
+      "name": "Improved Fire Damage Negation Plus 2"
+    },
+    "6002800": {
+      "key": "improvedLightningDamageNegationPlus1",
+      "name": "Improved Lightning Damage Negation Plus 1"
+    },
+    "6002801": {
+      "key": "improvedLightningDamageNegationPlus2",
+      "name": "Improved Lightning Damage Negation Plus 2"
+    },
+    "6002900": {
+      "key": "improvedHolyDamageNegationPlus1",
+      "name": "Improved Holy Damage Negation Plus 1"
+    },
+    "6002901": {
+      "key": "improvedHolyDamageNegationPlus2",
+      "name": "Improved Holy Damage Negation Plus 2"
+    },
+    "6003000": {
+      "key": "improvedPoisonResistancePlus1",
+      "name": "Improved Poison Resistance Plus 1"
+    },
+    "6003001": {
+      "key": "improvedPoisonResistancePlus2",
+      "name": "Improved Poison Resistance Plus 2"
+    },
+    "6003100": {
+      "key": "improvedBloodLossResistancePlus1",
+      "name": "Improved Blood Loss Resistance Plus 1"
+    },
+    "6003101": {
+      "key": "improvedBloodLossResistancePlus2",
+      "name": "Improved Blood Loss Resistance Plus 2"
+    },
+    "6003200": {
+      "key": "improvedSleepResistancePlus1",
+      "name": "Improved Sleep Resistance Plus 1"
+    },
+    "6003201": {
+      "key": "improvedSleepResistancePlus2",
+      "name": "Improved Sleep Resistance Plus 2"
+    },
+    "6003300": {
+      "key": "improvedDeathBlightResistancePlus1",
+      "name": "Improved Death Blight Resistance Plus 1"
+    },
+    "6003301": {
+      "key": "improvedDeathBlightResistancePlus2",
+      "name": "Improved Death Blight Resistance Plus 2"
+    },
+    "6003400": {
+      "key": "improvedRotResistancePlus1",
+      "name": "Improved Rot Resistance Plus 1"
+    },
+    "6003401": {
+      "key": "improvedRotResistancePlus2",
+      "name": "Improved Rot Resistance Plus 2"
+    },
+    "6003500": {
+      "key": "improvedFrostResistancePlus1",
+      "name": "Improved Frost Resistance Plus 1"
+    },
+    "6003501": {
+      "key": "improvedFrostResistancePlus2",
+      "name": "Improved Frost Resistance Plus 2"
+    },
+    "6003600": {
+      "key": "improvedMadnessResistancePlus1",
+      "name": "Improved Madness Resistance Plus 1"
+    },
+    "6003601": {
+      "key": "improvedMadnessResistancePlus2",
+      "name": "Improved Madness Resistance Plus 2"
+    },
+    "6005600": {
+      "key": "partialHPRestorationUponPostDamageAttacksPlus1",
+      "name": "Partial Hprestoration Upon Post Damage Attacks Plus 1"
+    },
+    "6005601": {
+      "key": "partialHPRestorationUponPostDamageAttacksPlus2",
+      "name": "Partial Hprestoration Upon Post Damage Attacks Plus 2"
+    },
+    "6006000": {
+      "key": "improvedStanceBreakingWhenTwoHanding",
+      "name": "Improved Stance Breaking When Two Handing"
+    },
+    "6006001": {
+      "key": "improvedStanceBreakingWhenTwoHanding",
+      "name": "Improved Stance Breaking When Two Handing"
+    },
+    "6006100": {
+      "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
+      "name": "Improved Stance Breaking When Wielding Two Armaments"
+    },
+    "6006101": {
+      "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
+      "name": "Improved Stance Breaking When Wielding Two Armaments"
+    },
+    "6012300": {
+      "key": "improvedDamageNegationAtLowHP",
+      "name": "Improved Damage Negation At Low Hp"
+    },
+    "6012301": {
+      "key": "improvedDamageNegationAtLowHP",
+      "name": "Improved Damage Negation At Low Hp"
+    },
+    "6030200": {
+      "key": "hpRestoredWhenUsingMedicinalBolusesEtcPlus1",
+      "name": "Hp Restored When Using Medicinal Boluses Etc Plus 1"
+    },
+    "6030201": {
+      "key": "hpRestoredWhenUsingMedicinalBolusesEtcPlus2",
+      "name": "Hp Restored When Using Medicinal Boluses Etc Plus 2"
+    },
+    "6030600": {
+      "key": "artGaugeChargedFromSuccessfulGuardingPlus1",
+      "name": "Art Gauge Charged From Successful Guarding Plus 1"
+    },
+    "6030601": {
+      "key": "artGaugeChargedFromSuccessfulGuardingPlus2",
+      "name": "Art Gauge Charged From Successful Guarding Plus 2"
+    },
+    "6030800": {
+      "key": "artGaugeFillsModeratelyUponCriticalHitPlus1",
+      "name": "Art Gauge Fills Moderately Upon Critical Hit Plus 1"
+    },
+    "6030801": {
+      "key": "artGaugeFillsModeratelyUponCriticalHitPlus2",
+      "name": "Art Gauge Fills Moderately Upon Critical Hit Plus 2"
+    },
+    "6030900": {
+      "key": "physicalAttackPowerIncreasesAfterUsingGreaseItemsPlus1",
+      "name": "Physical Attack Power Increases After Using Grease Items Plus 1"
+    },
+    "6030901": {
+      "key": "physicalAttackPowerIncreasesAfterUsingGreaseItemsPlus2",
+      "name": "Physical Attack Power Increases After Using Grease Items Plus 2"
+    },
+    "6031900": {
+      "key": "criticalHitsEarnRunes",
+      "name": "Critical Hits Earn Runes"
+    },
+    "6031901": {
+      "key": "criticalHitsEarnRunes",
+      "name": "Critical Hits Earn Runes"
+    },
+    "6032200": {
+      "key": "takingAttacksImprovesAttackPower",
+      "name": "Taking Attacks Improves Attack Power"
+    },
+    "6032201": {
+      "key": "takingAttacksImprovesAttackPower",
+      "name": "Taking Attacks Improves Attack Power"
+    },
+    "6035100": {
+      "key": "criticalHitBoostsStaminaRecoverySpeedPlus1",
+      "name": "Critical Hit Boosts Stamina Recovery Speed Plus 1"
+    },
+    "6035101": {
+      "key": "criticalHitBoostsStaminaRecoverySpeed",
+      "name": "Critical Hit Boosts Stamina Recovery Speed"
+    },
+    "6040000": {
+      "key": "improvedInitialStandardAttack",
+      "name": "Improved Initial Standard Attack"
+    },
+    "6040001": {
+      "key": "improvedInitialStandardAttack",
+      "name": "Improved Initial Standard Attack"
+    },
+    "6040100": {
+      "key": "improvedGuardCountersPlus1",
+      "name": "Improved Guard Counters Plus 1"
+    },
+    "6040101": {
+      "key": "improvedGuardCountersPlus2",
+      "name": "Improved Guard Counters Plus 2"
+    },
+    "6040300": {
+      "key": "improvedThrowingPotDamagePlus1",
+      "name": "Improved Throwing Pot Damage Plus 1"
+    },
+    "6040301": {
+      "key": "improvedThrowingPotDamagePlus2",
+      "name": "Improved Throwing Pot Damage Plus 2"
+    },
+    "6040400": {
+      "key": "improvedThrowingKnifeDamagePlus1",
+      "name": "Improved Throwing Knife Damage Plus 1"
+    },
+    "6040401": {
+      "key": "improvedThrowingKnifeDamagePlus2",
+      "name": "Improved Throwing Knife Damage Plus 2"
+    },
+    "6040500": {
+      "key": "improvedGlintstoneAndGravityStoneDamagePlus1",
+      "name": "Improved Glintstone And Gravity Stone Damage Plus 1"
+    },
+    "6040501": {
+      "key": "improvedGlintstoneAndGravityStoneDamagePlus2",
+      "name": "Improved Glintstone And Gravity Stone Damage Plus 2"
+    },
+    "6043000": {
+      "key": "improvedRoarAndBreathAttacksPlus1",
+      "name": "Improved Roar And Breath Attacks Plus 1"
+    },
+    "6043001": {
+      "key": "improvedRoarAndBreathAttacksPlus2",
+      "name": "Improved Roar And Breath Attacks Plus 2"
+    },
+    "6043100": {
+      "key": "improvedPerfumingArtsPlus1",
+      "name": "Improved Perfuming Arts Plus 1"
+    },
+    "6043101": {
+      "key": "improvedPerfumingArtsPlus2",
+      "name": "Improved Perfuming Arts Plus 2"
+    },
+    "6060300": {
+      "key": "maxHPIncreasedForEachGreatEnemyDefeatedAtAGreatChurch",
+      "name": "Max Hpincreased For Each Great Enemy Defeated At Agreat Church"
+    },
+    "6060400": {
+      "key": "runesAndItemDiscoveryIncreasedForEachGreatEnemyDefeatedAtAFort",
+      "name": "Runes And Item Discovery Increased For Each Great Enemy Defeated At Afort"
+    },
+    "6060500": {
+      "key": "arcaneIncreasedForEachGreatEnemyDefeatedAtARuin",
+      "name": "Arcane Increased For Each Great Enemy Defeated At Aruin"
+    },
+    "6060600": {
+      "key": "maxStaminaIncreasedForEachGreatEnemyDefeatedAtAGreatEncampment",
+      "name": "Max Stamina Increased For Each Great Enemy Defeated At Agreat Encampment"
+    },
+    "6090000": {
+      "key": "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
+      "name": "Defeating Enemies Fills More Of The Art Gauge Plus 1"
+    },
+    "6090001": {
+      "key": "defeatingEnemiesFillsMoreOfTheArtGaugePlus2",
+      "name": "Defeating Enemies Fills More Of The Art Gauge Plus 2"
+    },
+    "6160000": {
+      "key": "hpRestorationUponThrustingCounterattackPlus1",
+      "name": "Hp Restoration Upon Thrusting Counterattack Plus 1"
+    },
+    "6160001": {
+      "key": "hpRestorationUponThrustingCounterattackPlus2",
+      "name": "Hp Restoration Upon Thrusting Counterattack Plus 2"
+    },
+    "6260000": {
+      "key": "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus1",
+      "name": "Attack Power Up When Facing Poison Afflicted Enemy Plus 1"
+    },
+    "6260001": {
+      "key": "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus2",
+      "name": "Attack Power Up When Facing Poison Afflicted Enemy Plus 2"
+    },
+    "6260300": {
+      "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemyPlus1",
+      "name": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy Plus 1"
+    },
+    "6260301": {
+      "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemyPlus2",
+      "name": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy Plus 2"
+    },
+    "6260400": {
+      "key": "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus1",
+      "name": "Attack Power Up When Facing Frostbite Afflicted Enemy Plus 1"
+    },
+    "6260401": {
+      "key": "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus2",
+      "name": "Attack Power Up When Facing Frostbite Afflicted Enemy Plus 2"
+    },
+    "6500000": {
+      "key": "wylderCharacterSkillInflictsBloodLoss",
+      "name": "Wylder Character Skill Inflicts Blood Loss"
+    },
+    "6500100": {
+      "key": "guardianCharacterSkillBoostsDamageNegationOfNearbyAllies",
+      "name": "Guardian Character Skill Boosts Damage Negation Of Nearby Allies"
+    },
+    "6500200": {
+      "key": "ironeyeCharacterSkillInflictsHeavyPoisonDamageOnPoisonedEnemies",
+      "name": "Ironeye Character Skill Inflicts Heavy Poison Damage On Poisoned Enemies"
+    },
+    "6500300": {
+      "key": "duchessUseCharacterSkillForBriefInvulnerability",
+      "name": "Duchess Use Character Skill For Brief Invulnerability"
+    },
+    "6500400": {
+      "key": "raiderHitWithCharacterSkillToReduceEnemyAttackPower",
+      "name": "Raider Hit With Character Skill To Reduce Enemy Attack Power"
+    },
+    "6500500": {
+      "key": "revenantIncreasedMaxFPUponAbilityActivation",
+      "name": "Revenant Increased Max Fpupon Ability Activation"
+    },
+    "6500600": {
+      "key": "recluseCollectAffinityResiduesToNegateAffinity",
+      "name": "Recluse Collect Affinity Residues To Negate Affinity"
+    },
+    "6500700": {
+      "key": "executorSlowlyRestoreHPUponAbilityActivation",
+      "name": "Executor Slowly Restore Hpupon Ability Activation"
+    },
+    "6500800": {
+      "key": "scholarReducedFpConsumptionWhenUsingCharacterSkillOnSelf",
+      "name": "Scholar Reduced Fp Consumption When Using Character Skill On Self"
+    },
+    "6500900": {
+      "key": "undertakerExecutingArtReadiesCharacterSkill",
+      "name": "Undertaker Executing Art Readies Character Skill"
+    },
+    "6600000": {
+      "key": "sleepInVicinityImprovesAttackPower",
+      "name": "Sleep In Vicinity Improves Attack Power"
+    },
+    "6600001": {
+      "key": "sleepInVicinityImprovesAttackPowerPlus1",
+      "name": "Sleep In Vicinity Improves Attack Power Plus 1"
+    },
+    "6600002": {
+      "key": "sleepInVicinityImprovesAttackPowerPlus2",
+      "name": "Sleep In Vicinity Improves Attack Power Plus 2"
+    },
+    "6600100": {
+      "key": "madnessInVicinityImprovesAttackPower",
+      "name": "Madness In Vicinity Improves Attack Power"
+    },
+    "6600101": {
+      "key": "madnessInVicinityImprovesAttackPowerPlus1",
+      "name": "Madness In Vicinity Improves Attack Power Plus 1"
+    },
+    "6600102": {
+      "key": "madnessInVicinityImprovesAttackPowerPlus2",
+      "name": "Madness In Vicinity Improves Attack Power Plus 2"
+    },
+    "6610400": {
+      "key": "increasedMaximumHP",
+      "name": "Increased Maximum Hp"
+    },
+    "6610500": {
+      "key": "increasedMaximumFP",
+      "name": "Increased Maximum Fp"
+    },
+    "6610600": {
+      "key": "increasedMaximumStamina",
+      "name": "Increased Maximum Stamina"
+    },
+    "6610700": {
+      "key": "reducedFPConsumption",
+      "name": "Reduced Fpconsumption"
+    },
+    "6610701": {
+      "key": "reducedFPConsumptionPlus1",
+      "name": "Reduced Fpconsumption Plus 1"
+    },
+    "6610702": {
+      "key": "reducedFPConsumptionPlus2",
+      "name": "Reduced Fpconsumption Plus 2"
+    },
+    "6610800": {
+      "key": "improvedAffinityAttackPower",
+      "name": "Improved Affinity Attack Power"
+    },
+    "6610801": {
+      "key": "improvedAffinityAttackPowerPlus1",
+      "name": "Improved Affinity Attack Power Plus 1"
+    },
+    "6610802": {
+      "key": "improvedAffinityAttackPowerPlus2",
+      "name": "Improved Affinity Attack Power Plus 2"
+    },
+    "6611000": {
+      "key": "improvedPhysicalDamageNegation",
+      "name": "Improved Physical Damage Negation"
+    },
+    "6611001": {
+      "key": "improvedPhysicalDamageNegationPlus1",
+      "name": "Improved Physical Damage Negation Plus 1"
+    },
+    "6611002": {
+      "key": "improvedPhysicalDamageNegationPlus2",
+      "name": "Improved Physical Damage Negation Plus 2"
+    },
+    "6611100": {
+      "key": "improvedAffinityDamageNegation",
+      "name": "Improved Affinity Damage Negation"
+    },
+    "6611101": {
+      "key": "improvedAffinityDamageNegationPlus1",
+      "name": "Improved Affinity Damage Negation Plus 1"
+    },
+    "6611102": {
+      "key": "improvedAffinityDamageNegationPlus2",
+      "name": "Improved Affinity Damage Negation Plus 2"
+    },
+    "6611200": {
+      "key": "improvedSorceries",
+      "name": "Improved Sorceries"
+    },
+    "6611201": {
+      "key": "improvedSorceriesPlus1",
+      "name": "Improved Sorceries Plus 1"
+    },
+    "6611202": {
+      "key": "improvedSorceriesPlus2",
+      "name": "Improved Sorceries Plus 2"
+    },
+    "6611300": {
+      "key": "improvedIncantations",
+      "name": "Improved Incantations"
+    },
+    "6611301": {
+      "key": "improvedIncantationsPlus1",
+      "name": "Improved Incantations Plus 1"
+    },
+    "6611302": {
+      "key": "improvedIncantationsPlus2",
+      "name": "Improved Incantations Plus 2"
+    },
+    "6611400": {
+      "key": "improvedFlaskHPRestoration",
+      "name": "Improved Flask Hprestoration"
+    },
+    "6621000": {
+      "key": "crimsonspillCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Crimsonspill Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6621100": {
+      "key": "crimsonCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Crimson Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6621200": {
+      "key": "ceruleanCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Cerulean Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6621300": {
+      "key": "speckledHardtearInPossessionAtStartOfExpedition",
+      "name": "Speckled Hardtear In Possession At Start Of Expedition"
+    },
+    "6621400": {
+      "key": "crimsonBubbletearInPossessionAtStartOfExpedition",
+      "name": "Crimson Bubbletear In Possession At Start Of Expedition"
+    },
+    "6621500": {
+      "key": "opalineBubbletearInPossessionAtStartOfExpedition",
+      "name": "Opaline Bubbletear In Possession At Start Of Expedition"
+    },
+    "6621600": {
+      "key": "crimsonburstCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Crimsonburst Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6621700": {
+      "key": "greenburstCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Greenburst Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6621800": {
+      "key": "opalineHardtearInPossessionAtStartOfExpedition",
+      "name": "Opaline Hardtear In Possession At Start Of Expedition"
+    },
+    "6621900": {
+      "key": "thornyCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Thorny Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6622000": {
+      "key": "spikedCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Spiked Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6622100": {
+      "key": "windyCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Windy Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6622200": {
+      "key": "rupturedCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Ruptured Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6622300": {
+      "key": "leadenHardtearInPossessionAtStartOfExpedition",
+      "name": "Leaden Hardtear In Possession At Start Of Expedition"
+    },
+    "6622400": {
+      "key": "twiggyCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Twiggy Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6622500": {
+      "key": "crimsonwhorlBubbletearInPossessionAtStartOfExpedition",
+      "name": "Crimsonwhorl Bubbletear In Possession At Start Of Expedition"
+    },
+    "6622600": {
+      "key": "ceruleanHiddenTearInPossessionAtStartOfExpedition",
+      "name": "Cerulean Hidden Tear In Possession At Start Of Expedition"
+    },
+    "6622700": {
+      "key": "stonebarbCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Stonebarb Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6622800": {
+      "key": "flameShroudingCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Flame Shrouding Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6622900": {
+      "key": "magicShroudingCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Magic Shrouding Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6623000": {
+      "key": "lightningShroudingCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Lightning Shrouding Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6623100": {
+      "key": "holyShroudingCrackedTearInPossessionAtStartOfExpedition",
+      "name": "Holy Shrouding Cracked Tear In Possession At Start Of Expedition"
+    },
+    "6623200": {
+      "key": "greenspillCrystalTearInPossessionAtStartOfExpedition",
+      "name": "Greenspill Crystal Tear In Possession At Start Of Expedition"
+    },
+    "6624000": {
+      "key": "upliftingAromaticInPossessionAtStartOfExpedition",
+      "name": "Uplifting Aromatic In Possession At Start Of Expedition"
+    },
+    "6624100": {
+      "key": "sparkAromaticInPossessionAtStartOfExpedition",
+      "name": "Spark Aromatic In Possession At Start Of Expedition"
+    },
+    "6624200": {
+      "key": "ironjarAromaticInPossessionAtStartOfExpedition",
+      "name": "Ironjar Aromatic In Possession At Start Of Expedition"
+    },
+    "6624300": {
+      "key": "bloodboilAromaticInPossessionAtStartOfExpedition",
+      "name": "Bloodboil Aromatic In Possession At Start Of Expedition"
+    },
+    "6624400": {
+      "key": "poisonSpraymistInPossessionAtStartOfExpedition",
+      "name": "Poison Spraymist In Possession At Start Of Expedition"
+    },
+    "6624500": {
+      "key": "acidSpraymistInPossessionAtStartOfExpedition",
+      "name": "Acid Spraymist In Possession At Start Of Expedition"
+    },
+    "6630000": {
+      "key": "dormantPowerHelpsDiscoverDaggers",
+      "name": "Dormant Power Helps Discover Daggers"
+    },
+    "6630100": {
+      "key": "dormantPowerHelpsDiscoverStraightSwords",
+      "name": "Dormant Power Helps Discover Straight Swords"
+    },
+    "6630200": {
+      "key": "dormantPowerHelpsDiscoverGreatswords",
+      "name": "Dormant Power Helps Discover Greatswords"
+    },
+    "6630300": {
+      "key": "dormantPowerHelpsDiscoverColossalSwords",
+      "name": "Dormant Power Helps Discover Colossal Swords"
+    },
+    "6630400": {
+      "key": "dormantPowerHelpsDiscoverCurvedSwords",
+      "name": "Dormant Power Helps Discover Curved Swords"
+    },
+    "6630500": {
+      "key": "dormantPowerHelpsDiscoverCurvedGreatswords",
+      "name": "Dormant Power Helps Discover Curved Greatswords"
+    },
+    "6630600": {
+      "key": "dormantPowerHelpsDiscoverKatana",
+      "name": "Dormant Power Helps Discover Katana"
+    },
+    "6630700": {
+      "key": "dormantPowerHelpsDiscoverTwinblades",
+      "name": "Dormant Power Helps Discover Twinblades"
+    },
+    "6630800": {
+      "key": "dormantPowerHelpsDiscoverThrustingSwords",
+      "name": "Dormant Power Helps Discover Thrusting Swords"
+    },
+    "6630900": {
+      "key": "dormantPowerHelpsDiscoverHeavyThrustingSwords",
+      "name": "Dormant Power Helps Discover Heavy Thrusting Swords"
+    },
+    "6631000": {
+      "key": "dormantPowerHelpsDiscoverAxes",
+      "name": "Dormant Power Helps Discover Axes"
+    },
+    "6631100": {
+      "key": "dormantPowerHelpsDiscoverGreataxes",
+      "name": "Dormant Power Helps Discover Greataxes"
+    },
+    "6631200": {
+      "key": "dormantPowerHelpsDiscoverHammers",
+      "name": "Dormant Power Helps Discover Hammers"
+    },
+    "6631300": {
+      "key": "dormantPowerHelpsDiscoverGreatHammers",
+      "name": "Dormant Power Helps Discover Great Hammers"
+    },
+    "6631400": {
+      "key": "dormantPowerHelpsDiscoverFlails",
+      "name": "Dormant Power Helps Discover Flails"
+    },
+    "6631500": {
+      "key": "dormantPowerHelpsDiscoverSpears",
+      "name": "Dormant Power Helps Discover Spears"
+    },
+    "6631600": {
+      "key": "dormantPowerHelpsDiscoverGreatSpears",
+      "name": "Dormant Power Helps Discover Great Spears"
+    },
+    "6631700": {
+      "key": "dormantPowerHelpsDiscoverHalberds",
+      "name": "Dormant Power Helps Discover Halberds"
+    },
+    "6631800": {
+      "key": "dormantPowerHelpsDiscoverReapers",
+      "name": "Dormant Power Helps Discover Reapers"
+    },
+    "6631900": {
+      "key": "dormantPowerHelpsDiscoverFists",
+      "name": "Dormant Power Helps Discover Fists"
+    },
+    "6632000": {
+      "key": "dormantPowerHelpsDiscoverClaws",
+      "name": "Dormant Power Helps Discover Claws"
+    },
+    "6632100": {
+      "key": "dormantPowerHelpsDiscoverWhips",
+      "name": "Dormant Power Helps Discover Whips"
+    },
+    "6632200": {
+      "key": "dormantPowerHelpsDiscoverColossalWeapons",
+      "name": "Dormant Power Helps Discover Colossal Weapons"
+    },
+    "6632300": {
+      "key": "dormantPowerHelpsDiscoverBows",
+      "name": "Dormant Power Helps Discover Bows"
+    },
+    "6632400": {
+      "key": "dormantPowerHelpsDiscoverGreatbows",
+      "name": "Dormant Power Helps Discover Greatbows"
+    },
+    "6632500": {
+      "key": "dormantPowerHelpsDiscoverCrossbows",
+      "name": "Dormant Power Helps Discover Crossbows"
+    },
+    "6632600": {
+      "key": "dormantPowerHelpsDiscoverBallistas",
+      "name": "Dormant Power Helps Discover Ballistas"
+    },
+    "6632700": {
+      "key": "dormantPowerHelpsDiscoverSmallShields",
+      "name": "Dormant Power Helps Discover Small Shields"
+    },
+    "6632800": {
+      "key": "dormantPowerHelpsDiscoverMediumShields",
+      "name": "Dormant Power Helps Discover Medium Shields"
+    },
+    "6632900": {
+      "key": "dormantPowerHelpsDiscoverGreatshields",
+      "name": "Dormant Power Helps Discover Greatshields"
+    },
+    "6633000": {
+      "key": "dormantPowerHelpsDiscoverStaves",
+      "name": "Dormant Power Helps Discover Staves"
+    },
+    "6633100": {
+      "key": "dormantPowerHelpsDiscoverSacredSeals",
+      "name": "Dormant Power Helps Discover Sacred Seals"
+    },
+    "6633200": {
+      "key": "dormantPowerHelpsDiscoverTorches",
+      "name": "Dormant Power Helps Discover Torches"
+    },
+    "6640000": {
+      "key": "wylderImprovedMindReducedVigor",
+      "name": "Wylder Improved Mind Reduced Vigor"
+    },
+    "6640100": {
+      "key": "wylderImprovedIntelligenceAndFaithReducedStrengthAndDexterity",
+      "name": "Wylder Improved Intelligence And Faith Reduced Strength And Dexterity"
+    },
+    "6641000": {
+      "key": "guardianImprovedStrengthAndDexterityReducedVigor",
+      "name": "Guardian Improved Strength And Dexterity Reduced Vigor"
+    },
+    "6641100": {
+      "key": "guardianImprovedMindAndFaithReducedVigor",
+      "name": "Guardian Improved Mind And Faith Reduced Vigor"
+    },
+    "6642000": {
+      "key": "ironeyeImprovedArcaneReducedDexterity",
+      "name": "Ironeye Improved Arcane Reduced Dexterity"
+    },
+    "6642100": {
+      "key": "ironeyeImprovedVigorAndStrengthReducedDexterity",
+      "name": "Ironeye Improved Vigor And Strength Reduced Dexterity"
+    },
+    "6643000": {
+      "key": "duchessImprovedVigorAndStrengthReducedMind",
+      "name": "Duchess Improved Vigor And Strength Reduced Mind"
+    },
+    "6643100": {
+      "key": "duchessImprovedMindAndFaithReducedIntelligence",
+      "name": "Duchess Improved Mind And Faith Reduced Intelligence"
+    },
+    "6644000": {
+      "key": "raiderImprovedMindAndIntelligenceReducedVigorAndEndurance",
+      "name": "Raider Improved Mind And Intelligence Reduced Vigor And Endurance"
+    },
+    "6644100": {
+      "key": "raiderImprovedArcaneReducedVigor",
+      "name": "Raider Improved Arcane Reduced Vigor"
+    },
+    "6645000": {
+      "key": "revenantImprovedVigorAndEnduranceReducedMind",
+      "name": "Revenant Improved Vigor And Endurance Reduced Mind"
+    },
+    "6645100": {
+      "key": "revenantImprovedStrengthReducedFaith",
+      "name": "Revenant Improved Strength Reduced Faith"
+    },
+    "6646000": {
+      "key": "recluseImprovedVigorEnduranceAndDexterityReducedIntelligenceAndFaith",
+      "name": "Recluse Improved Vigor Endurance And Dexterity Reduced Intelligence And Faith"
+    },
+    "6646100": {
+      "key": "recluseImprovedIntelligenceAndFaithReducedMind",
+      "name": "Recluse Improved Intelligence And Faith Reduced Mind"
+    },
+    "6647000": {
+      "key": "executorImprovedVigorAndEnduranceReducedArcane",
+      "name": "Executor Improved Vigor And Endurance Reduced Arcane"
+    },
+    "6647100": {
+      "key": "executorImprovedDexterityAndArcaneReducedVigor",
+      "name": "Executor Improved Dexterity And Arcane Reduced Vigor"
+    },
+    "6647200": {
+      "key": "scholarImprovedMindReducedVigor",
+      "name": "Scholar Improved Mind Reduced Vigor"
+    },
+    "6647300": {
+      "key": "scholarImprovedEnduranceAndDexterityReducedIntelligenceAndArcane",
+      "name": "Scholar Improved Endurance And Dexterity Reduced Intelligence And Arcane"
+    },
+    "6647400": {
+      "key": "undertakerImprovedDexterityReducedVigorAndFaith",
+      "name": "Undertaker Improved Dexterity Reduced Vigor And Faith"
+    },
+    "6647500": {
+      "key": "undertakerImprovedMindAndFaithReducedStrength",
+      "name": "Undertaker Improved Mind And Faith Reduced Strength"
+    },
+    "6800000": {
+      "key": "reducedVigor",
+      "name": "Reduced Vigor"
+    },
+    "6800200": {
+      "key": "reducedEndurance",
+      "name": "Reduced Endurance"
+    },
+    "6810100": {
+      "key": "impairedDamageNegation",
+      "name": "Impaired Damage Negation"
+    },
+    "6820000": {
+      "key": "takingDamageCausesPoisonBuildup",
+      "name": "Taking Damage Causes Poison Buildup"
+    },
+    "6820100": {
+      "key": "takingDamageCausesRotBuildup",
+      "name": "Taking Damage Causes Rot Buildup"
+    },
+    "6820200": {
+      "key": "takingDamageCausesFrostBuildup",
+      "name": "Taking Damage Causes Frost Buildup"
+    },
+    "6820300": {
+      "key": "takingDamageCausesBloodLossBuildup",
+      "name": "Taking Damage Causes Blood Loss Buildup"
+    },
+    "6820400": {
+      "key": "takingDamageCausesMadnessBuildup",
+      "name": "Taking Damage Causes Madness Buildup"
+    },
+    "6820500": {
+      "key": "takingDamageCausesSleepBuildup",
+      "name": "Taking Damage Causes Sleep Buildup"
+    },
+    "6820600": {
+      "key": "takingDamageCausesDeathBuildup",
+      "name": "Taking Damage Causes Death Buildup"
+    },
+    "6830000": {
+      "key": "reducedStrengthAndIntelligence",
+      "name": "Reduced Strength And Intelligence"
+    },
+    "6830100": {
+      "key": "reducedDexterityAndFaith",
+      "name": "Reduced Dexterity And Faith"
+    },
+    "6830200": {
+      "key": "reducedIntelligenceAndDexterity",
+      "name": "Reduced Intelligence And Dexterity"
+    },
+    "6830300": {
+      "key": "reducedFaithAndStrength",
+      "name": "Reduced Faith And Strength"
+    },
+    "6830400": {
+      "key": "reducedVigorAndArcane",
+      "name": "Reduced Vigor And Arcane"
+    },
+    "6840000": {
+      "key": "reducedRuneAcquisition",
+      "name": "Reduced Rune Acquisition"
+    },
+    "6840100": {
+      "key": "reducedFlaskHPRestoration",
+      "name": "Reduced Flask Hprestoration"
+    },
+    "6840200": {
+      "key": "ultimateArtChargingImpaired",
+      "name": "Ultimate Art Charging Impaired"
+    },
+    "6850000": {
+      "key": "impairedPhysicalDamageNegation",
+      "name": "Impaired Physical Damage Negation"
+    },
+    "6850100": {
+      "key": "impairedAffinityDamageNegation",
+      "name": "Impaired Affinity Damage Negation"
+    },
+    "6850200": {
+      "key": "allResistancesDown",
+      "name": "All Resistances Down"
+    },
+    "6850300": {
+      "key": "reducedFlaskHPRestoration",
+      "name": "Reduced Flask Hprestoration"
+    },
+    "6850400": {
+      "key": "surgeSprintingDrainsMoreStamina",
+      "name": "Surge Sprinting Drains More Stamina"
+    },
+    "6850500": {
+      "key": "continuousHPLoss",
+      "name": "Continuous Hploss"
+    },
+    "6850600": {
+      "key": "increasedDrainOnStaminaForEvasion",
+      "name": "Increased Drain On Stamina For Evasion"
+    },
+    "6850700": {
+      "key": "moreDamageTakenAfterEvasion",
+      "name": "More Damage Taken After Evasion"
+    },
+    "6850800": {
+      "key": "repeatedEvasionsLowerDamageNegation",
+      "name": "Repeated Evasions Lower Damage Negation"
+    },
+    "6850900": {
+      "key": "reducedDamageNegationForFlaskUsages",
+      "name": "Reduced Damage Negation For Flask Usages"
+    },
+    "6851000": {
+      "key": "sleepBuildupForFlaskUsages",
+      "name": "Sleep Buildup For Flask Usages"
+    },
+    "6851100": {
+      "key": "madnessBuildupForFlaskUsages",
+      "name": "Madness Buildup For Flask Usages"
+    },
+    "6851200": {
+      "key": "lowerAttackWhenBelowMaxHP",
+      "name": "Lower Attack When Below Max Hp"
+    },
+    "6851300": {
+      "key": "poisonBuildupWhenBelowMaxHP",
+      "name": "Poison Buildup When Below Max Hp"
+    },
+    "6851400": {
+      "key": "rotBuildupWhenBelowMaxHP",
+      "name": "Rot Buildup When Below Max Hp"
+    },
+    "6851500": {
+      "key": "maxHPReducesAttackPower",
+      "name": "Max Hpreduces Attack Power"
+    },
+    "6851600": {
+      "key": "nearDeathSpillsFlask",
+      "name": "Near Death Spills Flask"
+    },
+    "6851700": {
+      "key": "nearDeathReducesMaxHP",
+      "name": "Near Death Reduces Max Hp"
+    },
+    "7000000": {
+      "key": "vigorPlus1",
+      "name": "Vigor Plus 1"
+    },
+    "7000001": {
+      "key": "vigorPlus2",
+      "name": "Vigor Plus 2"
+    },
+    "7000002": {
+      "key": "vigorPlus3",
+      "name": "Vigor Plus 3"
+    },
+    "7000090": {
+      "key": "increasedMaximumHP",
+      "name": "Increased Maximum Hp"
+    },
+    "7000100": {
+      "key": "mindPlus1",
+      "name": "Mind Plus 1"
+    },
+    "7000101": {
+      "key": "mindPlus2",
+      "name": "Mind Plus 2"
+    },
+    "7000102": {
+      "key": "mindPlus3",
+      "name": "Mind Plus 3"
+    },
+    "7000190": {
+      "key": "increasedMaximumFP",
+      "name": "Increased Maximum Fp"
+    },
+    "7000200": {
+      "key": "endurancePlus1",
+      "name": "Endurance Plus 1"
+    },
+    "7000201": {
+      "key": "endurancePlus2",
+      "name": "Endurance Plus 2"
+    },
+    "7000202": {
+      "key": "endurancePlus3",
+      "name": "Endurance Plus 3"
+    },
+    "7000290": {
+      "key": "increasedMaximumStamina",
+      "name": "Increased Maximum Stamina"
+    },
+    "7000300": {
+      "key": "strengthPlus1",
+      "name": "Strength Plus 1"
+    },
+    "7000301": {
+      "key": "strengthPlus2",
+      "name": "Strength Plus 2"
+    },
+    "7000302": {
+      "key": "strengthPlus3",
+      "name": "Strength Plus 3"
+    },
+    "7000400": {
+      "key": "dexterityPlus1",
+      "name": "Dexterity Plus 1"
+    },
+    "7000401": {
+      "key": "dexterityPlus2",
+      "name": "Dexterity Plus 2"
+    },
+    "7000402": {
+      "key": "dexterityPlus3",
+      "name": "Dexterity Plus 3"
+    },
+    "7000500": {
+      "key": "intelligencePlus1",
+      "name": "Intelligence Plus 1"
+    },
+    "7000501": {
+      "key": "intelligencePlus2",
+      "name": "Intelligence Plus 2"
+    },
+    "7000502": {
+      "key": "intelligencePlus3",
+      "name": "Intelligence Plus 3"
+    },
+    "7000600": {
+      "key": "faithPlus1",
+      "name": "Faith Plus 1"
+    },
+    "7000601": {
+      "key": "faithPlus2",
+      "name": "Faith Plus 2"
+    },
+    "7000602": {
+      "key": "faithPlus3",
+      "name": "Faith Plus 3"
+    },
+    "7000700": {
+      "key": "arcanePlus1",
+      "name": "Arcane Plus 1"
+    },
+    "7000701": {
+      "key": "arcanePlus2",
+      "name": "Arcane Plus 2"
+    },
+    "7000702": {
+      "key": "arcanePlus3",
+      "name": "Arcane Plus 3"
+    },
+    "7000800": {
+      "key": "characterSkillCooldownReductionPlus1",
+      "name": "Character Skill Cooldown Reduction Plus 1"
+    },
+    "7000801": {
+      "key": "characterSkillCooldownReductionPlus2",
+      "name": "Character Skill Cooldown Reduction Plus 2"
+    },
+    "7000802": {
+      "key": "characterSkillCooldownReductionPlus3",
+      "name": "Character Skill Cooldown Reduction Plus 3"
+    },
+    "7000900": {
+      "key": "ultimateArtAutoChargePlus1",
+      "name": "Ultimate Art Auto Charge Plus 1"
+    },
+    "7000901": {
+      "key": "ultimateArtAutoChargePlus2",
+      "name": "Ultimate Art Auto Charge Plus 2"
+    },
+    "7000902": {
+      "key": "ultimateArtAutoChargePlus3",
+      "name": "Ultimate Art Auto Charge Plus 3"
+    },
+    "7001000": {
+      "key": "poisePlus1",
+      "name": "Poise Plus 1"
+    },
+    "7001001": {
+      "key": "poisePlus2",
+      "name": "Poise Plus 2"
+    },
+    "7001002": {
+      "key": "poisePlus3",
+      "name": "Poise Plus 3"
+    },
+    "7001100": {
+      "key": "continuousHpRecovery",
+      "name": "Continuous Hp Recovery"
+    },
+    "7001400": {
+      "key": "physicalAttackUp",
+      "name": "Physical Attack Up"
+    },
+    "7001401": {
+      "key": "physicalAttackUpPlus1",
+      "name": "Physical Attack Up Plus 1"
+    },
+    "7001402": {
+      "key": "physicalAttackUpPlus2",
+      "name": "Physical Attack Up Plus 2"
+    },
+    "7001403": {
+      "key": "physicalAttackUpPlus3",
+      "name": "Physical Attack Up Plus 3"
+    },
+    "7001409": {
+      "key": "physicalAttackUp",
+      "name": "Physical Attack Up"
+    },
+    "7001500": {
+      "key": "magicAttackPowerUp",
+      "name": "Magic Attack Power Up"
+    },
+    "7001501": {
+      "key": "magicAttackPowerUpPlus1",
+      "name": "Magic Attack Power Up Plus 1"
+    },
+    "7001502": {
+      "key": "magicAttackPowerUpPlus2",
+      "name": "Magic Attack Power Up Plus 2"
+    },
+    "7001600": {
+      "key": "fireAttackPowerUp",
+      "name": "Fire Attack Power Up"
+    },
+    "7001601": {
+      "key": "fireAttackPowerUpPlus1",
+      "name": "Fire Attack Power Up Plus 1"
+    },
+    "7001602": {
+      "key": "fireAttackPowerUpPlus2",
+      "name": "Fire Attack Power Up Plus 2"
+    },
+    "7001700": {
+      "key": "lightningAttackPowerUp",
+      "name": "Lightning Attack Power Up"
+    },
+    "7001701": {
+      "key": "lightningAttackPowerUpPlus1",
+      "name": "Lightning Attack Power Up Plus 1"
+    },
+    "7001702": {
+      "key": "lightningAttackPowerUpPlus2",
+      "name": "Lightning Attack Power Up Plus 2"
+    },
+    "7001800": {
+      "key": "holyAttackPowerUp",
+      "name": "Holy Attack Power Up"
+    },
+    "7001801": {
+      "key": "holyAttackPowerUpPlus1",
+      "name": "Holy Attack Power Up Plus 1"
+    },
+    "7001802": {
+      "key": "holyAttackPowerUpPlus2",
+      "name": "Holy Attack Power Up Plus 2"
+    },
+    "7001900": {
+      "key": "attacksInflictPoison",
+      "name": "Attacks Inflict Poison"
+    },
+    "7001901": {
+      "key": "attacksInflictPoisonPlus1",
+      "name": "Attacks Inflict Poison Plus 1"
+    },
+    "7001902": {
+      "key": "attacksInflictPoisonPlus2",
+      "name": "Attacks Inflict Poison Plus 2"
+    },
+    "7002000": {
+      "key": "attacksInflictBloodLoss",
+      "name": "Attacks Inflict Blood Loss"
+    },
+    "7002001": {
+      "key": "attacksInflictBloodLossPlus1",
+      "name": "Attacks Inflict Blood Loss Plus 1"
+    },
+    "7002002": {
+      "key": "attacksInflictBloodLossPlus2",
+      "name": "Attacks Inflict Blood Loss Plus 2"
+    },
+    "7002100": {
+      "key": "attacksInflictSleep",
+      "name": "Attacks Inflict Sleep"
+    },
+    "7002101": {
+      "key": "attacksInflictSleepPlus1",
+      "name": "Attacks Inflict Sleep Plus 1"
+    },
+    "7002102": {
+      "key": "attacksInflictSleepPlus2",
+      "name": "Attacks Inflict Sleep Plus 2"
+    },
+    "7002103": {
+      "key": "attacksInflictSleepPlus3",
+      "name": "Attacks Inflict Sleep Plus 3"
+    },
+    "7002200": {
+      "key": "attacksInflictDeathBlight",
+      "name": "Attacks Inflict Death Blight"
+    },
+    "7002300": {
+      "key": "attacksInflictScarletRot",
+      "name": "Attacks Inflict Scarlet Rot"
+    },
+    "7002301": {
+      "key": "attacksInflictScarletRotPlus1",
+      "name": "Attacks Inflict Scarlet Rot Plus 1"
+    },
+    "7002302": {
+      "key": "attacksInflictScarletRotPlus2",
+      "name": "Attacks Inflict Scarlet Rot Plus 2"
+    },
+    "7002400": {
+      "key": "attacksInflictFrost",
+      "name": "Attacks Inflict Frost"
+    },
+    "7002401": {
+      "key": "attacksInflictFrostPlus1",
+      "name": "Attacks Inflict Frost Plus 1"
+    },
+    "7002402": {
+      "key": "attacksInflictFrostPlus2",
+      "name": "Attacks Inflict Frost Plus 2"
+    },
+    "7002403": {
+      "key": "attacksInflictFrostPlus3",
+      "name": "Attacks Inflict Frost Plus 3"
+    },
+    "7002500": {
+      "key": "attacksInflictMadness",
+      "name": "Attacks Inflict Madness"
+    },
+    "7002600": {
+      "key": "magicDamageNegationUp",
+      "name": "Magic Damage Negation Up"
+    },
+    "7002700": {
+      "key": "fireDamageNegationUp",
+      "name": "Fire Damage Negation Up"
+    },
+    "7002800": {
+      "key": "lightningDamageNegationUp",
+      "name": "Lightning Damage Negation Up"
+    },
+    "7002900": {
+      "key": "holyDamageNegationUp",
+      "name": "Holy Damage Negation Up"
+    },
+    "7003000": {
+      "key": "improvedPoisonResistance",
+      "name": "Improved Poison Resistance"
+    },
+    "7003100": {
+      "key": "improvedBloodLossResistance",
+      "name": "Improved Blood Loss Resistance"
+    },
+    "7003200": {
+      "key": "improvedSleepResistance",
+      "name": "Improved Sleep Resistance"
+    },
+    "7003300": {
+      "key": "improvedDeathBlightResistance",
+      "name": "Improved Death Blight Resistance"
+    },
+    "7003400": {
+      "key": "improvedRotResistance",
+      "name": "Improved Rot Resistance"
+    },
+    "7003500": {
+      "key": "improvedFrostResistance",
+      "name": "Improved Frost Resistance"
+    },
+    "7003600": {
+      "key": "improvedMadnessResistance",
+      "name": "Improved Madness Resistance"
+    },
+    "7005600": {
+      "key": "partialHpRestorationUponPostDamageAttacks",
+      "name": "Partial Hp Restoration Upon Post Damage Attacks"
+    },
+    "7006000": {
+      "key": "improvedStanceBreakingWhenTwoHanding",
+      "name": "Improved Stance Breaking When Two Handing"
+    },
+    "7006001": {
+      "key": "improvedStanceBreakingWhenTwoHanding",
+      "name": "Improved Stance Breaking When Two Handing"
+    },
+    "7006100": {
+      "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
+      "name": "Improved Stance Breaking When Wielding Two Armaments"
+    },
+    "7006101": {
+      "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
+      "name": "Improved Stance Breaking When Wielding Two Armaments"
+    },
+    "7006200": {
+      "key": "improvedPhysicalDamageNegation",
+      "name": "Improved Physical Damage Negation"
+    },
+    "7006300": {
+      "key": "improvedAffinityDamageNegation",
+      "name": "Improved Affinity Damage Negation"
+    },
+    "7006400": {
+      "key": "extendedSpellDuration",
+      "name": "Extended Spell Duration"
+    },
+    "7006500": {
+      "key": "continuousFpRecovery",
+      "name": "Continuous Fp Recovery"
+    },
+    "7006600": {
+      "key": "improvedMeleeAttackPower",
+      "name": "Improved Melee Attack Power"
+    },
+    "7006700": {
+      "key": "improvedSkillAttackPower",
+      "name": "Improved Skill Attack Power"
+    },
+    "7010000": {
+      "key": "guardianImprovedCharacterSkillRange",
+      "name": "Guardian Improved Character Skill Range"
+    },
+    "7010200": {
+      "key": "flaskAlsoHealsAllies",
+      "name": "Flask Also Heals Allies"
+    },
+    "7010500": {
+      "key": "wylderArtActivationSpreadsFireInArea",
+      "name": "Wylder Art Activation Spreads Fire In Area"
+    },
+    "7010700": {
+      "key": "duchessDaggerChainAttackReprises",
+      "name": "Duchess Dagger Chain Attack Reprises"
+    },
+    "7010800": {
+      "key": "raiderCharacterSkillDamageUp",
+      "name": "Raider Character Skill Damage Up"
+    },
+    "7010900": {
+      "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+      "name": "Revenant Expend Own Hpto Fully Heal Nearby Allies"
+    },
+    "7011000": {
+      "key": "guardianIncreasedDurationForCharacterSkill",
+      "name": "Guardian Increased Duration For Character Skill"
+    },
+    "7011100": {
+      "key": "guardianDamageNegationForAlliesImproved",
+      "name": "Guardian Damage Negation For Allies Improved"
+    },
+    "7011200": {
+      "key": "revenantTriggerGhostflameExplosionDuringUltimateArtActivation",
+      "name": "Revenant Trigger Ghostflame Explosion During Ultimate Art Activation"
+    },
+    "7011400": {
+      "key": "guardianRestoresAlliesHPWhenCharacterSkillUsed",
+      "name": "Guardian Restores Allies Hpwhen Character Skill Used"
+    },
+    "7011500": {
+      "key": "wylderCharacterSkillInflictsBloodLoss",
+      "name": "Wylder Character Skill Inflicts Blood Loss"
+    },
+    "7011600": {
+      "key": "guardianCreatesWhirlwindWhenChargingHalberd",
+      "name": "Guardian Creates Whirlwind When Charging Halberd"
+    },
+    "7011700": {
+      "key": "executorRoaringRestoresHPWhileArtActive",
+      "name": "Executor Roaring Restores Hpwhile Art Active"
+    },
+    "7011900": {
+      "key": "guardianCharacterSkillInflictsHolyDamage",
+      "name": "Guardian Character Skill Inflicts Holy Damage"
+    },
+    "7012000": {
+      "key": "guardianSlowlyRestoresNearbyAlliesHP",
+      "name": "Guardian Slowly Restores Nearby Allies Hp"
+    },
+    "7012200": {
+      "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+      "name": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low"
+    },
+    "7012300": {
+      "key": "improvedDamageNegationAtLowHP",
+      "name": "Improved Damage Negation At Low Hp"
+    },
+    "7012400": {
+      "key": "strongAttackCreatesWideWaveOfHeat",
+      "name": "Strong Attack Creates Wide Wave Of Heat"
+    },
+    "7012500": {
+      "key": "jumpingConjuresMagicProjectiles",
+      "name": "Jumping Conjures Magic Projectiles"
+    },
+    "7012600": {
+      "key": "attackBoostFromNearbyAllies",
+      "name": "Attack Boost From Nearby Allies"
+    },
+    "7012700": {
+      "key": "guardCountersCastLightPillar",
+      "name": "Guard Counters Cast Light Pillar"
+    },
+    "7020000": {
+      "key": "wylderStandardAttacksEnhancedWithFieryFollowUpsWhenUsingCharacterSkill",
+      "name": "Wylder Standard Attacks Enhanced With Fiery Follow Ups When Using Character Skill"
+    },
+    "7030000": {
+      "key": "improvedPoiseNearTotemStela",
+      "name": "Improved Poise Near Totem Stela"
+    },
+    "7030200": {
+      "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+      "name": "Hp Restored When Using Medicinal Boluses Etc"
+    },
+    "7030500": {
+      "key": "wylderImpairedDamageNegationImprovedAttackPowerStaminaAfterArtActivation",
+      "name": "Wylder Impaired Damage Negation Improved Attack Power Stamina After Art Activation"
+    },
+    "7030600": {
+      "key": "artGaugeChargedFromSuccessfulGuarding",
+      "name": "Art Gauge Charged From Successful Guarding"
+    },
+    "7030700": {
+      "key": "drawEnemyAttentionWhileGuarding",
+      "name": "Draw Enemy Attention While Guarding"
+    },
+    "7030800": {
+      "key": "artGaugeFillsModeratelyUponCriticalHit",
+      "name": "Art Gauge Fills Moderately Upon Critical Hit"
+    },
+    "7030900": {
+      "key": "attackPowerIncreasesAfterUsingGreaseItems",
+      "name": "Attack Power Increases After Using Grease Items"
+    },
+    "7031200": {
+      "key": "revenantStrengthensFamilyAndAlliesWhenUltimateArtActivated",
+      "name": "Revenant Strengthens Family And Allies When Ultimate Art Activated"
+    },
+    "7031300": {
+      "key": "raiderDamageTakenWhileUsingCharacterSkillImprovesAttack",
+      "name": "Raider Damage Taken While Using Character Skill Improves Attack"
+    },
+    "7031400": {
+      "key": "wylderReducedCooldownTimeForCharacterSkill",
+      "name": "Wylder Reduced Cooldown Time For Character Skill"
+    },
+    "7031600": {
+      "key": "performingConsecutiveSuccessfulGuardsImprovesGuardAbilityAndDeflectsBigAttacks",
+      "name": "Performing Consecutive Successful Guards Improves Guard Ability And Deflects Big Attacks"
+    },
+    "7031700": {
+      "key": "shockwaveProducedFromSuccessfulGuarding",
+      "name": "Shockwave Produced From Successful Guarding"
+    },
+    "7031800": {
+      "key": "duchessBecomeStealthyAfterCritFromBehind",
+      "name": "Duchess Become Stealthy After Crit From Behind"
+    },
+    "7031900": {
+      "key": "criticalHitsEarnRunes",
+      "name": "Critical Hits Earn Runes"
+    },
+    "7032200": {
+      "key": "takingAttacksImprovesAttackPower",
+      "name": "Taking Attacks Improves Attack Power"
+    },
+    "7032300": {
+      "key": "wylderImprovedAttackPowerWhenCharacterSkillActivated",
+      "name": "Wylder Improved Attack Power When Character Skill Activated"
+    },
+    "7032400": {
+      "key": "wylderArtGaugeGreatlyFilledWhenAbilityActivated",
+      "name": "Wylder Art Gauge Greatly Filled When Ability Activated"
+    },
+    "7032700": {
+      "key": "duchessDefeatingEnemiesWhileArtActiveUpsAttack",
+      "name": "Duchess Defeating Enemies While Art Active Ups Attack"
+    },
+    "7032800": {
+      "key": "recluseCollectingAffinityResidueActivatesTerraMagica",
+      "name": "Recluse Collecting Affinity Residue Activates Terra Magica"
+    },
+    "7032900": {
+      "key": "recluseSufferBloodLossAndIncreaseAttackPower",
+      "name": "Recluse Suffer Blood Loss And Increase Attack Power"
+    },
+    "7033000": {
+      "key": "wylderImprovedAttackPowerWhenAbilityActivated",
+      "name": "Wylder Improved Attack Power When Ability Activated"
+    },
+    "7033200": {
+      "key": "wylderAdditionalCharacterSkillUse",
+      "name": "Wylder Additional Character Skill Use"
+    },
+    "7033300": {
+      "key": "guardianBecomeTargetOfEnemyAggression",
+      "name": "Guardian Become Target Of Enemy Aggression"
+    },
+    "7033400": {
+      "key": "guardianSuccessfulGuardsSendOutShockwaves",
+      "name": "Guardian Successful Guards Send Out Shockwaves"
+    },
+    "7033600": {
+      "key": "duchessDurationOfUltimateArtExtended",
+      "name": "Duchess Duration Of Ultimate Art Extended"
+    },
+    "7033700": {
+      "key": "colossalArmamentsCoatedInRockWhenPerformingChargedAttacks",
+      "name": "Colossal Armaments Coated In Rock When Performing Charged Attacks"
+    },
+    "7033800": {
+      "key": "raiderPermanentlyIncreaseAttackPower",
+      "name": "Raider Permanently Increase Attack Power"
+    },
+    "7033900": {
+      "key": "recluseExtendsDurationOfBloodSigils",
+      "name": "Recluse Extends Duration Of Blood Sigils"
+    },
+    "7034000": {
+      "key": "recluseCollecting4AffinityResiduesImprovesAffinityAttackPower",
+      "name": "Recluse Collecting 4Affinity Residues Improves Affinity Attack Power"
+    },
+    "7034100": {
+      "key": "recluseActivatingUltimateArtRaisesMaxHP",
+      "name": "Recluse Activating Ultimate Art Raises Max Hp"
+    },
+    "7034200": {
+      "key": "executorAttackPowerUpWhileUltimateArtActive",
+      "name": "Executor Attack Power Up While Ultimate Art Active"
+    },
+    "7034300": {
+      "key": "executorImprovesEffectButLowersResistance",
+      "name": "Executor Improves Effect But Lowers Resistance"
+    },
+    "7034400": {
+      "key": "executorCharacterSkillBoostsAttackButDrainsHP",
+      "name": "Executor Character Skill Boosts Attack But Drains Hp"
+    },
+    "7034500": {
+      "key": "executorUnlockingCursedSwordRestoresHP",
+      "name": "Executor Unlocking Cursed Sword Restores Hp"
+    },
+    "7034600": {
+      "key": "ironeyeArtChargeActivationAddsPoisonEffect",
+      "name": "Ironeye Art Charge Activation Adds Poison Effect"
+    },
+    "7034700": {
+      "key": "ironeyeBoostsThrustingCounterattacksAfterArt",
+      "name": "Ironeye Boosts Thrusting Counterattacks After Art"
+    },
+    "7034800": {
+      "key": "fireCriticalHitGrantsMaxStaminaBoost",
+      "name": "Fire Critical Hit Grants Max Stamina Boost"
+    },
+    "7034900": {
+      "key": "criticalHitHPRestoration",
+      "name": "Critical Hit Hprestoration"
+    },
+    "7035000": {
+      "key": "criticalHitAddsLightningEffect",
+      "name": "Critical Hit Adds Lightning Effect"
+    },
+    "7035100": {
+      "key": "criticalHitBoostsStaminaRecoverySpeed",
+      "name": "Critical Hit Boosts Stamina Recovery Speed"
+    },
+    "7035200": {
+      "key": "consecutiveGuardsHardenSkin",
+      "name": "Consecutive Guards Harden Skin"
+    },
+    "7035300": {
+      "key": "criticalHitCreatesSleepMist",
+      "name": "Critical Hit Creates Sleep Mist"
+    },
+    "7035400": {
+      "key": "gestureCrossedLegsBuildsUpMadness",
+      "name": "Gesture Crossed Legs Builds Up Madness"
+    },
+    "7035410": {
+      "key": "gestureCrossedLegsBuildsUpMadness",
+      "name": "Gesture Crossed Legs Builds Up Madness"
+    },
+    "7035500": {
+      "key": "madnessContinuallyRecoversFP",
+      "name": "Madness Continually Recovers Fp"
+    },
+    "7035510": {
+      "key": "madnessContinuallyRecoversFP",
+      "name": "Madness Continually Recovers Fp"
+    },
+    "7035600": {
+      "key": "surgeSprintLandingsSplitEarth",
+      "name": "Surge Sprint Landings Split Earth"
+    },
+    "7035700": {
+      "key": "switchingWeaponsAddsAnAffinityAttack",
+      "name": "Switching Weapons Adds An Affinity Attack"
+    },
+    "7035800": {
+      "key": "boostsAttackPowerOfAddedAffinityAttacks",
+      "name": "Boosts Attack Power Of Added Affinity Attacks"
+    },
+    "7035900": {
+      "key": "switchingWeaponsBoostsAttackPower",
+      "name": "Switching Weapons Boosts Attack Power"
+    },
+    "7036000": {
+      "key": "fpRestorationUponSuccessiveAttacks",
+      "name": "Fp Restoration Upon Successive Attacks"
+    },
+    "7036100": {
+      "key": "hpRecoveryFromSuccessfulGuarding",
+      "name": "Hp Recovery From Successful Guarding"
+    },
+    "7036200": {
+      "key": "scholarPreventSlowingOfCharacterSkillProgress",
+      "name": "Scholar Prevent Slowing Of Character Skill Progress"
+    },
+    "7036300": {
+      "key": "scholarAlliesTargetedByCharacterSkillGainBoostedAttack",
+      "name": "Scholar Allies Targeted By Character Skill Gain Boosted Attack"
+    },
+    "7036400": {
+      "key": "scholarContinuousDamageInflictedOnTargetsThreadedByUltimateArt",
+      "name": "Scholar Continuous Damage Inflicted On Targets Threaded By Ultimate Art"
+    },
+    "7036500": {
+      "key": "scholarEarnRunesForEachAdditionalSpecimenAcquiredWithCharacterSkill",
+      "name": "Scholar Earn Runes For Each Additional Specimen Acquired With Character Skill"
+    },
+    "7036800": {
+      "key": "undertakerActivatingUltimateArtIncreasesAttackPower",
+      "name": "Undertaker Activating Ultimate Art Increases Attack Power"
+    },
+    "7036900": {
+      "key": "undertakerAttackPowerIncreasedByLandingTheFinalBlowOfAChainAttack",
+      "name": "Undertaker Attack Power Increased By Landing The Final Blow Of Achain Attack"
+    },
+    "7037000": {
+      "key": "undertakerPhysicalAttacksBoostedWhileAssistEffectFromIncantationIsActiveForSelf",
+      "name": "Undertaker Physical Attacks Boosted While Assist Effect From Incantation Is Active For Self"
+    },
+    "7037300": {
+      "key": "undertakerContactWithAlliesRestoresTheirHpWhileUltimateArtIsActivated",
+      "name": "Undertaker Contact With Allies Restores Their Hp While Ultimate Art Is Activated"
+    },
+    "7037600": {
+      "key": "successiveAttacksBoostAttackPower",
+      "name": "Successive Attacks Boost Attack Power"
+    },
+    "7037700": {
+      "key": "statusAilmentGaugesSlowlyIncreaseAttackPower",
+      "name": "Status Ailment Gauges Slowly Increase Attack Power"
+    },
+    "7037800": {
+      "key": "occasionallyNullifyAttacksWhenDamageNegationsIsLowered",
+      "name": "Occasionally Nullify Attacks When Damage Negations Is Lowered"
+    },
+    "7040000": {
+      "key": "improvedInitialStandardAttack",
+      "name": "Improved Initial Standard Attack"
+    },
+    "7040100": {
+      "key": "improvedGuardCounters",
+      "name": "Improved Guard Counters"
+    },
+    "7040200": {
+      "key": "improvedCriticalHits",
+      "name": "Improved Critical Hits"
+    },
+    "7040201": {
+      "key": "improvedCriticalHitsPlus1",
+      "name": "Improved Critical Hits Plus 1"
+    },
+    "7040290": {
+      "key": "improvedCriticalHitsPlus1",
+      "name": "Improved Critical Hits Plus 1"
+    },
+    "7040300": {
+      "key": "improvedThrowingPotDamage",
+      "name": "Improved Throwing Pot Damage"
+    },
+    "7040400": {
+      "key": "improvedThrowingKnifeDamage",
+      "name": "Improved Throwing Knife Damage"
+    },
+    "7040500": {
+      "key": "improvedGlintstoneAndGravityStoneDamage",
+      "name": "Improved Glintstone And Gravity Stone Damage"
+    },
+    "7043000": {
+      "key": "improvedRoarAndBreathAttacks",
+      "name": "Improved Roar And Breath Attacks"
+    },
+    "7043100": {
+      "key": "improvedPerfumingArts",
+      "name": "Improved Perfuming Arts"
+    },
+    "7043200": {
+      "key": "improvedStonediggerSorcery",
+      "name": "Improved Stonedigger Sorcery"
+    },
+    "7043300": {
+      "key": "improvedCarianSwordSorcery",
+      "name": "Improved Carian Sword Sorcery"
+    },
+    "7043400": {
+      "key": "improvedGlintbladeSorcery",
+      "name": "Improved Glintblade Sorcery"
+    },
+    "7043500": {
+      "key": "improvedInvisibilitySorcery",
+      "name": "Improved Invisibility Sorcery"
+    },
+    "7043600": {
+      "key": "improvedCrystalianSorcery",
+      "name": "Improved Crystalian Sorcery"
+    },
+    "7043700": {
+      "key": "improvedGravitySorcery",
+      "name": "Improved Gravity Sorcery"
+    },
+    "7043800": {
+      "key": "improvedThornSorcery",
+      "name": "Improved Thorn Sorcery"
+    },
+    "7043900": {
+      "key": "improvedNightSorcery",
+      "name": "Improved Night Sorcery"
+    },
+    "7044000": {
+      "key": "improvedFundamentalistIncantations",
+      "name": "Improved Fundamentalist Incantations"
+    },
+    "7044100": {
+      "key": "improvedDragonCultIncantations",
+      "name": "Improved Dragon Cult Incantations"
+    },
+    "7044200": {
+      "key": "improvedGiantsFlameIncantations",
+      "name": "Improved Giants Flame Incantations"
+    },
+    "7044300": {
+      "key": "improvedGodslayerIncantations",
+      "name": "Improved Godslayer Incantations"
+    },
+    "7044400": {
+      "key": "improvedBestialIncantations",
+      "name": "Improved Bestial Incantations"
+    },
+    "7044500": {
+      "key": "improvedFrenziedFlameIncantations",
+      "name": "Improved Frenzied Flame Incantations"
+    },
+    "7044600": {
+      "key": "improvedDragonCommunionIncantations",
+      "name": "Improved Dragon Communion Incantations"
+    },
+    "7050000": {
+      "key": "raisedStaminaRecoveryForNearbyAlliesButNotForSelf",
+      "name": "Raised Stamina Recovery For Nearby Allies But Not For Self"
+    },
+    "7050100": {
+      "key": "itemsConferEffectToAllNearbyAllies",
+      "name": "Items Confer Effect To All Nearby Allies"
+    },
+    "7060000": {
+      "key": "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated",
+      "name": "Attack Power Permanently Increased For Each Evergaol Prisoner Defeated"
+    },
+    "7060100": {
+      "key": "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
+      "name": "Max Fp Permanently Increased After Releasing Sorcerers Rise Mechanism"
+    },
+    "7060200": {
+      "key": "attackPowerUpAfterDefeatingANightInvader",
+      "name": "Attack Power Up After Defeating Anight Invader"
+    },
+    "7070000": {
+      "key": "treasureMarkedUponMap",
+      "name": "Treasure Marked Upon Map"
+    },
+    "7080000": {
+      "key": "improvedAttackPowerWith3PlusDaggersEquipped",
+      "name": "Improved Attack Power With 3Plus Daggers Equipped"
+    },
+    "7080100": {
+      "key": "improvedAttackPowerWith3PlusStraightSwordsEquipped",
+      "name": "Improved Attack Power With 3Plus Straight Swords Equipped"
+    },
+    "7080200": {
+      "key": "improvedAttackPowerWith3PlusGreatswordsEquipped",
+      "name": "Improved Attack Power With 3Plus Greatswords Equipped"
+    },
+    "7080300": {
+      "key": "improvedAttackPowerWith3PlusColossalSwordsEquipped",
+      "name": "Improved Attack Power With 3Plus Colossal Swords Equipped"
+    },
+    "7080400": {
+      "key": "improvedAttackPowerWith3PlusCurvedSwordsEquipped",
+      "name": "Improved Attack Power With 3Plus Curved Swords Equipped"
+    },
+    "7080500": {
+      "key": "improvedAttackPowerWith3PlusCurvedGreatswordsEquipped",
+      "name": "Improved Attack Power With 3Plus Curved Greatswords Equipped"
+    },
+    "7080600": {
+      "key": "improvedAttackPowerWith3PlusKatanaEquipped",
+      "name": "Improved Attack Power With 3Plus Katana Equipped"
+    },
+    "7080700": {
+      "key": "improvedAttackPowerWith3PlusTwinbladesEquipped",
+      "name": "Improved Attack Power With 3Plus Twinblades Equipped"
+    },
+    "7080800": {
+      "key": "improvedAttackPowerWith3PlusThrustingSwordsEquipped",
+      "name": "Improved Attack Power With 3Plus Thrusting Swords Equipped"
+    },
+    "7080900": {
+      "key": "improvedAttackPowerWith3PlusHeavyThrustingSwordsEquipped",
+      "name": "Improved Attack Power With 3Plus Heavy Thrusting Swords Equipped"
+    },
+    "7081000": {
+      "key": "improvedAttackPowerWith3PlusAxesEquipped",
+      "name": "Improved Attack Power With 3Plus Axes Equipped"
+    },
+    "7081100": {
+      "key": "improvedAttackPowerWith3PlusGreataxesEquipped",
+      "name": "Improved Attack Power With 3Plus Greataxes Equipped"
+    },
+    "7081200": {
+      "key": "improvedAttackPowerWith3PlusHammersEquipped",
+      "name": "Improved Attack Power With 3Plus Hammers Equipped"
+    },
+    "7081300": {
+      "key": "improvedAttackPowerWith3PlusGreatHammersEquipped",
+      "name": "Improved Attack Power With 3Plus Great Hammers Equipped"
+    },
+    "7081400": {
+      "key": "improvedAttackPowerWith3PlusFlailsEquipped",
+      "name": "Improved Attack Power With 3Plus Flails Equipped"
+    },
+    "7081500": {
+      "key": "improvedAttackPowerWith3PlusSpearsEquipped",
+      "name": "Improved Attack Power With 3Plus Spears Equipped"
+    },
+    "7081700": {
+      "key": "improvedAttackPowerWith3PlusGreatSpearsEquipped",
+      "name": "Improved Attack Power With 3Plus Great Spears Equipped"
+    },
+    "7081800": {
+      "key": "improvedAttackPowerWith3PlusHalberdsEquipped",
+      "name": "Improved Attack Power With 3Plus Halberds Equipped"
+    },
+    "7081900": {
+      "key": "improvedAttackPowerWith3PlusReapersEquipped",
+      "name": "Improved Attack Power With 3Plus Reapers Equipped"
+    },
+    "7082000": {
+      "key": "improvedAttackPowerWith3PlusFistsEquipped",
+      "name": "Improved Attack Power With 3Plus Fists Equipped"
+    },
+    "7082100": {
+      "key": "improvedAttackPowerWith3PlusClawsEquipped",
+      "name": "Improved Attack Power With 3Plus Claws Equipped"
+    },
+    "7082200": {
+      "key": "improvedAttackPowerWith3PlusWhipsEquipped",
+      "name": "Improved Attack Power With 3Plus Whips Equipped"
+    },
+    "7082300": {
+      "key": "improvedAttackPowerWith3PlusColossalWeaponsEquipped",
+      "name": "Improved Attack Power With 3Plus Colossal Weapons Equipped"
+    },
+    "7082400": {
+      "key": "improvedAttackPowerWith3PlusBowsEquipped",
+      "name": "Improved Attack Power With 3Plus Bows Equipped"
+    },
+    "7082500": {
+      "key": "maxFpUpWith3PlusStavesEquipped",
+      "name": "Max Fp Up With 3Plus Staves Equipped"
+    },
+    "7082600": {
+      "key": "maxFpUpWith3PlusSacredSealsEquipped",
+      "name": "Max Fp Up With 3Plus Sacred Seals Equipped"
+    },
+    "7082700": {
+      "key": "maxHpUpWith3PlusSmallShieldsEquipped",
+      "name": "Max Hp Up With 3Plus Small Shields Equipped"
+    },
+    "7082800": {
+      "key": "maxHpUpWith3PlusMediumShieldsEquipped",
+      "name": "Max Hp Up With 3Plus Medium Shields Equipped"
+    },
+    "7082900": {
+      "key": "maxHpUpWith3PlusGreatshieldsEquipped",
+      "name": "Max Hp Up With 3Plus Greatshields Equipped"
+    },
+    "7090000": {
+      "key": "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "name": "Defeating Enemies Fills More Of The Art Gauge"
+    },
+    "7090100": {
+      "key": "defeatingEnemiesRestoresHPForAlliesButNotForSelf",
+      "name": "Defeating Enemies Restores Hpfor Allies But Not For Self"
+    },
+    "7090300": {
+      "key": "defeatingEnemiesNearTotemStelaRestoresHP",
+      "name": "Defeating Enemies Near Totem Stela Restores Hp"
+    },
+    "7100000": {
+      "key": "criticalHitsDealHugeDamageOnPoisonedEnemies",
+      "name": "Critical Hits Deal Huge Damage On Poisoned Enemies"
+    },
+    "7100100": {
+      "key": "staminaRecoveryUponLandingAttacks",
+      "name": "Stamina Recovery Upon Landing Attacks"
+    },
+    "7100110": {
+      "key": "staminaRecoveryUponLandingAttacksPlus1",
+      "name": "Stamina Recovery Upon Landing Attacks Plus 1"
+    },
+    "7100190": {
+      "key": "staminaRecoveryUponLandingAttacksPlus1",
+      "name": "Stamina Recovery Upon Landing Attacks Plus 1"
+    },
+    "7110000": {
+      "key": "increasedRuneAcquisitionForSelfAndAllies",
+      "name": "Increased Rune Acquisition For Self And Allies"
+    },
+    "7120000": {
+      "key": "startingArmamentDealsMagicDamage",
+      "name": "Starting Armament Deals Magic Damage"
+    },
+    "7120100": {
+      "key": "startingArmamentDealsFireDamage",
+      "name": "Starting Armament Deals Fire Damage"
+    },
+    "7120101": {
+      "key": "armamentDealsFireDamagePlus1AtStartOfExpedition",
+      "name": "Armament Deals Fire Damage Plus 1At Start Of Expedition"
+    },
+    "7120200": {
+      "key": "startingArmamentDealsLightningDamage",
+      "name": "Starting Armament Deals Lightning Damage"
+    },
+    "7120300": {
+      "key": "startingArmamentDealsHolyDamage",
+      "name": "Starting Armament Deals Holy Damage"
+    },
+    "7120400": {
+      "key": "startingArmamentInflictsFrost",
+      "name": "Starting Armament Inflicts Frost"
+    },
+    "7120500": {
+      "key": "startingArmamentInflictsPoison",
+      "name": "Starting Armament Inflicts Poison"
+    },
+    "7120600": {
+      "key": "startingArmamentInflictsBloodLoss",
+      "name": "Starting Armament Inflicts Blood Loss"
+    },
+    "7120700": {
+      "key": "startingArmamentInflictsScarletRot",
+      "name": "Starting Armament Inflicts Scarlet Rot"
+    },
+    "7120900": {
+      "key": "stoneswordKeyInPossessionAtStartOfExpedition",
+      "name": "Stonesword Key In Possession At Start Of Expedition"
+    },
+    "7121000": {
+      "key": "smallPouchInPossessionAtStartOfExpedition",
+      "name": "Small Pouch In Possession At Start Of Expedition"
+    },
+    "7121001": {
+      "key": "smallPouchInPossessionAtStartOfExpedition",
+      "name": "Small Pouch In Possession At Start Of Expedition"
+    },
+    "7121100": {
+      "key": "firePotsInPossessionAtStartOfExpedition",
+      "name": "Fire Pots In Possession At Start Of Expedition"
+    },
+    "7121200": {
+      "key": "magicPotsInPossessionAtStartOfExpedition",
+      "name": "Magic Pots In Possession At Start Of Expedition"
+    },
+    "7121300": {
+      "key": "lightningPotsInPossessionAtStartOfExpedition",
+      "name": "Lightning Pots In Possession At Start Of Expedition"
+    },
+    "7121400": {
+      "key": "holyWaterPotsInPossessionAtStartOfExpedition",
+      "name": "Holy Water Pots In Possession At Start Of Expedition"
+    },
+    "7121500": {
+      "key": "poisonboneDartsInPossessionAtStartOfExpedition",
+      "name": "Poisonbone Darts In Possession At Start Of Expedition"
+    },
+    "7121600": {
+      "key": "crystalDartsInPossessionAtStartOfExpedition",
+      "name": "Crystal Darts In Possession At Start Of Expedition"
+    },
+    "7121700": {
+      "key": "throwingDaggersInPossessionAtStartOfExpedition",
+      "name": "Throwing Daggers In Possession At Start Of Expedition"
+    },
+    "7121800": {
+      "key": "glintstoneScrapsInPossessionAtStartOfExpedition",
+      "name": "Glintstone Scraps In Possession At Start Of Expedition"
+    },
+    "7121900": {
+      "key": "gravityStoneChunksInPossessionAtStartOfExpedition",
+      "name": "Gravity Stone Chunks In Possession At Start Of Expedition"
+    },
+    "7122000": {
+      "key": "bewitchingBranchesInPossessionAtStartOfExpedition",
+      "name": "Bewitching Branches In Possession At Start Of Expedition"
+    },
+    "7122100": {
+      "key": "wraithCallingBellInPossessionAtStartOfExpedition",
+      "name": "Wraith Calling Bell In Possession At Start Of Expedition"
+    },
+    "7122200": {
+      "key": "fireGreaseInPossessionAtStartOfExpedition",
+      "name": "Fire Grease In Possession At Start Of Expedition"
+    },
+    "7122300": {
+      "key": "magicGreaseInPossessionAtStartOfExpedition",
+      "name": "Magic Grease In Possession At Start Of Expedition"
+    },
+    "7122400": {
+      "key": "lightningGreaseInPossessionAtStartOfExpedition",
+      "name": "Lightning Grease In Possession At Start Of Expedition"
+    },
+    "7122500": {
+      "key": "holyGreaseInPossessionAtStartOfExpedition",
+      "name": "Holy Grease In Possession At Start Of Expedition"
+    },
+    "7122600": {
+      "key": "shieldGreaseInPossessionAtStartOfExpedition",
+      "name": "Shield Grease In Possession At Start Of Expedition"
+    },
+    "7122700": {
+      "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition"
+    },
+    "7122800": {
+      "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition"
+    },
+    "7122900": {
+      "key": "changesCompatibleArmamentsSkillToFlamingStrikeAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Flaming Strike At Start Of Expedition"
+    },
+    "7123000": {
+      "key": "changesCompatibleArmamentsSkillToEruptionAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Eruption At Start Of Expedition"
+    },
+    "7123100": {
+      "key": "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Thunderbolt At Start Of Expedition"
+    },
+    "7123200": {
+      "key": "changesCompatibleArmamentsSkillToLightningSlashAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Lightning Slash At Start Of Expedition"
+    },
+    "7123300": {
+      "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition"
+    },
+    "7123400": {
+      "key": "changesCompatibleArmamentsSkillToPrayerfulStrikeAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Prayerful Strike At Start Of Expedition"
+    },
+    "7123500": {
+      "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition"
+    },
+    "7123600": {
+      "key": "changesCompatibleArmamentsSkillToPoisonMothFlightAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Poison Moth Flight At Start Of Expedition"
+    },
+    "7123700": {
+      "key": "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Blood Blade At Start Of Expedition"
+    },
+    "7123800": {
+      "key": "changesCompatibleArmamentsSkillToSeppukuAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Seppuku At Start Of Expedition"
+    },
+    "7123900": {
+      "key": "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Chilling Mist At Start Of Expedition"
+    },
+    "7124000": {
+      "key": "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Hoarfrost Stomp At Start Of Expedition"
+    },
+    "7124100": {
+      "key": "changesCompatibleArmamentsSkillToWhiteShadowsLureAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To White Shadows Lure At Start Of Expedition"
+    },
+    "7124300": {
+      "key": "changesCompatibleArmamentsSkillToEndureAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Endure At Start Of Expedition"
+    },
+    "7124400": {
+      "key": "changesCompatibleArmamentsSkillToQuickstepAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Quickstep At Start Of Expedition"
+    },
+    "7124500": {
+      "key": "changesCompatibleArmamentsSkillToStormStompAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Storm Stomp At Start Of Expedition"
+    },
+    "7124600": {
+      "key": "changesCompatibleArmamentsSkillToDeterminationAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Determination At Start Of Expedition"
+    },
+    "7124700": {
+      "key": "changesCompatibleArmamentsSkillToRainOfArrowsAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Skill To Rain Of Arrows At Start Of Expedition"
+    },
+    "7126000": {
+      "key": "starlightShardsInPossessionAtStartOfExpedition",
+      "name": "Starlight Shards In Possession At Start Of Expedition"
+    },
+    "7126001": {
+      "key": "starlightShardsInPossessionAtStartOfExpedition",
+      "name": "Starlight Shards In Possession At Start Of Expedition"
+    },
+    "7126002": {
+      "key": "starlightShardsInPossessionAtStartOfExpedition",
+      "name": "Starlight Shards In Possession At Start Of Expedition"
+    },
+    "7150000": {
+      "key": "guardCounterIsGivenABoostBasedOnCurrentHP",
+      "name": "Guard Counter Is Given Aboost Based On Current Hp"
+    },
+    "7160000": {
+      "key": "hpRestorationUponThrustingCounterattack",
+      "name": "Hp Restoration Upon Thrusting Counterattack"
+    },
+    "7170100": {
+      "key": "attacksInflictRotWhenDamageIsTaken",
+      "name": "Attacks Inflict Rot When Damage Is Taken"
+    },
+    "7200000": {
+      "key": "hpRestorationWithHeadShots",
+      "name": "Hp Restoration With Head Shots"
+    },
+    "7200100": {
+      "key": "improvedStanceBreakingWithHeadShots",
+      "name": "Improved Stance Breaking With Head Shots"
+    },
+    "7220000": {
+      "key": "revenantPowerUpWhileFightingAlongsideFamily",
+      "name": "Revenant Power Up While Fighting Alongside Family"
+    },
+    "7230000": {
+      "key": "runeDiscountForShopPurchasesWhileOnExpedition",
+      "name": "Rune Discount For Shop Purchases While On Expedition"
+    },
+    "7230001": {
+      "key": "hugeRuneDiscountForShopPurchasesWhileOnExpedition",
+      "name": "Huge Rune Discount For Shop Purchases While On Expedition"
+    },
+    "7240000": {
+      "key": "improvedPoiseDamageNegationWhenKnockedBackByDamage",
+      "name": "Improved Poise Damage Negation When Knocked Back By Damage"
+    },
+    "7260000": {
+      "key": "attackPowerUpWhenFacingPoisonAfflictedEnemy",
+      "name": "Attack Power Up When Facing Poison Afflicted Enemy"
+    },
+    "7260200": {
+      "key": "attackPowerUpWhenFacingSleepAfflictedEnemy",
+      "name": "Attack Power Up When Facing Sleep Afflicted Enemy"
+    },
+    "7260300": {
+      "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
+      "name": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy"
+    },
+    "7260400": {
+      "key": "attackPowerUpWhenFacingFrostbiteAfflictedEnemy",
+      "name": "Attack Power Up When Facing Frostbite Afflicted Enemy"
+    },
+    "7260600": {
+      "key": "attacksCreateMagicBurstsVersusSleepingEnemies",
+      "name": "Attacks Create Magic Bursts Versus Sleeping Enemies"
+    },
+    "7260700": {
+      "key": "nearbyFrostbiteConcealsSelf",
+      "name": "Nearby Frostbite Conceals Self"
+    },
+    "7260710": {
+      "key": "poisonAndRotInVicinityIncreasesAttackPower",
+      "name": "Poison And Rot In Vicinity Increases Attack Power"
+    },
+    "7260800": {
+      "key": "poisonAndRotInVicinityIncreasesAttackPower",
+      "name": "Poison And Rot In Vicinity Increases Attack Power"
+    },
+    "7260900": {
+      "key": "rotInVicinityCausesContinuousHpRecovery",
+      "name": "Rot In Vicinity Causes Continuous Hp Recovery"
+    },
+    "7270100": {
+      "key": "ironeyeAdditionalCharacterSkillUse",
+      "name": "Ironeye Additional Character Skill Use"
+    },
+    "7280000": {
+      "key": "ironeyeExtendsDurationOfWeakPoint",
+      "name": "Ironeye Extends Duration Of Weak Point"
+    },
+    "7290000": {
+      "key": "duchessImprovedCharacterSkillAttackPower",
+      "name": "Duchess Improved Character Skill Attack Power"
+    },
+    "7300000": {
+      "key": "duchessCharacterSkillInflictsSleep",
+      "name": "Duchess Character Skill Inflicts Sleep"
+    },
+    "7310000": {
+      "key": "raiderDurationOfUltimateArtExtended",
+      "name": "Raider Duration Of Ultimate Art Extended"
+    },
+    "7320000": {
+      "key": "revenantAbilityActivationChanceIncreased",
+      "name": "Revenant Ability Activation Chance Increased"
+    },
+    "7330000": {
+      "key": "improvedDaggerAttackPower",
+      "name": "Improved Dagger Attack Power"
+    },
+    "7330100": {
+      "key": "improvedStraightSwordAttackPower",
+      "name": "Improved Straight Sword Attack Power"
+    },
+    "7330200": {
+      "key": "improvedGreatswordAttackPower",
+      "name": "Improved Greatsword Attack Power"
+    },
+    "7330300": {
+      "key": "improvedColossalSwordAttackPower",
+      "name": "Improved Colossal Sword Attack Power"
+    },
+    "7330400": {
+      "key": "improvedCurvedSwordAttackPower",
+      "name": "Improved Curved Sword Attack Power"
+    },
+    "7330500": {
+      "key": "improvedCurvedGreatswordAttackPower",
+      "name": "Improved Curved Greatsword Attack Power"
+    },
+    "7330600": {
+      "key": "improvedKatanaAttackPower",
+      "name": "Improved Katana Attack Power"
+    },
+    "7330700": {
+      "key": "improvedTwinbladeAttackPower",
+      "name": "Improved Twinblade Attack Power"
+    },
+    "7330800": {
+      "key": "improvedThrustingSwordAttackPower",
+      "name": "Improved Thrusting Sword Attack Power"
+    },
+    "7330900": {
+      "key": "improvedHeavyThrustingSwordAttackPower",
+      "name": "Improved Heavy Thrusting Sword Attack Power"
+    },
+    "7331000": {
+      "key": "improvedAxeAttackPower",
+      "name": "Improved Axe Attack Power"
+    },
+    "7331100": {
+      "key": "improvedGreataxeAttackPower",
+      "name": "Improved Greataxe Attack Power"
+    },
+    "7331200": {
+      "key": "improvedHammerAttackPower",
+      "name": "Improved Hammer Attack Power"
+    },
+    "7331300": {
+      "key": "improvedGreatHammerAttackPower",
+      "name": "Improved Great Hammer Attack Power"
+    },
+    "7331400": {
+      "key": "improvedFlailAttackPower",
+      "name": "Improved Flail Attack Power"
+    },
+    "7331500": {
+      "key": "improvedSpearAttackPower",
+      "name": "Improved Spear Attack Power"
+    },
+    "7331600": {
+      "key": "improvedPikeAttackPower",
+      "name": "Improved Pike Attack Power"
+    },
+    "7331700": {
+      "key": "improvedGreatSpearAttackPower",
+      "name": "Improved Great Spear Attack Power"
+    },
+    "7331800": {
+      "key": "improvedHalberdAttackPower",
+      "name": "Improved Halberd Attack Power"
+    },
+    "7331900": {
+      "key": "improvedReaperAttackPower",
+      "name": "Improved Reaper Attack Power"
+    },
+    "7332000": {
+      "key": "improvedFistAttackPower",
+      "name": "Improved Fist Attack Power"
+    },
+    "7332100": {
+      "key": "improvedClawAttackPower",
+      "name": "Improved Claw Attack Power"
+    },
+    "7332200": {
+      "key": "improvedWhipAttackPower",
+      "name": "Improved Whip Attack Power"
+    },
+    "7332300": {
+      "key": "improvedColossalWeaponAttackPower",
+      "name": "Improved Colossal Weapon Attack Power"
+    },
+    "7332400": {
+      "key": "improvedBowAttackPower",
+      "name": "Improved Bow Attack Power"
+    },
+    "7332500": {
+      "key": "improvedGreatbowAttackPower",
+      "name": "Improved Greatbow Attack Power"
+    },
+    "7332600": {
+      "key": "improvedCrossbowAttackPower",
+      "name": "Improved Crossbow Attack Power"
+    },
+    "7332700": {
+      "key": "improvedBallistaAttackPower",
+      "name": "Improved Ballista Attack Power"
+    },
+    "7340000": {
+      "key": "hpRestorationUponDaggerAttacks",
+      "name": "Hp Restoration Upon Dagger Attacks"
+    },
+    "7340100": {
+      "key": "hpRestorationUponStraightSwordAttacks",
+      "name": "Hp Restoration Upon Straight Sword Attacks"
+    },
+    "7340200": {
+      "key": "hpRestorationUponGreatswordAttacks",
+      "name": "Hp Restoration Upon Greatsword Attacks"
+    },
+    "7340300": {
+      "key": "hpRestorationUponColossalSwordAttacks",
+      "name": "Hp Restoration Upon Colossal Sword Attacks"
+    },
+    "7340400": {
+      "key": "hpRestorationUponCurvedSwordAttacks",
+      "name": "Hp Restoration Upon Curved Sword Attacks"
+    },
+    "7340500": {
+      "key": "hpRestorationUponCurvedGreatswordAttacks",
+      "name": "Hp Restoration Upon Curved Greatsword Attacks"
+    },
+    "7340600": {
+      "key": "hpRestorationUponKatanaAttacks",
+      "name": "Hp Restoration Upon Katana Attacks"
+    },
+    "7340700": {
+      "key": "hpRestorationUponTwinbladeAttacks",
+      "name": "Hp Restoration Upon Twinblade Attacks"
+    },
+    "7340800": {
+      "key": "hpRestorationUponThrustingSwordAttacks",
+      "name": "Hp Restoration Upon Thrusting Sword Attacks"
+    },
+    "7340900": {
+      "key": "hpRestorationUponHeavyThrustingSwordAttacks",
+      "name": "Hp Restoration Upon Heavy Thrusting Sword Attacks"
+    },
+    "7341000": {
+      "key": "hpRestorationUponAxeAttacks",
+      "name": "Hp Restoration Upon Axe Attacks"
+    },
+    "7341100": {
+      "key": "hpRestorationUponGreataxeAttacks",
+      "name": "Hp Restoration Upon Greataxe Attacks"
+    },
+    "7341200": {
+      "key": "hpRestorationUponHammerAttacks",
+      "name": "Hp Restoration Upon Hammer Attacks"
+    },
+    "7341300": {
+      "key": "hpRestorationUponGreatHammerAttacks",
+      "name": "Hp Restoration Upon Great Hammer Attacks"
+    },
+    "7341400": {
+      "key": "hpRestorationUponFlailAttacks",
+      "name": "Hp Restoration Upon Flail Attacks"
+    },
+    "7341500": {
+      "key": "hpRestorationUponSpearAttacks",
+      "name": "Hp Restoration Upon Spear Attacks"
+    },
+    "7341600": {
+      "key": "hpRestorationUponPikeAttacks",
+      "name": "Hp Restoration Upon Pike Attacks"
+    },
+    "7341700": {
+      "key": "hpRestorationUponGreatSpearAttacks",
+      "name": "Hp Restoration Upon Great Spear Attacks"
+    },
+    "7341800": {
+      "key": "hpRestorationUponHalberdAttacks",
+      "name": "Hp Restoration Upon Halberd Attacks"
+    },
+    "7341900": {
+      "key": "hpRestorationUponReaperAttacks",
+      "name": "Hp Restoration Upon Reaper Attacks"
+    },
+    "7342000": {
+      "key": "hpRestorationUponFistAttacks",
+      "name": "Hp Restoration Upon Fist Attacks"
+    },
+    "7342100": {
+      "key": "hpRestorationUponClawAttacks",
+      "name": "Hp Restoration Upon Claw Attacks"
+    },
+    "7342200": {
+      "key": "hpRestorationUponWhipAttacks",
+      "name": "Hp Restoration Upon Whip Attacks"
+    },
+    "7342300": {
+      "key": "hpRestorationUponColossalWeaponAttacks",
+      "name": "Hp Restoration Upon Colossal Weapon Attacks"
+    },
+    "7342400": {
+      "key": "hpRestorationUponBowAttacks",
+      "name": "Hp Restoration Upon Bow Attacks"
+    },
+    "7342500": {
+      "key": "hpRestorationUponGreatbowAttacks",
+      "name": "Hp Restoration Upon Greatbow Attacks"
+    },
+    "7342600": {
+      "key": "hpRestorationUponCrossbowAttacks",
+      "name": "Hp Restoration Upon Crossbow Attacks"
+    },
+    "7342700": {
+      "key": "hpRestorationUponBallistaAttacks",
+      "name": "Hp Restoration Upon Ballista Attacks"
+    },
+    "7350000": {
+      "key": "fpRestorationUponDaggerAttacks",
+      "name": "Fp Restoration Upon Dagger Attacks"
+    },
+    "7350100": {
+      "key": "fpRestorationUponStraightSwordAttacks",
+      "name": "Fp Restoration Upon Straight Sword Attacks"
+    },
+    "7350200": {
+      "key": "fpRestorationUponGreatswordAttacks",
+      "name": "Fp Restoration Upon Greatsword Attacks"
+    },
+    "7350300": {
+      "key": "fpRestorationUponColossalSwordAttacks",
+      "name": "Fp Restoration Upon Colossal Sword Attacks"
+    },
+    "7350400": {
+      "key": "fpRestorationUponCurvedSwordAttacks",
+      "name": "Fp Restoration Upon Curved Sword Attacks"
+    },
+    "7350500": {
+      "key": "fpRestorationUponCurvedGreatswordAttacks",
+      "name": "Fp Restoration Upon Curved Greatsword Attacks"
+    },
+    "7350600": {
+      "key": "fpRestorationUponKatanaAttacks",
+      "name": "Fp Restoration Upon Katana Attacks"
+    },
+    "7350700": {
+      "key": "fpRestorationUponTwinbladeAttacks",
+      "name": "Fp Restoration Upon Twinblade Attacks"
+    },
+    "7350800": {
+      "key": "fpRestorationUponThrustingSwordAttacks",
+      "name": "Fp Restoration Upon Thrusting Sword Attacks"
+    },
+    "7350900": {
+      "key": "fpRestorationUponHeavyThrustingSwordAttacks",
+      "name": "Fp Restoration Upon Heavy Thrusting Sword Attacks"
+    },
+    "7351000": {
+      "key": "fpRestorationUponAxeAttacks",
+      "name": "Fp Restoration Upon Axe Attacks"
+    },
+    "7351100": {
+      "key": "fpRestorationUponGreataxeAttacks",
+      "name": "Fp Restoration Upon Greataxe Attacks"
+    },
+    "7351200": {
+      "key": "fpRestorationUponHammerAttacks",
+      "name": "Fp Restoration Upon Hammer Attacks"
+    },
+    "7351300": {
+      "key": "fpRestorationUponGreatHammerAttacks",
+      "name": "Fp Restoration Upon Great Hammer Attacks"
+    },
+    "7351400": {
+      "key": "fpRestorationUponFlailAttacks",
+      "name": "Fp Restoration Upon Flail Attacks"
+    },
+    "7351500": {
+      "key": "fpRestorationUponSpearAttacks",
+      "name": "Fp Restoration Upon Spear Attacks"
+    },
+    "7351600": {
+      "key": "fpRestorationUponPikeAttacks",
+      "name": "Fp Restoration Upon Pike Attacks"
+    },
+    "7351700": {
+      "key": "fpRestorationUponGreatSpearAttacks",
+      "name": "Fp Restoration Upon Great Spear Attacks"
+    },
+    "7351800": {
+      "key": "fpRestorationUponHalberdAttacks",
+      "name": "Fp Restoration Upon Halberd Attacks"
+    },
+    "7351900": {
+      "key": "fpRestorationUponReaperAttacks",
+      "name": "Fp Restoration Upon Reaper Attacks"
+    },
+    "7352000": {
+      "key": "fpRestorationUponFistAttacks",
+      "name": "Fp Restoration Upon Fist Attacks"
+    },
+    "7352100": {
+      "key": "fpRestorationUponClawAttacks",
+      "name": "Fp Restoration Upon Claw Attacks"
+    },
+    "7352200": {
+      "key": "fpRestorationUponWhipAttacks",
+      "name": "Fp Restoration Upon Whip Attacks"
+    },
+    "7352300": {
+      "key": "fpRestorationUponColossalWeaponAttacks",
+      "name": "Fp Restoration Upon Colossal Weapon Attacks"
+    },
+    "7352400": {
+      "key": "fpRestorationUponBowAttacks",
+      "name": "Fp Restoration Upon Bow Attacks"
+    },
+    "7352500": {
+      "key": "fpRestorationUponGreatbowAttacks",
+      "name": "Fp Restoration Upon Greatbow Attacks"
+    },
+    "7352600": {
+      "key": "fpRestorationUponCrossbowAttacks",
+      "name": "Fp Restoration Upon Crossbow Attacks"
+    },
+    "7352700": {
+      "key": "fpRestorationUponBallistaAttacks",
+      "name": "Fp Restoration Upon Ballista Attacks"
+    },
+    "7360600": {
+      "key": "changesCompatibleArmamentsSorceryToMagicGlintbladeAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Sorcery To Magic Glintblade At Start Of Expedition"
+    },
+    "7360900": {
+      "key": "changesCompatibleArmamentsSorceryToCarianGreatswordAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Sorcery To Carian Greatsword At Start Of Expedition"
+    },
+    "7361200": {
+      "key": "changesCompatibleArmamentsSorceryToNightShardAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Sorcery To Night Shard At Start Of Expedition"
+    },
+    "7361300": {
+      "key": "changesCompatibleArmamentsSorceryToMagmaShotAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Sorcery To Magma Shot At Start Of Expedition"
+    },
+    "7362100": {
+      "key": "changesCompatibleArmamentsSorceryToBriarsOfPunishmentAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Sorcery To Briars Of Punishment At Start Of Expedition"
+    },
+    "7370300": {
+      "key": "changesCompatibleArmamentsIncantationToWrathOfGoldAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Incantation To Wrath Of Gold At Start Of Expedition"
+    },
+    "7370400": {
+      "key": "changesCompatibleArmamentsIncantationToLightningSpearAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Incantation To Lightning Spear At Start Of Expedition"
+    },
+    "7370600": {
+      "key": "changesCompatibleArmamentsIncantationToOFlameAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Incantation To Oflame At Start Of Expedition"
+    },
+    "7370900": {
+      "key": "changesCompatibleArmamentsIncantationToBeastClawAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Incantation To Beast Claw At Start Of Expedition"
+    },
+    "7371500": {
+      "key": "changesCompatibleArmamentsIncantationToDragonfireAtStartOfExpedition",
+      "name": "Changes Compatible Armaments Incantation To Dragonfire At Start Of Expedition"
+    },
+    "8000000": {
+      "key": "increasedMaximumHP",
+      "name": "Increased Maximum Hp"
+    },
+    "8000001": {
+      "key": "increasedMaximumHP",
+      "name": "Increased Maximum Hp"
+    },
+    "8010000": {
+      "key": "increasedMaximumFP",
+      "name": "Increased Maximum Fp"
+    },
+    "8010001": {
+      "key": "raisesMaximumFpPlus1",
+      "name": "Raises Maximum Fp Plus 1"
+    },
+    "8010100": {
+      "key": "reducedFPConsumption",
+      "name": "Reduced Fpconsumption"
+    },
+    "8010101": {
+      "key": "reducedFPConsumption",
+      "name": "Reduced Fpconsumption"
+    },
+    "8020000": {
+      "key": "increasedMaximumStamina",
+      "name": "Increased Maximum Stamina"
+    },
+    "8020001": {
+      "key": "increasedMaximumStamina",
+      "name": "Increased Maximum Stamina"
+    },
+    "8020100": {
+      "key": "reducedStaminaConsumption",
+      "name": "Reduced Stamina Consumption"
+    },
+    "8020200": {
+      "key": "improvedStaminaRecovery",
+      "name": "Improved Stamina Recovery"
+    },
+    "8020201": {
+      "key": "improvedStaminaRecoveryPlus1",
+      "name": "Improved Stamina Recovery Plus 1"
+    },
+    "8100000": {
+      "key": "improvedPhysicalAttackPower",
+      "name": "Improved Physical Attack Power"
+    },
+    "8100001": {
+      "key": "raisesPhysicalAttackPowerPlus1",
+      "name": "Raises Physical Attack Power Plus 1"
+    },
+    "8100100": {
+      "key": "improvedMagicAttackPower",
+      "name": "Improved Magic Attack Power"
+    },
+    "8100101": {
+      "key": "improvedMagicAttackPower",
+      "name": "Improved Magic Attack Power"
+    },
+    "8100200": {
+      "key": "improvedFireAttackPower",
+      "name": "Improved Fire Attack Power"
+    },
+    "8100201": {
+      "key": "improvedFireAttackPower",
+      "name": "Improved Fire Attack Power"
+    },
+    "8100300": {
+      "key": "improvedLightningAttackPower",
+      "name": "Improved Lightning Attack Power"
+    },
+    "8100301": {
+      "key": "improvedLightningAttackPower",
+      "name": "Improved Lightning Attack Power"
+    },
+    "8100400": {
+      "key": "improvedHolyAttackPower",
+      "name": "Improved Holy Attack Power"
+    },
+    "8100401": {
+      "key": "improvedHolyAttackPower",
+      "name": "Improved Holy Attack Power"
+    },
+    "8110000": {
+      "key": "attacksInflictPoison",
+      "name": "Attacks Inflict Poison"
+    },
+    "8110100": {
+      "key": "attacksInflictBloodLoss",
+      "name": "Attacks Inflict Blood Loss"
+    },
+    "8110200": {
+      "key": "attacksInflictSleep",
+      "name": "Attacks Inflict Sleep"
+    },
+    "8110300": {
+      "key": "attacksInflictDeathBlight",
+      "name": "Attacks Inflict Death Blight"
+    },
+    "8110400": {
+      "key": "attacksInflictRot",
+      "name": "Attacks Inflict Rot"
+    },
+    "8110500": {
+      "key": "attacksInflictFrost",
+      "name": "Attacks Inflict Frost"
+    },
+    "8110600": {
+      "key": "attacksInflictMadness",
+      "name": "Attacks Inflict Madness"
+    },
+    "8110700": {
+      "key": "addFireToWeapon",
+      "name": "Add Fire To Weapon"
+    },
+    "8110800": {
+      "key": "addMagicToWeapon",
+      "name": "Add Magic To Weapon"
+    },
+    "8110900": {
+      "key": "addLightningToWeapon",
+      "name": "Add Lightning To Weapon"
+    },
+    "8111000": {
+      "key": "addHolyToWeapon",
+      "name": "Add Holy To Weapon"
+    },
+    "8120000": {
+      "key": "improvedStanceBreaking",
+      "name": "Improved Stance Breaking"
+    },
+    "8120001": {
+      "key": "improvedStanceBreaking",
+      "name": "Improved Stance Breaking"
+    },
+    "8130000": {
+      "key": "improvedCriticalHits",
+      "name": "Improved Critical Hits"
+    },
+    "8130001": {
+      "key": "improvedCriticalHits",
+      "name": "Improved Critical Hits"
+    },
+    "8130002": {
+      "key": "improvedCriticalHits",
+      "name": "Improved Critical Hits"
+    },
+    "8130003": {
+      "key": "improvedCriticalHits",
+      "name": "Improved Critical Hits"
+    },
+    "8140000": {
+      "key": "improvedGuardBreaking",
+      "name": "Improved Guard Breaking"
+    },
+    "8140001": {
+      "key": "improvedGuardBreaking",
+      "name": "Improved Guard Breaking"
+    },
+    "8140002": {
+      "key": "improvedGuardBreaking",
+      "name": "Improved Guard Breaking"
+    },
+    "8150000": {
+      "key": "attackBoostLifeformsBornOfFallingStars",
+      "name": "Attack Boost Lifeforms Born Of Falling Stars"
+    },
+    "8150100": {
+      "key": "attackBoostThoseWhoLiveInDeath",
+      "name": "Attack Boost Those Who Live In Death"
+    },
+    "8150300": {
+      "key": "attackBoostDragons",
+      "name": "Attack Boost Dragons"
+    },
+    "8200000": {
+      "key": "improvedPhysicalDamageNegation",
+      "name": "Improved Physical Damage Negation"
+    },
+    "8200001": {
+      "key": "raisesPhysicalDamageNegationPlus1",
+      "name": "Raises Physical Damage Negation Plus 1"
+    },
+    "8200100": {
+      "key": "improvedMagicDamageNegation",
+      "name": "Improved Magic Damage Negation"
+    },
+    "8200101": {
+      "key": "improvedMagicDamageNegation",
+      "name": "Improved Magic Damage Negation"
+    },
+    "8200102": {
+      "key": "improvedMagicDamageNegation",
+      "name": "Improved Magic Damage Negation"
+    },
+    "8200200": {
+      "key": "improvedFireDamageNegation",
+      "name": "Improved Fire Damage Negation"
+    },
+    "8200201": {
+      "key": "improvedFireDamageNegation",
+      "name": "Improved Fire Damage Negation"
+    },
+    "8200202": {
+      "key": "improvedFireDamageNegation",
+      "name": "Improved Fire Damage Negation"
+    },
+    "8200300": {
+      "key": "improvedLightningDamageNegation",
+      "name": "Improved Lightning Damage Negation"
+    },
+    "8200301": {
+      "key": "improvedLightningDamageNegation",
+      "name": "Improved Lightning Damage Negation"
+    },
+    "8200302": {
+      "key": "improvedLightningDamageNegation",
+      "name": "Improved Lightning Damage Negation"
+    },
+    "8200400": {
+      "key": "improvedHolyDamageNegation",
+      "name": "Improved Holy Damage Negation"
+    },
+    "8200401": {
+      "key": "improvedHolyDamageNegation",
+      "name": "Improved Holy Damage Negation"
+    },
+    "8200402": {
+      "key": "improvedHolyDamageNegation",
+      "name": "Improved Holy Damage Negation"
+    },
+    "8200500": {
+      "key": "improvedNonPhysicalDamageNegation",
+      "name": "Improved Non Physical Damage Negation"
+    },
+    "8200501": {
+      "key": "raisesNonPhysicalDamageNegationPlus1",
+      "name": "Raises Non Physical Damage Negation Plus 1"
+    },
+    "8210000": {
+      "key": "improvedPoisonResistance",
+      "name": "Improved Poison Resistance"
+    },
+    "8210001": {
+      "key": "improvedPoisonResistance",
+      "name": "Improved Poison Resistance"
+    },
+    "8210002": {
+      "key": "improvedPoisonResistance",
+      "name": "Improved Poison Resistance"
+    },
+    "8210100": {
+      "key": "improvedBloodLossResistance",
+      "name": "Improved Blood Loss Resistance"
+    },
+    "8210101": {
+      "key": "improvedBloodLossResistance",
+      "name": "Improved Blood Loss Resistance"
+    },
+    "8210102": {
+      "key": "improvedBloodLossResistance",
+      "name": "Improved Blood Loss Resistance"
+    },
+    "8210200": {
+      "key": "improvedSleepResistance",
+      "name": "Improved Sleep Resistance"
+    },
+    "8210201": {
+      "key": "improvedSleepResistance",
+      "name": "Improved Sleep Resistance"
+    },
+    "8210202": {
+      "key": "improvedSleepResistance",
+      "name": "Improved Sleep Resistance"
+    },
+    "8210300": {
+      "key": "improvedDeathBlightResistance",
+      "name": "Improved Death Blight Resistance"
+    },
+    "8210301": {
+      "key": "improvedDeathBlightResistance",
+      "name": "Improved Death Blight Resistance"
+    },
+    "8210302": {
+      "key": "improvedDeathBlightResistance",
+      "name": "Improved Death Blight Resistance"
+    },
+    "8210400": {
+      "key": "improvedRotResistance",
+      "name": "Improved Rot Resistance"
+    },
+    "8210401": {
+      "key": "improvedRotResistance",
+      "name": "Improved Rot Resistance"
+    },
+    "8210402": {
+      "key": "improvedRotResistance",
+      "name": "Improved Rot Resistance"
+    },
+    "8210500": {
+      "key": "improvedFrostResistance",
+      "name": "Improved Frost Resistance"
+    },
+    "8210501": {
+      "key": "improvedFrostResistance",
+      "name": "Improved Frost Resistance"
+    },
+    "8210502": {
+      "key": "improvedFrostResistance",
+      "name": "Improved Frost Resistance"
+    },
+    "8210600": {
+      "key": "improvedMadnessResistance",
+      "name": "Improved Madness Resistance"
+    },
+    "8210601": {
+      "key": "improvedMadnessResistance",
+      "name": "Improved Madness Resistance"
+    },
+    "8210602": {
+      "key": "improvedMadnessResistance",
+      "name": "Improved Madness Resistance"
+    },
+    "8210700": {
+      "key": "raisesResistanceToAllAilments",
+      "name": "Raises Resistance To All Ailments"
+    },
+    "8210701": {
+      "key": "allResistanceUp",
+      "name": "All Resistance Up"
+    },
+    "8220000": {
+      "key": "improvedGuardingAbility",
+      "name": "Improved Guarding Ability"
+    },
+    "8220001": {
+      "key": "improvedGuardingAbilityPlus1",
+      "name": "Improved Guarding Ability Plus 1"
+    },
+    "8220002": {
+      "key": "improvedGuardingAbilityPlus2",
+      "name": "Improved Guarding Ability Plus 2"
+    },
+    "8230000": {
+      "key": "improvedPoise",
+      "name": "Improved Poise"
+    },
+    "8230001": {
+      "key": "improvedPoise",
+      "name": "Improved Poise"
+    },
+    "8300000": {
+      "key": "improvedAttackPowerWhenTwoHanding",
+      "name": "Improved Attack Power When Two Handing"
+    },
+    "8300001": {
+      "key": "improvedAttackPowerWhenTwoHanding",
+      "name": "Improved Attack Power When Two Handing"
+    },
+    "8300002": {
+      "key": "improvedAttackPowerWhenTwoHanding",
+      "name": "Improved Attack Power When Two Handing"
+    },
+    "8300100": {
+      "key": "improvedStanceBreakingWhenTwoHanding",
+      "name": "Improved Stance Breaking When Two Handing"
+    },
+    "8300101": {
+      "key": "improvedStanceBreakingWhenTwoHanding",
+      "name": "Improved Stance Breaking When Two Handing"
+    },
+    "8310000": {
+      "key": "attackUpWhenWieldingTwoArmaments",
+      "name": "Attack Up When Wielding Two Armaments"
+    },
+    "8310001": {
+      "key": "attackUpWhenWieldingTwoArmaments",
+      "name": "Attack Up When Wielding Two Armaments"
+    },
+    "8310002": {
+      "key": "attackUpWhenWieldingTwoArmaments",
+      "name": "Attack Up When Wielding Two Armaments"
+    },
+    "8310100": {
+      "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
+      "name": "Improved Stance Breaking When Wielding Two Armaments"
+    },
+    "8310101": {
+      "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
+      "name": "Improved Stance Breaking When Wielding Two Armaments"
+    },
+    "8320000": {
+      "key": "improvedChainAttackFinishers",
+      "name": "Improved Chain Attack Finishers"
+    },
+    "8320001": {
+      "key": "improvedChainAttackFinishers",
+      "name": "Improved Chain Attack Finishers"
+    },
+    "8320002": {
+      "key": "improvedChainAttackFinishers",
+      "name": "Improved Chain Attack Finishers"
+    },
+    "8320100": {
+      "key": "improvedChargeAttacks",
+      "name": "Improved Charge Attacks"
+    },
+    "8320101": {
+      "key": "improvedChargeAttacks",
+      "name": "Improved Charge Attacks"
+    },
+    "8320102": {
+      "key": "improvedChargeAttacks",
+      "name": "Improved Charge Attacks"
+    },
+    "8320200": {
+      "key": "strongAttacksImprovePoise",
+      "name": "Strong Attacks Improve Poise"
+    },
+    "8320300": {
+      "key": "improvedJumpAttacks",
+      "name": "Improved Jump Attacks"
+    },
+    "8320301": {
+      "key": "improvedJumpAttacks",
+      "name": "Improved Jump Attacks"
+    },
+    "8320302": {
+      "key": "improvedJumpAttacks",
+      "name": "Improved Jump Attacks"
+    },
+    "8320400": {
+      "key": "dmgNegationUpWhileChargingAttacks",
+      "name": "Dmg Negation Up While Charging Attacks"
+    },
+    "8320401": {
+      "key": "dmgNegationUpWhileChargingAttacks",
+      "name": "Dmg Negation Up While Charging Attacks"
+    },
+    "8320402": {
+      "key": "dmgNegationUpWhileChargingAttacks",
+      "name": "Dmg Negation Up While Charging Attacks"
+    },
+    "8330000": {
+      "key": "improvedSorceries",
+      "name": "Improved Sorceries"
+    },
+    "8330100": {
+      "key": "improvedIncantations",
+      "name": "Improved Incantations"
+    },
+    "8330104": {
+      "key": "raisesSorceryIncantationPotency",
+      "name": "Raises Sorcery Incantation Potency"
+    },
+    "8330200": {
+      "key": "improvedChargedSorceries",
+      "name": "Improved Charged Sorceries"
+    },
+    "8330201": {
+      "key": "improvedChargedSorceries",
+      "name": "Improved Charged Sorceries"
+    },
+    "8330202": {
+      "key": "improvedChargedSorceries",
+      "name": "Improved Charged Sorceries"
+    },
+    "8330300": {
+      "key": "improvedChargedIncantation",
+      "name": "Improved Charged Incantation"
+    },
+    "8330301": {
+      "key": "improvedChargedIncantation",
+      "name": "Improved Charged Incantation"
+    },
+    "8330302": {
+      "key": "improvedChargedIncantation",
+      "name": "Improved Charged Incantation"
+    },
+    "8330400": {
+      "key": "improvedSpellCastingSpeed",
+      "name": "Improved Spell Casting Speed"
+    },
+    "8330401": {
+      "key": "improvedSpellCastingSpeed",
+      "name": "Improved Spell Casting Speed"
+    },
+    "8330500": {
+      "key": "extendedSpellDuration",
+      "name": "Extended Spell Duration"
+    },
+    "8330600": {
+      "key": "reducedSpellFpCost",
+      "name": "Reduced Spell Fp Cost"
+    },
+    "8330601": {
+      "key": "reducedSpellFpCost",
+      "name": "Reduced Spell Fp Cost"
+    },
+    "8330602": {
+      "key": "reducedSpellFpCost",
+      "name": "Reduced Spell Fp Cost"
+    },
+    "8330700": {
+      "key": "communionGrantsAntiDragonEffect",
+      "name": "Communion Grants Anti Dragon Effect"
+    },
+    "8330900": {
+      "key": "dmgNegationUpWhileCastingSpells",
+      "name": "Dmg Negation Up While Casting Spells"
+    },
+    "8330901": {
+      "key": "dmgNegationUpWhileCastingSpells",
+      "name": "Dmg Negation Up While Casting Spells"
+    },
+    "8330902": {
+      "key": "dmgNegationUpWhileCastingSpells",
+      "name": "Dmg Negation Up While Casting Spells"
+    },
+    "8340000": {
+      "key": "improvedRangedWeaponAttacks",
+      "name": "Improved Ranged Weapon Attacks"
+    },
+    "8340001": {
+      "key": "improvedRangedWeaponAttacks",
+      "name": "Improved Ranged Weapon Attacks"
+    },
+    "8340002": {
+      "key": "improvedRangedWeaponAttacks",
+      "name": "Improved Ranged Weapon Attacks"
+    },
+    "8340100": {
+      "key": "projectileDamageDropOffReduced",
+      "name": "Projectile Damage Drop Off Reduced"
+    },
+    "8340101": {
+      "key": "projectileDamageDropOffReduced",
+      "name": "Projectile Damage Drop Off Reduced"
+    },
+    "8340102": {
+      "key": "projectileDamageDropOffReducedPlus1",
+      "name": "Projectile Damage Drop Off Reduced Plus 1"
+    },
+    "8350000": {
+      "key": "improvedSkillAttackPower",
+      "name": "Improved Skill Attack Power"
+    },
+    "8350001": {
+      "key": "improvedSkillAttackPower",
+      "name": "Improved Skill Attack Power"
+    },
+    "8350002": {
+      "key": "improvedSkillAttackPower",
+      "name": "Improved Skill Attack Power"
+    },
+    "8350100": {
+      "key": "improvedChargedSkillAttackPower",
+      "name": "Improved Charged Skill Attack Power"
+    },
+    "8350200": {
+      "key": "reducedSkillFpCost",
+      "name": "Reduced Skill Fp Cost"
+    },
+    "8350201": {
+      "key": "reducedSkillFpCost",
+      "name": "Reduced Skill Fp Cost"
+    },
+    "8350202": {
+      "key": "reducedSkillFpCost",
+      "name": "Reduced Skill Fp Cost"
+    },
+    "8350300": {
+      "key": "skillActivationImprovesPoise",
+      "name": "Skill Activation Improves Poise"
+    },
+    "8350400": {
+      "key": "parriesActivateGoldenRetaliation",
+      "name": "Parries Activate Golden Retaliation"
+    },
+    "8360000": {
+      "key": "ultimateArtGaugeChargeSpeedUp",
+      "name": "Ultimate Art Gauge Charge Speed Up"
+    },
+    "8370000": {
+      "key": "characterSkillCooldownReduction",
+      "name": "Character Skill Cooldown Reduction"
+    },
+    "8380000": {
+      "key": "improvedRoarAndBreathAttacks",
+      "name": "Improved Roar And Breath Attacks"
+    },
+    "8390000": {
+      "key": "improvedThrowingPots",
+      "name": "Improved Throwing Pots"
+    },
+    "8400000": {
+      "key": "improvedPerfumingArts",
+      "name": "Improved Perfuming Arts"
+    },
+    "8410000": {
+      "key": "improvedDodging",
+      "name": "Improved Dodging"
+    },
+    "8410100": {
+      "key": "lightningUponDodging",
+      "name": "Lightning Upon Dodging"
+    },
+    "8420000": {
+      "key": "improvedGuardCounters",
+      "name": "Improved Guard Counters"
+    },
+    "8420001": {
+      "key": "improvedGuardCounters",
+      "name": "Improved Guard Counters"
+    },
+    "8420002": {
+      "key": "improvedGuardCounters",
+      "name": "Improved Guard Counters"
+    },
+    "8420100": {
+      "key": "guardCountersActivateHolyAttacks",
+      "name": "Guard Counters Activate Holy Attacks"
+    },
+    "8420200": {
+      "key": "guardCountersLaunchSummoningAttack",
+      "name": "Guard Counters Launch Summoning Attack"
+    },
+    "8430000": {
+      "key": "improvedThrustingCounterattack",
+      "name": "Improved Thrusting Counterattack"
+    },
+    "8440000": {
+      "key": "improvedFlaskHPRestoration",
+      "name": "Improved Flask Hprestoration"
+    },
+    "8440001": {
+      "key": "improvedFlaskHPRestoration",
+      "name": "Improved Flask Hprestoration"
+    },
+    "8440100": {
+      "key": "flaskAlsoHealsAllies",
+      "name": "Flask Also Heals Allies"
+    },
+    "8440200": {
+      "key": "gradualRestorationByFlask",
+      "name": "Gradual Restoration By Flask"
+    },
+    "8450000": {
+      "key": "magmaSurgeSprint",
+      "name": "Magma Surge Sprint"
+    },
+    "8450100": {
+      "key": "iceStormSurgeSprint",
+      "name": "Ice Storm Surge Sprint"
+    },
+    "8460000": {
+      "key": "darknessConcealsCasterWhileWalking",
+      "name": "Darkness Conceals Caster While Walking"
+    },
+    "8460100": {
+      "key": "savageFlamesRoarWhileWalking",
+      "name": "Savage Flames Roar While Walking"
+    },
+    "8460200": {
+      "key": "flameOfFrenzyWhileWalking",
+      "name": "Flame Of Frenzy While Walking"
+    },
+    "8460300": {
+      "key": "wraithsWhileWalking",
+      "name": "Wraiths While Walking"
+    },
+    "8460400": {
+      "key": "viciousStarRainPoursWhileWalking",
+      "name": "Vicious Star Rain Pours While Walking"
+    },
+    "8460500": {
+      "key": "stormOfRedLightningWhileWalking",
+      "name": "Storm Of Red Lightning While Walking"
+    },
+    "8500000": {
+      "key": "moreRunesFromDefeatedEnemies",
+      "name": "More Runes From Defeated Enemies"
+    },
+    "8500100": {
+      "key": "runeOfTheStrong",
+      "name": "Rune Of The Strong"
+    },
+    "8500101": {
+      "key": "runeOfTheStrong",
+      "name": "Rune Of The Strong"
+    },
+    "8500102": {
+      "key": "runes60kAtStart30kOnDeath",
+      "name": "Runes 60K At Start 30K On Death"
+    },
+    "8510000": {
+      "key": "improvedItemDiscovery",
+      "name": "Improved Item Discovery"
+    },
+    "8510001": {
+      "key": "improvedItemDiscovery",
+      "name": "Improved Item Discovery"
+    },
+    "8510002": {
+      "key": "improvedItemDiscovery",
+      "name": "Improved Item Discovery"
+    },
+    "8520000": {
+      "key": "lessLikelyToBeTargeted",
+      "name": "Less Likely To Be Targeted"
+    },
+    "8530000": {
+      "key": "multiplePeriodicalGlintblades",
+      "name": "Multiple Periodical Glintblades"
+    },
+    "8530100": {
+      "key": "manyPeriodicalGlintblades",
+      "name": "Many Periodical Glintblades"
+    },
+    "8530200": {
+      "key": "periodicalGiantGlintblades",
+      "name": "Periodical Giant Glintblades"
+    },
+    "8540000": {
+      "key": "continuousHpRecovery",
+      "name": "Continuous Hp Recovery"
+    },
+    "8600100": {
+      "key": "hpRestorationUponAttacks",
+      "name": "Hp Restoration Upon Attacks"
+    },
+    "8600200": {
+      "key": "fpRestorationUponAttacks",
+      "name": "Fp Restoration Upon Attacks"
+    },
+    "8600201": {
+      "key": "fpRestorationUponAttacks",
+      "name": "Fp Restoration Upon Attacks"
+    },
+    "8600202": {
+      "key": "fpRestorationUponAttacks",
+      "name": "Fp Restoration Upon Attacks"
+    },
+    "8600300": {
+      "key": "suddenEnemyDeathUponAttacks",
+      "name": "Sudden Enemy Death Upon Attacks"
+    },
+    "8610000": {
+      "key": "hpRestorationUponSuccessiveAttacks",
+      "name": "Hp Restoration Upon Successive Attacks"
+    },
+    "8610100": {
+      "key": "fpRestorationUponSuccessiveAttacks",
+      "name": "Fp Restoration Upon Successive Attacks"
+    },
+    "8610200": {
+      "key": "successiveAttacksBoostAttackPower",
+      "name": "Successive Attacks Boost Attack Power"
+    },
+    "8610300": {
+      "key": "magicAttackFollowsChargeAttacks",
+      "name": "Magic Attack Follows Charge Attacks"
+    },
+    "8610400": {
+      "key": "fireAttackFollowsChargeAttacks",
+      "name": "Fire Attack Follows Charge Attacks"
+    },
+    "8610500": {
+      "key": "lightningFollowsChargeAttacks",
+      "name": "Lightning Follows Charge Attacks"
+    },
+    "8610600": {
+      "key": "holyAttackFollowsChargeAttacks",
+      "name": "Holy Attack Follows Charge Attacks"
+    },
+    "8610700": {
+      "key": "successiveAttacksNegateDamage",
+      "name": "Successive Attacks Negate Damage"
+    },
+    "8610701": {
+      "key": "successiveAttacksNegateDamage",
+      "name": "Successive Attacks Negate Damage"
+    },
+    "8610702": {
+      "key": "successiveAttacksNegateDamage",
+      "name": "Successive Attacks Negate Damage"
+    },
+    "8620000": {
+      "key": "takingDamageRestoresFp",
+      "name": "Taking Damage Restores Fp"
+    },
+    "8620001": {
+      "key": "takingDamageRestoresFp",
+      "name": "Taking Damage Restores Fp"
+    },
+    "8620002": {
+      "key": "takingDamageRestoresFp",
+      "name": "Taking Damage Restores Fp"
+    },
+    "8620100": {
+      "key": "takingDamageBoostsDamageNegation",
+      "name": "Taking Damage Boosts Damage Negation"
+    },
+    "8620101": {
+      "key": "takingDamageBoostsDamageNegation",
+      "name": "Taking Damage Boosts Damage Negation"
+    },
+    "8620102": {
+      "key": "takingDamageBoostsDamageNegation",
+      "name": "Taking Damage Boosts Damage Negation"
+    },
+    "8630000": {
+      "key": "defeatingEnemiesRestoresHP",
+      "name": "Defeating Enemies Restores Hp"
+    },
+    "8630001": {
+      "key": "defeatingEnemiesRestoresHP",
+      "name": "Defeating Enemies Restores Hp"
+    },
+    "8630002": {
+      "key": "defeatingEnemiesRestoresHP",
+      "name": "Defeating Enemies Restores Hp"
+    },
+    "8630100": {
+      "key": "defeatingEnemiesRestoresFP",
+      "name": "Defeating Enemies Restores Fp"
+    },
+    "8630101": {
+      "key": "defeatingEnemiesRestoresFP",
+      "name": "Defeating Enemies Restores Fp"
+    },
+    "8630102": {
+      "key": "defeatingEnemiesRestoresFP",
+      "name": "Defeating Enemies Restores Fp"
+    },
+    "8630200": {
+      "key": "defeatingGroupSummonsWraiths",
+      "name": "Defeating Group Summons Wraiths"
+    },
+    "8630300": {
+      "key": "defeatingGroupReleasesMistOfCharm",
+      "name": "Defeating Group Releases Mist Of Charm"
+    },
+    "8630400": {
+      "key": "defeatingGroupCallsVengefulSpirits",
+      "name": "Defeating Group Calls Vengeful Spirits"
+    },
+    "8630500": {
+      "key": "magmaUponDefeatingMultipleEnemies",
+      "name": "Magma Upon Defeating Multiple Enemies"
+    },
+    "8630600": {
+      "key": "defeatingGroupReleasesMistOfFrost",
+      "name": "Defeating Group Releases Mist Of Frost"
+    },
+    "8630700": {
+      "key": "defeatingGroupUnleashesLightning",
+      "name": "Defeating Group Unleashes Lightning"
+    },
+    "8630800": {
+      "key": "defeatingGroupFiresGoldenShockwave",
+      "name": "Defeating Group Fires Golden Shockwave"
+    },
+    "8640000": {
+      "key": "criticalHitHPRestoration",
+      "name": "Critical Hit Hprestoration"
+    },
+    "8640100": {
+      "key": "criticalHitFPRestoration",
+      "name": "Critical Hit Fprestoration"
+    },
+    "8640200": {
+      "key": "damageBoostedAfterCriticalHit",
+      "name": "Damage Boosted After Critical Hit"
+    },
+    "8640300": {
+      "key": "sacredOrderUponHolyCriticalHit",
+      "name": "Sacred Order Upon Holy Critical Hit"
+    },
+    "8640400": {
+      "key": "magmaUponFireCriticalHit",
+      "name": "Magma Upon Fire Critical Hit"
+    },
+    "8640500": {
+      "key": "lightningCriticalHitImbuesArmament",
+      "name": "Lightning Critical Hit Imbues Armament"
+    },
+    "8640600": {
+      "key": "crystalShardsUponMagicCriticalHit",
+      "name": "Crystal Shards Upon Magic Critical Hit"
+    },
+    "8640700": {
+      "key": "poisonMistUponPoisonCriticalHit",
+      "name": "Poison Mist Upon Poison Critical Hit"
+    },
+    "8640800": {
+      "key": "bloodLossCritThornsOfPunishment",
+      "name": "Blood Loss Crit Thorns Of Punishment"
+    },
+    "8640900": {
+      "key": "rotCriticalHitFiresPestThreads",
+      "name": "Rot Critical Hit Fires Pest Threads"
+    },
+    "8641000": {
+      "key": "iceStormUponCriticalHitWithFrost",
+      "name": "Ice Storm Upon Critical Hit With Frost"
+    },
+    "8641100": {
+      "key": "madnessCritHitFiresFrenziedFlame",
+      "name": "Madness Crit Hit Fires Frenzied Flame"
+    },
+    "8641200": {
+      "key": "deathCritHitCallsDeathLightning",
+      "name": "Death Crit Hit Calls Death Lightning"
+    },
+    "8650000": {
+      "key": "hpRecoveryFromSuccessfulGuardingPlus",
+      "name": "Hp Recovery From Successful Guarding Plus"
+    },
+    "8650100": {
+      "key": "fpRecoveryFromSuccessfulGuarding",
+      "name": "Fp Recovery From Successful Guarding"
+    },
+    "8652000": {
+      "key": "successfulGuardingUpsPoise",
+      "name": "Successful Guarding Ups Poise"
+    },
+    "8652001": {
+      "key": "successfulGuardingUpsPoise",
+      "name": "Successful Guarding Ups Poise"
+    },
+    "8652002": {
+      "key": "successfulGuardingUpsPoise",
+      "name": "Successful Guarding Ups Poise"
+    },
+    "8652100": {
+      "key": "successfulGuardingUpsDmgNegation",
+      "name": "Successful Guarding Ups Dmg Negation"
+    },
+    "8652101": {
+      "key": "successfulGuardingUpsDmgNegation",
+      "name": "Successful Guarding Ups Dmg Negation"
+    },
+    "8652102": {
+      "key": "successfulGuardingUpsDmgNegation",
+      "name": "Successful Guarding Ups Dmg Negation"
+    },
+    "8660000": {
+      "key": "improvedAttackPowerAtLowHP",
+      "name": "Improved Attack Power At Low Hp"
+    },
+    "8660001": {
+      "key": "improvedAttackPowerAtLowHP",
+      "name": "Improved Attack Power At Low Hp"
+    },
+    "8660002": {
+      "key": "improvedAttackPowerAtLowHP",
+      "name": "Improved Attack Power At Low Hp"
+    },
+    "8660101": {
+      "key": "improvedDamageNegationAtLowHP",
+      "name": "Improved Damage Negation At Low Hp"
+    },
+    "8660200": {
+      "key": "criticalHitsInflictBloodLoss",
+      "name": "Critical Hits Inflict Blood Loss"
+    },
+    "8660300": {
+      "key": "createsHolyGroundAtLowHP",
+      "name": "Creates Holy Ground At Low Hp"
+    },
+    "8660400": {
+      "key": "lowHpCritHitFullyRestoresHP",
+      "name": "Low Hp Crit Hit Fully Restores Hp"
+    },
+    "8670000": {
+      "key": "improvedAttackPowerAtFullHP",
+      "name": "Improved Attack Power At Full Hp"
+    },
+    "8670001": {
+      "key": "improvedAttackPowerAtFullHP",
+      "name": "Improved Attack Power At Full Hp"
+    },
+    "8670002": {
+      "key": "improvedAttackPowerAtFullHP",
+      "name": "Improved Attack Power At Full Hp"
+    },
+    "8670101": {
+      "key": "improvedDamageNegationAtFullHP",
+      "name": "Improved Damage Negation At Full Hp"
+    },
+    "8690000": {
+      "key": "poisonProducesAMistOfPoison",
+      "name": "Poison Produces Amist Of Poison"
+    },
+    "8690100": {
+      "key": "madnessProducesAFlameOfFrenzy",
+      "name": "Madness Produces Aflame Of Frenzy"
+    },
+    "8690200": {
+      "key": "rotProducesAMistOfScarletRot",
+      "name": "Rot Produces Amist Of Scarlet Rot"
+    },
+    "8690300": {
+      "key": "frostbiteProducesAMistOfFrost",
+      "name": "Frostbite Produces Amist Of Frost"
+    },
+    "8690400": {
+      "key": "sleepProducesAMistOfSleep",
+      "name": "Sleep Produces Amist Of Sleep"
+    },
+    "8700000": {
+      "key": "poisonIncreasesAttackPower",
+      "name": "Poison Increases Attack Power"
+    },
+    "8710000": {
+      "key": "bloodLossIncreasesAttackPower",
+      "name": "Blood Loss Increases Attack Power"
+    },
+    "8720000": {
+      "key": "sleepIncreasesAttackPower",
+      "name": "Sleep Increases Attack Power"
+    },
+    "8740000": {
+      "key": "frostbiteIncreasesAttackPower",
+      "name": "Frostbite Increases Attack Power"
+    },
+    "8750000": {
+      "key": "madnessIncreasesAttackPower",
+      "name": "Madness Increases Attack Power"
+    },
+    "8760000": {
+      "key": "reducedMaximumHP",
+      "name": "Reduced Maximum Hp"
+    },
+    "8760100": {
+      "key": "reducedMaximumFP",
+      "name": "Reduced Maximum Fp"
+    },
+    "8760200": {
+      "key": "reducedMaximumStamina",
+      "name": "Reduced Maximum Stamina"
+    },
+    "8761000": {
+      "key": "impairedPhysicalDamageNegation",
+      "name": "Impaired Physical Damage Negation"
+    },
+    "8761100": {
+      "key": "impairedAffinityDamageNegation",
+      "name": "Impaired Affinity Damage Negation"
+    },
+    "8762000": {
+      "key": "allResistancesDown",
+      "name": "All Resistances Down"
+    },
+    "8763000": {
+      "key": "reducedFlaskHPRestoration",
+      "name": "Reduced Flask Hprestoration"
+    },
+    "8766000": {
+      "key": "continuousHPLoss",
+      "name": "Continuous Hploss"
+    },
+    "8770000": {
+      "key": "nightsTideDamageIncreased",
+      "name": "Nights Tide Damage Increased"
+    },
+    "8771000": {
+      "key": "damageIncreasedByNightsEncroachment",
+      "name": "Damage Increased By Nights Encroachment"
+    },
+    "8800100": {
+      "key": "moreDamageTakenAfterEvasion",
+      "name": "More Damage Taken After Evasion"
+    },
+    "8800200": {
+      "key": "repeatedEvasionsLowerDamageNegation",
+      "name": "Repeated Evasions Lower Damage Negation"
+    },
+    "8801000": {
+      "key": "reducedDamageNegationForFlaskUsages",
+      "name": "Reduced Damage Negation For Flask Usages"
+    },
+    "8810000": {
+      "key": "lowerAttackWhenBelowMaxHP",
+      "name": "Lower Attack When Below Max Hp"
+    },
+    "8810200": {
+      "key": "slowerArtGaugeWhenBelowMaxHP",
+      "name": "Slower Art Gauge When Below Max Hp"
+    },
+    "8810300": {
+      "key": "poisonBuildupWhenBelowMaxHP",
+      "name": "Poison Buildup When Below Max Hp"
+    },
+    "8810400": {
+      "key": "rotBuildupWhenBelowMaxHP",
+      "name": "Rot Buildup When Below Max Hp"
+    },
+    "8813100": {
+      "key": "lowerStaminaImpairsDmgNegation",
+      "name": "Lower Stamina Impairs Dmg Negation"
+    },
+    "8821000": {
+      "key": "attacksImpairedOnOccasion",
+      "name": "Attacks Impaired On Occasion"
+    },
+    "8830000": {
+      "key": "ailmentsCauseIncreasedDamage",
+      "name": "Ailments Cause Increased Damage"
+    },
+    "8831000": {
+      "key": "nearDeathReducesArtGauge",
+      "name": "Near Death Reduces Art Gauge"
+    },
+    "8831200": {
+      "key": "nearDeathReducesMaxHP",
+      "name": "Near Death Reduces Max Hp"
+    },
+    "8850300": {
+      "key": "improvedStaminaRecovery",
+      "name": "Improved Stamina Recovery"
+    },
+    "8851000": {
+      "key": "allResistancesUp",
+      "name": "All Resistances Up"
+    },
+    "8851200": {
+      "key": "improvedSorceriesAndIncantations",
+      "name": "Improved Sorceries And Incantations"
+    },
+    "8851300": {
+      "key": "increasedSorceryAndIncantationDuration",
+      "name": "Increased Sorcery And Incantation Duration"
+    },
+    "8851900": {
+      "key": "improvedFlaskHPRestoration",
+      "name": "Improved Flask Hprestoration"
+    },
+    "8880000": {
+      "key": "iceStormUponChargedSlash",
+      "name": "Ice Storm Upon Charged Slash"
+    },
+    "8880100": {
+      "key": "ringOfLightUponChargedSlash",
+      "name": "Ring Of Light Upon Charged Slash"
+    },
+    "8880200": {
+      "key": "blackFlamesUponChargedSlash",
+      "name": "Black Flames Upon Charged Slash"
+    },
+    "8880300": {
+      "key": "phantomAttackUponChargedSlash",
+      "name": "Phantom Attack Upon Charged Slash"
+    },
+    "8880400": {
+      "key": "roaringFlamesUponChargedSlash",
+      "name": "Roaring Flames Upon Charged Slash"
+    },
+    "8881000": {
+      "key": "holyShockwaveUponChargedStrike",
+      "name": "Holy Shockwave Upon Charged Strike"
+    },
+    "8881100": {
+      "key": "projectilesUponChargedStrike",
+      "name": "Projectiles Upon Charged Strike"
+    },
+    "8881200": {
+      "key": "luringEnemiesUponChargedStrike",
+      "name": "Luring Enemies Upon Charged Strike"
+    },
+    "8881300": {
+      "key": "shockwaveUponChargedStrike",
+      "name": "Shockwave Upon Charged Strike"
+    },
+    "8881400": {
+      "key": "phantomAttackUponChargedStrike",
+      "name": "Phantom Attack Upon Charged Strike"
+    },
+    "8881500": {
+      "key": "magmaUponChargedStrike",
+      "name": "Magma Upon Charged Strike"
+    },
+    "8881600": {
+      "key": "magicBubblesUponChargedStrike",
+      "name": "Magic Bubbles Upon Charged Strike"
+    },
+    "8882000": {
+      "key": "phantomAttackUponChargedThrust",
+      "name": "Phantom Attack Upon Charged Thrust"
+    },
+    "8882100": {
+      "key": "lightningUponChargedThrust",
+      "name": "Lightning Upon Charged Thrust"
+    },
+    "8882200": {
+      "key": "acidMistUponChargedThrust",
+      "name": "Acid Mist Upon Charged Thrust"
+    },
+    "8882300": {
+      "key": "pestThreadsUponChargedThrust",
+      "name": "Pest Threads Upon Charged Thrust"
+    },
+    "8882400": {
+      "key": "poisonMistUponChargedThrust",
+      "name": "Poison Mist Upon Charged Thrust"
+    },
+    "8882500": {
+      "key": "chargedThrustInvokesSleepMist",
+      "name": "Charged Thrust Invokes Sleep Mist"
+    },
+    "8883000": {
+      "key": "projectilesLaunchedUponAttacks",
+      "name": "Projectiles Launched Upon Attacks"
+    },
+    "8883100": {
+      "key": "lightningUponPrecisionAiming",
+      "name": "Lightning Upon Precision Aiming"
+    },
+    "8883200": {
+      "key": "poisonMistUponPrecisionAiming",
+      "name": "Poison Mist Upon Precision Aiming"
+    },
+    "8883300": {
+      "key": "rotMistUponPrecisionAiming",
+      "name": "Rot Mist Upon Precision Aiming"
+    },
+    "8883400": {
+      "key": "bloodfliesUponPrecisionAiming",
+      "name": "Bloodflies Upon Precision Aiming"
+    },
+    "8884000": {
+      "key": "shieldingImprovesDamageNegation",
+      "name": "Shielding Improves Damage Negation"
+    },
+    "8884100": {
+      "key": "shieldingInvokesIndomitableVow",
+      "name": "Shielding Invokes Indomitable Vow"
+    },
+    "8884200": {
+      "key": "shieldingCreatesHolyGround",
+      "name": "Shielding Creates Holy Ground"
+    },
+    "8884300": {
+      "key": "brokenStanceActivatesEndure",
+      "name": "Broken Stance Activates Endure"
+    },
+    "8885000": {
+      "key": "flaskHealingAlsoRestoresFP",
+      "name": "Flask Healing Also Restores Fp"
+    },
+    "8885100": {
+      "key": "failingToCastSorceryRestoresFP",
+      "name": "Failing To Cast Sorcery Restores Fp"
+    },
+    "8885200": {
+      "key": "guardingUpsAttackAndCastingSpeeds",
+      "name": "Guarding Ups Attack And Casting Speeds"
+    },
+    "8920100": {
+      "key": "improvedNonPhysicalAttackPower",
+      "name": "Improved Non Physical Attack Power"
+    },
+    "8920101": {
+      "key": "improvedNonPhysicalAttackPower",
+      "name": "Improved Non Physical Attack Power"
+    },
+    "8920102": {
+      "key": "improvedNonPhysicalAttackPower",
+      "name": "Improved Non Physical Attack Power"
+    },
+    "8921400": {
+      "key": "criticalHitsBoostAttackPower",
+      "name": "Critical Hits Boost Attack Power"
+    },
+    "8960100": {
+      "key": "changedStrongAttacks",
+      "name": "Changed Strong Attacks"
+    },
+    "8960200": {
+      "key": "strongJumpAttacksCreateShockwave",
+      "name": "Strong Jump Attacks Create Shockwave"
+    },
+    "9021400": {
+      "key": "powerOfNightAndFlame",
+      "name": "Power Of Night And Flame"
+    },
+    "9030900": {
+      "key": "powerOfDarkMoon",
+      "name": "Power Of Dark Moon"
+    },
+    "9031000": {
+      "key": "powerOfTheGreaterWill",
+      "name": "Power Of The Greater Will"
+    },
+    "9031400": {
+      "key": "powerOfTheBlasphemous",
+      "name": "Power Of The Blasphemous"
+    },
+    "9031500": {
+      "key": "powerOfHouseMarais",
+      "name": "Power Of House Marais"
+    },
+    "9031700": {
+      "key": "powerOfTheGoldenOrder",
+      "name": "Power Of The Golden Order"
+    },
+    "9040200": {
+      "key": "powerOfDestinedDeath",
+      "name": "Power Of Destined Death"
+    },
+    "9040500": {
+      "key": "powerOfTheStarscourge",
+      "name": "Power Of The Starscourge"
+    },
+    "9040800": {
+      "key": "powerOfDestruction",
+      "name": "Power Of Destruction"
+    },
+    "9041000": {
+      "key": "powerOfVengeance",
+      "name": "Power Of Vengeance"
+    },
+    "9060400": {
+      "key": "powerOfTheDragonlord",
+      "name": "Power Of The Dragonlord"
+    },
+    "9071000": {
+      "key": "powerOfDespair",
+      "name": "Power Of Despair"
+    },
+    "9081000": {
+      "key": "powerOfTheOmenKing",
+      "name": "Power Of The Omen King"
+    },
+    "9090200": {
+      "key": "powerOfTheUndefeated",
+      "name": "Power Of The Undefeated"
+    },
+    "9111500": {
+      "key": "powerOfTheQueen",
+      "name": "Power Of The Queen"
+    },
+    "9122000": {
+      "key": "powerOfTheBlasphemous",
+      "name": "Power Of The Blasphemous"
+    },
+    "9130300": {
+      "key": "powerOfTheLightlessVoid",
+      "name": "Power Of The Lightless Void"
+    },
+    "9150400": {
+      "key": "powerOfTheGoldenLineage",
+      "name": "Power Of The Golden Lineage"
+    },
+    "9151100": {
+      "key": "powerOfTheAncestralSpirit",
+      "name": "Power Of The Ancestral Spirit"
+    },
+    "9160900": {
+      "key": "powerOfTheGreatAncientDragon",
+      "name": "Power Of The Great Ancient Dragon"
+    },
+    "9170100": {
+      "key": "powerOfTheBloodLord",
+      "name": "Power Of The Blood Lord"
+    },
+    "9200600": {
+      "key": "powerOfTheGiant",
+      "name": "Power Of The Giant"
+    },
+    "9210600": {
+      "key": "powerOfTheFlyingDragon",
+      "name": "Power Of The Flying Dragon"
+    },
+    "9230500": {
+      "key": "powerOfTheFirstLord",
+      "name": "Power Of The First Lord"
+    },
+    "9330900": {
+      "key": "powerOfFullMoon",
+      "name": "Power Of Full Moon"
+    },
+    "9420000": {
+      "key": "powerOfTheGeneral",
+      "name": "Power Of The General"
+    },
+    "9990100": {
+      "key": "theWyldersGrief",
+      "name": "The Wylders Grief"
+    },
+    "9990101": {
+      "key": "theWyldersGrief",
+      "name": "The Wylders Grief"
+    },
+    "9990102": {
+      "key": "theWyldersGrief",
+      "name": "The Wylders Grief"
+    },
+    "9990200": {
+      "key": "theGuardiansGrief",
+      "name": "The Guardians Grief"
+    },
+    "9990201": {
+      "key": "theGuardiansGrief",
+      "name": "The Guardians Grief"
+    },
+    "9990202": {
+      "key": "theGuardiansGrief",
+      "name": "The Guardians Grief"
+    },
+    "9990300": {
+      "key": "theIroneyesGrief",
+      "name": "The Ironeyes Grief"
+    },
+    "9990301": {
+      "key": "theIroneyesGrief",
+      "name": "The Ironeyes Grief"
+    },
+    "9990302": {
+      "key": "theIroneyesGrief",
+      "name": "The Ironeyes Grief"
+    },
+    "9990400": {
+      "key": "theDuchessGrief",
+      "name": "The Duchess Grief"
+    },
+    "9990500": {
+      "key": "theRaidersGrief",
+      "name": "The Raiders Grief"
+    },
+    "9990501": {
+      "key": "theRaidersGrief",
+      "name": "The Raiders Grief"
+    },
+    "9990502": {
+      "key": "theRaidersGrief",
+      "name": "The Raiders Grief"
+    },
+    "9990600": {
+      "key": "theRevenantsGrief",
+      "name": "The Revenants Grief"
+    },
+    "9990601": {
+      "key": "theRevenantsGrief",
+      "name": "The Revenants Grief"
+    },
+    "9990602": {
+      "key": "theRevenantsGrief",
+      "name": "The Revenants Grief"
+    },
+    "9990700": {
+      "key": "theReclusesGrief",
+      "name": "The Recluses Grief"
+    },
+    "9990701": {
+      "key": "theReclusesGrief",
+      "name": "The Recluses Grief"
+    },
+    "9990702": {
+      "key": "theReclusesGrief",
+      "name": "The Recluses Grief"
+    },
+    "9990800": {
+      "key": "theExecutorsGrief",
+      "name": "The Executors Grief"
+    },
+    "9990801": {
+      "key": "theExecutorsGrief",
+      "name": "The Executors Grief"
+    },
+    "9990802": {
+      "key": "theExecutorsGrief",
+      "name": "The Executors Grief"
+    }
+  }
+}
