@@ -1,0 +1,20 @@
+{
+  "effects": [
+    {
+      "key": "increasedMaximumHP",
+      "priority": "required"
+    },
+    {
+      "key": "physicalAttackUpPlus2",
+      "priority": "preferred"
+    },
+    {
+      "key": "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "priority": "preferred"
+    },
+    {
+      "key": "ultimateArtAutoChargePlus3",
+      "priority": "nice_to_have"
+    }
+  ]
+}

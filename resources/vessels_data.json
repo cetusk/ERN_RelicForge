@@ -1,0 +1,163 @@
+{
+  "universalVessels": [
+    {
+      "key": "sacredErdtreeGrail",
+      "nameJa": "黄金樹の聖杯",
+      "nameEn": "Sacred Erdtree Grail",
+      "normalSlots": ["Yellow", "Yellow", "Yellow"],
+      "deepSlots": ["Yellow", "Yellow", "Yellow"]
+    },
+    {
+      "key": "spiritTreeGrail",
+      "nameJa": "霊樹の聖杯",
+      "nameEn": "Spirit Tree Grail",
+      "normalSlots": ["Green", "Green", "Green"],
+      "deepSlots": ["Green", "Green", "Green"]
+    },
+    {
+      "key": "giantTreeGrail",
+      "nameJa": "巨人樹の聖杯",
+      "nameEn": "Giant Tree Grail",
+      "normalSlots": ["Blue", "Blue", "Blue"],
+      "deepSlots": ["Blue", "Blue", "Blue"]
+    },
+    {
+      "key": "scadutreeGrail",
+      "nameJa": "影樹の聖杯",
+      "nameEn": "Scadutree Grail",
+      "normalSlots": ["Red", "Red", "Red"],
+      "deepSlots": ["Red", "Red", "Red"]
+    }
+  ],
+  "vesselTypes": [
+    {"key": "urn", "nameJa": "器", "nameEn": "Urn"},
+    {"key": "goblet", "nameJa": "盃", "nameEn": "Goblet"},
+    {"key": "chalice", "nameJa": "高杯", "nameEn": "Chalice"},
+    {"key": "sootCoveredUrn", "nameJa": "煤けた器", "nameEn": "Soot-Covered Urn"},
+    {"key": "sealedUrn", "nameJa": "封じられた器", "nameEn": "Sealed Urn"},
+    {"key": "decrepitGoblet", "nameJa": "朽ちた盃", "nameEn": "Decrepit Goblet"},
+    {"key": "forgottenGoblet", "nameJa": "忘れられた盃", "nameEn": "Forgotten Goblet"}
+  ],
+  "characters": {
+    "追跡者": {
+      "nameEn": "Wylder",
+      "vessels": {
+        "urn":             {"normalSlots": ["Red", "Red", "Blue"],    "deepSlots": ["Red", "Red", "Blue"]},
+        "goblet":          {"normalSlots": ["Yellow", "Green", "Green"], "deepSlots": ["Yellow", "Green", "Green"]},
+        "chalice":         {"normalSlots": ["Red", "Yellow", "Any"],  "deepSlots": ["Red", "Blue", "Green"]},
+        "sootCoveredUrn":  {"normalSlots": ["Blue", "Blue", "Yellow"], "deepSlots": ["Blue", "Blue", "Yellow"]},
+        "sealedUrn":       {"normalSlots": ["Blue", "Red", "Red"],   "deepSlots": ["Green", "Yellow", "Yellow"]},
+        "decrepitGoblet":  {"normalSlots": ["Blue", "Green", "Yellow"], "deepSlots": ["Blue", "Green", "Yellow"]},
+        "forgottenGoblet": {"normalSlots": ["Green", "Green", "Yellow"], "deepSlots": ["Red", "Green", "Any"]}
+      }
+    },
+    "守護者": {
+      "nameEn": "Guardian",
+      "vessels": {
+        "urn":             {"normalSlots": ["Red", "Yellow", "Yellow"], "deepSlots": ["Red", "Yellow", "Yellow"]},
+        "goblet":          {"normalSlots": ["Blue", "Blue", "Green"], "deepSlots": ["Blue", "Blue", "Green"]},
+        "chalice":         {"normalSlots": ["Blue", "Yellow", "Any"], "deepSlots": ["Red", "Blue", "Yellow"]},
+        "sootCoveredUrn":  {"normalSlots": ["Red", "Green", "Green"], "deepSlots": ["Red", "Green", "Green"]},
+        "sealedUrn":       {"normalSlots": ["Yellow", "Yellow", "Red"], "deepSlots": ["Green", "Green", "Yellow"]},
+        "decrepitGoblet":  {"normalSlots": ["Yellow", "Green", "Green"], "deepSlots": ["Yellow", "Green", "Green"]},
+        "forgottenGoblet": {"normalSlots": ["Green", "Blue", "Blue"], "deepSlots": ["Red", "Blue", "Any"]}
+      }
+    },
+    "鉄の目": {
+      "nameEn": "Iron Eye",
+      "vessels": {
+        "urn":             {"normalSlots": ["Yellow", "Green", "Green"], "deepSlots": ["Yellow", "Green", "Green"]},
+        "goblet":          {"normalSlots": ["Red", "Blue", "Yellow"], "deepSlots": ["Red", "Blue", "Yellow"]},
+        "chalice":         {"normalSlots": ["Red", "Green", "Any"],  "deepSlots": ["Red", "Red", "Green"]},
+        "sootCoveredUrn":  {"normalSlots": ["Blue", "Yellow", "Yellow"], "deepSlots": ["Blue", "Yellow", "Yellow"]},
+        "sealedUrn":       {"normalSlots": ["Green", "Green", "Yellow"], "deepSlots": ["Blue", "Blue", "Red"]},
+        "decrepitGoblet":  {"normalSlots": ["Blue", "Blue", "Green"], "deepSlots": ["Blue", "Blue", "Green"]},
+        "forgottenGoblet": {"normalSlots": ["Yellow", "Blue", "Red"], "deepSlots": ["Yellow", "Green", "Any"]}
+      }
+    },
+    "レディ": {
+      "nameEn": "Duchess",
+      "vessels": {
+        "urn":             {"normalSlots": ["Red", "Blue", "Blue"],  "deepSlots": ["Red", "Blue", "Blue"]},
+        "goblet":          {"normalSlots": ["Yellow", "Yellow", "Green"], "deepSlots": ["Yellow", "Yellow", "Green"]},
+        "chalice":         {"normalSlots": ["Blue", "Yellow", "Any"], "deepSlots": ["Red", "Blue", "Yellow"]},
+        "sootCoveredUrn":  {"normalSlots": ["Red", "Red", "Green"],  "deepSlots": ["Red", "Red", "Green"]},
+        "sealedUrn":       {"normalSlots": ["Blue", "Blue", "Red"],  "deepSlots": ["Green", "Green", "Yellow"]},
+        "decrepitGoblet":  {"normalSlots": ["Blue", "Green", "Green"], "deepSlots": ["Blue", "Green", "Green"]},
+        "forgottenGoblet": {"normalSlots": ["Green", "Yellow", "Yellow"], "deepSlots": ["Red", "Green", "Any"]}
+      }
+    },
+    "無頼漢": {
+      "nameEn": "Raider",
+      "vessels": {
+        "urn":             {"normalSlots": ["Red", "Green", "Green"], "deepSlots": ["Red", "Green", "Green"]},
+        "goblet":          {"normalSlots": ["Red", "Blue", "Yellow"], "deepSlots": ["Red", "Blue", "Yellow"]},
+        "chalice":         {"normalSlots": ["Red", "Red", "Any"],   "deepSlots": ["Red", "Yellow", "Yellow"]},
+        "sootCoveredUrn":  {"normalSlots": ["Blue", "Blue", "Green"], "deepSlots": ["Blue", "Blue", "Green"]},
+        "sealedUrn":       {"normalSlots": ["Green", "Green", "Red"], "deepSlots": ["Yellow", "Blue", "Blue"]},
+        "decrepitGoblet":  {"normalSlots": ["Yellow", "Yellow", "Green"], "deepSlots": ["Yellow", "Yellow", "Green"]},
+        "forgottenGoblet": {"normalSlots": ["Yellow", "Blue", "Red"], "deepSlots": ["Red", "Green", "Any"]}
+      }
+    },
+    "復讐者": {
+      "nameEn": "Revenant",
+      "vessels": {
+        "urn":             {"normalSlots": ["Blue", "Blue", "Yellow"], "deepSlots": ["Blue", "Blue", "Yellow"]},
+        "goblet":          {"normalSlots": ["Red", "Red", "Green"],  "deepSlots": ["Red", "Red", "Green"]},
+        "chalice":         {"normalSlots": ["Blue", "Green", "Any"], "deepSlots": ["Blue", "Yellow", "Green"]},
+        "sootCoveredUrn":  {"normalSlots": ["Red", "Yellow", "Yellow"], "deepSlots": ["Red", "Yellow", "Yellow"]},
+        "sealedUrn":       {"normalSlots": ["Yellow", "Blue", "Blue"], "deepSlots": ["Green", "Green", "Red"]},
+        "decrepitGoblet":  {"normalSlots": ["Red", "Red", "Yellow"], "deepSlots": ["Red", "Red", "Yellow"]},
+        "forgottenGoblet": {"normalSlots": ["Green", "Red", "Red"],  "deepSlots": ["Yellow", "Green", "Any"]}
+      }
+    },
+    "隠者": {
+      "nameEn": "Recluse",
+      "vessels": {
+        "urn":             {"normalSlots": ["Blue", "Blue", "Green"], "deepSlots": ["Blue", "Blue", "Green"]},
+        "goblet":          {"normalSlots": ["Red", "Blue", "Yellow"], "deepSlots": ["Red", "Blue", "Yellow"]},
+        "chalice":         {"normalSlots": ["Yellow", "Green", "Any"], "deepSlots": ["Blue", "Green", "Green"]},
+        "sootCoveredUrn":  {"normalSlots": ["Red", "Red", "Yellow"], "deepSlots": ["Red", "Red", "Yellow"]},
+        "sealedUrn":       {"normalSlots": ["Green", "Blue", "Blue"], "deepSlots": ["Yellow", "Yellow", "Red"]},
+        "decrepitGoblet":  {"normalSlots": ["Red", "Red", "Blue"],  "deepSlots": ["Red", "Red", "Blue"]},
+        "forgottenGoblet": {"normalSlots": ["Yellow", "Blue", "Red"], "deepSlots": ["Blue", "Green", "Any"]}
+      }
+    },
+    "執行者": {
+      "nameEn": "Executor",
+      "vessels": {
+        "urn":             {"normalSlots": ["Red", "Yellow", "Yellow"], "deepSlots": ["Red", "Yellow", "Yellow"]},
+        "goblet":          {"normalSlots": ["Red", "Blue", "Green"], "deepSlots": ["Red", "Blue", "Green"]},
+        "chalice":         {"normalSlots": ["Blue", "Yellow", "Any"], "deepSlots": ["Yellow", "Yellow", "Green"]},
+        "sootCoveredUrn":  {"normalSlots": ["Red", "Red", "Blue"],  "deepSlots": ["Red", "Red", "Blue"]},
+        "sealedUrn":       {"normalSlots": ["Yellow", "Yellow", "Red"], "deepSlots": ["Green", "Green", "Blue"]},
+        "decrepitGoblet":  {"normalSlots": ["Red", "Red", "Yellow"], "deepSlots": ["Red", "Red", "Yellow"]},
+        "forgottenGoblet": {"normalSlots": ["Green", "Blue", "Red"], "deepSlots": ["Yellow", "Green", "Any"]}
+      }
+    },
+    "学者": {
+      "nameEn": "Scholar",
+      "vessels": {
+        "urn":             {"normalSlots": ["Red", "Red", "Yellow"], "deepSlots": ["Red", "Red", "Yellow"]},
+        "goblet":          {"normalSlots": ["Blue", "Green", "Yellow"], "deepSlots": ["Blue", "Green", "Yellow"]},
+        "chalice":         {"normalSlots": ["Red", "Blue", "Any"],  "deepSlots": ["Red", "Yellow", "Yellow"]},
+        "sootCoveredUrn":  {"normalSlots": ["Blue", "Green", "Green"], "deepSlots": ["Blue", "Green", "Green"]},
+        "sealedUrn":       {"normalSlots": ["Yellow", "Red", "Red"], "deepSlots": ["Green", "Blue", "Blue"]},
+        "decrepitGoblet":  {"normalSlots": ["Blue", "Blue", "Green"], "deepSlots": ["Blue", "Blue", "Green"]},
+        "forgottenGoblet": {"normalSlots": ["Yellow", "Green", "Blue"], "deepSlots": ["Red", "Green", "Any"]}
+      }
+    },
+    "葬儀屋": {
+      "nameEn": "Undertaker",
+      "vessels": {
+        "urn":             {"normalSlots": ["Blue", "Green", "Green"], "deepSlots": ["Blue", "Green", "Green"]},
+        "goblet":          {"normalSlots": ["Red", "Yellow", "Yellow"], "deepSlots": ["Red", "Yellow", "Yellow"]},
+        "chalice":         {"normalSlots": ["Green", "Yellow", "Any"], "deepSlots": ["Blue", "Green", "Yellow"]},
+        "sootCoveredUrn":  {"normalSlots": ["Red", "Red", "Blue"],  "deepSlots": ["Red", "Red", "Blue"]},
+        "sealedUrn":       {"normalSlots": ["Green", "Green", "Blue"], "deepSlots": ["Yellow", "Red", "Red"]},
+        "decrepitGoblet":  {"normalSlots": ["Red", "Blue", "Blue"], "deepSlots": ["Red", "Blue", "Blue"]},
+        "forgottenGoblet": {"normalSlots": ["Yellow", "Yellow", "Red"], "deepSlots": ["Blue", "Yellow", "Any"]}
+      }
+    }
+  }
+}

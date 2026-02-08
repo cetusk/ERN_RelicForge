@@ -1,0 +1,32 @@
+{
+  "effects": [
+    {
+      "key": "physicalAttackUpPlus4",
+      "priority": "required"
+    },
+    {
+      "key": "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
+      "priority": "required"
+    },
+    {
+      "key": "attackPowerUpAfterDefeatingANightInvader",
+      "priority": "required"
+    },
+    {
+      "key": "changesCompatibleArmamentsSkillToFlamingStrikeAtStartOfExpedition",
+      "priority": "required"
+    },
+    {
+      "key": "improvedSkillAttackPower",
+      "priority": "required"
+    },
+    {
+      "key": "increasedRuneAcquisitionForSelfAndAllies",
+      "priority": "preferred"
+    },
+    {
+      "key": "wylderArtActivationSpreadsFireInArea",
+      "priority": "nice_to_have"
+    }
+  ]
+}
