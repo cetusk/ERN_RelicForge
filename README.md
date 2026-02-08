@@ -28,9 +28,6 @@ ERN_RelicForge/
 │       ├── app.js               # UI ロジック
 │       └── style.css            # ダークテーマスタイル
 │
-├── debugs/                      # 開発用スクリプト
-│   └── translate_items.py
-│
 └── examples/
     └── sample_output.json       # サンプル出力
 ```
