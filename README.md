@@ -30,9 +30,6 @@ ERN_RelicForge/
 │       ├── app.js               # UI ロジック
 │       └── style.css            # ダークテーマスタイル
 │
-├── scripts/
-│   └── add_stacking_info.py     # 効果の重複可否データ投入スクリプト
-│
 └── examples/
     ├── sample_output.json       # パーサーサンプル出力
     ├── sample_effects_config.json  # 効果指定サンプル
