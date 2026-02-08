@@ -10,6 +10,7 @@ let andGroups = [new Set(), new Set(), new Set()]; // AND groups (OR within, AND
 let activeAndGroup = 0;             // active AND group index
 let allUniqueEffects = [];          // unique effects with counts
 let collapsedCategories = new Set(); // collapsed category IDs in inspector
+let stackingLookup = {};           // effectId -> { stackable, stackNotes }
 const AND_GROUP_COLORS = ['#e74c3c', '#3498db', '#2ecc71']; // group indicator colors
 
 // === Type Display Names ===
@@ -52,6 +53,7 @@ const inspectorBackdrop = document.getElementById('inspector-backdrop');
 const inspector = document.getElementById('inspector');
 const inspectorClose = document.getElementById('inspector-close');
 const inspectorSearch = document.getElementById('inspector-search');
+const inspectorSearchClear = document.getElementById('inspector-search-clear');
 const inspectorEffectList = document.getElementById('inspector-effect-list');
 const inspectorSelectedCount = document.getElementById('inspector-selected-count');
 const inspectorClear = document.getElementById('inspector-clear');
@@ -141,6 +143,7 @@ async function openFile() {
 
   try {
     relicData = await window.api.parseSaveFile(filePath);
+    stackingLookup = await window.api.loadStackingData();
     loadedFileName = filePath.split(/[/\\]/).pop();
     buildSearchTerms();
     buildUniqueEffects();
@@ -488,7 +491,7 @@ function showDetail(relic) {
       : (main.name_en || '-');
     html += `<div class="detail-effect">`;
     html += `<div class="detail-effect-main">${mainName}</div>`;
-    html += `<div class="detail-effect-id">ID: ${main.id} | Key: ${main.key}</div>`;
+    html += formatStackingInfo(main.id, ja);
     for (let i = 1; i < group.length; i++) {
       const d = group[i];
       const debuffName = displayLang === 'ja'
@@ -496,7 +499,7 @@ function showDetail(relic) {
         : (d.name_en || '-');
       html += `<div class="detail-effect-sub">`;
       html += `<div class="detail-effect-debuff-name">${debuffName}</div>`;
-      html += `<div class="detail-effect-id">ID: ${d.id} | Key: ${d.key}</div>`;
+      html += formatStackingInfo(d.id, ja);
       html += `</div>`;
     }
     html += `</div>`;
@@ -520,6 +523,23 @@ function closeDetail() {
 
 function field(label, value) {
   return `<div class="detail-field"><span class="label">${label}</span><span class="value">${value}</span></div>`;
+}
+
+function formatStackingInfo(effectId, ja) {
+  const info = stackingLookup[String(effectId)];
+  if (!info) return '';
+  let stackLabel;
+  if (info.stackable === true) {
+    stackLabel = ja ? '重複: ○' : 'Stacking: Yes';
+  } else if (info.stackable === 'conditional') {
+    stackLabel = ja ? '重複: △' : 'Stacking: Conditional';
+  } else {
+    stackLabel = ja ? '重複: ×' : 'Stacking: No';
+  }
+  const notes = info.stackNotes
+    ? `<span class="stacking-notes">${info.stackNotes}</span>`
+    : '';
+  return `<div class="detail-effect-stacking">${stackLabel}${notes}</div>`;
 }
 
 // === Minimap ===
@@ -907,7 +927,16 @@ btnInspector.addEventListener('click', openInspector);
 inspectorClose.addEventListener('click', closeInspector);
 inspectorBackdrop.addEventListener('click', closeInspector);
 
-inspectorSearch.addEventListener('input', renderInspectorEffects);
+inspectorSearch.addEventListener('input', () => {
+  inspectorSearchClear.classList.toggle('hidden', !inspectorSearch.value);
+  renderInspectorEffects();
+});
+inspectorSearchClear.addEventListener('click', () => {
+  inspectorSearch.value = '';
+  inspectorSearchClear.classList.add('hidden');
+  renderInspectorEffects();
+  inspectorSearch.focus();
+});
 
 // AND group tab clicks
 document.getElementById('and-group-tabs').addEventListener('click', (e) => {

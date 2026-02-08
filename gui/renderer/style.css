@@ -570,10 +570,15 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   font-weight: 500;
 }
 
-.detail-effect-id {
+.detail-effect-stacking {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-top: 2px;
+}
+
+.stacking-notes {
+  margin-left: 8px;
+  color: var(--text-muted);
 }
 
 /* === Inspector Panel === */
@@ -721,18 +726,37 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   flex-shrink: 0;
 }
 
+.inspector-search-wrapper {
+  position: relative;
+  margin-bottom: 10px;
+}
+
 .inspector-search {
   width: 100%;
-  padding: 7px 12px;
+  padding: 7px 28px 7px 12px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--text-primary);
   font-size: 13px;
   outline: none;
-  margin-bottom: 10px;
 }
 .inspector-search:focus { border-color: var(--accent); }
+
+.inspector-search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.inspector-search-clear:hover { color: var(--text-primary); }
 
 .inspector-effect-list {
   max-height: calc(100vh - 220px);

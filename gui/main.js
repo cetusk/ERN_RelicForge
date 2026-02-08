@@ -51,6 +51,27 @@ ipcMain.handle('open-file-dialog', async () => {
   return result.filePaths[0];
 });
 
+ipcMain.handle('load-stacking-data', async () => {
+  const projectRoot = path.resolve(__dirname, '..');
+  const effectsFile = path.join(projectRoot, 'resources', 'effects_data.json');
+  try {
+    const raw = fs.readFileSync(effectsFile, 'utf-8');
+    const data = JSON.parse(raw);
+    // Build lookup: effectId (string) -> { stackable, stackNotes }
+    const lookup = {};
+    for (const [id, entry] of Object.entries(data.effects || {})) {
+      lookup[id] = {
+        stackable: entry.stackable,
+        stackNotes: entry.stackNotes || '',
+      };
+    }
+    return lookup;
+  } catch (e) {
+    console.error('Failed to load stacking data:', e.message);
+    return {};
+  }
+});
+
 ipcMain.handle('parse-save-file', async (_event, sl2Path) => {
   const projectRoot = path.resolve(__dirname, '..');
   const parserScript = path.join(projectRoot, 'src', 'relic_parser.py');

@@ -130,7 +130,10 @@
           <span class="and-group-connector">AND</span>
           <button class="and-group-tab" data-group="2">条件3(OR)</button>
         </div>
-        <input type="text" id="inspector-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
+        <div class="inspector-search-wrapper">
+          <input type="text" id="inspector-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
+          <button id="inspector-search-clear" class="inspector-search-clear hidden" type="button">&times;</button>
+        </div>
         <div id="inspector-effect-list" class="inspector-effect-list"></div>
       </div>
     </div>
