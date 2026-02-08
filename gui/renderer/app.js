@@ -6,9 +6,11 @@ let sortDirection = 'desc';
 let selectedRelicId = null;
 let displayLang = 'ja';    // 'ja' or 'en'
 let loadedFileName = '';   // currently loaded filename
-let selectedEffectKeys = new Set(); // effect keys selected in inspector
+let andGroups = [new Set(), new Set(), new Set()]; // AND groups (OR within, AND between)
+let activeAndGroup = 0;             // active AND group index
 let allUniqueEffects = [];          // unique effects with counts
 let collapsedCategories = new Set(); // collapsed category IDs in inspector
+const AND_GROUP_COLORS = ['#e74c3c', '#3498db', '#2ecc71']; // group indicator colors
 
 // === Type Display Names ===
 const TYPE_LABELS = {
@@ -142,7 +144,7 @@ async function openFile() {
     loadedFileName = filePath.split(/[/\\]/).pop();
     buildSearchTerms();
     buildUniqueEffects();
-    selectedEffectKeys.clear();
+    andGroups.forEach(g => g.clear());
     updateHeaderInfo();
     toolbar.classList.remove('hidden');
     btnInspector.classList.remove('hidden');
@@ -350,10 +352,11 @@ function applyFilters() {
       const itemText = `${r.itemKey || ''} ${r.itemNameEn || ''} ${r.itemNameJa || ''}`.toLowerCase();
       if (!effectTexts.includes(query) && !itemText.includes(query)) return false;
     }
-    // Effect filter (OR logic)
-    if (selectedEffectKeys.size > 0) {
+    // Effect filter: AND between groups, OR within each group
+    const activeGroups = andGroups.filter(g => g.size > 0);
+    if (activeGroups.length > 0) {
       const relicEffectKeys = r.effects.flat().map(e => e.key);
-      if (!relicEffectKeys.some(k => selectedEffectKeys.has(k))) return false;
+      if (!activeGroups.every(g => relicEffectKeys.some(k => g.has(k)))) return false;
     }
     return true;
   });
@@ -760,6 +763,7 @@ function openInspector() {
   inspectorSearch.value = '';
   // Default all categories to collapsed
   EFFECT_CATEGORIES.forEach(c => collapsedCategories.add(c.id));
+  updateAndGroupTabs();
   renderInspectorEffects();
   inspectorSearch.focus();
 }
@@ -821,10 +825,14 @@ function renderInspectorEffects() {
     html += `<div class="inspector-group-items${isCollapsed ? ' collapsed' : ''}" data-cat="${catId}">`;
     items.forEach(e => {
       const name = ja ? e.name_ja : e.name_en;
-      const checked = selectedEffectKeys.has(e.key);
+      const groupIdx = andGroups.findIndex(g => g.has(e.key));
+      const checked = groupIdx >= 0;
       html += `<label class="inspector-effect-item${checked ? ' checked' : ''}" data-key="${e.key}">
-        <input type="checkbox" ${checked ? 'checked' : ''} />
-        <span class="inspector-effect-name" title="${name}">${name}</span>
+        <input type="checkbox" ${checked ? 'checked' : ''} />`;
+      if (groupIdx >= 0) {
+        html += `<span class="effect-group-dot" style="background:${AND_GROUP_COLORS[groupIdx]}"></span>`;
+      }
+      html += `<span class="inspector-effect-name" title="${name}">${name}</span>
         <span class="inspector-effect-count">${e.count}</span>
       </label>`;
     });
@@ -855,20 +863,43 @@ function renderInspectorEffects() {
 
 function updateInspectorCount() {
   const ja = displayLang === 'ja';
-  const n = selectedEffectKeys.size;
-  inspectorSelectedCount.textContent = ja ? `${n}件選択中` : `${n} selected`;
+  const parts = andGroups.map((g, i) => g.size > 0 ? `${ja ? '条件' : 'G'}${i + 1}:${g.size}` : null).filter(Boolean);
+  if (parts.length > 0) {
+    inspectorSelectedCount.textContent = parts.join(' AND ');
+  } else {
+    inspectorSelectedCount.textContent = ja ? '0件選択中' : '0 selected';
+  }
 }
 
 function updateInspectorButton() {
   const ja = displayLang === 'ja';
-  const n = selectedEffectKeys.size;
-  if (n > 0) {
-    btnInspectorLabel.textContent = ja ? `高度な検索 (${n})` : `Advanced (${n})`;
+  const activeCount = andGroups.filter(g => g.size > 0).length;
+  if (activeCount > 0) {
+    const total = andGroups.reduce((sum, g) => sum + g.size, 0);
+    if (activeCount === 1) {
+      btnInspectorLabel.textContent = ja ? `高度な検索 (${total})` : `Advanced (${total})`;
+    } else {
+      btnInspectorLabel.textContent = ja
+        ? `高度な検索 (AND: ${activeCount}条件)`
+        : `Advanced (AND: ${activeCount} groups)`;
+    }
     btnInspector.classList.add('active');
   } else {
     btnInspectorLabel.textContent = ja ? '高度な検索' : 'Advanced';
     btnInspector.classList.remove('active');
   }
+}
+
+function updateAndGroupTabs() {
+  document.querySelectorAll('.and-group-tab').forEach(tab => {
+    const gi = parseInt(tab.dataset.group);
+    const g = andGroups[gi];
+    const ja = displayLang === 'ja';
+    const label = ja ? `条件${gi + 1}(OR)` : `G${gi + 1}(OR)`;
+    tab.classList.toggle('active', gi === activeAndGroup);
+    tab.classList.toggle('has-items', g.size > 0 && gi !== activeAndGroup);
+    tab.textContent = g.size > 0 ? `${label} [${g.size}]` : label;
+  });
 }
 
 // Inspector event listeners
@@ -878,18 +909,29 @@ inspectorBackdrop.addEventListener('click', closeInspector);
 
 inspectorSearch.addEventListener('input', renderInspectorEffects);
 
+// AND group tab clicks
+document.getElementById('and-group-tabs').addEventListener('click', (e) => {
+  const tab = e.target.closest('.and-group-tab');
+  if (!tab) return;
+  activeAndGroup = parseInt(tab.dataset.group);
+  updateAndGroupTabs();
+  renderInspectorEffects();
+});
+
 inspectorEffectList.addEventListener('change', (e) => {
   const checkbox = e.target;
   if (checkbox.type !== 'checkbox') return;
   const item = checkbox.closest('.inspector-effect-item');
   const key = item.dataset.key;
   if (checkbox.checked) {
-    selectedEffectKeys.add(key);
-    item.classList.add('checked');
+    // Remove from any other group first
+    andGroups.forEach(g => g.delete(key));
+    andGroups[activeAndGroup].add(key);
   } else {
-    selectedEffectKeys.delete(key);
-    item.classList.remove('checked');
+    andGroups[activeAndGroup].delete(key);
   }
+  updateAndGroupTabs();
+  renderInspectorEffects();
   updateInspectorCount();
 });
 
@@ -900,7 +942,8 @@ inspectorApply.addEventListener('click', () => {
 });
 
 inspectorClear.addEventListener('click', () => {
-  selectedEffectKeys.clear();
+  andGroups.forEach(g => g.clear());
+  updateAndGroupTabs();
   renderInspectorEffects();
   updateInspectorButton();
   applyFilters();
