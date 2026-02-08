@@ -52,5 +52,4 @@ node_modules/
 package-lock.json
 
 # Debugs
-debugs/*.sl2
-debugs/*.json
+debugs/
