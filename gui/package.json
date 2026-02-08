@@ -1,0 +1,12 @@
+{
+  "name": "ern-relicforge-gui",
+  "version": "1.0.0",
+  "description": "Elden Ring Nightreign Relic Viewer",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^33.4.11"
+  }
+}

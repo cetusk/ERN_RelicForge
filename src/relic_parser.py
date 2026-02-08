@@ -452,25 +452,33 @@ def main():
                 for eff_id in effect_group:
                     eff_info = effects_data.get(eff_id, {})
                     if isinstance(eff_info, dict):
-                        eff_name = eff_info.get('name', eff_info.get('key', f"Unknown Effect {eff_id}"))
+                        eff_name_en = eff_info.get('name_en', eff_info.get('key', f"Unknown Effect {eff_id}"))
+                        eff_name_ja = eff_info.get('name_ja', eff_name_en)
                         eff_key = eff_info.get('key', eff_id)
                     else:
-                        eff_name = eff_info if eff_info else f"Unknown Effect {eff_id}"
+                        eff_name_en = eff_info if eff_info else f"Unknown Effect {eff_id}"
+                        eff_name_ja = eff_name_en
                         eff_key = eff_id
-                    
+
                     effect_dict.append({
                         'id': eff_id,
                         'key': eff_key,
-                        'name': eff_name
+                        'name_en': eff_name_en,
+                        'name_ja': eff_name_ja
                     })
                 effects_list.append(effect_dict)
             
             item_info = items_data.get(relic['item_id'], {})
-            
+            item_key = item_info.get('key', f"Unknown Item {relic['item_id']}")
+            item_name_en = item_info.get('name_en', item_key)
+            item_name_ja = item_info.get('name_ja', item_name_en)
+
             relics_output.append({
                 'id': relic['id'],
                 'itemId': relic['item_id'],
-                'itemKey': item_info.get('key', f"Unknown Item {relic['item_id']}"),
+                'itemKey': item_key,
+                'itemNameEn': item_name_en,
+                'itemNameJa': item_name_ja,
                 'itemColor': item_info.get('color'),
                 'itemType': item_info.get('type'),
                 'effects': effects_list,
