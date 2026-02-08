@@ -13,6 +13,22 @@ let collapsedCategories = new Set(); // collapsed category IDs in inspector
 let stackingLookup = {};           // effectId -> { stackable, stackNotes }
 const AND_GROUP_COLORS = ['#e74c3c', '#3498db', '#2ecc71']; // group indicator colors
 
+// === Tab State ===
+let activeTab = 'main';
+let optimizerTabs = new Map(); // tabId -> { label, data, params }
+let nextTabId = 1;
+let vesselsData = null;  // cached vessels_data.json
+let optSelectedEffects = new Map(); // effectKey -> priority
+let optVesselCollapsed = true;  // vessel list collapsed state
+let effectSelectCollapsed = new Set(); // collapsed categories in effect selector
+
+// Priority display labels
+const PRIORITY_LABELS = {
+  required:     { ja: '必須', en: 'Required' },
+  preferred:    { ja: '推奨', en: 'Preferred' },
+  nice_to_have: { ja: '任意', en: 'Nice to have' },
+};
+
 // === Type Display Names ===
 const TYPE_LABELS = {
   Relic:       { ja: '通常', en: 'Relic' },
@@ -58,6 +74,36 @@ const inspectorEffectList = document.getElementById('inspector-effect-list');
 const inspectorSelectedCount = document.getElementById('inspector-selected-count');
 const inspectorClear = document.getElementById('inspector-clear');
 const inspectorApply = document.getElementById('inspector-apply');
+
+// Tab bar
+const tabBar = document.getElementById('tab-bar');
+
+// Optimizer inspector elements
+const btnOptimizer = document.getElementById('btn-optimizer');
+const btnOptimizerLabel = document.getElementById('btn-optimizer-label');
+const optimizerBackdrop = document.getElementById('optimizer-backdrop');
+const optimizerInspector = document.getElementById('optimizer-inspector');
+const optimizerClose = document.getElementById('optimizer-close');
+const optCharacter = document.getElementById('opt-character');
+const optVesselList = document.getElementById('opt-vessel-list');
+const optCombined = document.getElementById('opt-combined');
+const optEffectsList = document.getElementById('opt-effects-list');
+const optAddEffect = document.getElementById('opt-add-effect');
+const optCandidates = document.getElementById('opt-candidates');
+const optTop = document.getElementById('opt-top');
+const optimizerClearBtn = document.getElementById('optimizer-clear');
+const optimizerRunBtn = document.getElementById('optimizer-run');
+const optVesselHeader = document.getElementById('opt-vessel-header');
+
+// Effect selection inspector elements
+const effectSelectBackdrop = document.getElementById('effect-select-backdrop');
+const effectSelectInspector = document.getElementById('effect-select-inspector');
+const effectSelectClose = document.getElementById('effect-select-close');
+const effectSelectSearch = document.getElementById('effect-select-search');
+const effectSelectSearchClear = document.getElementById('effect-select-search-clear');
+const effectSelectList = document.getElementById('effect-select-list');
+const effectSelectClearBtn = document.getElementById('effect-select-clear');
+const effectSelectApplyBtn = document.getElementById('effect-select-apply');
 
 // Minimap elements
 const minimap = document.getElementById('minimap');
@@ -151,7 +197,10 @@ async function openFile() {
     updateHeaderInfo();
     toolbar.classList.remove('hidden');
     btnInspector.classList.remove('hidden');
+    btnOptimizer.classList.remove('hidden');
+    tabBar.classList.remove('hidden');
     updateInspectorButton();
+    updateOptimizerButton();
     sortColumn = 'sortKey';
     sortDirection = 'desc';
     updateSortIndicators();
@@ -716,6 +765,8 @@ function classifyEffect(name_ja, name_en, key) {
   const en = (name_en || '').toLowerCase();
   // Character-specific (【追跡者】etc.)
   if (/【.+?】/.test(ja)) return 'character';
+  // Beneficial effects containing "低下" but NOT demerits
+  if (/カット率低下時.*無効化/.test(ja) || /nullify.*damage\s*negation/i.test(en)) return 'cutrate';
   // Demerits
   if (/低下|減少|悪化|持続減少|喪失/.test(ja) && !/上昇|強化|回復/.test(ja)) return 'demerit';
   if (/被ダメージ時.*蓄積|HP最大未満時.*蓄積|消費増加|被ダメージ増加/.test(ja)) return 'demerit';
@@ -727,6 +778,8 @@ function classifyEffect(name_ja, name_en, key) {
   // Stats
   if (/最大HP|最大FP|最大スタミナ|生命力|精神力|持久力|筋力|技量|知力|信仰|神秘|強靭度/.test(ja)) return 'stats';
   if (/vigor|mind|endurance|strength|dexterity|intelligence|faith|arcane|poise|maximum\s*(hp|fp|stamina)/i.test(en)) return 'stats';
+  // Skill attack power → attack (before skill check)
+  if (/スキル攻撃力|戦技攻撃力|スキルの攻撃力/.test(ja) || /skill\s*attack\s*power/i.test(en)) return 'attack';
   // Skill / Arts
   if (/スキル|アーツ|クールタイム/.test(ja) || /skill|art\s*gauge|cooldown/i.test(en)) return 'skill';
   // Sorcery / Incantation
@@ -977,3 +1030,924 @@ inspectorClear.addEventListener('click', () => {
   updateInspectorButton();
   applyFilters();
 });
+
+// ============================================================
+// === Tab Management ===
+// ============================================================
+
+function renderTabBar() {
+  // Keep main tab, remove dynamic tabs
+  const existing = tabBar.querySelectorAll('.tab[data-tab]:not([data-tab="main"])');
+  existing.forEach(el => el.remove());
+
+  optimizerTabs.forEach((info, tabId) => {
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (activeTab === tabId ? ' active' : '');
+    tab.dataset.tab = tabId;
+
+    const label = document.createElement('span');
+    label.className = 'tab-label';
+    label.textContent = info.label;
+    tab.appendChild(label);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'tab-close';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeTab(tabId);
+    });
+    tab.appendChild(closeBtn);
+
+    tab.addEventListener('click', () => switchTab(tabId));
+    tabBar.appendChild(tab);
+  });
+
+  // Update main tab active state
+  const mainTab = tabBar.querySelector('[data-tab="main"]');
+  if (mainTab) mainTab.className = 'tab' + (activeTab === 'main' ? ' active' : '');
+}
+
+// Main tab click handler (set once)
+tabBar.querySelector('[data-tab="main"]').addEventListener('click', () => switchTab('main'));
+
+function switchTab(tabId) {
+  activeTab = tabId;
+
+  // Toggle content visibility
+  contentArea.classList.toggle('hidden', tabId !== 'main');
+
+  // Show/hide optimizer tab wrappers
+  optimizerTabs.forEach((info, tid) => {
+    const wrapper = document.getElementById(`opt-wrapper-${tid}`);
+    if (wrapper) wrapper.classList.toggle('hidden', tid !== tabId);
+  });
+
+  // Update toolbar visibility: show filters only on main tab
+  const filterElements = toolbar.querySelectorAll('.search-wrapper, .filter-group, #result-count, #btn-inspector');
+  filterElements.forEach(el => {
+    if (tabId === 'main') {
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  renderTabBar();
+}
+
+function addOptimizerTab(label, data, params) {
+  const tabId = `optimizer-${nextTabId++}`;
+
+  optimizerTabs.set(tabId, { label, data, params });
+
+  // Create wrapper (flex row: results list + detail panel)
+  const wrapper = document.createElement('div');
+  wrapper.id = `opt-wrapper-${tabId}`;
+  wrapper.className = 'opt-tab-wrapper';
+
+  // Results list
+  const container = document.createElement('div');
+  container.id = `opt-result-${tabId}`;
+  container.className = 'optimizer-results-container';
+  wrapper.appendChild(container);
+
+  // Detail panel (hidden initially)
+  const detail = document.createElement('div');
+  detail.id = `opt-detail-${tabId}`;
+  detail.className = 'opt-detail-panel hidden';
+  detail.innerHTML = `
+    <div class="detail-header">
+      <h2 class="opt-detail-title"></h2>
+      <button class="btn-close opt-detail-close">&times;</button>
+    </div>
+    <div class="opt-detail-body detail-body"></div>`;
+  wrapper.appendChild(detail);
+
+  document.getElementById('main-content').appendChild(wrapper);
+  renderOptimizerResults(tabId, data, params);
+  switchTab(tabId);
+}
+
+function closeTab(tabId) {
+  if (tabId === 'main') return;
+
+  optimizerTabs.delete(tabId);
+  const wrapper = document.getElementById(`opt-wrapper-${tabId}`);
+  if (wrapper) wrapper.remove();
+
+  if (activeTab === tabId) {
+    switchTab('main');
+  } else {
+    renderTabBar();
+  }
+}
+
+// ============================================================
+// === Optimizer Inspector ===
+// ============================================================
+
+function updateOptimizerButton() {
+  const ja = displayLang === 'ja';
+  btnOptimizerLabel.textContent = ja ? 'ビルド探索' : 'Build Search';
+}
+
+async function openOptimizerInspector() {
+  optimizerBackdrop.classList.remove('hidden');
+  optimizerInspector.classList.add('open');
+
+  // Load vessels data if not cached
+  if (!vesselsData) {
+    vesselsData = await window.api.loadVesselsData();
+  }
+
+  renderOptimizerCharacterSelect();
+  renderOptimizerVesselList();
+  updateOptEffectsCount();
+}
+
+function closeOptimizerInspector() {
+  optimizerBackdrop.classList.add('hidden');
+  optimizerInspector.classList.remove('open');
+}
+
+function renderOptimizerCharacterSelect() {
+  if (!vesselsData) return;
+  const ja = displayLang === 'ja';
+
+  let html = '';
+  const chars = vesselsData.characters || {};
+  for (const [charJa, charData] of Object.entries(chars)) {
+    const charName = ja ? charJa : (charData.nameEn || charJa);
+    html += `<option value="${charJa}">${charName}</option>`;
+  }
+  optCharacter.innerHTML = html;
+}
+
+function renderOptimizerVesselList() {
+  if (!vesselsData) return;
+  const ja = displayLang === 'ja';
+
+  const vesselTypes = vesselsData.vesselTypes || [];
+  let html = '';
+
+  // Character-specific vessels (all checked by default)
+  vesselTypes.forEach(vt => {
+    const vesselName = ja ? vt.nameJa : vt.nameEn;
+    html += `<label class="opt-vessel-item" data-vessel="${vt.key}">
+      <input type="checkbox" checked value="${vt.key}">
+      <span>${vesselName}</span>
+    </label>`;
+  });
+
+  // Universal vessels (all checked by default)
+  const universalVessels = vesselsData.universalVessels || [];
+  universalVessels.forEach(uv => {
+    const vesselName = ja ? uv.nameJa : uv.nameEn;
+    html += `<label class="opt-vessel-item" data-vessel="${uv.key}">
+      <input type="checkbox" checked value="${uv.key}">
+      <span>${vesselName}</span>
+    </label>`;
+  });
+
+  optVesselList.innerHTML = html;
+  updateOptVesselCount();
+}
+
+function updateOptVesselCount() {
+  const total = optVesselList.querySelectorAll('input[type="checkbox"]').length;
+  const checked = optVesselList.querySelectorAll('input[type="checkbox"]:checked').length;
+  const countEl = document.getElementById('opt-vessel-count');
+  if (countEl) countEl.textContent = `${checked}/${total}`;
+}
+
+function toggleOptVesselCollapse() {
+  optVesselCollapsed = !optVesselCollapsed;
+  optVesselHeader.classList.toggle('collapsed', optVesselCollapsed);
+  optVesselList.classList.toggle('collapsed', optVesselCollapsed);
+}
+
+// Render selected effects as tags in the optimizer inspector
+function renderOptEffectsTags() {
+  const ja = displayLang === 'ja';
+  let html = '';
+  optSelectedEffects.forEach((priority, key) => {
+    const eff = allUniqueEffects.find(e => e.key === key);
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+    const priorityLabel = PRIORITY_LABELS[priority]
+      ? (ja ? PRIORITY_LABELS[priority].ja : PRIORITY_LABELS[priority].en)
+      : priority;
+    html += `<div class="opt-effect-tag" data-key="${key}">
+      <span class="opt-effect-tag-priority ${priority}">${priorityLabel}</span>
+      <span class="opt-effect-tag-name" title="${key}">${name}</span>
+      <button class="opt-effect-remove" data-key="${key}">&times;</button>
+    </div>`;
+  });
+  optEffectsList.innerHTML = html;
+
+  // Attach remove handlers
+  optEffectsList.querySelectorAll('.opt-effect-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      optSelectedEffects.delete(btn.dataset.key);
+      renderOptEffectsTags();
+      updateOptEffectsCount();
+    });
+  });
+
+  updateOptEffectsCount();
+}
+
+function updateOptEffectsCount() {
+  const count = optSelectedEffects.size;
+  const ja = displayLang === 'ja';
+  document.getElementById('opt-effects-count').textContent =
+    ja ? `${count}件` : `${count} effects`;
+}
+
+function collectOptimizerParams() {
+  const character = optCharacter.value;
+
+  // Collect selected vessels
+  const vesselChecks = optVesselList.querySelectorAll('input[type="checkbox"]:checked');
+  const vessels = Array.from(vesselChecks).map(cb => cb.value);
+  const vesselStr = vessels.length > 0 ? vessels.join(',') : undefined;
+
+  const combined = optCombined.checked;
+
+  // Collect effects from optSelectedEffects map
+  const effects = [];
+  optSelectedEffects.forEach((priority, key) => {
+    effects.push({ key, priority });
+  });
+
+  const candidates = parseInt(optCandidates.value) || 30;
+  const top = parseInt(optTop.value) || 50;
+
+  return { character, vessel: vesselStr, combined, effects, candidates, top };
+}
+
+async function runOptimization() {
+  if (!relicData) return;
+
+  const params = collectOptimizerParams();
+
+  // Disable run button during execution
+  optimizerRunBtn.disabled = true;
+  const ja = displayLang === 'ja';
+  document.getElementById('optimizer-run-label').textContent =
+    ja ? '実行中...' : 'Running...';
+
+  try {
+    const result = await window.api.runOptimizer({
+      relicData: relicData,
+      character: params.character,
+      vessel: params.vessel,
+      combined: params.combined,
+      effects: params.effects,
+      candidates: params.candidates,
+      top: params.top,
+    });
+
+    closeOptimizerInspector();
+
+    // Build tab label
+    const charName = ja ? params.character :
+      (vesselsData && vesselsData.characters[params.character]
+        ? vesselsData.characters[params.character].nameEn
+        : params.character);
+    const label = ja
+      ? `${charName} #${nextTabId}`
+      : `${charName} #${nextTabId}`;
+
+    addOptimizerTab(label, result, params);
+  } catch (err) {
+    alert(`${ja ? 'ビルド探索エラー' : 'Build Search Error'}:\n${err}`);
+  } finally {
+    optimizerRunBtn.disabled = false;
+    document.getElementById('optimizer-run-label').textContent =
+      ja ? '実行' : 'Run';
+  }
+}
+
+// Optimizer inspector event listeners
+btnOptimizer.addEventListener('click', openOptimizerInspector);
+optimizerClose.addEventListener('click', closeOptimizerInspector);
+optimizerBackdrop.addEventListener('click', closeOptimizerInspector);
+optAddEffect.addEventListener('click', openEffectSelectInspector);
+optimizerRunBtn.addEventListener('click', runOptimization);
+optimizerClearBtn.addEventListener('click', () => {
+  optSelectedEffects.clear();
+  renderOptEffectsTags();
+  renderOptimizerVesselList();
+  optCombined.checked = true;
+  optCandidates.value = '30';
+  optTop.value = '50';
+});
+
+// Vessel collapsible header
+optVesselHeader.addEventListener('click', toggleOptVesselCollapse);
+// Update vessel count when checkboxes change
+optVesselList.addEventListener('change', updateOptVesselCount);
+
+// Preset save/load
+const optPresetSave = document.getElementById('opt-preset-save');
+const optPresetLoad = document.getElementById('opt-preset-load');
+
+optPresetSave.addEventListener('click', async () => {
+  const params = collectOptimizerParams();
+  const preset = {
+    version: 1,
+    character: params.character,
+    vessel: params.vessel,
+    combined: params.combined,
+    effects: params.effects,
+    candidates: params.candidates,
+    top: params.top,
+  };
+  const jsonStr = JSON.stringify(preset, null, 2);
+  await window.api.savePresetDialog(jsonStr);
+});
+
+optPresetLoad.addEventListener('click', async () => {
+  const preset = await window.api.loadPresetDialog();
+  if (!preset) return;
+
+  // Apply character
+  if (preset.character) optCharacter.value = preset.character;
+
+  // Apply vessels: uncheck all, then check matching
+  if (preset.vessel) {
+    const vesselKeys = preset.vessel.split(',');
+    optVesselList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.checked = vesselKeys.includes(cb.value);
+    });
+    updateOptVesselCount();
+  }
+
+  // Apply combined mode
+  if (preset.combined !== undefined) optCombined.checked = preset.combined;
+
+  // Apply effects
+  optSelectedEffects.clear();
+  if (preset.effects && Array.isArray(preset.effects)) {
+    preset.effects.forEach(e => {
+      optSelectedEffects.set(e.key, e.priority || 'required');
+    });
+  }
+  renderOptEffectsTags();
+
+  // Apply settings
+  if (preset.candidates) optCandidates.value = preset.candidates;
+  if (preset.top) optTop.value = preset.top;
+});
+
+// ============================================================
+// === Effect Selection Inspector ===
+// ============================================================
+
+function openEffectSelectInspector() {
+  effectSelectBackdrop.classList.remove('hidden');
+  effectSelectInspector.classList.add('open');
+  effectSelectSearch.value = '';
+  effectSelectSearchClear.classList.add('hidden');
+  // Default all categories to collapsed
+  EFFECT_CATEGORIES.forEach(c => effectSelectCollapsed.add(c.id));
+  renderEffectSelectList();
+  effectSelectSearch.focus();
+}
+
+function closeEffectSelectInspector() {
+  effectSelectBackdrop.classList.add('hidden');
+  effectSelectInspector.classList.remove('open');
+}
+
+function renderEffectSelectList() {
+  const query = effectSelectSearch.value.toLowerCase().trim();
+  const filtered = query
+    ? allUniqueEffects.filter(e =>
+        e.name_ja.toLowerCase().includes(query) ||
+        e.name_en.toLowerCase().includes(query) ||
+        e.key.toLowerCase().includes(query))
+    : allUniqueEffects;
+
+  // Group by category
+  const groups = new Map();
+  filtered.forEach(e => {
+    const catId = e.category;
+    if (!groups.has(catId)) groups.set(catId, []);
+    groups.get(catId).push(e);
+  });
+
+  const ja = displayLang === 'ja';
+  const catOrder = EFFECT_CATEGORIES.map(c => c.id);
+
+  let html = '';
+  catOrder.forEach(catId => {
+    const items = groups.get(catId);
+    if (!items || items.length === 0) return;
+    const catDef = EFFECT_CATEGORIES.find(c => c.id === catId);
+    const catName = catDef ? (ja ? catDef.ja : catDef.en) : (ja ? 'その他' : 'Other');
+    const isCollapsed = effectSelectCollapsed.has(catId);
+
+    html += `<div class="inspector-group-header${isCollapsed ? ' collapsed' : ''}" data-cat="${catId}">`;
+    html += `<span class="inspector-group-arrow">▼</span>`;
+    html += `<span class="group-name">${catName}</span>`;
+    html += `<span class="group-count">(${items.length})</span>`;
+    html += `</div>`;
+    html += `<div class="inspector-group-items${isCollapsed ? ' collapsed' : ''}" data-cat="${catId}">`;
+    items.forEach(e => {
+      const name = ja ? e.name_ja : e.name_en;
+      const checked = optSelectedEffects.has(e.key);
+      const priority = optSelectedEffects.get(e.key) || 'required';
+      const reqLabel = ja ? PRIORITY_LABELS.required.ja : PRIORITY_LABELS.required.en;
+      const prefLabel = ja ? PRIORITY_LABELS.preferred.ja : PRIORITY_LABELS.preferred.en;
+      const niceLabel = ja ? PRIORITY_LABELS.nice_to_have.ja : PRIORITY_LABELS.nice_to_have.en;
+
+      html += `<div class="effect-select-item${checked ? ' checked' : ''}" data-key="${e.key}">
+        <input type="checkbox" ${checked ? 'checked' : ''} />
+        <span class="effect-select-name" title="${name}">${name}</span>
+        <select${checked ? '' : ' style="visibility:hidden"'}>
+          <option value="required"${priority === 'required' ? ' selected' : ''}>${reqLabel}</option>
+          <option value="preferred"${priority === 'preferred' ? ' selected' : ''}>${prefLabel}</option>
+          <option value="nice_to_have"${priority === 'nice_to_have' ? ' selected' : ''}>${niceLabel}</option>
+        </select>
+        <span class="effect-select-count">${e.count}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  effectSelectList.innerHTML = html;
+
+  // Collapsible group headers
+  effectSelectList.querySelectorAll('.inspector-group-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const catId = header.dataset.cat;
+      const itemsDiv = effectSelectList.querySelector(`.inspector-group-items[data-cat="${catId}"]`);
+      if (effectSelectCollapsed.has(catId)) {
+        effectSelectCollapsed.delete(catId);
+        header.classList.remove('collapsed');
+        itemsDiv.classList.remove('collapsed');
+      } else {
+        effectSelectCollapsed.add(catId);
+        header.classList.add('collapsed');
+        itemsDiv.classList.add('collapsed');
+      }
+    });
+  });
+}
+
+// Effect select checkbox/priority change handlers (delegated)
+effectSelectList.addEventListener('change', (e) => {
+  const item = e.target.closest('.effect-select-item');
+  if (!item) return;
+  const key = item.dataset.key;
+
+  if (e.target.type === 'checkbox') {
+    const select = item.querySelector('select');
+    if (e.target.checked) {
+      optSelectedEffects.set(key, select.value);
+      select.style.visibility = '';
+      item.classList.add('checked');
+    } else {
+      optSelectedEffects.delete(key);
+      select.style.visibility = 'hidden';
+      item.classList.remove('checked');
+    }
+  } else if (e.target.tagName === 'SELECT') {
+    if (optSelectedEffects.has(key)) {
+      optSelectedEffects.set(key, e.target.value);
+    }
+  }
+});
+
+// Click on item text toggles checkbox; select clicks are excluded
+effectSelectList.addEventListener('click', (e) => {
+  if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION' || e.target.tagName === 'INPUT') return;
+  const item = e.target.closest('.effect-select-item');
+  if (!item) return;
+  const checkbox = item.querySelector('input[type="checkbox"]');
+  if (checkbox) {
+    checkbox.checked = !checkbox.checked;
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+});
+
+effectSelectClose.addEventListener('click', closeEffectSelectInspector);
+effectSelectBackdrop.addEventListener('click', closeEffectSelectInspector);
+
+effectSelectSearch.addEventListener('input', () => {
+  effectSelectSearchClear.classList.toggle('hidden', !effectSelectSearch.value);
+  renderEffectSelectList();
+});
+effectSelectSearchClear.addEventListener('click', () => {
+  effectSelectSearch.value = '';
+  effectSelectSearchClear.classList.add('hidden');
+  renderEffectSelectList();
+  effectSelectSearch.focus();
+});
+
+effectSelectApplyBtn.addEventListener('click', () => {
+  closeEffectSelectInspector();
+  renderOptEffectsTags();
+});
+
+effectSelectClearBtn.addEventListener('click', () => {
+  optSelectedEffects.clear();
+  renderEffectSelectList();
+});
+
+// ============================================================
+// === Optimizer Results Rendering ===
+// ============================================================
+
+function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
+  const container = document.getElementById(`opt-result-${tabId}`);
+  if (!container) return;
+  const ja = displayLang === 'ja';
+
+  sortKey = sortKey || 'score';
+  sortDir = sortDir || 'desc';
+
+  const bestResult = data.bestResult;
+  const allResults = data.allResults || [];
+
+  // Flatten all results across all vessels into a single sorted list
+  const flatResults = [];
+  allResults.forEach(vesselOutput => {
+    const vesselInfo = vesselOutput.parameters && vesselOutput.parameters.vessel;
+    (vesselOutput.results || []).forEach(res => {
+      flatResults.push({
+        ...res,
+        _vesselInfo: vesselInfo || null,
+        _vesselNameJa: vesselInfo ? vesselInfo.nameJa : (vesselOutput.parameters.color || '?'),
+        _vesselNameEn: vesselInfo ? vesselInfo.nameEn : (vesselOutput.parameters.color || '?'),
+      });
+    });
+  });
+
+  // Sort
+  flatResults.sort((a, b) => {
+    if (sortKey === 'score') {
+      const cmp = (b.requiredMet === a.requiredMet) ? 0 : (b.requiredMet ? 1 : -1);
+      if (cmp !== 0) return cmp;
+      return sortDir === 'desc' ? b.score - a.score : a.score - b.score;
+    }
+    if (sortKey === 'vessel') {
+      const va = ja ? a._vesselNameJa : a._vesselNameEn;
+      const vb = ja ? b._vesselNameJa : b._vesselNameEn;
+      let cmp = va.localeCompare(vb, ja ? 'ja' : 'en');
+      if (sortDir === 'desc') cmp = -cmp;
+      return cmp || (b.score - a.score);
+    }
+    return 0;
+  });
+
+  let html = '';
+
+  // Summary header
+  if (bestResult) {
+    const best = bestResult.result;
+    const vesselName = bestResult.parameters && bestResult.parameters.vessel
+      ? (ja ? bestResult.parameters.vessel.nameJa : bestResult.parameters.vessel.nameEn)
+      : '';
+    html += `<div class="opt-results-summary">`;
+    html += `<div class="opt-results-summary-title">${ja ? 'ビルド探索結果' : 'Build Search Results'}</div>`;
+    html += `<div class="opt-results-summary-info">`;
+    html += `<span>${ja ? '最高スコア' : 'Best Score'}: ${best.score}</span>`;
+    html += `<span>${ja ? '献器' : 'Vessel'}: ${vesselName}</span>`;
+    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? '✓' : '✗'}</span>`;
+    html += `<span>${ja ? '総件数' : 'Total'}: ${flatResults.length}</span>`;
+    html += `</div></div>`;
+  }
+
+  // Search conditions
+  html += `<div class="opt-conditions-summary">`;
+  html += `<div class="opt-conditions-title">${ja ? '検索条件' : 'Search Conditions'}</div>`;
+  html += `<div class="opt-conditions-row">`;
+  html += `<span class="opt-conditions-label">${ja ? 'キャラクター' : 'Character'}:</span>`;
+  html += `<span class="opt-conditions-value">${params.character || '-'}</span>`;
+  html += `</div>`;
+  if (params.vessel) {
+    const vesselKeys = params.vessel.split(',');
+    const vesselNames = vesselKeys.map(vk => {
+      if (vesselsData) {
+        const vt = (vesselsData.vesselTypes || []).find(v => v.key === vk);
+        if (vt) return ja ? vt.nameJa : vt.nameEn;
+        const uv = (vesselsData.universalVessels || []).find(v => v.key === vk);
+        if (uv) return ja ? uv.nameJa : uv.nameEn;
+      }
+      return vk;
+    });
+    html += `<div class="opt-conditions-row">`;
+    html += `<span class="opt-conditions-label">${ja ? '献器' : 'Vessels'}:</span>`;
+    html += `<span class="opt-conditions-value">${vesselNames.join(', ')}</span>`;
+    html += `</div>`;
+  }
+  html += `<div class="opt-conditions-row">`;
+  html += `<span class="opt-conditions-label">${ja ? 'モード' : 'Mode'}:</span>`;
+  html += `<span class="opt-conditions-value">${params.combined ? (ja ? '通常+深層' : 'Combined') : (ja ? '通常のみ' : 'Normal only')}</span>`;
+  html += `</div>`;
+  if (params.effects && params.effects.length > 0) {
+    html += `<div class="opt-conditions-row">`;
+    html += `<span class="opt-conditions-label">${ja ? '効果' : 'Effects'}:</span>`;
+    html += `<div class="opt-conditions-effects">`;
+    params.effects.forEach(e => {
+      const eff = allUniqueEffects.find(u => u.key === e.key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
+      const pLabel = PRIORITY_LABELS[e.priority]
+        ? (ja ? PRIORITY_LABELS[e.priority].ja : PRIORITY_LABELS[e.priority].en) : e.priority;
+      html += `<span class="opt-conditions-effect-tag ${e.priority}">${name} <small>(${pLabel})</small></span>`;
+    });
+    html += `</div></div>`;
+  }
+  html += `</div>`;
+
+  // Headline bar (column headers like the relic list)
+  const scoreLabel = ja ? 'スコア' : 'Score';
+  const vesselLabel = ja ? '献器' : 'Vessel';
+  const reqLabel = ja ? '必須充足' : 'Required';
+  const rankLabel = '#';
+  const scoreArrow = sortKey === 'score' ? (sortDir === 'desc' ? ' ▼' : ' ▲') : '';
+  const vesselArrow = sortKey === 'vessel' ? (sortDir === 'desc' ? ' ▼' : ' ▲') : '';
+  html += `<div class="opt-result-headline">`;
+  html += `<span class="opt-hl-rank">${rankLabel}</span>`;
+  html += `<span class="opt-hl-score sortable${sortKey === 'score' ? ' active' : ''}" data-sort="score">${scoreLabel}${scoreArrow}</span>`;
+  html += `<span class="opt-hl-req">${reqLabel}</span>`;
+  html += `<span class="opt-hl-vessel sortable${sortKey === 'vessel' ? ' active' : ''}" data-sort="vessel">${vesselLabel}${vesselArrow}</span>`;
+  html += `</div>`;
+
+  // Render flat result list
+  const bestKey = bestResult && bestResult.parameters && bestResult.parameters.vessel
+    ? bestResult.parameters.vessel.key : null;
+  const bestScore = bestResult ? bestResult.result.score : -1;
+
+  flatResults.forEach((res, idx) => {
+    const isBest = bestKey && res._vesselInfo && res._vesselInfo.key === bestKey
+      && res.score === bestScore && res.rank === 1;
+    html += renderResultCard(res, ja, isBest, params, idx);
+  });
+
+  if (flatResults.length === 0) {
+    html += `<div class="opt-loading"><p>${ja ? '結果なし' : 'No results'}</p></div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Click handler: show detail panel on the right (entire card is clickable)
+  container.querySelectorAll('.opt-result-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const idx = parseInt(card.dataset.idx, 10);
+      container.querySelectorAll('.opt-result-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      showOptResultDetail(tabId, flatResults[idx], params, idx);
+    });
+  });
+
+  // Sort button handlers (headline columns)
+  container.querySelectorAll('.opt-result-headline .sortable').forEach(col => {
+    col.addEventListener('click', () => {
+      const key = col.dataset.sort;
+      let dir = 'desc';
+      if (key === sortKey) dir = sortDir === 'desc' ? 'asc' : 'desc';
+      renderOptimizerResults(tabId, data, params, key, dir);
+    });
+  });
+}
+
+function renderResultCard(res, ja, isBest, params, idx) {
+  const cardClass = `opt-result-card${isBest ? ' best' : ''}`;
+  const vesselName = ja ? res._vesselNameJa : res._vesselNameEn;
+  const matchedSet = new Set(res.matchedEffects || []);
+  const specKeys = new Set((params.effects || []).map(e => e.key));
+
+  let html = `<div class="${cardClass}" data-idx="${idx}">`;
+  html += `<div class="opt-result-header">`;
+  html += `<span class="opt-rank">#${idx + 1}</span>`;
+  html += `<span class="opt-score">${ja ? 'スコア' : 'Score'}: ${res.score}</span>`;
+  html += `<span class="opt-required-badge ${res.requiredMet ? 'met' : 'not-met'}">`;
+  html += `${res.requiredMet ? '✓' : '✗'}</span>`;
+  html += `<span class="opt-vessel-name">${vesselName}</span>`;
+  html += `</div>`;
+
+  // Card body: per-relic rows (relic name left, its effects right, aligned)
+  const allRelics = [].concat(res.normalRelics || [], res.deepRelics || [], res.relics || []);
+  if (allRelics.length > 0) {
+    html += `<div class="opt-card-body">`;
+
+    allRelics.forEach(r => {
+      const rName = ja ? (r.itemNameJa || r.itemNameEn || r.itemKey) : (r.itemNameEn || r.itemKey);
+      html += `<div class="opt-card-row">`;
+      html += `<div class="opt-card-relic"><span class="color-badge ${r.itemColor}"></span>${rName}</div>`;
+      html += `<div class="opt-card-effects">`;
+      (r.effects || []).forEach(eff => {
+        if (eff.isDebuff) return; // skip sub-effects for compact view
+        const effName = ja ? (eff.name_ja || eff.name_en || eff.key) : (eff.name_en || eff.key);
+        const isMatched = matchedSet.has(eff.key);
+        const isSpec = specKeys.has(eff.key);
+        let cls = 'opt-card-effect';
+        if (isMatched) {
+          const spec = params.effects.find(e => e.key === eff.key);
+          cls += ` matched ${spec ? spec.priority : 'nice_to_have'}`;
+        } else if (isSpec) {
+          cls += ' spec-miss';
+        }
+        html += `<span class="${cls}">${effName}</span>`;
+      });
+      html += `</div>`;
+      html += `</div>`;
+    });
+
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+// === Optimizer Result Detail Panel ===
+
+function showOptResultDetail(tabId, res, params, idx) {
+  const panel = document.getElementById(`opt-detail-${tabId}`);
+  if (!panel) return;
+  panel.classList.remove('hidden');
+  const ja = displayLang === 'ja';
+
+  const title = panel.querySelector('.opt-detail-title');
+  const body = panel.querySelector('.opt-detail-body');
+  const vesselName = ja ? res._vesselNameJa : res._vesselNameEn;
+  title.textContent = `#${idx + 1} ${vesselName}`;
+
+  let html = '';
+
+  // Score info section
+  html += `<div class="detail-section">`;
+  html += `<h3>${ja ? 'スコア情報' : 'Score Info'}</h3>`;
+  html += field(ja ? 'スコア' : 'Score', res.score);
+  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? '✓' : '✗');
+  html += field(ja ? '献器' : 'Vessel', vesselName);
+  html += `</div>`;
+
+  // Normal relics section
+  if (res.normalRelics && res.normalRelics.length > 0) {
+    html += `<div class="detail-section">`;
+    html += `<h3>${ja ? '通常遺物' : 'Normal Relics'}</h3>`;
+    res.normalRelics.forEach(r => { html += renderOptDetailRelic(r, ja); });
+    html += `</div>`;
+  }
+
+  // Deep relics section
+  if (res.deepRelics && res.deepRelics.length > 0) {
+    html += `<div class="detail-section">`;
+    html += `<h3>${ja ? '深層遺物' : 'Deep Relics'}</h3>`;
+    res.deepRelics.forEach(r => { html += renderOptDetailRelic(r, ja); });
+    html += `</div>`;
+  }
+
+  // Legacy relics (non-combined)
+  if (res.relics && !res.normalRelics) {
+    html += `<div class="detail-section">`;
+    html += `<h3>${ja ? '遺物' : 'Relics'}</h3>`;
+    res.relics.forEach(r => { html += renderOptDetailRelic(r, ja); });
+    html += `</div>`;
+  }
+
+  // Matched effects section
+  html += `<div class="detail-section">`;
+  html += `<h3>${ja ? 'マッチした効果' : 'Matched Effects'}</h3>`;
+  (res.matchedEffects || []).forEach(key => {
+    const spec = params.effects.find(e => e.key === key);
+    const priority = spec ? spec.priority : 'nice_to_have';
+    const eff = allUniqueEffects.find(e => e.key === key);
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+    const pLabel = PRIORITY_LABELS[priority]
+      ? (ja ? PRIORITY_LABELS[priority].ja : PRIORITY_LABELS[priority].en) : priority;
+    html += `<div class="detail-effect">`;
+    html += `<div class="detail-effect-main">${name}</div>`;
+    html += `<div class="detail-effect-stacking">${pLabel}</div>`;
+    html += `</div>`;
+  });
+  // Missing required
+  (res.missingRequired || []).forEach(key => {
+    const eff = allUniqueEffects.find(e => e.key === key);
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+    html += `<div class="detail-effect" style="opacity:0.5">`;
+    html += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
+    html += `<div class="detail-effect-stacking">${ja ? '未達' : 'Missing'}</div>`;
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  body.innerHTML = html;
+
+  // Close button
+  panel.querySelector('.opt-detail-close').onclick = () => {
+    panel.classList.add('hidden');
+    const container = document.getElementById(`opt-result-${tabId}`);
+    if (container) container.querySelectorAll('.opt-result-card').forEach(c => c.classList.remove('selected'));
+  };
+}
+
+function renderOptDetailRelic(relic, ja) {
+  const itemName = ja
+    ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
+    : (relic.itemNameEn || relic.itemKey);
+  const typeBadge = TYPE_LABELS[relic.itemType];
+  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : relic.itemType;
+
+  let html = `<div class="detail-effect">`;
+  html += `<div class="detail-effect-main">`;
+  html += `<span class="color-badge ${relic.itemColor}"></span> `;
+  html += `<span class="type-badge ${relic.itemType}" style="font-size:10px;padding:1px 5px">${typeStr}</span> `;
+  html += itemName;
+  html += `</div>`;
+
+  // Group effects: main + sub-effects
+  const effectGroups = [];
+  let currentGroup = null;
+  (relic.effects || []).forEach(eff => {
+    if (eff.isDebuff && currentGroup) {
+      currentGroup.debuffs.push(eff);
+    } else {
+      currentGroup = { main: eff, debuffs: [] };
+      effectGroups.push(currentGroup);
+    }
+  });
+
+  effectGroups.forEach(group => {
+    const mainName = ja
+      ? (group.main.name_ja || group.main.name_en || group.main.key)
+      : (group.main.name_en || group.main.key);
+    const matched = group.main.matched;
+    html += `<div class="opt-detail-effect-item">`;
+    html += `<div class="opt-detail-effect-name${matched ? ' matched' : ''}">${mainName}</div>`;
+    group.debuffs.forEach(d => {
+      const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
+      const isDemerit = classifyEffect(d.name_ja, d.name_en, d.key) === 'demerit';
+      html += `<div class="opt-detail-effect-sub ${isDemerit ? 'demerit' : ''}">${dName}</div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  return html;
+}
+
+// ============================================================
+// === Language UI updates for new elements ===
+// ============================================================
+
+const _origUpdateLangUI = updateLangUI;
+updateLangUI = function() {
+  _origUpdateLangUI();
+  const ja = displayLang === 'ja';
+
+  // Tab bar
+  const mainTabLabel = document.getElementById('main-tab-label');
+  if (mainTabLabel) mainTabLabel.textContent = ja ? '遺物一覧' : 'Relic List';
+
+  // Optimizer button
+  updateOptimizerButton();
+
+  // Optimizer inspector labels
+  document.getElementById('optimizer-title').textContent = ja ? 'ビルド探索' : 'Build Search';
+  document.getElementById('opt-character-label').textContent = ja ? 'キャラクター' : 'Character';
+  document.getElementById('opt-vessel-label').textContent = ja ? '献器' : 'Vessel';
+  document.getElementById('opt-mode-label').textContent = ja ? 'モード' : 'Mode';
+  document.getElementById('opt-combined-label').textContent = ja ? '通常+深層' : 'Normal+Deep';
+  document.getElementById('opt-effects-label').textContent = ja ? '効果指定' : 'Effect Specs';
+  document.getElementById('opt-add-effect-label').textContent = ja ? '効果を追加' : 'Add Effect';
+  // Effect selection inspector labels
+  document.getElementById('effect-select-title').textContent = ja ? '効果を選択' : 'Select Effects';
+  effectSelectSearch.placeholder = ja ? '効果名で絞り込み...' : 'Filter effects...';
+  document.getElementById('effect-select-clear-label').textContent = ja ? 'クリア' : 'Clear';
+  document.getElementById('effect-select-apply-label').textContent = ja ? '適用' : 'Apply';
+  document.getElementById('opt-settings-label').textContent = ja ? '設定' : 'Settings';
+  document.getElementById('opt-candidates-label').textContent = ja ? '候補数/スロット' : 'Candidates/Slot';
+  document.getElementById('opt-top-label').textContent = ja ? '出力件数' : 'Result Count';
+  document.getElementById('optimizer-clear-label').textContent = ja ? 'クリア' : 'Clear';
+  document.getElementById('optimizer-run-label').textContent = ja ? '実行' : 'Run';
+  document.getElementById('opt-preset-label').textContent = ja ? '検索条件プリセット:' : 'Search Preset:';
+  document.getElementById('opt-preset-save').title = ja ? '検索条件プリセット保存' : 'Save Search Preset';
+  document.getElementById('opt-preset-save-label').textContent = ja ? '保存' : 'Save';
+  document.getElementById('opt-preset-load').title = ja ? '検索条件プリセット読込' : 'Load Search Preset';
+  document.getElementById('opt-preset-load-label').textContent = ja ? '読込' : 'Load';
+
+  // Re-render character/vessel if open
+  if (optimizerInspector.classList.contains('open')) {
+    renderOptimizerCharacterSelect();
+    renderOptimizerVesselList();
+    renderOptEffectsTags();
+  }
+  if (effectSelectInspector.classList.contains('open')) {
+    renderEffectSelectList();
+  }
+
+  updateOptEffectsCount();
+
+  // Re-render active optimizer tab
+  if (activeTab !== 'main' && optimizerTabs.has(activeTab)) {
+    const info = optimizerTabs.get(activeTab);
+    renderOptimizerResults(activeTab, info.data, info.params);
+  }
+};

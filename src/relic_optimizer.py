@@ -57,25 +57,44 @@ def load_vessels_data(vessels_file: str) -> Dict:
         return json.load(f)
 
 
-def load_stacking_data(effects_data_file: str) -> Dict[str, bool]:
+def load_stacking_data(effects_data_file: str) -> Dict:
     """効果の重複可否データを読み込み
 
     effects_data.json から各効果キーの stackable 値を取得。
-    同じキーが複数のエフェクト ID に存在する場合、
-    いずれかが True なら True とする。
+    返り値: key -> True (完全スタック可) / False (不可) / "conditional" (条件付き)
+    優先度: True > "conditional" > False
     """
     with open(effects_data_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    key_stackable: Dict[str, bool] = {}
+    key_stackable: Dict = {}
     for eid, entry in data.get('effects', {}).items():
         key = entry['key']
         stackable = entry.get('stackable', False)
         if key not in key_stackable:
-            key_stackable[key] = (stackable is True)
+            if stackable is True:
+                key_stackable[key] = True
+            elif stackable == 'conditional':
+                key_stackable[key] = 'conditional'
+            else:
+                key_stackable[key] = False
         elif stackable is True:
             key_stackable[key] = True
+        elif stackable == 'conditional' and key_stackable[key] is False:
+            key_stackable[key] = 'conditional'
     return key_stackable
+
+
+def _extract_base_key_and_level(key: str):
+    """PlusN サフィックスからベースキーとレベルを抽出
+
+    例: 'physicalAttackUpPlus4' -> ('physicalAttackUp', 4)
+        'improvedDodging'       -> ('improvedDodging', None)
+    """
+    m = re.match(r'^(.+?)Plus(\d+)$', key)
+    if m:
+        return m.group(1), int(m.group(2))
+    return key, None
 
 
 def resolve_character_name_ja(name: str) -> str:
@@ -93,7 +112,7 @@ def resolve_character_name_ja(name: str) -> str:
 class RelicOptimizer:
     def __init__(self, relics: List[Dict], effect_specs: List[Dict],
                  vessels_data: Optional[Dict] = None,
-                 stacking_data: Optional[Dict[str, bool]] = None):
+                 stacking_data: Optional[Dict] = None):
         self.all_relics = relics
         self.effect_specs = effect_specs
         self.vessels_data = vessels_data
@@ -172,7 +191,7 @@ class RelicOptimizer:
 
     def is_stackable(self, key: str) -> bool:
         """効果がスタック可能かどうか（重複装備で恩恵があるか）"""
-        return self.stacking_data.get(key, False)
+        return self.stacking_data.get(key, False) is True
 
     def score_relic(self, relic: Dict) -> int:
         """個別遺物のスコア計算"""
@@ -187,16 +206,27 @@ class RelicOptimizer:
 
         スタック可能な効果: weight × 遺物数（重複分の恩恵あり）
         スタック不可な効果: weight × 1（重複しても1回分のみ）
+        条件付き (conditional): 同レベル重複不可、異レベルは加算
+          - 同一キー(同レベル)が重複する場合、ペナルティを適用
+          - PlusN なしキー: weight×1 + 重複ペナルティ
         """
         score = 0
         for key, count in effect_counts.items():
             if key not in self.effect_lookup:
                 continue
             weight = self.effect_lookup[key]['weight']
-            if self.is_stackable(key):
+            stacking = self.stacking_data.get(key, False)
+
+            if stacking is True:
                 score += weight * count
+            elif stacking == 'conditional':
+                # 同一キー = 同一レベル → 1回のみカウント
+                score += weight
+                # 重複している場合、余剰分にペナルティ（weight の 30%）
+                if count > 1:
+                    score -= int(weight * 0.3 * (count - 1))
             else:
-                score += weight  # 1回のみカウント
+                score += weight  # 非スタック: 1回のみカウント
         return score
 
     def score_combination(self, combo: Tuple[Dict, ...]) -> Tuple[bool, int, Set[str], List[str]]:

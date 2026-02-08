@@ -38,6 +38,32 @@ app.on('activate', () => {
 
 // ---- IPC Handlers ----
 
+ipcMain.handle('save-preset-dialog', async (_event, jsonStr) => {
+  const result = await dialog.showSaveDialog(mainWindow, {
+    title: 'プリセットを保存',
+    defaultPath: 'preset.json',
+    filters: [
+      { name: 'JSON Files', extensions: ['json'] },
+    ],
+  });
+  if (result.canceled || !result.filePath) return null;
+  fs.writeFileSync(result.filePath, jsonStr, 'utf-8');
+  return result.filePath;
+});
+
+ipcMain.handle('load-preset-dialog', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    title: 'プリセットを読み込み',
+    filters: [
+      { name: 'JSON Files', extensions: ['json'] },
+    ],
+    properties: ['openFile'],
+  });
+  if (result.canceled || result.filePaths.length === 0) return null;
+  const raw = fs.readFileSync(result.filePaths[0], 'utf-8');
+  return JSON.parse(raw);
+});
+
 ipcMain.handle('open-file-dialog', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     title: 'セーブファイルを選択',
@@ -69,6 +95,90 @@ ipcMain.handle('load-stacking-data', async () => {
   } catch (e) {
     console.error('Failed to load stacking data:', e.message);
     return {};
+  }
+});
+
+ipcMain.handle('load-vessels-data', async () => {
+  const projectRoot = path.resolve(__dirname, '..');
+  const vesselsFile = path.join(projectRoot, 'resources', 'vessels_data.json');
+  try {
+    const raw = fs.readFileSync(vesselsFile, 'utf-8');
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error('Failed to load vessels data:', e.message);
+    return null;
+  }
+});
+
+ipcMain.handle('run-optimizer', async (_event, params) => {
+  const projectRoot = path.resolve(__dirname, '..');
+  const optimizerScript = path.join(projectRoot, 'src', 'relic_optimizer.py');
+
+  // Write relic data to temp file
+  const tmpInput = path.join(os.tmpdir(), `relicforge_opt_input_${Date.now()}.json`);
+  const tmpEffects = path.join(os.tmpdir(), `relicforge_opt_effects_${Date.now()}.json`);
+  const tmpOutput = path.join(os.tmpdir(), `relicforge_opt_output_${Date.now()}.json`);
+
+  const cleanup = () => {
+    [tmpInput, tmpEffects, tmpOutput].forEach(f => {
+      try { fs.unlinkSync(f); } catch (_) {}
+    });
+  };
+
+  try {
+    // Write input relic data
+    fs.writeFileSync(tmpInput, JSON.stringify(params.relicData, null, 0), 'utf-8');
+
+    // Write effects config
+    const effectsConfig = { effects: params.effects || [] };
+    fs.writeFileSync(tmpEffects, JSON.stringify(effectsConfig, null, 0), 'utf-8');
+
+    // Build args
+    const args = [
+      optimizerScript,
+      '--input', tmpInput,
+      '--effects', tmpEffects,
+      '-o', tmpOutput,
+      '--top', String(params.top || 50),
+      '--candidates', String(params.candidates || 30),
+    ];
+    if (params.character) {
+      args.push('--character', params.character);
+    }
+    if (params.vessel) {
+      args.push('--vessel', params.vessel);
+    }
+    if (params.combined) {
+      args.push('--combined');
+    }
+
+    return new Promise((resolve, reject) => {
+      const tryRun = (cmd) => {
+        execFile(cmd, args, { timeout: 120000 }, (error, stdout, stderr) => {
+          if (error) {
+            if (cmd === 'python3') {
+              tryRun('python');
+              return;
+            }
+            cleanup();
+            reject(`Optimizer error: ${error.message}\n${stderr}`);
+            return;
+          }
+          try {
+            const data = fs.readFileSync(tmpOutput, 'utf-8');
+            cleanup();
+            resolve(JSON.parse(data));
+          } catch (e) {
+            cleanup();
+            reject(`Failed to read optimizer output: ${e.message}`);
+          }
+        });
+      };
+      tryRun('python3');
+    });
+  } catch (e) {
+    cleanup();
+    throw `Optimizer setup error: ${e.message}`;
   }
 });
 

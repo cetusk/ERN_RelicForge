@@ -58,7 +58,15 @@
       </select>
     </div>
     <button id="btn-inspector" class="btn-inspector hidden">&#9881; <span id="btn-inspector-label">高度な検索</span></button>
+    <button id="btn-optimizer" class="btn-inspector hidden">&#9881; <span id="btn-optimizer-label">ビルド探索</span></button>
     <span id="result-count" class="result-count"></span>
+  </div>
+
+  <!-- Tab Bar -->
+  <div id="tab-bar" class="tab-bar hidden">
+    <div class="tab active" data-tab="main">
+      <span class="tab-label" id="main-tab-label">遺物一覧</span>
+    </div>
   </div>
 
   <!-- Main Content -->
@@ -140,6 +148,85 @@
     <div class="inspector-footer">
       <button id="inspector-clear" class="btn-secondary">クリア</button>
       <button id="inspector-apply" class="btn-primary">適用</button>
+    </div>
+  </div>
+
+  <!-- Optimizer Inspector Panel -->
+  <div id="optimizer-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="optimizer-inspector" class="inspector">
+    <div class="inspector-header">
+      <h3 id="optimizer-title">ビルド探索</h3>
+      <button id="optimizer-close" class="btn-close">&times;</button>
+    </div>
+    <div class="inspector-body">
+      <div class="inspector-section">
+        <h4 id="opt-character-label">キャラクター</h4>
+        <select id="opt-character" class="opt-select"></select>
+      </div>
+      <div class="inspector-section">
+        <div class="opt-collapsible-header collapsed" id="opt-vessel-header">
+          <span class="inspector-group-arrow">▼</span>
+          <h4 id="opt-vessel-label">献器</h4>
+          <span id="opt-vessel-count" class="inspector-count"></span>
+        </div>
+        <div id="opt-vessel-list" class="opt-vessel-list collapsed"></div>
+      </div>
+      <div class="inspector-section">
+        <h4 id="opt-mode-label">モード</h4>
+        <label class="opt-checkbox-label"><input type="checkbox" id="opt-combined" checked> <span id="opt-combined-label">通常+深層</span></label>
+      </div>
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <h4 id="opt-effects-label">効果指定</h4>
+          <span id="opt-effects-count" class="inspector-count">0件</span>
+        </div>
+        <div id="opt-effects-list" class="opt-effects-list"></div>
+        <button id="opt-add-effect" class="btn-secondary opt-add-effect-btn">+ <span id="opt-add-effect-label">効果を追加</span></button>
+      </div>
+      <div class="inspector-section">
+        <h4 id="opt-settings-label">設定</h4>
+        <div class="opt-setting">
+          <label id="opt-candidates-label">候補数/スロット</label>
+          <input type="number" id="opt-candidates" value="30" min="5" max="100" class="opt-number-input">
+        </div>
+        <div class="opt-setting">
+          <label id="opt-top-label">出力件数</label>
+          <input type="number" id="opt-top" value="50" min="1" max="200" class="opt-number-input">
+        </div>
+      </div>
+    </div>
+    <div class="inspector-footer">
+      <div class="opt-preset-row">
+        <span id="opt-preset-label" class="opt-preset-label">検索条件プリセット:</span>
+        <button id="opt-preset-save" class="btn-preset" title="検索条件プリセット保存">&#128190; <span id="opt-preset-save-label">保存</span></button>
+        <button id="opt-preset-load" class="btn-preset" title="検索条件プリセット読込">&#128194; <span id="opt-preset-load-label">読込</span></button>
+      </div>
+      <div class="opt-footer-actions">
+        <button id="optimizer-clear" class="btn-secondary"><span id="optimizer-clear-label">クリア</span></button>
+        <button id="optimizer-run" class="btn-primary"><span id="optimizer-run-label">実行</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Effect Selection Inspector Panel -->
+  <div id="effect-select-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="effect-select-inspector" class="inspector effect-select-inspector">
+    <div class="inspector-header">
+      <h3 id="effect-select-title">効果を選択</h3>
+      <button id="effect-select-close" class="btn-close">&times;</button>
+    </div>
+    <div class="inspector-body">
+      <div class="inspector-section">
+        <div class="inspector-search-wrapper">
+          <input type="text" id="effect-select-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
+          <button id="effect-select-search-clear" class="inspector-search-clear hidden" type="button">&times;</button>
+        </div>
+        <div id="effect-select-list" class="inspector-effect-list"></div>
+      </div>
+    </div>
+    <div class="inspector-footer effect-select-footer">
+      <button id="effect-select-clear" class="btn-secondary"><span id="effect-select-clear-label">クリア</span></button>
+      <button id="effect-select-apply" class="btn-primary"><span id="effect-select-apply-label">適用</span></button>
     </div>
   </div>
 
