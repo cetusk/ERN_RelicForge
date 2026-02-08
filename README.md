@@ -1,7 +1,7 @@
 # ERN_RelicForge
 
-Elden Ring: Nightreign のセーブファイル (.sl2) から遺物情報を抽出・閲覧するツール。
-CLI パーサーと Electron ベースの GUI ビューアーを提供。
+Elden Ring: Nightreign のセーブファイル (.sl2) から遺物情報を抽出・閲覧・最適化するツール。
+CLI パーサー、遺物組み合わせ最適化ツール、Electron ベースの GUI ビューアーを提供。
 
 ## Folder Structure
 
@@ -13,11 +13,13 @@ ERN_RelicForge/
 ├── .gitignore
 │
 ├── src/
-│   └── relic_parser.py          # セーブファイル解析パーサー
+│   ├── relic_parser.py          # セーブファイル解析パーサー
+│   └── relic_optimizer.py       # 遺物組み合わせ最適化ツール
 │
 ├── resources/
 │   ├── items_data.json          # アイテムデータ (1003件, 日英名称付き)
-│   └── effects_data.json        # エフェクトデータ (1117件, 日英名称付き)
+│   ├── effects_data.json        # エフェクトデータ (1117件, 日英名称・重複可否付き)
+│   └── vessels_data.json        # 献器データ (全10キャラ・4汎用献器)
 │
 ├── gui/                         # Electron GUI アプリ
 │   ├── package.json
@@ -28,13 +30,22 @@ ERN_RelicForge/
 │       ├── app.js               # UI ロジック
 │       └── style.css            # ダークテーマスタイル
 │
+├── scripts/
+│   └── add_stacking_info.py     # 効果の重複可否データ投入スクリプト
+│
 └── examples/
-    └── sample_output.json       # サンプル出力
+    ├── sample_output.json       # パーサーサンプル出力
+    ├── sample_effects_config.json  # 効果指定サンプル
+    └── test_wylder_effects.json    # 追跡者テスト用効果指定
 ```
 
 ## Features
 
 - `.sl2` セーブファイルの復号化・遺物抽出
+- 遺物組み合わせ最適化
+  - 献器スロット色制約に基づく6スロット（通常3＋深層3）一括最適化
+  - 効果の重複可否を考慮したスコアリング
+  - 全献器の比較と最高スコアの自動選出
 - 日本語 / English 対応
 - Electron GUI ビューアー
   - 効果名のテキスト検索
@@ -75,6 +86,84 @@ python src/relic_parser.py <save_file.sl2> [options]
 # 例
 python src/relic_parser.py path/to/NR0000.sl2 -o result.json
 ```
+
+### 遺物最適化ツール
+
+```bash
+python src/relic_optimizer.py --input <parser_output.json> --effects <effects_config.json> [options]
+```
+
+| オプション | 説明 | デフォルト |
+|---|---|---|
+| `--input FILE` | relic_parser 出力の JSON ファイル | (必須) |
+| `--effects FILE` | 効果指定ファイル (JSON) | なし |
+| `-o, --output FILE` | 出力ファイル名 | `combinations.json` |
+| `--character NAME` | キャラクター名 (例: `追跡者`, `Wylder`) | なし (全キャラ) |
+| `--vessel TYPE` | 献器タイプ, カンマ区切り (例: `urn,chalice`) | なし (全献器) |
+| `--combined` | 通常3＋深層3の6スロット一括最適化 | off |
+| `--deep` | 深層遺物スロットを使用 (非combined時) | off |
+| `--color COLOR` | 遺物の色 (献器未使用時) | なし (全色) |
+| `--types TYPES` | 遺物タイプ, カンマ区切り | `Relic` |
+| `--top N` | 献器あたりの出力候補数 | `10` |
+| `--candidates N` | スロットあたりの候補数 | `30` |
+
+```bash
+# 例: 追跡者向け、全献器で通常+深層の一括最適化
+python src/relic_optimizer.py --input output.json \
+  --effects examples/test_wylder_effects.json \
+  --character 追跡者 --combined -o result.json
+
+# 例: 特定献器のみ
+python src/relic_optimizer.py --input output.json \
+  --effects examples/sample_effects_config.json \
+  --character 追跡者 --combined --vessel chalice
+```
+
+#### 効果指定ファイル
+
+欲しい効果とその優先度を記述する JSON ファイル:
+
+```json
+{
+  "effects": [
+    { "key": "physicalAttackUpPlus4", "priority": "required" },
+    { "key": "improvedSkillAttackPower", "priority": "preferred" },
+    { "key": "increasedRuneAcquisitionForSelfAndAllies", "priority": "nice_to_have" }
+  ]
+}
+```
+
+| 優先度 | 意味 | スコア重み |
+|---|---|---|
+| `required` | 必須 | 100 |
+| `preferred` | あれば嬉しい | 10 |
+| `nice_to_have` | あったら良い | 1 |
+
+#### 出力構造
+
+```json
+{
+  "bestResult": {
+    "parameters": { "vessel": {...}, ... },
+    "result": { "rank": 1, "score": 810, "requiredMet": true, ... }
+  },
+  "allResults": [
+    {
+      "parameters": { "vessel": {...}, ... },
+      "results": [ { "rank": 1, ... }, { "rank": 2, ... }, ... ]
+    }
+  ]
+}
+```
+
+- `bestResult` — 全献器中の最高スコア1件
+- `allResults` — 全献器の top N 件
+
+#### スコアリング
+
+- **スタック可能な効果** (例: `physicalAttackUpPlus4`): 重み × 遺物数（重複で恩恵あり）
+- **スタック不可な効果** (例: `changesCompatible...`): 重み × 1（重複しても1回のみ）
+- required 充足の組み合わせがスコアに関わらず優先される
 
 ### GUI
 
