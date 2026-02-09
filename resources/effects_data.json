@@ -431,7 +431,7 @@
     "330800": {
       "key": "reducedSpellFpCost",
       "name_en": "Reduced Spell Fp Cost",
-      "name_ja": "魔術/祈祷のFP消費軽減",
+      "name_ja": "魔術/祈祷の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
@@ -571,7 +571,7 @@
     "360200": {
       "key": "reducedSkillFpCost",
       "name_en": "Reduced Skill Fp Cost",
-      "name_ja": "戦技のFP消費軽減",
+      "name_ja": "戦技の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
@@ -1285,7 +1285,7 @@
     "6500800": {
       "key": "scholarReducedFpConsumptionWhenUsingCharacterSkillOnSelf",
       "name_en": "Scholar Reduced Fp Consumption When Using Character Skill On Self",
-      "name_ja": "【学者】スキルを自身に使用時、FP消費軽減",
+      "name_ja": "【学者】スキルを自身に使用時、消費FP軽減",
       "stackable": false,
       "stackNotes": "キャラクター固有効果"
     },
@@ -1362,23 +1362,23 @@
     "6610700": {
       "key": "reducedFPConsumption",
       "name_en": "Reduced Fpconsumption",
-      "name_ja": "FP消費軽減",
+      "name_ja": "消費FP軽減",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
     },
     "6610701": {
       "key": "reducedFPConsumptionPlus1",
       "name_en": "Reduced Fpconsumption Plus 1",
-      "name_ja": "FP消費軽減+1",
+      "name_ja": "消費FP軽減+1",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
     },
     "6610702": {
       "key": "reducedFPConsumptionPlus2",
       "name_en": "Reduced Fpconsumption Plus 2",
-      "name_ja": "FP消費軽減+2",
+      "name_ja": "消費FP軽減+2",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
     },
     "6610800": {
       "key": "improvedAffinityAttackPower",
@@ -1649,7 +1649,7 @@
     "6623200": {
       "key": "greenspillCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Greenspill Crystal Tear In Possession At Start Of Expedition",
-      "name_ja": "出撃時に「緑色の秘雫」を持つ",
+      "name_ja": "出撃時に「緑溢れの結晶雫」を持つ",
       "stackable": true,
       "stackNotes": "1個"
     },
@@ -5268,16 +5268,16 @@
     "8010100": {
       "key": "reducedFPConsumption",
       "name_en": "Reduced Fpconsumption",
-      "name_ja": "FP消費軽減",
+      "name_ja": "消費FP軽減",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
     },
     "8010101": {
       "key": "reducedFPConsumption",
       "name_en": "Reduced Fpconsumption",
-      "name_ja": "FP消費軽減",
+      "name_ja": "消費FP軽減",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
     },
     "8020000": {
       "key": "increasedMaximumStamina",
@@ -6101,21 +6101,21 @@
     "8330600": {
       "key": "reducedSpellFpCost",
       "name_en": "Reduced Spell Fp Cost",
-      "name_ja": "魔術/祈祷のFP消費軽減",
+      "name_ja": "魔術/祈祷の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
     "8330601": {
       "key": "reducedSpellFpCost",
       "name_en": "Reduced Spell Fp Cost",
-      "name_ja": "魔術/祈祷のFP消費軽減",
+      "name_ja": "魔術/祈祷の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
     "8330602": {
       "key": "reducedSpellFpCost",
       "name_en": "Reduced Spell Fp Cost",
-      "name_ja": "魔術/祈祷のFP消費軽減",
+      "name_ja": "魔術/祈祷の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
@@ -6220,21 +6220,21 @@
     "8350200": {
       "key": "reducedSkillFpCost",
       "name_en": "Reduced Skill Fp Cost",
-      "name_ja": "戦技のFP消費軽減",
+      "name_ja": "戦技の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
     "8350201": {
       "key": "reducedSkillFpCost",
       "name_en": "Reduced Skill Fp Cost",
-      "name_ja": "戦技のFP消費軽減",
+      "name_ja": "戦技の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },
     "8350202": {
       "key": "reducedSkillFpCost",
       "name_en": "Reduced Skill Fp Cost",
-      "name_ja": "戦技のFP消費軽減",
+      "name_ja": "戦技の消費FP軽減",
       "stackable": true,
       "stackNotes": ""
     },

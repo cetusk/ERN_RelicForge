@@ -1,6 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const path = require('path');
-const { execFile } = require('child_process');
+const { execFile, spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 
@@ -134,7 +134,7 @@ ipcMain.handle('run-optimizer', async (_event, params) => {
     fs.writeFileSync(tmpEffects, JSON.stringify(effectsConfig, null, 0), 'utf-8');
 
     // Build args
-    const args = [
+    const pyArgs = [
       optimizerScript,
       '--input', tmpInput,
       '--effects', tmpEffects,
@@ -143,25 +143,55 @@ ipcMain.handle('run-optimizer', async (_event, params) => {
       '--candidates', String(params.candidates || 30),
     ];
     if (params.character) {
-      args.push('--character', params.character);
+      pyArgs.push('--character', params.character);
     }
     if (params.vessel) {
-      args.push('--vessel', params.vessel);
+      pyArgs.push('--vessel', params.vessel);
     }
     if (params.combined) {
-      args.push('--combined');
+      pyArgs.push('--combined');
     }
 
     return new Promise((resolve, reject) => {
       const tryRun = (cmd) => {
-        execFile(cmd, args, { timeout: 120000 }, (error, stdout, stderr) => {
-          if (error) {
-            if (cmd === 'python3') {
+        const proc = spawn(cmd, pyArgs, { timeout: 120000, shell: true });
+        let stderrBuf = '';
+
+        proc.stderr.on('data', (chunk) => {
+          const text = chunk.toString();
+          stderrBuf += text;
+          // Parse PROGRESS lines and send to renderer
+          const lines = text.split('\n');
+          for (const line of lines) {
+            const m = line.match(/^PROGRESS:(\d+)\/(\d+)/);
+            if (m) {
+              mainWindow.webContents.send('optimizer-progress', {
+                current: parseInt(m[1]),
+                total: parseInt(m[2]),
+              });
+            }
+          }
+        });
+
+        proc.on('error', (err) => {
+          if (cmd === 'python3') {
+            tryRun('python');
+            return;
+          }
+          cleanup();
+          reject(`Optimizer error: ${err.message}`);
+        });
+
+        proc.on('close', (code) => {
+          if (code !== 0) {
+            // Fallback: python3 not found (9009=Windows, 127=Unix)
+            if (cmd === 'python3' && (code === 9009 || code === 127 ||
+                stderrBuf.includes('not found') || stderrBuf.includes('not recognized'))) {
               tryRun('python');
               return;
             }
             cleanup();
-            reject(`Optimizer error: ${error.message}\n${stderr}`);
+            reject(`Optimizer exited with code ${code}\n${stderrBuf}`);
             return;
           }
           try {

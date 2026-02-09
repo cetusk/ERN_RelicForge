@@ -6,6 +6,11 @@ contextBridge.exposeInMainWorld('api', {
   loadStackingData: () => ipcRenderer.invoke('load-stacking-data'),
   loadVesselsData: () => ipcRenderer.invoke('load-vessels-data'),
   runOptimizer: (params) => ipcRenderer.invoke('run-optimizer', params),
+  onOptimizerProgress: (callback) => {
+    const handler = (_event, data) => callback(data);
+    ipcRenderer.on('optimizer-progress', handler);
+    return () => ipcRenderer.removeListener('optimizer-progress', handler);
+  },
   savePresetDialog: (jsonStr) => ipcRenderer.invoke('save-preset-dialog', jsonStr),
   loadPresetDialog: () => ipcRenderer.invoke('load-preset-dialog'),
 });

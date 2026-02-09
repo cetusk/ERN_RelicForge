@@ -927,39 +927,76 @@ class RelicOptimizer:
         return output
 
 
-def _build_output(all_output: List[Dict]) -> Dict:
-    """bestResult（最高スコア）と allResults（全結果）に分離した出力を構築"""
-    # 全献器/色の結果から最高スコアの結果を選出
-    best_result = None
-    best_score = -1
-    best_required_met = False
-
+def _build_output(all_output: List[Dict], top_n: int = 50) -> Dict:
+    """全献器の結果をマージし、グローバル上位 top_n 件に絞った出力を構築"""
+    # 全献器の結果をフラットにマージ（各結果に献器情報を付与）
+    flat = []
     for vessel_output in all_output:
-        results = vessel_output.get('results', [])
-        if not results:
-            continue
-        top = results[0]
-        top_req = top.get('requiredMet', False)
-        top_score = top.get('score', 0)
-        # required 充足 > スコア の優先順
-        if ((top_req and not best_required_met) or
-            (top_req == best_required_met and top_score > best_score)):
-            best_required_met = top_req
-            best_score = top_score
-            best_result = vessel_output
+        params = vessel_output.get('parameters', {})
+        vessel_info = params.get('vessel')
+        for res in vessel_output.get('results', []):
+            entry = dict(res)
+            if vessel_info and 'vessel' not in entry:
+                entry['vessel'] = vessel_info
+            elif not vessel_info and params.get('color'):
+                entry['_color'] = params['color']
+            flat.append(entry)
+
+    # ソート: requiredMet 優先、次にスコア降順
+    flat.sort(key=lambda r: (r.get('requiredMet', False), r.get('score', 0)),
+              reverse=True)
+
+    # グローバル top_n に絞る
+    flat = flat[:top_n]
+
+    # rank を振り直す
+    for i, entry in enumerate(flat):
+        entry['rank'] = i + 1
 
     output = {}
 
-    if best_result:
-        # bestResult: 最高スコアの献器/色の先頭結果のみ
-        best_entry = {
-            'parameters': best_result['parameters'],
-            'result': best_result['results'][0],
+    if flat:
+        output['bestResult'] = {
+            'parameters': all_output[0].get('parameters', {}),
+            'result': flat[0],
         }
-        output['bestResult'] = best_entry
+        # bestResult の parameters に正しい献器情報を設定
+        if flat[0].get('vessel'):
+            output['bestResult']['parameters'] = dict(
+                output['bestResult']['parameters'])
+            output['bestResult']['parameters']['vessel'] = flat[0]['vessel']
 
-    # allResults: 全献器/色の全結果
-    output['allResults'] = all_output
+    # allResults: フラット化した結果を献器ごとに再グループ化
+    grouped = {}
+    for entry in flat:
+        vessel = entry.get('vessel')
+        color = entry.get('_color')
+        if vessel:
+            group_key = vessel.get('key', '')
+        elif color:
+            group_key = color
+        else:
+            group_key = '_unknown'
+
+        if group_key not in grouped:
+            # 元の parameters を見つける
+            src_params = {}
+            for vo in all_output:
+                p = vo.get('parameters', {})
+                v = p.get('vessel')
+                if vessel and v and v.get('key') == group_key:
+                    src_params = p
+                    break
+                elif color and p.get('color') == color:
+                    src_params = p
+                    break
+            grouped[group_key] = {
+                'parameters': src_params,
+                'results': [],
+            }
+        grouped[group_key]['results'].append(entry)
+
+    output['allResults'] = list(grouped.values())
 
     return output
 
@@ -1063,7 +1100,9 @@ def main():
             sys.exit(1)
 
         all_output = []
-        for vc in vessel_configs:
+        total_vessels = len(vessel_configs)
+        for vi, vc in enumerate(vessel_configs):
+            print(f"PROGRESS:{vi}/{total_vessels}", file=sys.stderr, flush=True)
             print(f"\nOptimizing for vessel: {vc['nameJa']} "
                   f"({vc['nameEn']})", file=sys.stderr)
 
@@ -1125,14 +1164,18 @@ def main():
             else:
                 print(f"  No combinations found", file=sys.stderr)
 
-        output_data = _build_output(all_output)
+        print(f"PROGRESS:{total_vessels}/{total_vessels}", file=sys.stderr,
+              flush=True)
+        output_data = _build_output(all_output, top_n=args.top)
 
     else:
         # Legacy mode: color-based optimization (no vessel constraints)
         colors = [args.color] if args.color else \
             ['Red', 'Blue', 'Yellow', 'Green']
         all_output = []
-        for color in colors:
+        total_colors = len(colors)
+        for ci, color in enumerate(colors):
+            print(f"PROGRESS:{ci}/{total_colors}", file=sys.stderr, flush=True)
             print(f"\nOptimizing for color: {color}", file=sys.stderr)
             results = optimizer.optimize_legacy(
                 color=color, types=types, character=args.character,
@@ -1152,7 +1195,9 @@ def main():
             else:
                 print(f"  No combinations found", file=sys.stderr)
 
-        output_data = _build_output(all_output)
+        print(f"PROGRESS:{total_colors}/{total_colors}", file=sys.stderr,
+              flush=True)
+        output_data = _build_output(all_output, top_n=args.top)
 
     with open(args.output, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)

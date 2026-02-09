@@ -121,6 +121,7 @@
   <!-- Inspector Panel -->
   <div id="inspector-backdrop" class="inspector-backdrop hidden"></div>
   <div id="inspector" class="inspector">
+    <div class="inspector-resize-handle"></div>
     <div class="inspector-header">
       <h3 id="inspector-title">高度な検索</h3>
       <button id="inspector-close" class="btn-close">&times;</button>
@@ -154,6 +155,7 @@
   <!-- Optimizer Inspector Panel -->
   <div id="optimizer-backdrop" class="inspector-backdrop hidden"></div>
   <div id="optimizer-inspector" class="inspector">
+    <div class="inspector-resize-handle"></div>
     <div class="inspector-header">
       <h3 id="optimizer-title">ビルド探索</h3>
       <button id="optimizer-close" class="btn-close">&times;</button>
@@ -186,7 +188,7 @@
       <div class="inspector-section">
         <h4 id="opt-settings-label">設定</h4>
         <div class="opt-setting">
-          <label id="opt-candidates-label">候補数/スロット</label>
+          <label id="opt-candidates-label">上位抽出数/色</label>
           <input type="number" id="opt-candidates" value="30" min="5" max="100" class="opt-number-input">
         </div>
         <div class="opt-setting">

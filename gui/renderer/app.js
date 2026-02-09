@@ -746,28 +746,32 @@ window.addEventListener('resize', () => {
 // === Inspector ===
 // Category definitions based on kamikouryaku.net wiki
 const EFFECT_CATEGORIES = [
-  { id: 'character', ja: 'キャラクター固有', en: 'Character-Specific' },
-  { id: 'stats',     ja: '能力値',          en: 'Stats' },
-  { id: 'attack',    ja: '攻撃力',          en: 'Attack Power' },
-  { id: 'skill',     ja: 'スキル／アーツ',   en: 'Skill / Arts' },
-  { id: 'magic',     ja: '魔術／祈祷',      en: 'Sorcery / Incantation' },
-  { id: 'cutrate',   ja: 'カット率',        en: 'Damage Negation' },
-  { id: 'resist',    ja: '状態異常耐性',     en: 'Status Resistance' },
-  { id: 'recovery',  ja: '回復',            en: 'Recovery' },
-  { id: 'action',    ja: 'アクション',       en: 'Action' },
-  { id: 'start',     ja: '開始ボーナス',     en: 'Start Bonus' },
-  { id: 'mapenv',    ja: 'マップ環境',       en: 'Map / Environment' },
-  { id: 'team',      ja: 'チームメンバー',   en: 'Team Member' },
-  { id: 'night',     ja: '夜の力',          en: 'Night Power' },
-  { id: 'demerit',   ja: 'デメリット',       en: 'Demerits' },
-  { id: 'other',     ja: 'その他',          en: 'Other' },
+  { id: 'character',     ja: 'キャラクター固有',           en: 'Character-Specific' },
+  { id: 'stats',         ja: '能力値',                    en: 'Stats' },
+  { id: 'attack',        ja: '攻撃力',                    en: 'Attack Power' },
+  { id: 'skill',         ja: 'スキル／アーツ',             en: 'Skill / Arts' },
+  { id: 'magic',         ja: '魔術／祈祷',                en: 'Sorcery / Incantation' },
+  { id: 'cutrate',       ja: 'カット率',                  en: 'Damage Negation' },
+  { id: 'resist',        ja: '状態異常耐性',               en: 'Status Resistance' },
+  { id: 'recovery',      ja: '回復',                      en: 'Recovery' },
+  { id: 'action',        ja: 'アクション',                 en: 'Action' },
+  { id: 'start_skill',   ja: '出撃時の武器（戦技）',       en: 'Sortie Weapon (Skill)' },
+  { id: 'start_enchant', ja: '出撃時の武器（付加）',       en: 'Sortie Weapon (Enchant)' },
+  { id: 'start_magic',   ja: '出撃時の武器（魔術／祈祷）', en: 'Sortie Weapon (Magic)' },
+  { id: 'start_item',    ja: '出撃時のアイテム',           en: 'Starting Items' },
+  { id: 'start_tear',    ja: '出撃時のアイテム（結晶の雫）', en: 'Starting Items (Crystal Tears)' },
+  { id: 'mapenv',        ja: 'マップ環境',                 en: 'Map / Environment' },
+  { id: 'team',          ja: 'チームメンバー',              en: 'Team Member' },
+  { id: 'night',         ja: '夜の力',                     en: 'Night Power' },
+  { id: 'demerit',       ja: 'デメリット',                  en: 'Demerits' },
+  { id: 'other',         ja: 'その他',                     en: 'Other' },
 ];
 
 function classifyEffect(name_ja, name_en, key) {
   const ja = name_ja || '';
   const en = (name_en || '').toLowerCase();
-  // 1. Character-specific (【追跡者】etc.)
-  if (/【.+?】/.test(ja)) return 'character';
+  // 1. Character-specific (【追跡者】etc.) or トーテム・ステラ (無頼漢固有)
+  if (/【.+?】/.test(ja) || /トーテム・ステラ/.test(ja)) return 'character';
   // 2. Demerit: specific patterns first (before recovery catches 回復)
   if (/回復量低下/.test(ja)) return 'demerit';
   if (/低下|減少|悪化|持続減少|喪失|鈍化/.test(ja) && !/上昇|強化|回復|軽減|付加|全回復|なし|無効化|生成/.test(ja)) return 'demerit';
@@ -775,8 +779,12 @@ function classifyEffect(name_ja, name_en, key) {
   if (/impaired|reduced|continuous\s*loss/i.test(en) && !/improved|increased|restoration|discover|inflict|activat|consumption|cost|drop.*off/i.test(en)) return 'demerit';
   // 3. Night Power
   if (/^.+の力$/.test(ja) && !/攻撃力|の力を/.test(ja) || /の悲嘆/.test(ja) || /^power\s*of/i.test(en) || /grief/i.test(en)) return 'night';
-  // 4. Start bonus (出撃時 only)
-  if (/出撃時/.test(ja) || /sortie|at\s*start\s*of\s*expedition/i.test(en)) return 'start';
+  // 4. Sortie weapon / item subcategories (wiki: 出撃時の武器, 出撃時のアイテム)
+  if (/出撃時の武器の戦技を/.test(ja)) return 'start_skill';
+  if (/出撃時の武器に.*付加/.test(ja)) return 'start_enchant';
+  if (/出撃時の武器の魔術を|出撃時の武器の祈祷を/.test(ja)) return 'start_magic';
+  if (/出撃時に.*雫.*を持つ/.test(ja)) return 'start_tear';
+  if (/出撃時に.*を持つ/.test(ja)) return 'start_item';
   // 5. Team member (BEFORE recovery — ally-focused effects)
   // 味方を含め = includes allies as secondary benefit → not team (let recovery handle)
   if (!/味方を含め/.test(ja) && (/味方/.test(ja) || /allies/i.test(en))) return 'team';
@@ -789,35 +797,43 @@ function classifyEffect(name_ja, name_en, key) {
   if (/カット率低下時.*無効化/.test(ja) || /nullify.*attack/i.test(en)) return 'action';
   if (/状態の敵に対する攻撃/.test(ja)) return 'action';
   if (/ジェスチャー/.test(ja) || /gesture/i.test(en)) return 'action';
-  // 7. Stats
+  // 7. Specific cutrate (before stats catches 強靭度)
+  if (/ダメージで吹き飛ばされた時.*カット率/.test(ja)) return 'cutrate';
+  // 7b. Specific spell type enhancement → magic (before stats catches 信仰 in 王都古竜信仰)
+  if (/の魔術を強化|の祈祷を強化|の祈祷強化/.test(ja)) return 'magic';
+  // 8. Specific stats (before mapenv catches 発見力/ルーン)
+  if (/小砦の強敵|大教会の強敵|大野営地の強敵|遺跡の強敵/.test(ja)) return 'stats';
+  // 9. Stats
   if (/最大HP|最大FP|最大スタミナ|生命力|精神力|持久力|筋力|技量|知力|信仰|神秘|強靭度/.test(ja)) return 'stats';
   if (/vigor|mind\b|endurance|\bstrength\b|dexterity|intelligence|faith|arcane|poise|maximum\s*(hp|fp|stamina)/i.test(en)) return 'stats';
-  // 8. Skill attack power → attack (before skill check)
+  // 10. Skill attack power → attack (before skill check)
   if (/スキル攻撃力|戦技攻撃力|スキルの攻撃力/.test(ja) || /skill\s*attack\s*power/i.test(en)) return 'attack';
-  // 9. Skill / Arts
+  // 11. Skill / Arts
   if (/スキル|アーツ|クールタイム/.test(ja) || /skill|art\s*gauge|cooldown/i.test(en)) return 'skill';
-  // 10. Sorcery / Incantation
-  if (/魔術|祈祷|詠唱|ソウル|FP消費/.test(ja) || /sorcery|sorceries|incantation|spell|casting/i.test(en)) return 'magic';
-  // 11. Specific attack enhancements (wiki: 攻撃力 category)
+  // 12. General sorcery/incantation enhancement → attack (wiki: 攻撃力)
+  if (/^魔術強化|^祈祷強化/.test(ja)) return 'attack';
+  // 12b. Sorcery / Incantation
+  if (/魔術|祈祷|詠唱|ソウル/.test(ja) || /sorcery|sorceries|incantation|spell|casting/i.test(en)) return 'magic';
+  // 13. Specific attack enhancements (wiki: 攻撃力 category)
   if (/ガードカウンター/.test(ja) || /guard\s*counter/i.test(en)) return 'attack';
   if (/投擲壺強化/.test(ja)) return 'attack';
   if (/調香術強化/.test(ja)) return 'attack';
   if (/咆哮.*強化|ブレス.*強化/.test(ja)) return 'attack';
   if (/体勢を崩す力/.test(ja) || /stance.*break.*power/i.test(en)) return 'attack';
-  // 12. Damage Negation
+  // 14. Damage Negation
   if (/カット率|ガード性能/.test(ja) || /damage\s*negation/i.test(en)) return 'cutrate';
-  // 13. Status Resistance
+  // 15. Status Resistance
   if (/耐性/.test(ja) || /resistance/i.test(en)) return 'resist';
-  // 14. Recovery
-  if (/回復|リゲイン|聖杯瓶/.test(ja) || /restoration|recovery|restore|flask/i.test(en)) return 'recovery';
-  // 15. Attack Power
+  // 16. Recovery
+  if (/回復|リゲイン|聖杯瓶|消費FP/.test(ja) || /restoration|recovery|restore|flask|reduced.*fp.*consumption/i.test(en)) return 'recovery';
+  // 17. Attack Power
   if (/攻撃力|致命の一撃強化|通常攻撃の1段目/.test(ja) || /attack\s*power|critical.*damage/i.test(en)) return 'attack';
-  // 16. Map / Environment
+  // 18. Map / Environment
   if (/埋もれ宝|地図|発見力|ルーン|見つけやすくなる|死亡時/.test(ja) || /item\s*discovery|rune/i.test(en)) return 'mapenv';
-  // 17. Action (broad)
+  // 19. Action (broad)
   if (/ローリング|回避|二刀|両手持ち|タメ攻撃|連撃|遠距離|武器の持ち替え|刺突|ジャンプ|ガード崩し|波動ダッシュ|ガード成功|ガード連続|ガード中|致命の一撃|パリィ|歩行中|集団撃破|精密射撃|シールド|体勢が崩れ|竜餐|定期的に|状態になると|スタミナ消費|咆哮|ブレス|調香術|投擲/.test(ja)
     || /throwing|perfum|roar|breath|dodge|evasion|two.*hand|dual|charge|ranged|switch.*weapon|thrust|jump|stance.*break|critical.*hit/i.test(en)) return 'action';
-  // 18. Broad attack-related
+  // 20. Broad attack-related
   if (/攻撃/.test(ja) || /attack/i.test(en)) return 'attack';
   return 'other';
 }
@@ -863,6 +879,37 @@ function closeInspector() {
   inspectorBackdrop.classList.add('hidden');
   inspector.classList.remove('open');
 }
+
+// --- Inspector resize ---
+function setupInspectorResize(inspectorEl) {
+  const handle = inspectorEl.querySelector('.inspector-resize-handle');
+  if (!handle) return;
+  let startX, startWidth;
+  handle.addEventListener('mousedown', (e) => {
+    startX = e.clientX;
+    startWidth = inspectorEl.offsetWidth;
+    handle.classList.add('active');
+    const onMove = (ev) => {
+      const w = Math.max(280, Math.min(800, startWidth + (ev.clientX - startX)));
+      inspectorEl.style.width = w + 'px';
+      // If optimizer inspector, also update effect-select sub-panel position
+      const effectSel = document.querySelector('.effect-select-inspector');
+      if (effectSel && inspectorEl.id === 'optimizer-inspector') {
+        effectSel.style.left = w + 'px';
+      }
+    };
+    const onUp = () => {
+      handle.classList.remove('active');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  });
+}
+setupInspectorResize(document.getElementById('inspector'));
+setupInspectorResize(document.getElementById('optimizer-inspector'));
 
 function renderInspectorEffects() {
   const query = inspectorSearch.value.toLowerCase().trim();
@@ -1099,6 +1146,17 @@ function renderTabBar() {
     tab.className = 'tab' + (activeTab === tabId ? ' active' : '');
     tab.dataset.tab = tabId;
 
+    if (info._loading) {
+      const spinner = document.createElement('span');
+      spinner.className = 'tab-spinner';
+      tab.appendChild(spinner);
+    } else if (info._error) {
+      const errIcon = document.createElement('span');
+      errIcon.className = 'tab-error-icon';
+      errIcon.textContent = '!';
+      tab.appendChild(errIcon);
+    }
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = info.label;
@@ -1181,6 +1239,59 @@ function addOptimizerTab(label, data, params) {
   document.getElementById('main-content').appendChild(wrapper);
   renderOptimizerResults(tabId, data, params);
   switchTab(tabId);
+}
+
+function addOptimizerTabLoading(label, params) {
+  const tabId = `optimizer-${nextTabId++}`;
+  const ja = displayLang === 'ja';
+
+  optimizerTabs.set(tabId, { label, data: null, params, _loading: true });
+
+  const wrapper = document.createElement('div');
+  wrapper.id = `opt-wrapper-${tabId}`;
+  wrapper.className = 'opt-tab-wrapper';
+
+  const container = document.createElement('div');
+  container.id = `opt-result-${tabId}`;
+  container.className = 'optimizer-results-container opt-loading';
+  container.innerHTML = `<div class="opt-loading-content">
+    <div class="opt-loading-spinner"></div>
+    <div class="opt-loading-title">${ja ? '計算中...' : 'Calculating...'}</div>
+    <div class="opt-loading-progress" id="opt-progress-${tabId}">
+      <div class="opt-progress-bar-track">
+        <div class="opt-progress-bar-fill" id="opt-progress-fill-${tabId}"></div>
+      </div>
+      <div class="opt-progress-text" id="opt-progress-text-${tabId}">0%</div>
+    </div>
+    <div class="opt-loading-message">${ja ? '献器ごとに最適な組み合わせを探索しています' : 'Searching for optimal combinations per vessel'}</div>
+  </div>`;
+  wrapper.appendChild(container);
+
+  const detail = document.createElement('div');
+  detail.id = `opt-detail-${tabId}`;
+  detail.className = 'opt-detail-panel hidden';
+  detail.innerHTML = `
+    <div class="detail-header">
+      <h2 class="opt-detail-title"></h2>
+      <button class="btn-close opt-detail-close">&times;</button>
+    </div>
+    <div class="opt-detail-body detail-body"></div>`;
+  wrapper.appendChild(detail);
+
+  document.getElementById('main-content').appendChild(wrapper);
+  switchTab(tabId);
+  return tabId;
+}
+
+function updateOptimizerTabProgress(tabId, current, total) {
+  const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+  const fill = document.getElementById(`opt-progress-fill-${tabId}`);
+  const text = document.getElementById(`opt-progress-text-${tabId}`);
+  if (fill) fill.style.width = `${pct}%`;
+  if (text) {
+    const ja = displayLang === 'ja';
+    text.textContent = `${current} / ${total}${ja ? ' 献器' : ' vessels'} (${pct}%)`;
+  }
 }
 
 function closeTab(tabId) {
@@ -1355,6 +1466,25 @@ async function runOptimization() {
   document.getElementById('optimizer-run-label').textContent =
     ja ? '実行中...' : 'Running...';
 
+  // Build tab label
+  const charName = ja ? params.character :
+    (vesselsData && vesselsData.characters[params.character]
+      ? vesselsData.characters[params.character].nameEn
+      : params.character);
+  const label = ja
+    ? `${charName} #${nextTabId}`
+    : `${charName} #${nextTabId}`;
+
+  // Create tab immediately with loading state
+  const tabId = addOptimizerTabLoading(label, params);
+
+  closeOptimizerInspector();
+
+  // Listen for progress updates
+  const removeProgressListener = window.api.onOptimizerProgress((data) => {
+    updateOptimizerTabProgress(tabId, data.current, data.total);
+  });
+
   try {
     const result = await window.api.runOptimizer({
       relicData: relicData,
@@ -1366,20 +1496,32 @@ async function runOptimization() {
       top: params.top,
     });
 
-    closeOptimizerInspector();
+    removeProgressListener();
 
-    // Build tab label
-    const charName = ja ? params.character :
-      (vesselsData && vesselsData.characters[params.character]
-        ? vesselsData.characters[params.character].nameEn
-        : params.character);
-    const label = ja
-      ? `${charName} #${nextTabId}`
-      : `${charName} #${nextTabId}`;
-
-    addOptimizerTab(label, result, params);
+    // Replace loading state with results
+    optimizerTabs.set(tabId, { label, data: result, params });
+    const container = document.getElementById(`opt-result-${tabId}`);
+    if (container) {
+      container.classList.remove('opt-loading');
+      renderOptimizerResults(tabId, result, params);
+    }
+    // Update tab label (remove spinner icon)
+    renderTabBar();
   } catch (err) {
-    alert(`${ja ? 'ビルド探索エラー' : 'Build Search Error'}:\n${err}`);
+    removeProgressListener();
+    // Show error in the tab
+    const container = document.getElementById(`opt-result-${tabId}`);
+    if (container) {
+      container.classList.remove('opt-loading');
+      container.innerHTML = `<div class="opt-loading-content">
+        <div class="opt-loading-error">${ja ? 'エラー' : 'Error'}</div>
+        <div class="opt-loading-message">${String(err).substring(0, 300)}</div>
+      </div>`;
+    }
+    // Mark tab as error
+    const tabInfo = optimizerTabs.get(tabId);
+    if (tabInfo) tabInfo._error = true;
+    renderTabBar();
   } finally {
     optimizerRunBtn.disabled = false;
     document.getElementById('optimizer-run-label').textContent =
@@ -1510,8 +1652,15 @@ function renderEffectSelectList() {
     const catName = catDef ? (ja ? catDef.ja : catDef.en) : (ja ? 'その他' : 'Other');
     const isCollapsed = effectSelectCollapsed.has(catId);
 
+    // Determine select-all checkbox state for this category
+    const catKeys = items.map(e => e.key);
+    const checkedInCat = catKeys.filter(k => optSelectedEffects.has(k)).length;
+    const allCatChecked = checkedInCat === catKeys.length;
+    const someCatChecked = checkedInCat > 0 && !allCatChecked;
+
     html += `<div class="inspector-group-header${isCollapsed ? ' collapsed' : ''}" data-cat="${catId}">`;
     html += `<span class="inspector-group-arrow">▼</span>`;
+    html += `<input type="checkbox" class="inspector-group-checkbox" data-cat="${catId}" ${allCatChecked ? 'checked' : ''} ${someCatChecked ? 'data-indeterminate="true"' : ''} />`;
     html += `<span class="group-name">${catName}</span>`;
     html += `<span class="group-count">(${items.length})</span>`;
     html += `</div>`;
@@ -1539,9 +1688,15 @@ function renderEffectSelectList() {
 
   effectSelectList.innerHTML = html;
 
+  // Set indeterminate state for group checkboxes
+  effectSelectList.querySelectorAll('.inspector-group-checkbox[data-indeterminate="true"]').forEach(cb => {
+    cb.indeterminate = true;
+  });
+
   // Collapsible group headers
   effectSelectList.querySelectorAll('.inspector-group-header').forEach(header => {
-    header.addEventListener('click', () => {
+    header.addEventListener('click', (e) => {
+      if (e.target.classList.contains('inspector-group-checkbox')) return;
       const catId = header.dataset.cat;
       const itemsDiv = effectSelectList.querySelector(`.inspector-group-items[data-cat="${catId}"]`);
       if (effectSelectCollapsed.has(catId)) {
@@ -1559,6 +1714,27 @@ function renderEffectSelectList() {
 
 // Effect select checkbox/priority change handlers (delegated)
 effectSelectList.addEventListener('change', (e) => {
+  // Group select-all checkbox
+  if (e.target.classList.contains('inspector-group-checkbox')) {
+    const catId = e.target.dataset.cat;
+    const catItems = effectSelectList.querySelectorAll(`.inspector-group-items[data-cat="${catId}"] .effect-select-item`);
+    if (e.target.checked) {
+      catItems.forEach(item => {
+        const key = item.dataset.key;
+        if (!optSelectedEffects.has(key)) {
+          const select = item.querySelector('select');
+          optSelectedEffects.set(key, select.value);
+        }
+      });
+    } else {
+      catItems.forEach(item => {
+        optSelectedEffects.delete(item.dataset.key);
+      });
+    }
+    renderEffectSelectList();
+    return;
+  }
+
   const item = e.target.closest('.effect-select-item');
   if (!item) return;
   const key = item.dataset.key;
@@ -1637,11 +1813,12 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
   allResults.forEach(vesselOutput => {
     const vesselInfo = vesselOutput.parameters && vesselOutput.parameters.vessel;
     (vesselOutput.results || []).forEach(res => {
+      const vi = res.vessel || vesselInfo;
       flatResults.push({
         ...res,
-        _vesselInfo: vesselInfo || null,
-        _vesselNameJa: vesselInfo ? vesselInfo.nameJa : (vesselOutput.parameters.color || '?'),
-        _vesselNameEn: vesselInfo ? vesselInfo.nameEn : (vesselOutput.parameters.color || '?'),
+        _vesselInfo: vi || null,
+        _vesselNameJa: vi ? vi.nameJa : (vesselOutput.parameters.color || res._color || '?'),
+        _vesselNameEn: vi ? vi.nameEn : (vesselOutput.parameters.color || res._color || '?'),
       });
     });
   });
@@ -1652,13 +1829,6 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
       const cmp = (b.requiredMet === a.requiredMet) ? 0 : (b.requiredMet ? 1 : -1);
       if (cmp !== 0) return cmp;
       return sortDir === 'desc' ? b.score - a.score : a.score - b.score;
-    }
-    if (sortKey === 'vessel') {
-      const va = ja ? a._vesselNameJa : a._vesselNameEn;
-      const vb = ja ? b._vesselNameJa : b._vesselNameEn;
-      let cmp = va.localeCompare(vb, ja ? 'ja' : 'en');
-      if (sortDir === 'desc') cmp = -cmp;
-      return cmp || (b.score - a.score);
     }
     return 0;
   });
@@ -1730,12 +1900,11 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
   const reqLabel = ja ? '必須充足' : 'Required';
   const rankLabel = '#';
   const scoreArrow = sortKey === 'score' ? (sortDir === 'desc' ? ' ▼' : ' ▲') : '';
-  const vesselArrow = sortKey === 'vessel' ? (sortDir === 'desc' ? ' ▼' : ' ▲') : '';
   html += `<div class="opt-result-headline">`;
   html += `<span class="opt-hl-rank">${rankLabel}</span>`;
   html += `<span class="opt-hl-score sortable${sortKey === 'score' ? ' active' : ''}" data-sort="score">${scoreLabel}${scoreArrow}</span>`;
   html += `<span class="opt-hl-req">${reqLabel}</span>`;
-  html += `<span class="opt-hl-vessel sortable${sortKey === 'vessel' ? ' active' : ''}" data-sort="vessel">${vesselLabel}${vesselArrow}</span>`;
+  html += `<span class="opt-hl-vessel">${vesselLabel}</span>`;
   html += `</div>`;
 
   // Render flat result list
@@ -2015,7 +2184,7 @@ updateLangUI = function() {
   document.getElementById('effect-select-clear-label').textContent = ja ? 'クリア' : 'Clear';
   document.getElementById('effect-select-apply-label').textContent = ja ? '適用' : 'Apply';
   document.getElementById('opt-settings-label').textContent = ja ? '設定' : 'Settings';
-  document.getElementById('opt-candidates-label').textContent = ja ? '候補数/スロット' : 'Candidates/Slot';
+  document.getElementById('opt-candidates-label').textContent = ja ? '上位抽出数/色' : 'Top per Color';
   document.getElementById('opt-top-label').textContent = ja ? '出力件数' : 'Result Count';
   document.getElementById('optimizer-clear-label').textContent = ja ? 'クリア' : 'Clear';
   document.getElementById('optimizer-run-label').textContent = ja ? '実行' : 'Run';
