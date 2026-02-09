@@ -9,6 +9,7 @@ import os
 import re
 import sys
 import argparse
+import heapq
 from itertools import combinations, product
 from typing import List, Dict, Set, Tuple, Optional
 
@@ -19,6 +20,9 @@ PRIORITY_WEIGHTS = {
     'preferred': 10,
     'nice_to_have': 1,
 }
+
+# Concentration bonus: reward for multiple desired effects on a single relic
+CONCENTRATION_BONUS = 5
 
 # Character name mapping (JA -> EN)
 CHARACTER_NAMES = {
@@ -118,9 +122,19 @@ class RelicOptimizer:
         self.vessels_data = vessels_data
         self.stacking_data: Dict[str, bool] = stacking_data or {}
 
-        # Build effect lookup: key -> { priority, weight }
+        # Pre-computed caches (populated on demand)
+        self._effect_keys_cache: Dict[int, Set[str]] = {}
+        self._spec_keys_cache: Dict[int, Tuple] = {}
+        self._score_cache: Dict[int, int] = {}
+        self._exclude_keys_cache: Dict[int, Tuple] = {}
+
+        # Separate include and exclude specs
+        include_specs = [s for s in effect_specs if not s.get('exclude')]
+        exclude_specs = [s for s in effect_specs if s.get('exclude')]
+
+        # Build include effect lookup: key -> { priority, weight }
         self.effect_lookup: Dict[str, Dict] = {}
-        for spec in effect_specs:
+        for spec in include_specs:
             key = spec.get('key')
             name_ja = spec.get('name_ja')
             name_en = spec.get('name_en')
@@ -132,10 +146,29 @@ class RelicOptimizer:
                     'spec': spec,
                 }
             if name_ja or name_en:
-                self._resolve_name_matches(name_ja, name_en, spec, weight)
+                self._resolve_name_matches(
+                    name_ja, name_en, spec, weight, self.effect_lookup)
+
+        # Build exclude effect lookup: key -> { priority, weight }
+        self.exclude_lookup: Dict[str, Dict] = {}
+        for spec in exclude_specs:
+            key = spec.get('key')
+            name_ja = spec.get('name_ja')
+            name_en = spec.get('name_en')
+            weight = PRIORITY_WEIGHTS[spec['priority']]
+            if key:
+                self.exclude_lookup[key] = {
+                    'priority': spec['priority'],
+                    'weight': weight,
+                    'spec': spec,
+                }
+            if name_ja or name_en:
+                self._resolve_name_matches(
+                    name_ja, name_en, spec, weight, self.exclude_lookup)
 
     def _resolve_name_matches(self, name_ja: Optional[str], name_en: Optional[str],
-                               spec: Dict, weight: int):
+                               spec: Dict, weight: int,
+                               target_lookup: Dict[str, Dict]):
         """Resolve name_ja/name_en partial matches to effect keys from relic data"""
         for relic in self.all_relics:
             for group in relic['effects']:
@@ -145,8 +178,8 @@ class RelicOptimizer:
                         matched = True
                     if name_en and name_en.lower() in eff.get('name_en', '').lower():
                         matched = True
-                    if matched and eff['key'] not in self.effect_lookup:
-                        self.effect_lookup[eff['key']] = {
+                    if matched and eff['key'] not in target_lookup:
+                        target_lookup[eff['key']] = {
                             'priority': spec['priority'],
                             'weight': weight,
                             'spec': spec,
@@ -182,23 +215,68 @@ class RelicOptimizer:
         return filtered
 
     def get_relic_effect_keys(self, relic: Dict) -> Set[str]:
-        """遺物のメイン効果キーを取得（デバフ副効果は除外）"""
+        """遺物のメイン効果キーを取得（デバフ副効果は除外、キャッシュ付き）"""
+        rid = relic['id']
+        if rid in self._effect_keys_cache:
+            return self._effect_keys_cache[rid]
         keys = set()
         for group in relic['effects']:
             if group:
                 keys.add(group[0]['key'])
+        self._effect_keys_cache[rid] = keys
         return keys
+
+    def _get_spec_keys(self, relic: Dict) -> Tuple:
+        """遺物の効果キーのうち指定効果にマッチするもののみ返す（キャッシュ付き）"""
+        rid = relic['id']
+        if rid in self._spec_keys_cache:
+            return self._spec_keys_cache[rid]
+        keys = []
+        for group in relic['effects']:
+            if group:
+                k = group[0]['key']
+                if k in self.effect_lookup:
+                    keys.append(k)
+        result = tuple(keys)
+        self._spec_keys_cache[rid] = result
+        return result
+
+    def _get_exclude_keys(self, relic: Dict) -> Tuple:
+        """遺物の効果キーのうち除外対象にマッチするもののみ返す（キャッシュ付き）"""
+        rid = relic['id']
+        if rid in self._exclude_keys_cache:
+            return self._exclude_keys_cache[rid]
+        keys = []
+        for group in relic['effects']:
+            if group:
+                k = group[0]['key']
+                if k in self.exclude_lookup:
+                    keys.append(k)
+        result = tuple(keys)
+        self._exclude_keys_cache[rid] = result
+        return result
 
     def is_stackable(self, key: str) -> bool:
         """効果がスタック可能かどうか（重複装備で恩恵があるか）"""
         return self.stacking_data.get(key, False) is True
 
     def score_relic(self, relic: Dict) -> int:
-        """個別遺物のスコア計算"""
+        """個別遺物のスコア計算（キャッシュ付き）"""
+        rid = relic['id']
+        if rid in self._score_cache:
+            return self._score_cache[rid]
         score = 0
-        for key in self.get_relic_effect_keys(relic):
-            if key in self.effect_lookup:
-                score += self.effect_lookup[key]['weight']
+        spec_keys = self._get_spec_keys(relic)
+        for key in spec_keys:
+            score += self.effect_lookup[key]['weight']
+        # Concentration bonus: C(N, 2) pairs
+        n = len(spec_keys)
+        if n >= 2:
+            score += CONCENTRATION_BONUS * n * (n - 1) // 2
+        # Exclusion penalty
+        for key in self._get_exclude_keys(relic):
+            score -= self.exclude_lookup[key]['weight']
+        self._score_cache[rid] = score
         return score
 
     def _stacking_aware_score(self, effect_counts: Dict[str, int]) -> int:
@@ -229,24 +307,41 @@ class RelicOptimizer:
                 score += weight  # 非スタック: 1回のみカウント
         return score
 
-    def score_combination(self, combo: Tuple[Dict, ...]) -> Tuple[bool, int, Set[str], List[str]]:
-        """組み合わせのスコア計算（重複可否を考慮）
+    def score_combination(self, combo: Tuple[Dict, ...]):
+        """組み合わせのスコア計算（重複可否・集中ボーナス・除外を考慮）
 
         スタック可能な効果は遺物ごとにカウントし、
         スタック不可な効果は1回のみカウントする。
+        集中ボーナス: 1遺物に複数の指定効果がある場合に加算。
+        除外ペナルティ: 除外対象の効果が含まれている場合に減算。
         """
         effect_counts: Dict[str, int] = {}
+        concentration = 0
+        exclude_penalty = 0
+        has_exclude_required = False
+        excluded_present: Set[str] = set()
         seen_ids = set()
         for relic in combo:
             rid = relic['id']
             if rid in seen_ids:
                 continue
             seen_ids.add(rid)
-            for key in self.get_relic_effect_keys(relic):
-                if key in self.effect_lookup:
-                    effect_counts[key] = effect_counts.get(key, 0) + 1
+            spec_keys = self._get_spec_keys(relic)
+            for key in spec_keys:
+                effect_counts[key] = effect_counts.get(key, 0) + 1
+            # Concentration bonus
+            n_sk = len(spec_keys)
+            if n_sk >= 2:
+                concentration += CONCENTRATION_BONUS * n_sk * (n_sk - 1) // 2
+            # Exclusion penalty
+            for key in self._get_exclude_keys(relic):
+                exclude_penalty += self.exclude_lookup[key]['weight']
+                excluded_present.add(key)
+                if self.exclude_lookup[key]['priority'] == 'required':
+                    has_exclude_required = True
 
         score = self._stacking_aware_score(effect_counts)
+        score += concentration - exclude_penalty
 
         matched_keys = set(effect_counts.keys())
         required_keys = {
@@ -254,9 +349,9 @@ class RelicOptimizer:
             if v['priority'] == 'required'
         }
         missing_required = sorted(required_keys - matched_keys)
-        required_met = len(missing_required) == 0
+        required_met = len(missing_required) == 0 and not has_exclude_required
 
-        return required_met, score, matched_keys, missing_required
+        return required_met, score, matched_keys, missing_required, excluded_present
 
     def get_vessel_configs(self, character: str,
                            vessel_types: Optional[List[str]] = None,
@@ -357,12 +452,14 @@ class RelicOptimizer:
                 continue
             seen.add(canon)
 
-            req_met, score, matched, missing = self.score_combination(combo)
+            req_met, score, matched, missing, excl_present = \
+                self.score_combination(combo)
             results.append({
                 'required_met': req_met,
                 'score': score,
                 'matched_keys': matched,
                 'missing_required': missing,
+                'excluded_present': excl_present,
                 'relics': combo,
             })
 
@@ -386,10 +483,8 @@ class RelicOptimizer:
         # 指定効果を持つ遺物の ID セット
         wanted_ids: Set[int] = set()
         for r in filtered:
-            for key in self.get_relic_effect_keys(r):
-                if key in self.effect_lookup:
-                    wanted_ids.add(r['id'])
-                    break
+            if self._get_spec_keys(r):
+                wanted_ids.add(r['id'])
 
         slot_candidates = []
         for slot_color in slot_colors:
@@ -467,6 +562,7 @@ class RelicOptimizer:
               file=sys.stderr)
 
         # Phase 1: Enumerate normal combos (3 slots)
+        # Store effect_counts, concentration, exclusion per combo
         normal_combos = []
         seen_n = set()
         if all(len(sc) > 0 for sc in normal_cands):
@@ -479,14 +575,30 @@ class RelicOptimizer:
                     continue
                 seen_n.add(canon)
                 effect_counts: Dict[str, int] = {}
+                conc = 0
+                excl_pen = 0
+                has_excl_req = False
+                excl_keys: Set[str] = set()
                 for r in combo:
-                    for k in self.get_relic_effect_keys(r):
-                        if k in self.effect_lookup:
-                            effect_counts[k] = \
-                                effect_counts.get(k, 0) + 1
-                score = self._stacking_aware_score(effect_counts)
-                keys = set(effect_counts.keys())
-                normal_combos.append((score, keys, combo))
+                    sk = self._get_spec_keys(r)
+                    for k in sk:
+                        effect_counts[k] = \
+                            effect_counts.get(k, 0) + 1
+                    n_sk = len(sk)
+                    if n_sk >= 2:
+                        conc += CONCENTRATION_BONUS * \
+                            n_sk * (n_sk - 1) // 2
+                    for k in self._get_exclude_keys(r):
+                        excl_pen += self.exclude_lookup[k]['weight']
+                        excl_keys.add(k)
+                        if self.exclude_lookup[k]['priority'] \
+                                == 'required':
+                            has_excl_req = True
+                score = self._stacking_aware_score(effect_counts) \
+                    + conc - excl_pen
+                normal_combos.append((
+                    score, combo, effect_counts,
+                    conc, excl_pen, has_excl_req, excl_keys))
 
         # Phase 2: Enumerate deep combos (3 slots)
         deep_combos = []
@@ -502,14 +614,30 @@ class RelicOptimizer:
                     continue
                 seen_d.add(canon)
                 effect_counts: Dict[str, int] = {}
+                conc = 0
+                excl_pen = 0
+                has_excl_req = False
+                excl_keys: Set[str] = set()
                 for r in combo:
-                    for k in self.get_relic_effect_keys(r):
-                        if k in self.effect_lookup:
-                            effect_counts[k] = \
-                                effect_counts.get(k, 0) + 1
-                score = self._stacking_aware_score(effect_counts)
-                keys = set(effect_counts.keys())
-                deep_combos.append((score, keys, combo))
+                    sk = self._get_spec_keys(r)
+                    for k in sk:
+                        effect_counts[k] = \
+                            effect_counts.get(k, 0) + 1
+                    n_sk = len(sk)
+                    if n_sk >= 2:
+                        conc += CONCENTRATION_BONUS * \
+                            n_sk * (n_sk - 1) // 2
+                    for k in self._get_exclude_keys(r):
+                        excl_pen += self.exclude_lookup[k]['weight']
+                        excl_keys.add(k)
+                        if self.exclude_lookup[k]['priority'] \
+                                == 'required':
+                            has_excl_req = True
+                score = self._stacking_aware_score(effect_counts) \
+                    + conc - excl_pen
+                deep_combos.append((
+                    score, combo, effect_counts,
+                    conc, excl_pen, has_excl_req, excl_keys))
 
         print(f"  Normal combos: {len(normal_combos)}, "
               f"Deep combos: {len(deep_combos)}", file=sys.stderr)
@@ -524,49 +652,95 @@ class RelicOptimizer:
         # Handle single-side cases
         if not normal_combos:
             return self._combos_to_results(
-                [(s, k, (), c) for s, k, c in deep_combos[:top_n]])
+                [(s, ec, (), c, cn, ep, hr, ek)
+                 for s, c, ec, cn, ep, hr, ek
+                 in deep_combos[:top_n]])
         if not deep_combos:
             return self._combos_to_results(
-                [(s, k, c, ()) for s, k, c in normal_combos[:top_n]])
+                [(s, ec, c, (), cn, ep, hr, ek)
+                 for s, c, ec, cn, ep, hr, ek
+                 in normal_combos[:top_n]])
 
-        # Phase 3: Cross-pair with pruning
-        # Take generous top from each side for pairing
+        # Phase 3: Cross-pair with heap-based top-N and pruning
         max_pairs = 500
         n_top = min(len(normal_combos), max_pairs)
         d_top = min(len(deep_combos), max_pairs)
-        print(f"  Pairing: {n_top} normal x {d_top} deep = "
-              f"{n_top * d_top} pairs", file=sys.stderr)
 
-        required_keys = {
+        required_keys = frozenset(
             k for k, v in self.effect_lookup.items()
             if v['priority'] == 'required'
-        }
+        )
 
-        results = []
-        for ns, nkeys, ncombo in normal_combos[:n_top]:
-            for ds, dkeys, dcombo in deep_combos[:d_top]:
-                # 全6遺物から効果カウントを再計算
-                effect_counts: Dict[str, int] = {}
-                for r in list(ncombo) + list(dcombo):
-                    for k in self.get_relic_effect_keys(r):
-                        if k in self.effect_lookup:
-                            effect_counts[k] = \
-                                effect_counts.get(k, 0) + 1
-                score = self._stacking_aware_score(effect_counts)
-                matched = set(effect_counts.keys())
-                missing = sorted(required_keys - matched)
-                req_met = len(missing) == 0
+        normal_top = normal_combos[:n_top]
+        deep_top = deep_combos[:d_top]
+        best_deep_score = deep_top[0][0] if deep_top else 0
 
-                results.append({
+        # Min-heap for top-N: heap_key = (-req_met_int, -score, counter)
+        heap: list = []
+        result_map: Dict[int, Dict] = {}
+        counter = 0
+        evaluated = 0
+
+        for ns, ncombo, n_counts, n_conc, n_ep, n_her, n_ek \
+                in normal_top:
+            # Outer pruning: best possible = req_met=True, score=ns+best_deep
+            if len(heap) >= top_n:
+                best_possible = (-1, -(ns + best_deep_score))
+                heap_worst = (heap[0][0], heap[0][1])
+                if best_possible >= heap_worst:
+                    break
+
+            for ds, dcombo, d_counts, d_conc, d_ep, d_her, d_ek \
+                    in deep_top:
+                # Inner pruning
+                if len(heap) >= top_n:
+                    best_possible = (-1, -(ns + ds))
+                    heap_worst = (heap[0][0], heap[0][1])
+                    if best_possible >= heap_worst:
+                        break
+
+                # Merge effect counts (dict merge instead of relic re-scan)
+                merged = dict(n_counts)
+                for k, v in d_counts.items():
+                    merged[k] = merged.get(k, 0) + v
+
+                score = self._stacking_aware_score(merged) \
+                    + n_conc + d_conc - n_ep - d_ep
+                matched_keys = set(merged.keys())
+                missing = sorted(required_keys - matched_keys)
+                has_excl_req = n_her or d_her
+                req_met = len(missing) == 0 and not has_excl_req
+                excluded_present = n_ek | d_ek
+                evaluated += 1
+
+                heap_key = (-int(req_met), -score, counter)
+                result = {
                     'required_met': req_met,
                     'score': score,
-                    'matched_keys': matched,
+                    'matched_keys': matched_keys,
                     'missing_required': missing,
+                    'excluded_present': excluded_present,
                     'relics': tuple(ncombo) + tuple(dcombo),
                     'normal_relics': ncombo,
                     'deep_relics': dcombo,
-                })
+                }
 
+                if len(heap) < top_n:
+                    heapq.heappush(heap, heap_key)
+                    result_map[counter] = result
+                elif heap_key < heap[0]:
+                    evicted = heapq.heapreplace(heap, heap_key)
+                    del result_map[evicted[2]]
+                    result_map[counter] = result
+
+                counter += 1
+
+        print(f"  Pairing: {n_top} normal x {d_top} deep "
+              f"(max {n_top * d_top}, evaluated {evaluated})",
+              file=sys.stderr)
+
+        # Extract results from heap
+        results = [result_map[key[2]] for key in heap]
         results.sort(
             key=lambda x: (x['required_met'], x['score']), reverse=True)
 
@@ -574,23 +748,26 @@ class RelicOptimizer:
               f"(required met: {results[0]['required_met']})"
               if results else "  No results", file=sys.stderr)
 
-        return results[:top_n]
+        return results
 
     def _combos_to_results(self, items):
         """Single-side combo list to result format"""
         results = []
-        for score, keys, ncombo, dcombo in items:
-            matched = {k for k in keys if k in self.effect_lookup}
-            required_keys = {
-                k for k, v in self.effect_lookup.items()
-                if v['priority'] == 'required'
-            }
+        required_keys = {
+            k for k, v in self.effect_lookup.items()
+            if v['priority'] == 'required'
+        }
+        for score, effect_counts, ncombo, dcombo, \
+                conc, excl_pen, has_excl_req, excl_keys in items:
+            matched = set(effect_counts.keys())
             missing = sorted(required_keys - matched)
             results.append({
-                'required_met': len(missing) == 0,
+                'required_met': len(missing) == 0
+                    and not has_excl_req,
                 'score': score,
                 'matched_keys': matched,
                 'missing_required': missing,
+                'excluded_present': excl_keys,
                 'relics': tuple(ncombo) + tuple(dcombo),
                 'normal_relics': ncombo,
                 'deep_relics': dcombo,
@@ -624,24 +801,29 @@ class RelicOptimizer:
 
         results = []
         for combo in combinations(candidate_relics, actual_slots):
-            req_met, score, matched, missing = self.score_combination(combo)
+            req_met, score, matched, missing, excl_present = \
+                self.score_combination(combo)
             results.append({
                 'required_met': req_met,
                 'score': score,
                 'matched_keys': matched,
                 'missing_required': missing,
+                'excluded_present': excl_present,
                 'relics': combo,
             })
 
         results.sort(key=lambda x: (x['required_met'], x['score']), reverse=True)
         return results[:top_n]
 
-    def _format_relic(self, relic: Dict, matched_keys: Set[str]) -> Dict:
+    def _format_relic(self, relic: Dict, matched_keys: Set[str],
+                      excluded_keys: Optional[Set[str]] = None) -> Dict:
         """遺物1つの出力フォーマット"""
         effects_out = []
+        excl_set = excluded_keys or set()
         for group in relic['effects']:
             main_eff = group[0]
             matched = main_eff['key'] in matched_keys
+            excluded = main_eff['key'] in excl_set
             eff_entry = {
                 'key': main_eff['key'],
                 'name_ja': main_eff.get('name_ja', ''),
@@ -651,6 +833,10 @@ class RelicOptimizer:
             if matched and main_eff['key'] in self.effect_lookup:
                 eff_entry['priority'] = \
                     self.effect_lookup[main_eff['key']]['priority']
+            if excluded:
+                eff_entry['excluded'] = True
+                eff_entry['excludePriority'] = \
+                    self.exclude_lookup[main_eff['key']]['priority']
             effects_out.append(eff_entry)
             for sub in group[1:]:
                 effects_out.append({
@@ -680,11 +866,14 @@ class RelicOptimizer:
         formatted_results = []
         for rank, res in enumerate(results, 1):
             matched_keys = res['matched_keys']
+            excluded_keys = res.get('excluded_present', set())
 
             if is_combined and 'normal_relics' in res:
-                normal_out = [self._format_relic(r, matched_keys)
+                normal_out = [self._format_relic(r, matched_keys,
+                              excluded_keys)
                               for r in res['normal_relics']]
-                deep_out = [self._format_relic(r, matched_keys)
+                deep_out = [self._format_relic(r, matched_keys,
+                            excluded_keys)
                             for r in res['deep_relics']]
                 entry = {
                     'rank': rank,
@@ -694,9 +883,11 @@ class RelicOptimizer:
                     'deepRelics': deep_out,
                     'matchedEffects': sorted(matched_keys),
                     'missingRequired': res['missing_required'],
+                    'excludedPresent': sorted(excluded_keys),
                 }
             else:
-                relics_out = [self._format_relic(r, matched_keys)
+                relics_out = [self._format_relic(r, matched_keys,
+                              excluded_keys)
                               for r in res['relics']]
                 entry = {
                     'rank': rank,
@@ -705,6 +896,7 @@ class RelicOptimizer:
                     'relics': relics_out,
                     'matchedEffects': sorted(matched_keys),
                     'missingRequired': res['missing_required'],
+                    'excludedPresent': sorted(excluded_keys),
                 }
 
             if vessel_info:
@@ -718,7 +910,8 @@ class RelicOptimizer:
                 'candidates': params.get('candidates'),
                 'effects': [
                     {'key': s.get('key', ''), 'name_ja': s.get('name_ja', ''),
-                     'name_en': s.get('name_en', ''), 'priority': s['priority']}
+                     'name_en': s.get('name_en', ''), 'priority': s['priority'],
+                     'exclude': bool(s.get('exclude'))}
                     for s in self.effect_specs
                 ],
             },

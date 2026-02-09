@@ -24,9 +24,12 @@ let effectSelectCollapsed = new Set(); // collapsed categories in effect selecto
 
 // Priority display labels
 const PRIORITY_LABELS = {
-  required:     { ja: '必須', en: 'Required' },
-  preferred:    { ja: '推奨', en: 'Preferred' },
-  nice_to_have: { ja: '任意', en: 'Nice to have' },
+  required:             { ja: '必須', en: 'Required' },
+  preferred:            { ja: '推奨', en: 'Preferred' },
+  nice_to_have:         { ja: '任意', en: 'Nice to have' },
+  exclude_required:     { ja: '除外:必須', en: 'Exclude:Required' },
+  exclude_preferred:    { ja: '除外:推奨', en: 'Exclude:Preferred' },
+  exclude_nice_to_have: { ja: '除外:任意', en: 'Exclude:Nice to have' },
 };
 
 // === Type Display Names ===
@@ -753,7 +756,7 @@ const EFFECT_CATEGORIES = [
   { id: 'recovery',  ja: '回復',            en: 'Recovery' },
   { id: 'action',    ja: 'アクション',       en: 'Action' },
   { id: 'start',     ja: '開始ボーナス',     en: 'Start Bonus' },
-  { id: 'mapenv',    ja: 'マップ／ルーン',   en: 'Map / Runes' },
+  { id: 'mapenv',    ja: 'マップ環境',       en: 'Map / Environment' },
   { id: 'team',      ja: 'チームメンバー',   en: 'Team Member' },
   { id: 'night',     ja: '夜の力',          en: 'Night Power' },
   { id: 'demerit',   ja: 'デメリット',       en: 'Demerits' },
@@ -763,43 +766,58 @@ const EFFECT_CATEGORIES = [
 function classifyEffect(name_ja, name_en, key) {
   const ja = name_ja || '';
   const en = (name_en || '').toLowerCase();
-  // Character-specific (【追跡者】etc.)
+  // 1. Character-specific (【追跡者】etc.)
   if (/【.+?】/.test(ja)) return 'character';
-  // Beneficial effects containing "低下" but NOT demerits
-  if (/カット率低下時.*無効化/.test(ja) || /nullify.*damage\s*negation/i.test(en)) return 'cutrate';
-  // Demerits
-  if (/低下|減少|悪化|持続減少|喪失/.test(ja) && !/上昇|強化|回復/.test(ja)) return 'demerit';
+  // 2. Demerit: specific patterns first (before recovery catches 回復)
+  if (/回復量低下/.test(ja)) return 'demerit';
+  if (/低下|減少|悪化|持続減少|喪失|鈍化/.test(ja) && !/上昇|強化|回復|軽減|付加|全回復|なし|無効化|生成/.test(ja)) return 'demerit';
   if (/被ダメージ時.*蓄積|HP最大未満時.*蓄積|消費増加|被ダメージ増加/.test(ja)) return 'demerit';
-  if (/impaired|reduced(?!.*restoration)|loss(?!.*rune)|continuous.*loss/i.test(en) && !/improved|increased|restoration/i.test(en)) return 'demerit';
-  // Night Power
+  if (/impaired|reduced|continuous\s*loss/i.test(en) && !/improved|increased|restoration|discover|inflict|activat|consumption|cost|drop.*off/i.test(en)) return 'demerit';
+  // 3. Night Power
   if (/^.+の力$/.test(ja) && !/攻撃力|の力を/.test(ja) || /の悲嘆/.test(ja) || /^power\s*of/i.test(en) || /grief/i.test(en)) return 'night';
-  // Start bonus
-  if (/出撃時|戦技変更|付加する|見つけやすくなる/.test(ja) || /sortie|starting/i.test(en)) return 'start';
-  // Stats
+  // 4. Start bonus (出撃時 only)
+  if (/出撃時/.test(ja) || /sortie|at\s*start\s*of\s*expedition/i.test(en)) return 'start';
+  // 5. Team member (BEFORE recovery — ally-focused effects)
+  // 味方を含め = includes allies as secondary benefit → not team (let recovery handle)
+  if (!/味方を含め/.test(ja) && (/味方/.test(ja) || /allies/i.test(en))) return 'team';
+  // 6. Specific action patterns (before stats/attack/mapenv catch them)
+  if (/致命の一撃で.*ルーン/.test(ja)) return 'action';
+  if (/武器の持ち替え時.*付加/.test(ja)) return 'action';
+  if (/被ダメージ時.*付加/.test(ja)) return 'action';
+  if (/ガード中.*狙われ/.test(ja)) return 'action';
+  if (/周囲で.*状態.*発生時/.test(ja) && !/回復/.test(ja)) return 'action';
+  if (/カット率低下時.*無効化/.test(ja) || /nullify.*attack/i.test(en)) return 'action';
+  if (/状態の敵に対する攻撃/.test(ja)) return 'action';
+  if (/ジェスチャー/.test(ja) || /gesture/i.test(en)) return 'action';
+  // 7. Stats
   if (/最大HP|最大FP|最大スタミナ|生命力|精神力|持久力|筋力|技量|知力|信仰|神秘|強靭度/.test(ja)) return 'stats';
-  if (/vigor|mind|endurance|strength|dexterity|intelligence|faith|arcane|poise|maximum\s*(hp|fp|stamina)/i.test(en)) return 'stats';
-  // Skill attack power → attack (before skill check)
+  if (/vigor|mind\b|endurance|\bstrength\b|dexterity|intelligence|faith|arcane|poise|maximum\s*(hp|fp|stamina)/i.test(en)) return 'stats';
+  // 8. Skill attack power → attack (before skill check)
   if (/スキル攻撃力|戦技攻撃力|スキルの攻撃力/.test(ja) || /skill\s*attack\s*power/i.test(en)) return 'attack';
-  // Skill / Arts
+  // 9. Skill / Arts
   if (/スキル|アーツ|クールタイム/.test(ja) || /skill|art\s*gauge|cooldown/i.test(en)) return 'skill';
-  // Sorcery / Incantation
+  // 10. Sorcery / Incantation
   if (/魔術|祈祷|詠唱|ソウル|FP消費/.test(ja) || /sorcery|sorceries|incantation|spell|casting/i.test(en)) return 'magic';
-  // Damage Negation
-  if (/カット率|ガード性能/.test(ja) || /damage\s*negation|guarding/i.test(en)) return 'cutrate';
-  // Status Resistance
+  // 11. Specific attack enhancements (wiki: 攻撃力 category)
+  if (/ガードカウンター/.test(ja) || /guard\s*counter/i.test(en)) return 'attack';
+  if (/投擲壺強化/.test(ja)) return 'attack';
+  if (/調香術強化/.test(ja)) return 'attack';
+  if (/咆哮.*強化|ブレス.*強化/.test(ja)) return 'attack';
+  if (/体勢を崩す力/.test(ja) || /stance.*break.*power/i.test(en)) return 'attack';
+  // 12. Damage Negation
+  if (/カット率|ガード性能/.test(ja) || /damage\s*negation/i.test(en)) return 'cutrate';
+  // 13. Status Resistance
   if (/耐性/.test(ja) || /resistance/i.test(en)) return 'resist';
-  // Recovery
+  // 14. Recovery
   if (/回復|リゲイン|聖杯瓶/.test(ja) || /restoration|recovery|restore|flask/i.test(en)) return 'recovery';
-  // Attack Power
+  // 15. Attack Power
   if (/攻撃力|致命の一撃強化|通常攻撃の1段目/.test(ja) || /attack\s*power|critical.*damage/i.test(en)) return 'attack';
-  // Team member
-  if (/味方|周囲で|ヘイト|狙われ/.test(ja) || /allies|nearby|aggro/i.test(en)) return 'team';
-  // Map / Runes
-  if (/強敵を倒す度|発見力|ルーン|死亡時|埋もれ宝|地図/.test(ja) || /item\s*discovery|rune|death/i.test(en)) return 'mapenv';
-  // Action
-  if (/ガードカウンター|投擲壺|調香術|咆哮|ブレス|ローリング|回避|二刀|両手持ち|タメ攻撃|連撃|遠距離|武器の持ち替え|刺突|ジャンプ|ガード崩し|崩す力|体勢を崩す|波動ダッシュ|ガード成功|ガード連続|ガード中|致命の一撃|パリィ|歩行中|集団撃破|精密射撃|シールド|体勢が崩れ|竜餐|定期的に|状態になると|スタミナ消費/.test(ja)
-    || /guard\s*counter|throwing|perfum|roar|breath|dodge|evasion|two.*hand|dual|charge|ranged|switch.*weapon|thrust|jump|stance.*break|critical.*hit/i.test(en)) return 'action';
-  // Broad attack-related
+  // 16. Map / Environment
+  if (/埋もれ宝|地図|発見力|ルーン|見つけやすくなる|死亡時/.test(ja) || /item\s*discovery|rune/i.test(en)) return 'mapenv';
+  // 17. Action (broad)
+  if (/ローリング|回避|二刀|両手持ち|タメ攻撃|連撃|遠距離|武器の持ち替え|刺突|ジャンプ|ガード崩し|波動ダッシュ|ガード成功|ガード連続|ガード中|致命の一撃|パリィ|歩行中|集団撃破|精密射撃|シールド|体勢が崩れ|竜餐|定期的に|状態になると|スタミナ消費|咆哮|ブレス|調香術|投擲/.test(ja)
+    || /throwing|perfum|roar|breath|dodge|evasion|two.*hand|dual|charge|ranged|switch.*weapon|thrust|jump|stance.*break|critical.*hit/i.test(en)) return 'action';
+  // 18. Broad attack-related
   if (/攻撃/.test(ja) || /attack/i.test(en)) return 'attack';
   return 'other';
 }
@@ -890,8 +908,15 @@ function renderInspectorEffects() {
     const isCollapsed = collapsedCategories.has(catId);
     const hitCount = catHitCounts.get(catId) || 0;
 
+    // Determine select-all checkbox state for this category
+    const catKeys = items.map(e => e.key);
+    const checkedInCat = catKeys.filter(k => andGroups.some(g => g.has(k))).length;
+    const allChecked = checkedInCat === catKeys.length;
+    const someChecked = checkedInCat > 0 && !allChecked;
+
     html += `<div class="inspector-group-header${isCollapsed ? ' collapsed' : ''}" data-cat="${catId}">`;
     html += `<span class="inspector-group-arrow">▼</span>`;
+    html += `<input type="checkbox" class="inspector-group-checkbox" data-cat="${catId}" ${allChecked ? 'checked' : ''} ${someChecked ? 'data-indeterminate="true"' : ''} />`;
     html += `<span class="group-name">${catName}</span>`;
     html += `<span class="group-count">(${hitCount})</span>`;
     html += `</div>`;
@@ -914,9 +939,15 @@ function renderInspectorEffects() {
 
   inspectorEffectList.innerHTML = html;
 
+  // Set indeterminate state for group checkboxes (can't be set via HTML attribute)
+  inspectorEffectList.querySelectorAll('.inspector-group-checkbox[data-indeterminate="true"]').forEach(cb => {
+    cb.indeterminate = true;
+  });
+
   // Attach click handlers for collapsible group headers
   inspectorEffectList.querySelectorAll('.inspector-group-header').forEach(header => {
-    header.addEventListener('click', () => {
+    header.addEventListener('click', (e) => {
+      if (e.target.classList.contains('inspector-group-checkbox')) return;
       const catId = header.dataset.cat;
       const itemsDiv = inspectorEffectList.querySelector(`.inspector-group-items[data-cat="${catId}"]`);
       if (collapsedCategories.has(catId)) {
@@ -1003,6 +1034,29 @@ document.getElementById('and-group-tabs').addEventListener('click', (e) => {
 inspectorEffectList.addEventListener('change', (e) => {
   const checkbox = e.target;
   if (checkbox.type !== 'checkbox') return;
+
+  // Group select-all checkbox
+  if (checkbox.classList.contains('inspector-group-checkbox')) {
+    const catId = checkbox.dataset.cat;
+    const catItems = inspectorEffectList.querySelectorAll(`.inspector-group-items[data-cat="${catId}"] .inspector-effect-item`);
+    const catKeys = Array.from(catItems).map(item => item.dataset.key);
+    if (checkbox.checked) {
+      catKeys.forEach(k => {
+        andGroups.forEach(g => g.delete(k));
+        andGroups[activeAndGroup].add(k);
+      });
+    } else {
+      catKeys.forEach(k => {
+        andGroups.forEach(g => g.delete(k));
+      });
+    }
+    updateAndGroupTabs();
+    renderInspectorEffects();
+    updateInspectorCount();
+    return;
+  }
+
+  // Individual effect checkbox
   const item = checkbox.closest('.inspector-effect-item');
   const key = item.dataset.key;
   if (checkbox.checked) {
@@ -1277,7 +1331,11 @@ function collectOptimizerParams() {
   // Collect effects from optSelectedEffects map
   const effects = [];
   optSelectedEffects.forEach((priority, key) => {
-    effects.push({ key, priority });
+    if (priority.startsWith('exclude_')) {
+      effects.push({ key, priority: priority.replace('exclude_', ''), exclude: true });
+    } else {
+      effects.push({ key, priority });
+    }
   });
 
   const candidates = parseInt(optCandidates.value) || 30;
@@ -1391,7 +1449,10 @@ optPresetLoad.addEventListener('click', async () => {
   optSelectedEffects.clear();
   if (preset.effects && Array.isArray(preset.effects)) {
     preset.effects.forEach(e => {
-      optSelectedEffects.set(e.key, e.priority || 'required');
+      const priority = e.exclude
+        ? `exclude_${e.priority || 'required'}`
+        : (e.priority || 'required');
+      optSelectedEffects.set(e.key, priority);
     });
   }
   renderOptEffectsTags();
@@ -1459,18 +1520,17 @@ function renderEffectSelectList() {
       const name = ja ? e.name_ja : e.name_en;
       const checked = optSelectedEffects.has(e.key);
       const priority = optSelectedEffects.get(e.key) || 'required';
-      const reqLabel = ja ? PRIORITY_LABELS.required.ja : PRIORITY_LABELS.required.en;
-      const prefLabel = ja ? PRIORITY_LABELS.preferred.ja : PRIORITY_LABELS.preferred.en;
-      const niceLabel = ja ? PRIORITY_LABELS.nice_to_have.ja : PRIORITY_LABELS.nice_to_have.en;
+      const priorityOptions = ['required', 'preferred', 'nice_to_have',
+        'exclude_required', 'exclude_preferred', 'exclude_nice_to_have'];
+      const optionsHtml = priorityOptions.map(p => {
+        const label = ja ? PRIORITY_LABELS[p].ja : PRIORITY_LABELS[p].en;
+        return `<option value="${p}"${priority === p ? ' selected' : ''}>${label}</option>`;
+      }).join('');
 
       html += `<div class="effect-select-item${checked ? ' checked' : ''}" data-key="${e.key}">
         <input type="checkbox" ${checked ? 'checked' : ''} />
         <span class="effect-select-name" title="${name}">${name}</span>
-        <select${checked ? '' : ' style="visibility:hidden"'}>
-          <option value="required"${priority === 'required' ? ' selected' : ''}>${reqLabel}</option>
-          <option value="preferred"${priority === 'preferred' ? ' selected' : ''}>${prefLabel}</option>
-          <option value="nice_to_have"${priority === 'nice_to_have' ? ' selected' : ''}>${niceLabel}</option>
-        </select>
+        <select${checked ? '' : ' style="visibility:hidden"'}>${optionsHtml}</select>
         <span class="effect-select-count">${e.count}</span>
       </div>`;
     });
@@ -1655,9 +1715,10 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     params.effects.forEach(e => {
       const eff = allUniqueEffects.find(u => u.key === e.key);
       const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
-      const pLabel = PRIORITY_LABELS[e.priority]
-        ? (ja ? PRIORITY_LABELS[e.priority].ja : PRIORITY_LABELS[e.priority].en) : e.priority;
-      html += `<span class="opt-conditions-effect-tag ${e.priority}">${name} <small>(${pLabel})</small></span>`;
+      const displayPriority = e.exclude ? `exclude_${e.priority}` : e.priority;
+      const pLabel = PRIORITY_LABELS[displayPriority]
+        ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
+      html += `<span class="opt-conditions-effect-tag ${displayPriority}">${name} <small>(${pLabel})</small></span>`;
     });
     html += `</div></div>`;
   }
@@ -1719,7 +1780,9 @@ function renderResultCard(res, ja, isBest, params, idx) {
   const cardClass = `opt-result-card${isBest ? ' best' : ''}`;
   const vesselName = ja ? res._vesselNameJa : res._vesselNameEn;
   const matchedSet = new Set(res.matchedEffects || []);
-  const specKeys = new Set((params.effects || []).map(e => e.key));
+  const excludedSet = new Set(res.excludedPresent || []);
+  const specKeys = new Set((params.effects || []).filter(e => !e.exclude).map(e => e.key));
+  const excludeSpecKeys = new Set((params.effects || []).filter(e => e.exclude).map(e => e.key));
 
   let html = `<div class="${cardClass}" data-idx="${idx}">`;
   html += `<div class="opt-result-header">`;
@@ -1744,10 +1807,15 @@ function renderResultCard(res, ja, isBest, params, idx) {
         if (eff.isDebuff) return; // skip sub-effects for compact view
         const effName = ja ? (eff.name_ja || eff.name_en || eff.key) : (eff.name_en || eff.key);
         const isMatched = matchedSet.has(eff.key);
+        const isExcluded = eff.excluded || excludedSet.has(eff.key);
         const isSpec = specKeys.has(eff.key);
+        const isExcludeSpec = excludeSpecKeys.has(eff.key);
         let cls = 'opt-card-effect';
-        if (isMatched) {
-          const spec = params.effects.find(e => e.key === eff.key);
+        if (isExcluded) {
+          const exPriority = eff.excludePriority || 'required';
+          cls += ` excluded exclude_${exPriority}`;
+        } else if (isMatched) {
+          const spec = params.effects.find(e => e.key === eff.key && !e.exclude);
           cls += ` matched ${spec ? spec.priority : 'nice_to_have'}`;
         } else if (isSpec) {
           cls += ' spec-miss';
@@ -1816,7 +1884,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   html += `<div class="detail-section">`;
   html += `<h3>${ja ? 'マッチした効果' : 'Matched Effects'}</h3>`;
   (res.matchedEffects || []).forEach(key => {
-    const spec = params.effects.find(e => e.key === key);
+    const spec = params.effects.find(e => e.key === key && !e.exclude);
     const priority = spec ? spec.priority : 'nice_to_have';
     const eff = allUniqueEffects.find(e => e.key === key);
     const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
@@ -1837,6 +1905,26 @@ function showOptResultDetail(tabId, res, params, idx) {
     html += `</div>`;
   });
   html += `</div>`;
+
+  // Excluded effects present section
+  if (res.excludedPresent && res.excludedPresent.length > 0) {
+    html += `<div class="detail-section">`;
+    html += `<h3>${ja ? '除外効果（含有）' : 'Excluded Effects Present'}</h3>`;
+    (res.excludedPresent || []).forEach(key => {
+      const spec = params.effects.find(e => e.key === key && e.exclude);
+      const priority = spec ? spec.priority : 'nice_to_have';
+      const displayPriority = `exclude_${priority}`;
+      const eff = allUniqueEffects.find(e => e.key === key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      const pLabel = PRIORITY_LABELS[displayPriority]
+        ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
+      html += `<div class="detail-effect">`;
+      html += `<div class="detail-effect-main" style="color:#e07070;text-decoration:line-through">${name}</div>`;
+      html += `<div class="detail-effect-stacking">${pLabel}</div>`;
+      html += `</div>`;
+    });
+    html += `</div>`;
+  }
 
   body.innerHTML = html;
 
@@ -1879,8 +1967,12 @@ function renderOptDetailRelic(relic, ja) {
       ? (group.main.name_ja || group.main.name_en || group.main.key)
       : (group.main.name_en || group.main.key);
     const matched = group.main.matched;
+    const excluded = group.main.excluded;
+    let effCls = 'opt-detail-effect-name';
+    if (excluded) effCls += ' excluded';
+    else if (matched) effCls += ' matched';
     html += `<div class="opt-detail-effect-item">`;
-    html += `<div class="opt-detail-effect-name${matched ? ' matched' : ''}">${mainName}</div>`;
+    html += `<div class="${effCls}">${mainName}</div>`;
     group.debuffs.forEach(d => {
       const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
       const isDemerit = classifyEffect(d.name_ja, d.name_en, d.key) === 'demerit';

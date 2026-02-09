@@ -800,6 +800,15 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   transform: rotate(-90deg);
 }
 
+.inspector-group-checkbox {
+  width: 13px;
+  height: 13px;
+  margin: 0 6px 0 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
 .inspector-group-header .group-name { flex: 1; }
 
 .inspector-group-header .group-count {
@@ -1066,6 +1075,18 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   background: rgba(241, 196, 15, 0.2);
   color: var(--color-yellow);
 }
+.opt-effect-tag-priority.exclude_required {
+  background: rgba(231, 76, 60, 0.25);
+  color: #e07070;
+}
+.opt-effect-tag-priority.exclude_preferred {
+  background: rgba(231, 76, 60, 0.15);
+  color: #d4877a;
+}
+.opt-effect-tag-priority.exclude_nice_to_have {
+  background: rgba(231, 76, 60, 0.10);
+  color: #c09080;
+}
 
 .opt-effect-tag-name {
   flex: 1;
@@ -1281,6 +1302,21 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   background: rgba(241, 196, 15, 0.15);
   color: var(--color-yellow);
 }
+.opt-conditions-effect-tag.exclude_required {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e07070;
+  text-decoration: line-through;
+}
+.opt-conditions-effect-tag.exclude_preferred {
+  background: rgba(231, 76, 60, 0.12);
+  color: #d4877a;
+  text-decoration: line-through;
+}
+.opt-conditions-effect-tag.exclude_nice_to_have {
+  background: rgba(231, 76, 60, 0.08);
+  color: #c09080;
+  text-decoration: line-through;
+}
 .opt-conditions-effect-tag small {
   opacity: 0.7;
 }
@@ -1449,6 +1485,15 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   color: var(--color-yellow);
   font-weight: 600;
 }
+.opt-card-effect.excluded {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e07070;
+  text-decoration: line-through;
+}
+.opt-card-effect.excluded.exclude_required {
+  background: rgba(231, 76, 60, 0.25);
+  font-weight: 600;
+}
 
 .opt-relic-section {
   margin-bottom: 8px;
@@ -1605,6 +1650,10 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
 }
 .opt-detail-effect-name.matched {
   color: var(--accent);
+}
+.opt-detail-effect-name.excluded {
+  color: #e07070;
+  text-decoration: line-through;
 }
 .opt-detail-effect-sub {
   font-size: 12px;
