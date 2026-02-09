@@ -83,12 +83,15 @@ ipcMain.handle('load-stacking-data', async () => {
   try {
     const raw = fs.readFileSync(effectsFile, 'utf-8');
     const data = JSON.parse(raw);
-    // Build lookup: effectId (string) -> { stackable, stackNotes }
+    // Build lookup: effectId (string) -> { stackable, stackNotes, key, name_ja, name_en }
     const lookup = {};
     for (const [id, entry] of Object.entries(data.effects || {})) {
       lookup[id] = {
         stackable: entry.stackable,
         stackNotes: entry.stackNotes || '',
+        key: entry.key || '',
+        name_ja: entry.name_ja || '',
+        name_en: entry.name_en || '',
       };
     }
     return lookup;

@@ -841,6 +841,7 @@ function classifyEffect(name_ja, name_en, key) {
 function buildUniqueEffects() {
   if (!relicData) { allUniqueEffects = []; return; }
   const effectMap = new Map(); // key -> { key, id, name_ja, name_en, count, category }
+  // 1. Count effects from loaded relic data
   relicData.relics.forEach(r => {
     const seen = new Set();
     r.effects.flat().forEach(e => {
@@ -910,6 +911,7 @@ function setupInspectorResize(inspectorEl) {
 }
 setupInspectorResize(document.getElementById('inspector'));
 setupInspectorResize(document.getElementById('optimizer-inspector'));
+setupInspectorResize(document.getElementById('effect-select-inspector'));
 
 function renderInspectorEffects() {
   const query = inspectorSearch.value.toLowerCase().trim();
