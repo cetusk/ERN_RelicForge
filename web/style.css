@@ -361,6 +361,41 @@ body {
   color: var(--text-muted);
 }
 
+/* Path Hint */
+.path-hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.path-hint-value {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 3px 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: all;
+  transition: border-color 0.2s, background 0.2s;
+}
+.path-hint-value:hover {
+  border-color: var(--accent);
+  background: rgba(52, 152, 219, 0.1);
+}
+.path-hint-copied {
+  color: var(--accent);
+  font-size: 11px;
+  margin-left: 6px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.path-hint-copied.show {
+  opacity: 1;
+}
+
 /* Drop Zone */
 .drop-zone {
   margin-top: 16px;

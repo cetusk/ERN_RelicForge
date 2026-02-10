@@ -128,6 +128,8 @@ const tableContainer = document.getElementById('table-container');
 // Auto-load & drop zone elements
 const btnAutoLoad = document.getElementById('btn-auto-load');
 const autoLoadNote = document.getElementById('auto-load-note');
+const autoLoadPathHint = document.getElementById('auto-load-path-hint');
+const pathHintValue = document.getElementById('path-hint-value');
 const autoLoadStatus = document.getElementById('auto-load-status');
 const dropZone = document.getElementById('drop-zone');
 
@@ -358,7 +360,10 @@ function renderSaveFileList(files) {
 
 async function autoLoad() {
   try {
-    const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+    const dirHandle = await window.showDirectoryPicker({
+      id: 'nightreign-save',
+      mode: 'read',
+    });
     await saveDirHandle(dirHandle);
     const ja = displayLang === 'ja';
     showAutoLoadStatus(ja ? '検索中...' : 'Scanning...', false);
@@ -414,8 +419,28 @@ async function tryRestoreDirHandle() {
 if (!window.showDirectoryPicker) {
   if (btnAutoLoad) btnAutoLoad.style.display = 'none';
   if (autoLoadNote) autoLoadNote.style.display = 'none';
+  if (autoLoadPathHint) autoLoadPathHint.style.display = 'none';
 } else {
   btnAutoLoad.addEventListener('click', autoLoad);
+  // Show path hint with copy-to-clipboard
+  if (autoLoadPathHint) autoLoadPathHint.classList.remove('hidden');
+  if (pathHintValue) {
+    pathHintValue.addEventListener('click', () => {
+      const text = pathHintValue.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        let copied = pathHintValue.nextElementSibling;
+        if (!copied) {
+          copied = document.createElement('span');
+          copied.className = 'path-hint-copied';
+          const ja = displayLang === 'ja';
+          copied.textContent = ja ? 'コピーしました' : 'Copied!';
+          pathHintValue.parentNode.appendChild(copied);
+        }
+        copied.classList.add('show');
+        setTimeout(() => copied.classList.remove('show'), 1500);
+      });
+    });
+  }
   // Attempt to restore previous folder handle
   tryRestoreDirHandle();
 }
@@ -482,6 +507,8 @@ function updateLangUI() {
   document.getElementById('btn-open-welcome').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
   if (btnAutoLoad) btnAutoLoad.textContent = ja ? 'フォルダから自動読み込み' : 'Auto-load from Folder';
   if (autoLoadNote) autoLoadNote.textContent = ja ? '※ フォルダ読み込みは Chrome / Edge のみ対応' : '* Folder loading is Chrome / Edge only';
+  const pathHintLabel = document.getElementById('path-hint-label');
+  if (pathHintLabel) pathHintLabel.textContent = ja ? 'セーブファイルの場所:' : 'Save file location:';
   document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
   // Header button
   document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';
