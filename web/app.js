@@ -2022,13 +2022,13 @@ optVesselHeader.addEventListener('click', toggleOptVesselCollapse);
 // Update vessel count when checkboxes change
 optVesselList.addEventListener('change', updateOptVesselCount);
 
-// Mode change: clear deep-relic-only effects and demerits when switching to normal
+// Mode change: clear deep-relic-only effects when switching to normal
 optMode.addEventListener('change', () => {
   if (optMode.value === 'normal') {
     const toRemove = [];
     optSelectedEffects.forEach((priority, key) => {
       const eff = allUniqueEffects.find(e => e.key === key);
-      if (eff && (eff.deepOnly || eff.category === 'demerit')) toRemove.push(key);
+      if (eff && eff.deepOnly) toRemove.push(key);
     });
     toRemove.forEach(k => optSelectedEffects.delete(k));
     if (toRemove.length > 0) renderOptEffectsTags();
@@ -2141,9 +2141,9 @@ function renderEffectSelectList() {
   const query = effectSelectSearch.value.toLowerCase().trim();
   const isNormalOnly = optMode.value === 'normal';
   let base = allUniqueEffects;
-  // In normal-only mode, hide deep-relic-only effects and demerits
+  // In normal-only mode, hide deep-relic-only effects
   if (isNormalOnly) {
-    base = base.filter(e => !e.deepOnly && e.category !== 'demerit');
+    base = base.filter(e => !e.deepOnly);
   }
   const filtered = query
     ? base.filter(e =>
