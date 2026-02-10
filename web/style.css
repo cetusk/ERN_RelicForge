@@ -361,6 +361,30 @@ body {
   color: var(--text-muted);
 }
 
+/* Drop Zone */
+.drop-zone {
+  margin-top: 16px;
+  padding: 24px 40px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: default;
+}
+.drop-zone p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  pointer-events: none;
+}
+.drop-zone.drag-over {
+  border-color: var(--accent);
+  background: rgba(52, 152, 219, 0.08);
+}
+.drop-zone.drag-over p {
+  color: var(--accent);
+}
+
 /* === Loading === */
 .loading {
   display: flex;

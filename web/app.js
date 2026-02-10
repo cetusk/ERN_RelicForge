@@ -124,6 +124,13 @@ const minimap = document.getElementById('minimap');
 const minimapCanvas = document.getElementById('minimap-canvas');
 const minimapSlider = document.getElementById('minimap-slider');
 const tableContainer = document.getElementById('table-container');
+
+// Auto-load & drop zone elements
+const btnAutoLoad = document.getElementById('btn-auto-load');
+const autoLoadNote = document.getElementById('auto-load-note');
+const autoLoadStatus = document.getElementById('auto-load-status');
+const dropZone = document.getElementById('drop-zone');
+
 let suggestionIndex = -1;   // keyboard navigation index
 let searchTerms = [];       // cached suggestion candidates
 
@@ -269,6 +276,195 @@ async function loadAndDisplay(arrayBuffer) {
   }
 }
 
+// === Folder Auto-Load (File System Access API — Chrome / Edge only) ===
+const DB_NAME = 'ERNRelicForge';
+const STORE_NAME = 'settings';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(STORE_NAME);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function saveDirHandle(handle) {
+  const db = await openDB();
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  tx.objectStore(STORE_NAME).put(handle, 'dirHandle');
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function loadDirHandle() {
+  const db = await openDB();
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const req = tx.objectStore(STORE_NAME).get('dirHandle');
+  return new Promise((resolve, reject) => {
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function scanDirectoryForSaveFiles(dirHandle, path = '') {
+  const results = [];
+  for await (const entry of dirHandle.values()) {
+    const entryPath = path ? `${path}/${entry.name}` : entry.name;
+    if (entry.kind === 'directory') {
+      const sub = await scanDirectoryForSaveFiles(entry, entryPath);
+      results.push(...sub);
+    } else if (entry.kind === 'file') {
+      const lower = entry.name.toLowerCase();
+      if (lower.endsWith('.sl2.bak') || lower.endsWith('.sl2')) {
+        results.push({ handle: entry, path: entryPath, name: entry.name });
+      }
+    }
+  }
+  return results;
+}
+
+function showAutoLoadStatus(msg, isError) {
+  autoLoadStatus.textContent = msg;
+  autoLoadStatus.classList.remove('hidden');
+  autoLoadStatus.style.color = isError ? '#e74c3c' : '';
+}
+
+function renderSaveFileList(files) {
+  const ja = displayLang === 'ja';
+  autoLoadStatus.classList.remove('hidden');
+  const heading = ja ? `${files.length} 件のセーブファイルが見つかりました:` : `Found ${files.length} save file(s):`;
+  let html = `<p>${heading}</p><div class="save-file-list">`;
+  files.forEach((f, i) => {
+    html += `<div class="save-file-item" data-idx="${i}">
+      <span class="save-fname">${f.name}</span>
+      <span class="save-fpath">${f.path}</span>
+    </div>`;
+  });
+  html += '</div>';
+  autoLoadStatus.innerHTML = html;
+  autoLoadStatus.querySelectorAll('.save-file-item').forEach(el => {
+    el.addEventListener('click', async () => {
+      const idx = parseInt(el.dataset.idx);
+      const file = await files[idx].handle.getFile();
+      loadedFileName = file.name;
+      const arrayBuffer = await file.arrayBuffer();
+      await loadAndDisplay(arrayBuffer);
+    });
+  });
+}
+
+async function autoLoad() {
+  try {
+    const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+    await saveDirHandle(dirHandle);
+    const ja = displayLang === 'ja';
+    showAutoLoadStatus(ja ? '検索中...' : 'Scanning...', false);
+    const files = await scanDirectoryForSaveFiles(dirHandle);
+    if (files.length === 0) {
+      showAutoLoadStatus(ja ? 'セーブファイルが見つかりませんでした' : 'No save files found', true);
+    } else if (files.length === 1) {
+      showAutoLoadStatus(ja ? '読み込み中...' : 'Loading...', false);
+      const file = await files[0].handle.getFile();
+      loadedFileName = file.name;
+      const arrayBuffer = await file.arrayBuffer();
+      await loadAndDisplay(arrayBuffer);
+    } else {
+      renderSaveFileList(files);
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      // User cancelled picker — do nothing
+      autoLoadStatus.classList.add('hidden');
+      return;
+    }
+    showAutoLoadStatus(`Error: ${err.message}`, true);
+  }
+}
+
+// Try restoring saved directory handle on page load
+async function tryRestoreDirHandle() {
+  try {
+    const handle = await loadDirHandle();
+    if (!handle) return;
+    const perm = await handle.queryPermission({ mode: 'read' });
+    if (perm === 'granted') {
+      const ja = displayLang === 'ja';
+      showAutoLoadStatus(ja ? '前回のフォルダを検索中...' : 'Scanning previous folder...', false);
+      const files = await scanDirectoryForSaveFiles(handle);
+      if (files.length === 1) {
+        const file = await files[0].handle.getFile();
+        loadedFileName = file.name;
+        const arrayBuffer = await file.arrayBuffer();
+        await loadAndDisplay(arrayBuffer);
+      } else if (files.length > 1) {
+        renderSaveFileList(files);
+      } else {
+        autoLoadStatus.classList.add('hidden');
+      }
+    }
+  } catch (_) {
+    // Ignore — handle may be stale or permission denied
+  }
+}
+
+// Feature detection: hide auto-load button if not supported
+if (!window.showDirectoryPicker) {
+  if (btnAutoLoad) btnAutoLoad.style.display = 'none';
+  if (autoLoadNote) autoLoadNote.style.display = 'none';
+} else {
+  btnAutoLoad.addEventListener('click', autoLoad);
+  // Attempt to restore previous folder handle
+  tryRestoreDirHandle();
+}
+
+// === Drag & Drop ===
+welcome.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropZone.classList.add('drag-over');
+});
+
+welcome.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  // Only remove highlight when leaving the welcome area entirely
+  if (!welcome.contains(e.relatedTarget)) {
+    dropZone.classList.remove('drag-over');
+  }
+});
+
+welcome.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropZone.classList.remove('drag-over');
+
+  const files = Array.from(e.dataTransfer.files);
+  const validFile = files.find(f => {
+    const name = f.name.toLowerCase();
+    return name.endsWith('.sl2') || name.endsWith('.bak');
+  });
+
+  if (validFile) {
+    loadedFileName = validFile.name;
+    try {
+      const arrayBuffer = await validFile.arrayBuffer();
+      await loadAndDisplay(arrayBuffer);
+    } catch (err) {
+      alert(`ファイル読み込みエラー:\n${err}`);
+    }
+  } else {
+    const ja = displayLang === 'ja';
+    alert(ja ? '.sl2 / .bak ファイルをドロップしてください' : 'Please drop a .sl2 / .bak file');
+  }
+});
+
+// Prevent default browser behavior for drag outside drop zone
+document.addEventListener('dragover', (e) => e.preventDefault());
+document.addEventListener('drop', (e) => e.preventDefault());
+
 // === View Management ===
 function showView(name) {
   welcome.classList.toggle('hidden', name !== 'welcome');
@@ -284,6 +480,9 @@ function updateLangUI() {
     ? 'セーブファイル (.sl2 / .bak) を選択して遺物を確認'
     : 'Open a save file (.sl2 / .bak) to view relics';
   document.getElementById('btn-open-welcome').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  if (btnAutoLoad) btnAutoLoad.textContent = ja ? 'フォルダから自動読み込み' : 'Auto-load from Folder';
+  if (autoLoadNote) autoLoadNote.textContent = ja ? '※ フォルダ読み込みは Chrome / Edge のみ対応' : '* Folder loading is Chrome / Edge only';
+  document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
   // Header button
   document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';
   // Toolbar labels

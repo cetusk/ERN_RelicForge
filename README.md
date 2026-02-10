@@ -1,7 +1,7 @@
 # ERN_RelicForge
 
 Elden Ring: Nightreign のセーブファイル (.sl2) から遺物情報を抽出・閲覧・最適化するツール。
-CLI パーサー、遺物組み合わせ最適化ツール、Electron ベースの GUI ビューアーを提供。
+CLI パーサー、遺物組み合わせ最適化ツール、Electron ベースの GUI ビューアー、および GitHub Pages 対応の Web 版を提供。
 
 ## Folder Structure
 
@@ -30,6 +30,15 @@ ERN_RelicForge/
 │       ├── app.js               # UI ロジック
 │       └── style.css            # ダークテーマスタイル
 │
+├── web/                         # Web 版 (GitHub Pages 対応)
+│   ├── index.html
+│   ├── app.js                   # UI ロジック (ブラウザ専用)
+│   ├── relic-parser.js          # JS 版パーサー (CryptoJS 使用)
+│   ├── relic-optimizer.js       # JS 版最適化 (Web Worker 対応)
+│   ├── style.css                # ダークテーマスタイル
+│   └── lib/
+│       └── crypto-js.min.js     # AES-CBC 復号化用
+│
 └── examples/
     ├── sample_output.json       # パーサーサンプル出力
     ├── sample_effects_config.json  # 効果指定サンプル
@@ -49,7 +58,14 @@ ERN_RelicForge/
 - 除外条件: 特定の効果を含む組み合わせを除外可能
 - 全献器の比較と最高スコアの自動選出
 
-### GUI ビューアー
+### Web 版
+- GitHub Pages 対応 — インストール不要でブラウザから利用可能
+- Python パーサー・最適化ツールを JavaScript に完全移植
+- ファイル選択 / フォルダ自動読み込み (Chrome/Edge) / ドラッグ＆ドロップ対応
+- Web Worker による非同期最適化（UI ブロック防止）
+- Electron 版と同等の全機能を提供
+
+### GUI ビューアー (Electron / Web 共通)
 - 日本語 / English 対応（テーブル、詳細パネル、インスペクターすべてに反映）
 - 効果名のテキスト検索（日英両対応、サジェスト付き）
 - 色・タイプフィルター
@@ -76,17 +92,22 @@ ERN_RelicForge/
 
 ## Requirements
 
+**Web 版**: 不要（ブラウザのみ）
+
+**CLI / Electron GUI**:
 - Python 3.7 以上
 - [pycryptodome](https://pypi.org/project/pycryptodome/)
-- Node.js (GUI を使う場合)
+- Node.js (Electron GUI を使う場合)
 
 ## Installation
+
+Web 版はインストール不要。CLI / Electron GUI を使う場合:
 
 ```bash
 # Python 依存パッケージ
 pip install -r requirements.txt
 
-# GUI 依存パッケージ
+# Electron GUI 依存パッケージ
 cd gui
 npm install
 ```
@@ -192,7 +213,38 @@ python src/relic_optimizer.py --input output.json \
 - `bestResult` — 全献器中の最高スコア1件
 - `allResults` — 全献器の top N 件
 
-### GUI
+### Web 版 (GitHub Pages)
+
+インストール不要。ブラウザでアクセスするだけで利用可能。
+
+GitHub Pages にデプロイする場合は、リポジトリの Settings > Pages から `main` ブランチの `/` (root) を設定。
+`web/index.html` が `https://<username>.github.io/<repo>/web/` で公開される。
+
+#### ファイルの読み込み方法
+
+Web 版では 3 つの方法でセーブファイルを読み込める:
+
+1. **ファイルを選択して開く** — ファイル選択ダイアログから `.sl2` / `.bak` を選択
+2. **フォルダから自動読み込み** (Chrome / Edge のみ) — フォルダを選択すると `.sl2` / `.sl2.bak` を再帰検索。見つかったファイルが 1 件なら自動ロード、複数件なら一覧から選択。選択したフォルダは IndexedDB に保存され、次回アクセス時に自動復元を試行
+3. **ドラッグ＆ドロップ** — Welcome 画面に `.sl2` / `.bak` ファイルをドラッグ＆ドロップ
+
+#### ブラウザ対応
+
+| 機能 | Chrome / Edge | Firefox / Safari |
+|---|---|---|
+| ファイル選択 | o | o |
+| フォルダ自動読み込み | o | x (非対応) |
+| ドラッグ＆ドロップ | o | o |
+
+#### 技術的な違い (Electron 版 vs Web 版)
+
+- パーサー・最適化ツールは Python → JavaScript に完全移植
+- AES-CBC 復号化: pycryptodome → CryptoJS
+- 最適化処理: メインスレッド → Web Worker (UI ブロック防止)
+- セーブファイルアクセス: ファイルシステム直接 → File API / File System Access API
+- プリセット保存: ファイルダイアログ → ブラウザダウンロード / アップロード
+
+### Electron GUI
 
 ```bash
 cd gui
