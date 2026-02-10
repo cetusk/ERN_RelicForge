@@ -127,7 +127,6 @@ const tableContainer = document.getElementById('table-container');
 
 // Auto-load & drop zone elements
 const btnAutoLoad = document.getElementById('btn-auto-load');
-const autoLoadNote = document.getElementById('auto-load-note');
 const autoLoadPathHint = document.getElementById('auto-load-path-hint');
 const pathHintValue = document.getElementById('path-hint-value');
 const autoLoadStatus = document.getElementById('auto-load-status');
@@ -416,33 +415,29 @@ async function tryRestoreDirHandle() {
 }
 
 // Feature detection: hide auto-load button if not supported
+// Feature detection: hide auto-load button if not supported (path hint stays for drag & drop)
 if (!window.showDirectoryPicker) {
   if (btnAutoLoad) btnAutoLoad.style.display = 'none';
-  if (autoLoadNote) autoLoadNote.style.display = 'none';
-  if (autoLoadPathHint) autoLoadPathHint.style.display = 'none';
 } else {
   btnAutoLoad.addEventListener('click', autoLoad);
-  // Show path hint with copy-to-clipboard
-  if (autoLoadPathHint) autoLoadPathHint.classList.remove('hidden');
-  if (pathHintValue) {
-    pathHintValue.addEventListener('click', () => {
-      const text = pathHintValue.textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        let copied = pathHintValue.nextElementSibling;
-        if (!copied) {
-          copied = document.createElement('span');
-          copied.className = 'path-hint-copied';
-          const ja = displayLang === 'ja';
-          copied.textContent = ja ? 'コピーしました' : 'Copied!';
-          pathHintValue.parentNode.appendChild(copied);
-        }
-        copied.classList.add('show');
-        setTimeout(() => copied.classList.remove('show'), 1500);
-      });
-    });
-  }
   // Attempt to restore previous folder handle
   tryRestoreDirHandle();
+}
+
+// Path hint: click-to-copy (available for all browsers — useful for drag & drop workflow)
+const pathHintCopied = document.getElementById('path-hint-copied');
+if (pathHintValue) {
+  pathHintValue.addEventListener('click', () => {
+    const text = pathHintValue.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      if (pathHintCopied) {
+        const ja = displayLang === 'ja';
+        pathHintCopied.textContent = ja ? 'コピーしました' : 'Copied!';
+        pathHintCopied.classList.add('show');
+        setTimeout(() => pathHintCopied.classList.remove('show'), 1500);
+      }
+    });
+  });
 }
 
 // === Drag & Drop ===
@@ -506,9 +501,14 @@ function updateLangUI() {
     : 'Open a save file (.sl2 / .bak) to view relics';
   document.getElementById('btn-open-welcome').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
   if (btnAutoLoad) btnAutoLoad.textContent = ja ? 'フォルダから自動読み込み' : 'Auto-load from Folder';
-  if (autoLoadNote) autoLoadNote.textContent = ja ? '※ フォルダ読み込みは Chrome / Edge のみ対応' : '* Folder loading is Chrome / Edge only';
   const pathHintLabel = document.getElementById('path-hint-label');
-  if (pathHintLabel) pathHintLabel.textContent = ja ? 'セーブファイルの場所:' : 'Save file location:';
+  if (pathHintLabel) pathHintLabel.textContent = ja
+    ? 'セーブファイルの場所 — エクスプローラーのアドレスバーに貼り付けて開けます:'
+    : 'Save file location — paste in Explorer address bar to open:';
+  const pathHintNote = document.getElementById('path-hint-note');
+  if (pathHintNote) pathHintNote.innerHTML = ja
+    ? '※ ブラウザの制限により「フォルダから自動読み込み」では AppData 内は開けません。<br>上記パスをエクスプローラーで開き、ファイルを下のドロップゾーンにドラッグしてください。'
+    : '* Browser restrictions prevent "Auto-load from Folder" from accessing AppData.<br>Open the path above in Explorer and drag the file to the drop zone below.';
   document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
   // Header button
   document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';

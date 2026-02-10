@@ -80,10 +80,11 @@
         <button id="btn-open-welcome" class="btn-primary btn-large">ファイルを選択して開く</button>
         <button id="btn-auto-load" class="btn-secondary btn-large">フォルダから自動読み込み</button>
       </div>
-      <p id="auto-load-note" class="welcome-note">※ フォルダ読み込みは Chrome / Edge のみ対応</p>
-      <div id="auto-load-path-hint" class="path-hint hidden">
-        <span id="path-hint-label">セーブファイルの場所:</span>
+      <div id="auto-load-path-hint" class="path-hint">
+        <p id="path-hint-label" class="path-hint-label">セーブファイルの場所 — エクスプローラーのアドレスバーに貼り付けて開けます:</p>
         <code id="path-hint-value" class="path-hint-value" title="クリックでコピー">%AppData%\Nightreign</code>
+        <span id="path-hint-copied" class="path-hint-copied"></span>
+        <p id="path-hint-note" class="path-hint-note">※ ブラウザの制限により「フォルダから自動読み込み」では AppData 内は開けません。<br>上記パスをエクスプローラーで開き、ファイルを下のドロップゾーンにドラッグしてください。</p>
       </div>
       <div id="auto-load-status" class="auto-load-status hidden"></div>
       <div id="drop-zone" class="drop-zone">
