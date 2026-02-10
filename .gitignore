@@ -50,6 +50,10 @@ Thumbs.db
 # Node
 node_modules/
 package-lock.json
+package.json
+
+# Allow web/lib/ (crypto-js for browser)
+!web/lib/
 
 # Debugs
 debugs/

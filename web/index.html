@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERN RelicForge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header id="app-header">
+    <div class="header-left">
+      <h1>ERN RelicForge</h1>
+      <span id="header-info" class="header-info"></span>
+    </div>
+    <button id="btn-open" class="btn-primary">
+      <span class="btn-icon">&#128194;</span> <span id="btn-open-label">ファイルを開く</span>
+    </button>
+    <input type="file" id="file-input" accept=".sl2,.bak" style="display:none" />
+  </header>
+
+  <!-- Toolbar -->
+  <div id="toolbar" class="toolbar hidden">
+    <div class="search-wrapper">
+      <input type="text" id="search-input" placeholder="効果名で検索 (日本語 / English)..." autocomplete="off" />
+      <button id="search-clear" class="search-clear hidden" type="button">&times;</button>
+      <div id="search-suggestions" class="search-suggestions hidden"></div>
+    </div>
+    <div class="filter-group">
+      <label id="label-color">色:</label>
+      <div class="custom-select" id="color-select">
+        <button class="custom-select-btn" id="color-select-btn">
+          <span id="color-select-label">すべて</span>
+          <span class="custom-select-arrow">&#9662;</span>
+        </button>
+        <div class="custom-select-dropdown hidden" id="color-select-dropdown">
+          <div class="custom-select-option" data-value="">すべて</div>
+          <div class="custom-select-option" data-value="Red"><span class="color-badge Red"></span>Red</div>
+          <div class="custom-select-option" data-value="Blue"><span class="color-badge Blue"></span>Blue</div>
+          <div class="custom-select-option" data-value="Yellow"><span class="color-badge Yellow"></span>Yellow</div>
+          <div class="custom-select-option" data-value="Green"><span class="color-badge Green"></span>Green</div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-group">
+      <label id="label-type">タイプ:</label>
+      <select id="filter-type">
+        <option value="">すべて</option>
+        <option value="Relic">通常</option>
+        <option value="DeepRelic">深層</option>
+        <option value="UniqueRelic">固有</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label id="label-lang">言語:</label>
+      <select id="filter-lang">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <button id="btn-inspector" class="btn-inspector hidden">&#9881; <span id="btn-inspector-label">高度な検索</span></button>
+    <button id="btn-optimizer" class="btn-inspector hidden">&#9881; <span id="btn-optimizer-label">ビルド探索</span></button>
+    <span id="result-count" class="result-count"></span>
+  </div>
+
+  <!-- Tab Bar -->
+  <div id="tab-bar" class="tab-bar hidden">
+    <div class="tab active" data-tab="main">
+      <span class="tab-label" id="main-tab-label">遺物一覧</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content" class="main-content">
+    <!-- Welcome screen -->
+    <div id="welcome" class="welcome">
+      <div class="welcome-icon">&#9876;</div>
+      <p id="welcome-msg">セーブファイル (.sl2 / .bak) を選択して遺物を確認</p>
+      <div class="welcome-buttons">
+        <button id="btn-open-welcome" class="btn-primary btn-large">ファイルを選択して開く</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p id="loading-msg">解析中...</p>
+    </div>
+
+    <!-- Table + Detail -->
+    <div id="content-area" class="content-area hidden">
+      <div class="table-wrapper">
+        <div id="table-container" class="table-container">
+          <table id="relic-table">
+            <thead>
+              <tr>
+                <th data-sort="sortKey" class="sortable">#</th>
+                <th data-sort="itemColor" class="sortable" id="th-color">色</th>
+                <th data-sort="itemType" class="sortable" id="th-type">タイプ</th>
+                <th data-sort="itemKey" class="sortable" id="th-item">アイテム</th>
+                <th id="th-effects">効果</th>
+              </tr>
+            </thead>
+            <tbody id="relic-tbody"></tbody>
+          </table>
+        </div>
+        <div id="minimap" class="minimap">
+          <canvas id="minimap-canvas" class="minimap-canvas"></canvas>
+          <div id="minimap-slider" class="minimap-slider"></div>
+        </div>
+      </div>
+
+      <!-- Detail Panel -->
+      <div id="detail-panel" class="detail-panel hidden">
+        <div class="detail-header">
+          <h2 id="detail-title"></h2>
+          <button id="detail-close" class="btn-close">&times;</button>
+        </div>
+        <div id="detail-body" class="detail-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inspector Panel -->
+  <div id="inspector-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="inspector" class="inspector">
+    <div class="inspector-resize-handle"></div>
+    <div class="inspector-header">
+      <h3 id="inspector-title">高度な検索</h3>
+      <button id="inspector-close" class="btn-close">&times;</button>
+    </div>
+    <div class="inspector-body">
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <h4 id="inspector-effect-label">効果フィルター</h4>
+          <span id="inspector-selected-count" class="inspector-count">0件選択中</span>
+        </div>
+        <div id="and-group-tabs" class="and-group-tabs">
+          <button class="and-group-tab active" data-group="0">条件1(OR)</button>
+          <span class="and-group-connector">AND</span>
+          <button class="and-group-tab" data-group="1">条件2(OR)</button>
+          <span class="and-group-connector">AND</span>
+          <button class="and-group-tab" data-group="2">条件3(OR)</button>
+        </div>
+        <div class="inspector-search-wrapper">
+          <input type="text" id="inspector-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
+          <button id="inspector-search-clear" class="inspector-search-clear hidden" type="button">&times;</button>
+        </div>
+        <div id="inspector-effect-list" class="inspector-effect-list"></div>
+      </div>
+    </div>
+    <div class="inspector-footer">
+      <button id="inspector-clear" class="btn-secondary">クリア</button>
+      <button id="inspector-apply" class="btn-primary">適用</button>
+    </div>
+  </div>
+
+  <!-- Optimizer Inspector Panel -->
+  <div id="optimizer-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="optimizer-inspector" class="inspector">
+    <div class="inspector-resize-handle"></div>
+    <div class="inspector-header">
+      <h3 id="optimizer-title">ビルド探索</h3>
+      <button id="optimizer-close" class="btn-close">&times;</button>
+    </div>
+    <div class="inspector-body">
+      <div class="inspector-section">
+        <h4 id="opt-character-label">キャラクター</h4>
+        <select id="opt-character" class="opt-select"></select>
+      </div>
+      <div class="inspector-section">
+        <div class="opt-collapsible-header collapsed" id="opt-vessel-header">
+          <span class="inspector-group-arrow">&#9660;</span>
+          <h4 id="opt-vessel-label">献器</h4>
+          <span id="opt-vessel-count" class="inspector-count"></span>
+        </div>
+        <div id="opt-vessel-list" class="opt-vessel-list collapsed"></div>
+      </div>
+      <div class="inspector-section">
+        <h4 id="opt-mode-label">モード</h4>
+        <select id="opt-mode" class="opt-select">
+          <option value="combined">通常+深層</option>
+          <option value="normal">通常のみ</option>
+        </select>
+      </div>
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <h4 id="opt-effects-label">効果指定</h4>
+          <span id="opt-effects-count" class="inspector-count">0件</span>
+        </div>
+        <div id="opt-effects-list" class="opt-effects-list"></div>
+        <button id="opt-add-effect" class="btn-secondary opt-add-effect-btn">+ <span id="opt-add-effect-label">効果を追加</span></button>
+      </div>
+      <div class="inspector-section">
+        <h4 id="opt-settings-label">設定</h4>
+        <div class="opt-setting">
+          <label id="opt-candidates-label">上位抽出数/色</label>
+          <input type="number" id="opt-candidates" value="30" min="5" max="100" class="opt-number-input">
+        </div>
+        <div class="opt-setting">
+          <label id="opt-top-label">出力件数</label>
+          <input type="number" id="opt-top" value="50" min="1" max="200" class="opt-number-input">
+        </div>
+      </div>
+    </div>
+    <div class="inspector-footer">
+      <div class="opt-preset-row">
+        <span id="opt-preset-label" class="opt-preset-label">検索条件プリセット:</span>
+        <button id="opt-preset-save" class="btn-preset" title="検索条件プリセット保存">&#128190; <span id="opt-preset-save-label">保存</span></button>
+        <button id="opt-preset-load" class="btn-preset" title="検索条件プリセット読込">&#128194; <span id="opt-preset-load-label">読込</span></button>
+      </div>
+      <div class="opt-footer-actions">
+        <button id="optimizer-clear" class="btn-secondary"><span id="optimizer-clear-label">クリア</span></button>
+        <button id="optimizer-run" class="btn-primary"><span id="optimizer-run-label">実行</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Effect Selection Inspector Panel -->
+  <div id="effect-select-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="effect-select-inspector" class="inspector effect-select-inspector">
+    <div class="inspector-resize-handle"></div>
+    <div class="inspector-header">
+      <h3 id="effect-select-title">効果を選択</h3>
+      <button id="effect-select-close" class="btn-close">&times;</button>
+    </div>
+    <div class="inspector-body">
+      <div class="inspector-section">
+        <div class="inspector-search-wrapper">
+          <input type="text" id="effect-select-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
+          <button id="effect-select-search-clear" class="inspector-search-clear hidden" type="button">&times;</button>
+        </div>
+        <div id="effect-select-list" class="inspector-effect-list"></div>
+      </div>
+    </div>
+    <div class="inspector-footer effect-select-footer">
+      <button id="effect-select-clear" class="btn-secondary"><span id="effect-select-clear-label">クリア</span></button>
+      <button id="effect-select-apply" class="btn-primary"><span id="effect-select-apply-label">適用</span></button>
+    </div>
+  </div>
+
+  <script src="lib/crypto-js.min.js"></script>
+  <script src="relic-parser.js"></script>
+  <script src="relic-optimizer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
