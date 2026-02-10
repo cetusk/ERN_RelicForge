@@ -294,8 +294,8 @@ class RelicOptimizer {
     if (this._excludeKeysCache[rid]) return this._excludeKeysCache[rid];
     const keys = [];
     for (const group of relic.effects) {
-      if (group.length > 0) {
-        const k = group[0].key;
+      for (const e of group) {
+        const k = e.key;
         if (k in this.excludeLookup) keys.push(k);
       }
     }
@@ -873,13 +873,18 @@ class RelicOptimizer {
       }
       effectsOut.push(effEntry);
       for (let si = 1; si < group.length; si++) {
-        effectsOut.push({
+        const subEntry = {
           key: group[si].key,
           name_ja: group[si].name_ja || '',
           name_en: group[si].name_en || '',
           matched: false,
           isDebuff: true,
-        });
+        };
+        if (group[si].key in this.excludeLookup) {
+          subEntry.excluded = true;
+          subEntry.excludePriority = this.excludeLookup[group[si].key].priority;
+        }
+        effectsOut.push(subEntry);
       }
     }
 

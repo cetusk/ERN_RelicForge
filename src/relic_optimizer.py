@@ -287,14 +287,15 @@ class RelicOptimizer:
         return result
 
     def _get_exclude_keys(self, relic: Dict) -> Tuple:
-        """遺物の効果キーのうち除外対象にマッチするもののみ返す（キャッシュ付き）"""
+        """遺物の効果キーのうち除外対象にマッチするもののみ返す（キャッシュ付き）
+        サブ効果（デメリット等）も含め全効果を走査する。"""
         rid = relic['id']
         if rid in self._exclude_keys_cache:
             return self._exclude_keys_cache[rid]
         keys = []
         for group in relic['effects']:
-            if group:
-                k = group[0]['key']
+            for e in group:
+                k = e['key']
                 if k in self.exclude_lookup:
                     keys.append(k)
         result = tuple(keys)
@@ -1154,13 +1155,18 @@ class RelicOptimizer:
                     self.exclude_lookup[main_eff['key']]['priority']
             effects_out.append(eff_entry)
             for sub in group[1:]:
-                effects_out.append({
+                sub_entry = {
                     'key': sub['key'],
                     'name_ja': sub.get('name_ja', ''),
                     'name_en': sub.get('name_en', ''),
                     'matched': False,
                     'isDebuff': True,
-                })
+                }
+                if sub['key'] in excl_set:
+                    sub_entry['excluded'] = True
+                    sub_entry['excludePriority'] = \
+                        self.exclude_lookup[sub['key']]['priority']
+                effects_out.append(sub_entry)
 
         return {
             'id': relic['id'],
