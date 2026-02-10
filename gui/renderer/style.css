@@ -75,6 +75,22 @@ body {
 
 .btn-primary:hover { background: #6db3e8; }
 
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--bg-hover); }
+
 .btn-large {
   padding: 14px 32px;
   font-size: 16px;
@@ -273,6 +289,76 @@ body {
 
 .welcome-icon { font-size: 64px; opacity: 0.4; }
 .welcome p { font-size: 16px; }
+
+.welcome-buttons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.welcome-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: -8px;
+}
+
+.auto-load-status {
+  text-align: center;
+  max-width: 500px;
+}
+
+.auto-load-status .status-msg {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.auto-load-status .status-error {
+  font-size: 14px;
+  color: var(--color-red);
+  margin-bottom: 8px;
+}
+
+.auto-load-status .status-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.save-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+  width: 100%;
+}
+
+.save-file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.save-file-item:hover {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.save-file-item .save-id {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: monospace;
+}
+
+.save-file-item .save-mtime {
+  font-size: 12px;
+  color: var(--text-muted);
+}
 
 /* === Loading === */
 .loading {

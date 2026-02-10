@@ -74,8 +74,13 @@
     <!-- Welcome screen -->
     <div id="welcome" class="welcome">
       <div class="welcome-icon">&#9876;</div>
-      <p>セーブファイル (.sl2) を開いて遺物を確認</p>
-      <button id="btn-open-welcome" class="btn-primary btn-large">ファイルを開く</button>
+      <p id="welcome-msg">セーブファイル (.sl2) を開いて遺物を確認</p>
+      <div class="welcome-buttons">
+        <button id="btn-auto-load" class="btn-primary btn-large">自動で読み込む</button>
+        <button id="btn-open-welcome" class="btn-secondary btn-large">ファイルを選択して開く</button>
+      </div>
+      <p id="auto-load-note" class="welcome-note">&#8251; セーブデータ (.bak) を一時フォルダにコピーしてから読み込みます</p>
+      <div id="auto-load-status" class="auto-load-status hidden"></div>
     </div>
 
     <!-- Loading -->

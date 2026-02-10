@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
+  findSaveFiles: () => ipcRenderer.invoke('find-save-files'),
+  autoLoadSave: (bakPath) => ipcRenderer.invoke('auto-load-save', bakPath),
   openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
   parseSaveFile: (filePath) => ipcRenderer.invoke('parse-save-file', filePath),
   loadStackingData: () => ipcRenderer.invoke('load-stacking-data'),

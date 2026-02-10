@@ -64,6 +64,43 @@ ipcMain.handle('load-preset-dialog', async () => {
   return JSON.parse(raw);
 });
 
+// ---- Auto-load: find Nightreign save files ----
+ipcMain.handle('find-save-files', async () => {
+  try {
+    const nightreignDir = path.join(
+      os.homedir(), 'AppData', 'Roaming', 'Nightreign');
+    if (!fs.existsSync(nightreignDir)) return [];
+
+    const entries = fs.readdirSync(nightreignDir, { withFileTypes: true });
+    const results = [];
+    for (const entry of entries) {
+      if (!entry.isDirectory()) continue;
+      const bakPath = path.join(nightreignDir, entry.name, 'NR0000.sl2.bak');
+      if (fs.existsSync(bakPath)) {
+        const stat = fs.statSync(bakPath);
+        results.push({
+          id: entry.name,
+          path: bakPath,
+          mtime: stat.mtime.toISOString(),
+        });
+      }
+    }
+    // Sort by mtime descending (newest first)
+    results.sort((a, b) => b.mtime.localeCompare(a.mtime));
+    return results;
+  } catch (err) {
+    console.error('find-save-files error:', err);
+    return [];
+  }
+});
+
+ipcMain.handle('auto-load-save', async (_event, bakPath) => {
+  const tmpDir = os.tmpdir();
+  const dest = path.join(tmpDir, 'ern_relicforge_NR0000.sl2');
+  fs.copyFileSync(bakPath, dest);
+  return dest;
+});
+
 ipcMain.handle('open-file-dialog', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     title: 'セーブファイルを選択',

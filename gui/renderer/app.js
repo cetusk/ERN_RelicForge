@@ -42,6 +42,9 @@ const TYPE_LABELS = {
 // === DOM Elements ===
 const btnOpen = document.getElementById('btn-open');
 const btnOpenWelcome = document.getElementById('btn-open-welcome');
+const btnAutoLoad = document.getElementById('btn-auto-load');
+const autoLoadNote = document.getElementById('auto-load-note');
+const autoLoadStatus = document.getElementById('auto-load-status');
 const headerInfo = document.getElementById('header-info');
 const toolbar = document.getElementById('toolbar');
 const welcome = document.getElementById('welcome');
@@ -119,6 +122,7 @@ let searchTerms = [];       // cached suggestion candidates
 // === Init ===
 btnOpen.addEventListener('click', openFile);
 btnOpenWelcome.addEventListener('click', openFile);
+btnAutoLoad.addEventListener('click', autoLoad);
 searchInput.addEventListener('input', () => {
   searchClear.classList.toggle('hidden', !searchInput.value);
   applyFilters();
@@ -187,9 +191,11 @@ document.querySelectorAll('th.sortable').forEach(th => {
 async function openFile() {
   const filePath = await window.api.openFileDialog();
   if (!filePath) return;
+  await loadAndDisplay(filePath);
+}
 
+async function loadAndDisplay(filePath) {
   showView('loading');
-
   try {
     relicData = await window.api.parseSaveFile(filePath);
     stackingLookup = await window.api.loadStackingData();
@@ -212,6 +218,94 @@ async function openFile() {
   } catch (err) {
     alert(`解析エラー:\n${err}`);
     showView('welcome');
+    resetAutoLoadUI();
+  }
+}
+
+// === Auto Load ===
+function resetAutoLoadUI() {
+  autoLoadStatus.classList.add('hidden');
+  autoLoadStatus.innerHTML = '';
+  btnAutoLoad.disabled = false;
+  btnOpenWelcome.disabled = false;
+}
+
+function setAutoLoadStatus(html) {
+  autoLoadStatus.innerHTML = html;
+  autoLoadStatus.classList.remove('hidden');
+}
+
+async function autoLoad() {
+  btnAutoLoad.disabled = true;
+  btnOpenWelcome.disabled = true;
+  setAutoLoadStatus('<div class="status-msg">セーブデータを検索中...</div>');
+
+  try {
+    const saveFiles = await window.api.findSaveFiles();
+
+    if (saveFiles.length === 0) {
+      setAutoLoadStatus(
+        '<div class="status-error">セーブデータが見つかりませんでした</div>' +
+        '<div class="status-hint">AppData\\Roaming\\Nightreign\\ 内に NR0000.sl2.bak が見つかりません</div>');
+      btnAutoLoad.disabled = false;
+      btnOpenWelcome.disabled = false;
+      return;
+    }
+
+    if (saveFiles.length === 1) {
+      await autoLoadFile(saveFiles[0]);
+      return;
+    }
+
+    // Multiple save files: show selection
+    let listHtml = '<div class="status-msg">複数のセーブデータが見つかりました。選択してください:</div>';
+    listHtml += '<div class="save-file-list">';
+    for (let i = 0; i < saveFiles.length; i++) {
+      const sf = saveFiles[i];
+      const dt = new Date(sf.mtime);
+      const dateStr = dt.toLocaleString('ja-JP');
+      listHtml += `<div class="save-file-item" data-idx="${i}">` +
+        `<span class="save-id">${sf.id}</span>` +
+        `<span class="save-mtime">${dateStr}</span>` +
+        '</div>';
+    }
+    listHtml += '</div>';
+    setAutoLoadStatus(listHtml);
+    btnOpenWelcome.disabled = false;
+
+    // Attach click handlers to items
+    const items = autoLoadStatus.querySelectorAll('.save-file-item');
+    items.forEach(item => {
+      item.addEventListener('click', async () => {
+        const idx = parseInt(item.dataset.idx);
+        await autoLoadFile(saveFiles[idx]);
+      });
+    });
+  } catch (err) {
+    setAutoLoadStatus(
+      `<div class="status-error">エラー: ${err}</div>`);
+    btnAutoLoad.disabled = false;
+    btnOpenWelcome.disabled = false;
+  }
+}
+
+async function autoLoadFile(saveFile) {
+  btnAutoLoad.disabled = true;
+  btnOpenWelcome.disabled = true;
+  setAutoLoadStatus(
+    '<div class="status-msg">セーブデータを一時フォルダにコピーしています...</div>');
+
+  try {
+    const copiedPath = await window.api.autoLoadSave(saveFile.path);
+    setAutoLoadStatus(
+      '<div class="status-msg">解析中...</div>');
+    await loadAndDisplay(copiedPath);
+  } catch (err) {
+    setAutoLoadStatus(
+      `<div class="status-error">コピーまたは解析に失敗しました</div>` +
+      `<div class="status-hint">${err}</div>`);
+    btnAutoLoad.disabled = false;
+    btnOpenWelcome.disabled = false;
   }
 }
 
@@ -220,11 +314,21 @@ function showView(name) {
   welcome.classList.toggle('hidden', name !== 'welcome');
   loading.classList.toggle('hidden', name !== 'loading');
   contentArea.classList.toggle('hidden', name !== 'content');
+  if (name === 'welcome') resetAutoLoadUI();
 }
 
 // === Language UI ===
 function updateLangUI() {
   const ja = displayLang === 'ja';
+  // Welcome screen
+  document.getElementById('welcome-msg').textContent = ja
+    ? 'セーブファイル (.sl2) を開いて遺物を確認'
+    : 'Open a save file (.sl2) to view relics';
+  btnAutoLoad.textContent = ja ? '自動で読み込む' : 'Auto Load';
+  btnOpenWelcome.textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  autoLoadNote.textContent = ja
+    ? '\u203b セーブデータ (.bak) を一時フォルダにコピーしてから読み込みます'
+    : '* The save data (.bak) will be copied to a temp folder before loading';
   // Toolbar labels
   document.getElementById('label-color').textContent = ja ? '色:' : 'Color:';
   document.getElementById('label-type').textContent = ja ? 'タイプ:' : 'Type:';
