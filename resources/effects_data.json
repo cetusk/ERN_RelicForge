@@ -615,42 +615,48 @@
       "name_en": "Character Skill Cooldown Reduction Plus 4",
       "name_ja": "スキルクールタイム軽減+4",
       "stackable": true,
-      "stackNotes": "5%/7.5%/10%ほど軽減"
+      "stackNotes": "5%/7.5%/10%ほど軽減",
+      "deepOnly": true
     },
     "6000801": {
       "key": "characterSkillCooldownReductionPlus5",
       "name_en": "Character Skill Cooldown Reduction Plus 5",
       "name_ja": "スキルクールタイム軽減+5",
       "stackable": true,
-      "stackNotes": "5%/7.5%/10%ほど軽減"
+      "stackNotes": "5%/7.5%/10%ほど軽減",
+      "deepOnly": true
     },
     "6000900": {
       "key": "ultimateArtAutoChargePlus4",
       "name_en": "Ultimate Art Auto Charge Plus 4",
       "name_ja": "アーツゲージ自然蓄積+4",
       "stackable": true,
-      "stackNotes": "5%/7.5%/10%ほど増加"
+      "stackNotes": "5%/7.5%/10%ほど増加",
+      "deepOnly": true
     },
     "6000901": {
       "key": "ultimateArtAutoChargePlus5",
       "name_en": "Ultimate Art Auto Charge Plus 5",
       "name_ja": "アーツゲージ自然蓄積+5",
       "stackable": true,
-      "stackNotes": "5%/7.5%/10%ほど増加"
+      "stackNotes": "5%/7.5%/10%ほど増加",
+      "deepOnly": true
     },
     "6001000": {
       "key": "poisePlus4",
       "name_en": "Poise Plus 4",
       "name_ja": "強靭度+4",
       "stackable": true,
-      "stackNotes": "+5%/+10%/+15%"
+      "stackNotes": "+5%/+10%/+15%",
+      "deepOnly": true
     },
     "6001001": {
       "key": "poisePlus5",
       "name_en": "Poise Plus 5",
       "name_ja": "強靭度+5",
       "stackable": true,
-      "stackNotes": "+5%/+10%/+15%"
+      "stackNotes": "+5%/+10%/+15%",
+      "deepOnly": true
     },
     "6001400": {
       "key": "physicalAttackUpPlus3",
@@ -664,231 +670,264 @@
       "name_en": "Physical Attack Up Plus 4",
       "name_ja": "物理攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001500": {
       "key": "magicAttackPowerUpPlus3",
       "name_en": "Magic Attack Power Up Plus 3",
       "name_ja": "魔力攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001501": {
       "key": "magicAttackPowerUpPlus4",
       "name_en": "Magic Attack Power Up Plus 4",
       "name_ja": "魔力攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001600": {
       "key": "fireAttackPowerUpPlus3",
       "name_en": "Fire Attack Power Up Plus 3",
       "name_ja": "炎攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001601": {
       "key": "fireAttackPowerUpPlus4",
       "name_en": "Fire Attack Power Up Plus 4",
       "name_ja": "炎攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001700": {
       "key": "lightningAttackPowerUpPlus3",
       "name_en": "Lightning Attack Power Up Plus 3",
       "name_ja": "雷攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001701": {
       "key": "lightningAttackPowerUpPlus4",
       "name_en": "Lightning Attack Power Up Plus 4",
       "name_ja": "雷攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001800": {
       "key": "holyAttackPowerUpPlus3",
       "name_en": "Holy Attack Power Up Plus 3",
       "name_ja": "聖攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6001801": {
       "key": "holyAttackPowerUpPlus4",
       "name_en": "Holy Attack Power Up Plus 4",
       "name_ja": "聖攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6002600": {
       "key": "improvedMagicDamageNegationPlus1",
       "name_en": "Improved Magic Damage Negation Plus 1",
       "name_ja": "魔力カット率上昇+1",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002601": {
       "key": "improvedMagicDamageNegationPlus2",
       "name_en": "Improved Magic Damage Negation Plus 2",
       "name_ja": "魔力カット率上昇+2",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002700": {
       "key": "improvedFireDamageNegationPlus1",
       "name_en": "Improved Fire Damage Negation Plus 1",
       "name_ja": "炎カット率上昇+1",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002701": {
       "key": "improvedFireDamageNegationPlus2",
       "name_en": "Improved Fire Damage Negation Plus 2",
       "name_ja": "炎カット率上昇+2",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002800": {
       "key": "improvedLightningDamageNegationPlus1",
       "name_en": "Improved Lightning Damage Negation Plus 1",
       "name_ja": "雷カット率上昇+1",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002801": {
       "key": "improvedLightningDamageNegationPlus2",
       "name_en": "Improved Lightning Damage Negation Plus 2",
       "name_ja": "雷カット率上昇+2",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002900": {
       "key": "improvedHolyDamageNegationPlus1",
       "name_en": "Improved Holy Damage Negation Plus 1",
       "name_ja": "聖カット率上昇+1",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6002901": {
       "key": "improvedHolyDamageNegationPlus2",
       "name_en": "Improved Holy Damage Negation Plus 2",
       "name_ja": "聖カット率上昇+2",
       "stackable": true,
-      "stackNotes": "約10%カット"
+      "stackNotes": "約10%カット",
+      "deepOnly": true
     },
     "6003000": {
       "key": "improvedPoisonResistancePlus1",
       "name_en": "Improved Poison Resistance Plus 1",
       "name_ja": "毒耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003001": {
       "key": "improvedPoisonResistancePlus2",
       "name_en": "Improved Poison Resistance Plus 2",
       "name_ja": "毒耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003100": {
       "key": "improvedBloodLossResistancePlus1",
       "name_en": "Improved Blood Loss Resistance Plus 1",
       "name_ja": "出血耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003101": {
       "key": "improvedBloodLossResistancePlus2",
       "name_en": "Improved Blood Loss Resistance Plus 2",
       "name_ja": "出血耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003200": {
       "key": "improvedSleepResistancePlus1",
       "name_en": "Improved Sleep Resistance Plus 1",
       "name_ja": "睡眠耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003201": {
       "key": "improvedSleepResistancePlus2",
       "name_en": "Improved Sleep Resistance Plus 2",
       "name_ja": "睡眠耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003300": {
       "key": "improvedDeathBlightResistancePlus1",
       "name_en": "Improved Death Blight Resistance Plus 1",
       "name_ja": "抗死耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003301": {
       "key": "improvedDeathBlightResistancePlus2",
       "name_en": "Improved Death Blight Resistance Plus 2",
       "name_ja": "抗死耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003400": {
       "key": "improvedRotResistancePlus1",
       "name_en": "Improved Rot Resistance Plus 1",
       "name_ja": "腐敗耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003401": {
       "key": "improvedRotResistancePlus2",
       "name_en": "Improved Rot Resistance Plus 2",
       "name_ja": "腐敗耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003500": {
       "key": "improvedFrostResistancePlus1",
       "name_en": "Improved Frost Resistance Plus 1",
       "name_ja": "冷気耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003501": {
       "key": "improvedFrostResistancePlus2",
       "name_en": "Improved Frost Resistance Plus 2",
       "name_ja": "冷気耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003600": {
       "key": "improvedMadnessResistancePlus1",
       "name_en": "Improved Madness Resistance Plus 1",
       "name_ja": "発狂耐性上昇+1",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6003601": {
       "key": "improvedMadnessResistancePlus2",
       "name_en": "Improved Madness Resistance Plus 2",
       "name_ja": "発狂耐性上昇+2",
       "stackable": true,
-      "stackNotes": "1つにつき耐性+75（加算）"
+      "stackNotes": "1つにつき耐性+75（加算）",
+      "deepOnly": true
     },
     "6005600": {
       "key": "partialHPRestorationUponPostDamageAttacksPlus1",
       "name_en": "Partial Hprestoration Upon Post Damage Attacks Plus 1",
       "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6005601": {
       "key": "partialHPRestorationUponPostDamageAttacksPlus2",
       "name_en": "Partial Hprestoration Upon Post Damage Attacks Plus 2",
       "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6006000": {
       "key": "improvedStanceBreakingWhenTwoHanding",
@@ -937,56 +976,64 @@
       "name_en": "Hp Restored When Using Medicinal Boluses Etc Plus 1",
       "name_ja": "苔薬などのアイテム使用でHP回復+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030201": {
       "key": "hpRestoredWhenUsingMedicinalBolusesEtcPlus2",
       "name_en": "Hp Restored When Using Medicinal Boluses Etc Plus 2",
       "name_ja": "苔薬などのアイテム使用でHP回復+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030600": {
       "key": "artGaugeChargedFromSuccessfulGuardingPlus1",
       "name_en": "Art Gauge Charged From Successful Guarding Plus 1",
       "name_ja": "ガード成功時、アーツゲージを蓄積+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030601": {
       "key": "artGaugeChargedFromSuccessfulGuardingPlus2",
       "name_en": "Art Gauge Charged From Successful Guarding Plus 2",
       "name_ja": "ガード成功時、アーツゲージを蓄積+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030800": {
       "key": "artGaugeFillsModeratelyUponCriticalHitPlus1",
       "name_en": "Art Gauge Fills Moderately Upon Critical Hit Plus 1",
       "name_ja": "致命の一撃で、アーツゲージ増加+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030801": {
       "key": "artGaugeFillsModeratelyUponCriticalHitPlus2",
       "name_en": "Art Gauge Fills Moderately Upon Critical Hit Plus 2",
       "name_ja": "致命の一撃で、アーツゲージ増加+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030900": {
       "key": "physicalAttackPowerIncreasesAfterUsingGreaseItemsPlus1",
       "name_en": "Physical Attack Power Increases After Using Grease Items Plus 1",
       "name_ja": "脂アイテム使用時、追加で攻撃力上昇+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6030901": {
       "key": "physicalAttackPowerIncreasesAfterUsingGreaseItemsPlus2",
       "name_en": "Physical Attack Power Increases After Using Grease Items Plus 2",
       "name_ja": "脂アイテム使用時、追加で攻撃力上昇+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6031900": {
       "key": "criticalHitsEarnRunes",
@@ -1021,7 +1068,8 @@
       "name_en": "Critical Hit Boosts Stamina Recovery Speed Plus 1",
       "name_ja": "致命の一撃で、スタミナ回復速度上昇+1",
       "stackable": false,
-      "stackNotes": "15秒間約25%"
+      "stackNotes": "15秒間約25%",
+      "deepOnly": true
     },
     "6035101": {
       "key": "criticalHitBoostsStaminaRecoverySpeed",
@@ -1049,84 +1097,96 @@
       "name_en": "Improved Guard Counters Plus 1",
       "name_ja": "ガードカウンター強化+1",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6040101": {
       "key": "improvedGuardCountersPlus2",
       "name_en": "Improved Guard Counters Plus 2",
       "name_ja": "ガードカウンター強化+2",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6040300": {
       "key": "improvedThrowingPotDamagePlus1",
       "name_en": "Improved Throwing Pot Damage Plus 1",
       "name_ja": "投擲壺の攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "約1.15倍"
+      "stackNotes": "約1.15倍",
+      "deepOnly": true
     },
     "6040301": {
       "key": "improvedThrowingPotDamagePlus2",
       "name_en": "Improved Throwing Pot Damage Plus 2",
       "name_ja": "投擲壺の攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "約1.15倍"
+      "stackNotes": "約1.15倍",
+      "deepOnly": true
     },
     "6040400": {
       "key": "improvedThrowingKnifeDamagePlus1",
       "name_en": "Improved Throwing Knife Damage Plus 1",
       "name_ja": "投擲ナイフの攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "約1.14倍"
+      "stackNotes": "約1.14倍",
+      "deepOnly": true
     },
     "6040401": {
       "key": "improvedThrowingKnifeDamagePlus2",
       "name_en": "Improved Throwing Knife Damage Plus 2",
       "name_ja": "投擲ナイフの攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "約1.14倍"
+      "stackNotes": "約1.14倍",
+      "deepOnly": true
     },
     "6040500": {
       "key": "improvedGlintstoneAndGravityStoneDamagePlus1",
       "name_en": "Improved Glintstone And Gravity Stone Damage Plus 1",
       "name_ja": "輝石、重力石アイテムの攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "約1.15倍"
+      "stackNotes": "約1.15倍",
+      "deepOnly": true
     },
     "6040501": {
       "key": "improvedGlintstoneAndGravityStoneDamagePlus2",
       "name_en": "Improved Glintstone And Gravity Stone Damage Plus 2",
       "name_ja": "輝石、重力石アイテムの攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "約1.15倍"
+      "stackNotes": "約1.15倍",
+      "deepOnly": true
     },
     "6043000": {
       "key": "improvedRoarAndBreathAttacksPlus1",
       "name_en": "Improved Roar And Breath Attacks Plus 1",
       "name_ja": "咆哮とブレス強化+1",
       "stackable": true,
-      "stackNotes": "約1.15倍"
+      "stackNotes": "約1.15倍",
+      "deepOnly": true
     },
     "6043001": {
       "key": "improvedRoarAndBreathAttacksPlus2",
       "name_en": "Improved Roar And Breath Attacks Plus 2",
       "name_ja": "咆哮とブレス強化+2",
       "stackable": true,
-      "stackNotes": "約1.15倍"
+      "stackNotes": "約1.15倍",
+      "deepOnly": true
     },
     "6043100": {
       "key": "improvedPerfumingArtsPlus1",
       "name_en": "Improved Perfuming Arts Plus 1",
       "name_ja": "調香術強化+1",
       "stackable": true,
-      "stackNotes": "約1.14倍"
+      "stackNotes": "約1.14倍",
+      "deepOnly": true
     },
     "6043101": {
       "key": "improvedPerfumingArtsPlus2",
       "name_en": "Improved Perfuming Arts Plus 2",
       "name_ja": "調香術強化+2",
       "stackable": true,
-      "stackNotes": "約1.14倍"
+      "stackNotes": "約1.14倍",
+      "deepOnly": true
     },
     "6060300": {
       "key": "maxHPIncreasedForEachGreatEnemyDefeatedAtAGreatChurch",
@@ -1140,7 +1200,8 @@
       "name_en": "Runes And Item Discovery Increased For Each Great Enemy Defeated At Afort",
       "name_ja": "小砦の強敵を倒す度、取得ルーン増加、発見力上昇",
       "stackable": false,
-      "stackNotes": "取得ルーン+5.5%"
+      "stackNotes": "取得ルーン+5.5%",
+      "deepOnly": true
     },
     "6060500": {
       "key": "arcaneIncreasedForEachGreatEnemyDefeatedAtARuin",
@@ -1154,77 +1215,88 @@
       "name_en": "Max Stamina Increased For Each Great Enemy Defeated At Agreat Encampment",
       "name_ja": "大野営地の強敵を倒す度、最大スタミナ上昇",
       "stackable": false,
-      "stackNotes": "+7.5%"
+      "stackNotes": "+7.5%",
+      "deepOnly": true
     },
     "6090000": {
       "key": "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
       "name_en": "Defeating Enemies Fills More Of The Art Gauge Plus 1",
       "name_ja": "敵を倒した時、アーツゲージ増加+1",
       "stackable": "conditional",
-      "stackNotes": "通常版と深層版の異なるレベル同士は重複可"
+      "stackNotes": "通常版と深層版の異なるレベル同士は重複可",
+      "deepOnly": true
     },
     "6090001": {
       "key": "defeatingEnemiesFillsMoreOfTheArtGaugePlus2",
       "name_en": "Defeating Enemies Fills More Of The Art Gauge Plus 2",
       "name_ja": "敵を倒した時、アーツゲージ増加+2",
       "stackable": "conditional",
-      "stackNotes": "通常版と深層版の異なるレベル同士は重複可"
+      "stackNotes": "通常版と深層版の異なるレベル同士は重複可",
+      "deepOnly": true
     },
     "6160000": {
       "key": "hpRestorationUponThrustingCounterattackPlus1",
       "name_en": "Hp Restoration Upon Thrusting Counterattack Plus 1",
       "name_ja": "刺突カウンター発生時、HP回復+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6160001": {
       "key": "hpRestorationUponThrustingCounterattackPlus2",
       "name_en": "Hp Restoration Upon Thrusting Counterattack Plus 2",
       "name_ja": "刺突カウンター発生時、HP回復+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6260000": {
       "key": "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus1",
       "name_en": "Attack Power Up When Facing Poison Afflicted Enemy Plus 1",
       "name_ja": "毒状態の敵に対する攻撃を強化+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6260001": {
       "key": "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus2",
       "name_en": "Attack Power Up When Facing Poison Afflicted Enemy Plus 2",
       "name_ja": "毒状態の敵に対する攻撃を強化+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6260300": {
       "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemyPlus1",
       "name_en": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy Plus 1",
       "name_ja": "腐敗状態の敵に対する攻撃を強化+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6260301": {
       "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemyPlus2",
       "name_en": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy Plus 2",
       "name_ja": "腐敗状態の敵に対する攻撃を強化+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6260400": {
       "key": "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus1",
       "name_en": "Attack Power Up When Facing Frostbite Afflicted Enemy Plus 1",
       "name_ja": "凍傷状態の敵に対する攻撃を強化+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6260401": {
       "key": "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus2",
       "name_en": "Attack Power Up When Facing Frostbite Afflicted Enemy Plus 2",
       "name_ja": "凍傷状態の敵に対する攻撃を強化+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6500000": {
       "key": "wylderCharacterSkillInflictsBloodLoss",
@@ -1238,105 +1310,120 @@
       "name_en": "Guardian Character Skill Boosts Damage Negation Of Nearby Allies",
       "name_ja": "【守護者】スキル使用時、周囲の味方のカット率上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500200": {
       "key": "ironeyeCharacterSkillInflictsHeavyPoisonDamageOnPoisonedEnemies",
       "name_en": "Ironeye Character Skill Inflicts Heavy Poison Damage On Poisoned Enemies",
       "name_ja": "【鉄の目】スキルに毒を付加し、毒状態の敵に大ダメージ",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500300": {
       "key": "duchessUseCharacterSkillForBriefInvulnerability",
       "name_en": "Duchess Use Character Skill For Brief Invulnerability",
       "name_ja": "【レディ】スキル使用時、僅かに無敵",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500400": {
       "key": "raiderHitWithCharacterSkillToReduceEnemyAttackPower",
       "name_en": "Raider Hit With Character Skill To Reduce Enemy Attack Power",
       "name_ja": "【無頼漢】スキル命中時、敵の攻撃力低下",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500500": {
       "key": "revenantIncreasedMaxFPUponAbilityActivation",
       "name_en": "Revenant Increased Max Fpupon Ability Activation",
       "name_ja": "【復讐者】アビリティ発動時、最大FP上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500600": {
       "key": "recluseCollectAffinityResiduesToNegateAffinity",
       "name_en": "Recluse Collect Affinity Residues To Negate Affinity",
       "name_ja": "【隠者】属性痕を集めた時、対応する属性カット率上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500700": {
       "key": "executorSlowlyRestoreHPUponAbilityActivation",
       "name_en": "Executor Slowly Restore Hpupon Ability Activation",
       "name_ja": "【執行者】アビリティ発動時、HPをゆっくりと回復",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500800": {
       "key": "scholarReducedFpConsumptionWhenUsingCharacterSkillOnSelf",
       "name_en": "Scholar Reduced Fp Consumption When Using Character Skill On Self",
       "name_ja": "【学者】スキルを自身に使用時、消費FP軽減",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6500900": {
       "key": "undertakerExecutingArtReadiesCharacterSkill",
       "name_en": "Undertaker Executing Art Readies Character Skill",
       "name_ja": "【葬儀屋】アーツ発動後、スキル再使用可能",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "deepOnly": true
     },
     "6600000": {
       "key": "sleepInVicinityImprovesAttackPower",
       "name_en": "Sleep In Vicinity Improves Attack Power",
       "name_ja": "周囲で睡眠状態の発生時、攻撃力上昇",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6600001": {
       "key": "sleepInVicinityImprovesAttackPowerPlus1",
       "name_en": "Sleep In Vicinity Improves Attack Power Plus 1",
       "name_ja": "周囲で睡眠状態の発生時、攻撃力上昇+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6600002": {
       "key": "sleepInVicinityImprovesAttackPowerPlus2",
       "name_en": "Sleep In Vicinity Improves Attack Power Plus 2",
       "name_ja": "周囲で睡眠状態の発生時、攻撃力上昇+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6600100": {
       "key": "madnessInVicinityImprovesAttackPower",
       "name_en": "Madness In Vicinity Improves Attack Power",
       "name_ja": "周囲で発狂状態の発生時、攻撃力上昇",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6600101": {
       "key": "madnessInVicinityImprovesAttackPowerPlus1",
       "name_en": "Madness In Vicinity Improves Attack Power Plus 1",
       "name_ja": "周囲で発狂状態の発生時、攻撃力上昇+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6600102": {
       "key": "madnessInVicinityImprovesAttackPowerPlus2",
       "name_en": "Madness In Vicinity Improves Attack Power Plus 2",
       "name_ja": "周囲で発狂状態の発生時、攻撃力上昇+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6610400": {
       "key": "increasedMaximumHP",
@@ -1371,35 +1458,40 @@
       "name_en": "Reduced Fpconsumption Plus 1",
       "name_ja": "消費FP軽減+1",
       "stackable": true,
-      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算",
+      "deepOnly": true
     },
     "6610702": {
       "key": "reducedFPConsumptionPlus2",
       "name_en": "Reduced Fpconsumption Plus 2",
       "name_ja": "消費FP軽減+2",
       "stackable": true,
-      "stackNotes": "-7%、重ね掛け時0.93倍乗算"
+      "stackNotes": "-7%、重ね掛け時0.93倍乗算",
+      "deepOnly": true
     },
     "6610800": {
       "key": "improvedAffinityAttackPower",
       "name_en": "Improved Affinity Attack Power",
       "name_ja": "属性攻撃力上昇",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6610801": {
       "key": "improvedAffinityAttackPowerPlus1",
       "name_en": "Improved Affinity Attack Power Plus 1",
       "name_ja": "属性攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6610802": {
       "key": "improvedAffinityAttackPowerPlus2",
       "name_en": "Improved Affinity Attack Power Plus 2",
       "name_ja": "属性攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611000": {
       "key": "improvedPhysicalDamageNegation",
@@ -1413,14 +1505,16 @@
       "name_en": "Improved Physical Damage Negation Plus 1",
       "name_ja": "物理カット率上昇+1",
       "stackable": true,
-      "stackNotes": "約8%カット"
+      "stackNotes": "約8%カット",
+      "deepOnly": true
     },
     "6611002": {
       "key": "improvedPhysicalDamageNegationPlus2",
       "name_en": "Improved Physical Damage Negation Plus 2",
       "name_ja": "物理カット率上昇+2",
       "stackable": true,
-      "stackNotes": "約8%カット"
+      "stackNotes": "約8%カット",
+      "deepOnly": true
     },
     "6611100": {
       "key": "improvedAffinityDamageNegation",
@@ -1434,14 +1528,16 @@
       "name_en": "Improved Affinity Damage Negation Plus 1",
       "name_ja": "属性カット率上昇+1",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611102": {
       "key": "improvedAffinityDamageNegationPlus2",
       "name_en": "Improved Affinity Damage Negation Plus 2",
       "name_ja": "属性カット率上昇+2",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611200": {
       "key": "improvedSorceries",
@@ -1455,14 +1551,16 @@
       "name_en": "Improved Sorceries Plus 1",
       "name_ja": "魔術強化+1",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611202": {
       "key": "improvedSorceriesPlus2",
       "name_en": "Improved Sorceries Plus 2",
       "name_ja": "魔術強化+2",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611300": {
       "key": "improvedIncantations",
@@ -1476,14 +1574,16 @@
       "name_en": "Improved Incantations Plus 1",
       "name_ja": "祈祷強化+1",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611302": {
       "key": "improvedIncantationsPlus2",
       "name_en": "Improved Incantations Plus 2",
       "name_ja": "祈祷強化+2",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6611400": {
       "key": "improvedFlaskHPRestoration",
@@ -1497,217 +1597,248 @@
       "name_en": "Crimsonspill Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緋色の結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621100": {
       "key": "crimsonCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Crimson Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緋溢れの結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621200": {
       "key": "ceruleanCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Cerulean Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「青色の結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621300": {
       "key": "speckledHardtearInPossessionAtStartOfExpedition",
       "name_en": "Speckled Hardtear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「斑彩色の硬雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621400": {
       "key": "crimsonBubbletearInPossessionAtStartOfExpedition",
       "name_en": "Crimson Bubbletear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緋色の泡雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621500": {
       "key": "opalineBubbletearInPossessionAtStartOfExpedition",
       "name_en": "Opaline Bubbletear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「真珠色の泡雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621600": {
       "key": "crimsonburstCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Crimsonburst Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緋湧きの結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621700": {
       "key": "greenburstCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Greenburst Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緑湧きの結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621800": {
       "key": "opalineHardtearInPossessionAtStartOfExpedition",
       "name_en": "Opaline Hardtear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「真珠色の硬雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6621900": {
       "key": "thornyCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Thorny Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「連棘の割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622000": {
       "key": "spikedCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Spiked Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「大棘の割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622100": {
       "key": "windyCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Windy Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「風の結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622200": {
       "key": "rupturedCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Ruptured Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「破裂した結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622300": {
       "key": "leadenHardtearInPossessionAtStartOfExpedition",
       "name_en": "Leaden Hardtear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「鉛色の硬雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622400": {
       "key": "twiggyCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Twiggy Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「細枝の割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622500": {
       "key": "crimsonwhorlBubbletearInPossessionAtStartOfExpedition",
       "name_en": "Crimsonwhorl Bubbletear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緋色渦の泡雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622600": {
       "key": "ceruleanHiddenTearInPossessionAtStartOfExpedition",
       "name_en": "Cerulean Hidden Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「青色の秘雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622700": {
       "key": "stonebarbCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Stonebarb Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「岩棘の割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622800": {
       "key": "flameShroudingCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Flame Shrouding Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「炎纏いの割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6622900": {
       "key": "magicShroudingCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Magic Shrouding Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「魔力纏いの割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6623000": {
       "key": "lightningShroudingCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Lightning Shrouding Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「雷纏いの割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6623100": {
       "key": "holyShroudingCrackedTearInPossessionAtStartOfExpedition",
       "name_en": "Holy Shrouding Cracked Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「聖纏いの割れ雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6623200": {
       "key": "greenspillCrystalTearInPossessionAtStartOfExpedition",
       "name_en": "Greenspill Crystal Tear In Possession At Start Of Expedition",
       "name_ja": "出撃時に「緑溢れの結晶雫」を持つ",
       "stackable": true,
-      "stackNotes": "1個"
+      "stackNotes": "1個",
+      "deepOnly": true
     },
     "6624000": {
       "key": "upliftingAromaticInPossessionAtStartOfExpedition",
       "name_en": "Uplifting Aromatic In Possession At Start Of Expedition",
       "name_ja": "出撃時に「高揚の香り」を持つ",
       "stackable": true,
-      "stackNotes": "2個"
+      "stackNotes": "2個",
+      "deepOnly": true
     },
     "6624100": {
       "key": "sparkAromaticInPossessionAtStartOfExpedition",
       "name_en": "Spark Aromatic In Possession At Start Of Expedition",
       "name_ja": "出撃時に「火花の香り」を持つ",
       "stackable": true,
-      "stackNotes": "2個、調香術強化対象"
+      "stackNotes": "2個、調香術強化対象",
+      "deepOnly": true
     },
     "6624200": {
       "key": "ironjarAromaticInPossessionAtStartOfExpedition",
       "name_en": "Ironjar Aromatic In Possession At Start Of Expedition",
       "name_ja": "出撃時に「鉄壺の香薬」を持つ",
       "stackable": true,
-      "stackNotes": "2個"
+      "stackNotes": "2個",
+      "deepOnly": true
     },
     "6624300": {
       "key": "bloodboilAromaticInPossessionAtStartOfExpedition",
       "name_en": "Bloodboil Aromatic In Possession At Start Of Expedition",
       "name_ja": "出撃時に「狂熱の香薬」を持つ",
       "stackable": true,
-      "stackNotes": "2個"
+      "stackNotes": "2個",
+      "deepOnly": true
     },
     "6624400": {
       "key": "poisonSpraymistInPossessionAtStartOfExpedition",
       "name_en": "Poison Spraymist In Possession At Start Of Expedition",
       "name_ja": "出撃時に「毒の噴霧」を持つ",
       "stackable": true,
-      "stackNotes": "2個"
+      "stackNotes": "2個",
+      "deepOnly": true
     },
     "6624500": {
       "key": "acidSpraymistInPossessionAtStartOfExpedition",
       "name_en": "Acid Spraymist In Possession At Start Of Expedition",
       "name_ja": "出撃時に「酸の噴霧」を持つ",
       "stackable": true,
-      "stackNotes": "2個"
+      "stackNotes": "2個",
+      "deepOnly": true
     },
     "6630000": {
       "key": "dormantPowerHelpsDiscoverDaggers",
       "name_en": "Dormant Power Helps Discover Daggers",
       "name_ja": "潜在する力から、短剣を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6630100": {
       "key": "dormantPowerHelpsDiscoverStraightSwords",
       "name_en": "Dormant Power Helps Discover Straight Swords",
       "name_ja": "潜在する力から、直剣を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6630200": {
       "key": "dormantPowerHelpsDiscoverGreatswords",
@@ -1721,7 +1852,8 @@
       "name_en": "Dormant Power Helps Discover Colossal Swords",
       "name_ja": "潜在する力から、特大剣を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6630400": {
       "key": "dormantPowerHelpsDiscoverCurvedSwords",
@@ -1756,7 +1888,8 @@
       "name_en": "Dormant Power Helps Discover Thrusting Swords",
       "name_ja": "潜在する力から、刺剣を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6630900": {
       "key": "dormantPowerHelpsDiscoverHeavyThrustingSwords",
@@ -1770,7 +1903,8 @@
       "name_en": "Dormant Power Helps Discover Axes",
       "name_ja": "潜在する力から、斧を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6631100": {
       "key": "dormantPowerHelpsDiscoverGreataxes",
@@ -1784,14 +1918,16 @@
       "name_en": "Dormant Power Helps Discover Hammers",
       "name_ja": "潜在する力から、槌を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6631300": {
       "key": "dormantPowerHelpsDiscoverGreatHammers",
       "name_en": "Dormant Power Helps Discover Great Hammers",
       "name_ja": "潜在する力から、大槌を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6631400": {
       "key": "dormantPowerHelpsDiscoverFlails",
@@ -1805,7 +1941,8 @@
       "name_en": "Dormant Power Helps Discover Spears",
       "name_ja": "潜在する力から、槍を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6631600": {
       "key": "dormantPowerHelpsDiscoverGreatSpears",
@@ -1819,7 +1956,8 @@
       "name_en": "Dormant Power Helps Discover Halberds",
       "name_ja": "潜在する力から、斧槍を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6631800": {
       "key": "dormantPowerHelpsDiscoverReapers",
@@ -1847,7 +1985,8 @@
       "name_en": "Dormant Power Helps Discover Whips",
       "name_ja": "潜在する力から、鞭を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6632200": {
       "key": "dormantPowerHelpsDiscoverColossalWeapons",
@@ -1861,7 +2000,8 @@
       "name_en": "Dormant Power Helps Discover Bows",
       "name_ja": "潜在する力から、弓を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6632400": {
       "key": "dormantPowerHelpsDiscoverGreatbows",
@@ -1875,35 +2015,40 @@
       "name_en": "Dormant Power Helps Discover Crossbows",
       "name_ja": "潜在する力から、ボウガンを見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6632600": {
       "key": "dormantPowerHelpsDiscoverBallistas",
       "name_en": "Dormant Power Helps Discover Ballistas",
       "name_ja": "潜在する力から、バリスタを見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6632700": {
       "key": "dormantPowerHelpsDiscoverSmallShields",
       "name_en": "Dormant Power Helps Discover Small Shields",
       "name_ja": "潜在する力から、小盾を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6632800": {
       "key": "dormantPowerHelpsDiscoverMediumShields",
       "name_en": "Dormant Power Helps Discover Medium Shields",
       "name_ja": "潜在する力から、中盾を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6632900": {
       "key": "dormantPowerHelpsDiscoverGreatshields",
       "name_en": "Dormant Power Helps Discover Greatshields",
       "name_ja": "潜在する力から、大盾を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6633000": {
       "key": "dormantPowerHelpsDiscoverStaves",
@@ -1924,7 +2069,8 @@
       "name_en": "Dormant Power Helps Discover Torches",
       "name_ja": "潜在する力から、松明を見つけやすくなる",
       "stackable": false,
-      "stackNotes": "左優先"
+      "stackNotes": "左優先",
+      "deepOnly": true
     },
     "6640000": {
       "key": "wylderImprovedMindReducedVigor",
@@ -2071,14 +2217,16 @@
       "name_en": "Reduced Vigor",
       "name_ja": "生命力低下",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6800200": {
       "key": "reducedEndurance",
       "name_en": "Reduced Endurance",
       "name_ja": "持久力低下",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6810100": {
       "key": "impairedDamageNegation",
@@ -2092,91 +2240,104 @@
       "name_en": "Taking Damage Causes Poison Buildup",
       "name_ja": "被ダメージ時、毒を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6820100": {
       "key": "takingDamageCausesRotBuildup",
       "name_en": "Taking Damage Causes Rot Buildup",
       "name_ja": "被ダメージ時、腐敗を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6820200": {
       "key": "takingDamageCausesFrostBuildup",
       "name_en": "Taking Damage Causes Frost Buildup",
       "name_ja": "被ダメージ時、冷気を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6820300": {
       "key": "takingDamageCausesBloodLossBuildup",
       "name_en": "Taking Damage Causes Blood Loss Buildup",
       "name_ja": "被ダメージ時、出血を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6820400": {
       "key": "takingDamageCausesMadnessBuildup",
       "name_en": "Taking Damage Causes Madness Buildup",
       "name_ja": "被ダメージ時、発狂を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6820500": {
       "key": "takingDamageCausesSleepBuildup",
       "name_en": "Taking Damage Causes Sleep Buildup",
       "name_ja": "被ダメージ時、睡眠を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6820600": {
       "key": "takingDamageCausesDeathBuildup",
       "name_en": "Taking Damage Causes Death Buildup",
       "name_ja": "被ダメージ時、死を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6830000": {
       "key": "reducedStrengthAndIntelligence",
       "name_en": "Reduced Strength And Intelligence",
       "name_ja": "筋力と知力が低下",
       "stackable": true,
-      "stackNotes": "-3ずつ"
+      "stackNotes": "-3ずつ",
+      "deepOnly": true
     },
     "6830100": {
       "key": "reducedDexterityAndFaith",
       "name_en": "Reduced Dexterity And Faith",
       "name_ja": "技量と信仰が低下",
       "stackable": true,
-      "stackNotes": "-3ずつ"
+      "stackNotes": "-3ずつ",
+      "deepOnly": true
     },
     "6830200": {
       "key": "reducedIntelligenceAndDexterity",
       "name_en": "Reduced Intelligence And Dexterity",
       "name_ja": "知力と技量が低下",
       "stackable": true,
-      "stackNotes": "-3ずつ"
+      "stackNotes": "-3ずつ",
+      "deepOnly": true
     },
     "6830300": {
       "key": "reducedFaithAndStrength",
       "name_en": "Reduced Faith And Strength",
       "name_ja": "信仰と筋力が低下",
       "stackable": true,
-      "stackNotes": "-3ずつ"
+      "stackNotes": "-3ずつ",
+      "deepOnly": true
     },
     "6830400": {
       "key": "reducedVigorAndArcane",
       "name_en": "Reduced Vigor And Arcane",
       "name_ja": "生命力と神秘が低下",
       "stackable": true,
-      "stackNotes": "-3ずつ"
+      "stackNotes": "-3ずつ",
+      "deepOnly": true
     },
     "6840000": {
       "key": "reducedRuneAcquisition",
       "name_en": "Reduced Rune Acquisition",
       "name_ja": "取得ルーン減少",
       "stackable": true,
-      "stackNotes": "0.9倍"
+      "stackNotes": "0.9倍",
+      "deepOnly": true
     },
     "6840100": {
       "key": "reducedFlaskHPRestoration",
@@ -2190,7 +2351,8 @@
       "name_en": "Ultimate Art Charging Impaired",
       "name_ja": "アーツゲージ蓄積鈍化",
       "stackable": true,
-      "stackNotes": "約0.85倍"
+      "stackNotes": "約0.85倍",
+      "deepOnly": true
     },
     "6850000": {
       "key": "impairedPhysicalDamageNegation",
@@ -2225,7 +2387,8 @@
       "name_en": "Surge Sprinting Drains More Stamina",
       "name_ja": "波動ダッシュのスタミナ消費増加",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6850500": {
       "key": "continuousHPLoss",
@@ -2239,7 +2402,8 @@
       "name_en": "Increased Drain On Stamina For Evasion",
       "name_ja": "回避のスタミナ消費増加",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6850700": {
       "key": "moreDamageTakenAfterEvasion",
@@ -2267,14 +2431,16 @@
       "name_en": "Sleep Buildup For Flask Usages",
       "name_ja": "聖杯瓶使用時、睡眠を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6851100": {
       "key": "madnessBuildupForFlaskUsages",
       "name_en": "Madness Buildup For Flask Usages",
       "name_ja": "聖杯瓶使用時、発狂を蓄積",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6851200": {
       "key": "lowerAttackWhenBelowMaxHP",
@@ -2302,14 +2468,16 @@
       "name_en": "Max Hpreduces Attack Power",
       "name_ja": "最大HP時、攻撃力低下",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6851600": {
       "key": "nearDeathSpillsFlask",
       "name_en": "Near Death Spills Flask",
       "name_ja": "瀕死時、聖杯瓶を失う",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "deepOnly": true
     },
     "6851700": {
       "key": "nearDeathReducesMaxHP",

@@ -83,7 +83,7 @@ ipcMain.handle('load-stacking-data', async () => {
   try {
     const raw = fs.readFileSync(effectsFile, 'utf-8');
     const data = JSON.parse(raw);
-    // Build lookup: effectId (string) -> { stackable, stackNotes, key, name_ja, name_en }
+    // Build lookup: effectId (string) -> { stackable, stackNotes, key, name_ja, name_en, deepOnly }
     const lookup = {};
     for (const [id, entry] of Object.entries(data.effects || {})) {
       lookup[id] = {
@@ -92,6 +92,7 @@ ipcMain.handle('load-stacking-data', async () => {
         key: entry.key || '',
         name_ja: entry.name_ja || '',
         name_en: entry.name_en || '',
+        deepOnly: entry.deepOnly || false,
       };
     }
     return lookup;
@@ -153,6 +154,9 @@ ipcMain.handle('run-optimizer', async (_event, params) => {
     }
     if (params.combined) {
       pyArgs.push('--combined');
+    } else {
+      // Normal mode: include UniqueRelic (goes into normal slots)
+      pyArgs.push('--types', 'Relic,UniqueRelic');
     }
 
     return new Promise((resolve, reject) => {

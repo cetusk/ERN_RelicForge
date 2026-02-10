@@ -89,7 +89,7 @@ const optimizerInspector = document.getElementById('optimizer-inspector');
 const optimizerClose = document.getElementById('optimizer-close');
 const optCharacter = document.getElementById('opt-character');
 const optVesselList = document.getElementById('opt-vessel-list');
-const optCombined = document.getElementById('opt-combined');
+const optMode = document.getElementById('opt-mode');
 const optEffectsList = document.getElementById('opt-effects-list');
 const optAddEffect = document.getElementById('opt-add-effect');
 const optCandidates = document.getElementById('opt-candidates');
@@ -840,7 +840,12 @@ function classifyEffect(name_ja, name_en, key) {
 
 function buildUniqueEffects() {
   if (!relicData) { allUniqueEffects = []; return; }
-  const effectMap = new Map(); // key -> { key, id, name_ja, name_en, count, category }
+  // Build deepOnly lookup: effectKey -> boolean (from stackingLookup)
+  const deepOnlyByKey = {};
+  for (const [id, info] of Object.entries(stackingLookup)) {
+    if (info.deepOnly && info.key) deepOnlyByKey[info.key] = true;
+  }
+  const effectMap = new Map(); // key -> { key, id, name_ja, name_en, count, category, deepOnly }
   // 1. Count effects from loaded relic data
   relicData.relics.forEach(r => {
     const seen = new Set();
@@ -857,6 +862,7 @@ function buildUniqueEffects() {
           name_en: e.name_en || e.key,
           count: 1,
           category: classifyEffect(e.name_ja, e.name_en, e.key),
+          deepOnly: !!deepOnlyByKey[e.key],
         });
       }
     });
@@ -1439,7 +1445,7 @@ function collectOptimizerParams() {
   const vessels = Array.from(vesselChecks).map(cb => cb.value);
   const vesselStr = vessels.length > 0 ? vessels.join(',') : undefined;
 
-  const combined = optCombined.checked;
+  const combined = optMode.value === 'combined';
 
   // Collect effects from optSelectedEffects map
   const effects = [];
@@ -1541,7 +1547,7 @@ optimizerClearBtn.addEventListener('click', () => {
   optSelectedEffects.clear();
   renderOptEffectsTags();
   renderOptimizerVesselList();
-  optCombined.checked = true;
+  optMode.value = 'combined';
   optCandidates.value = '30';
   optTop.value = '50';
 });
@@ -1550,6 +1556,19 @@ optimizerClearBtn.addEventListener('click', () => {
 optVesselHeader.addEventListener('click', toggleOptVesselCollapse);
 // Update vessel count when checkboxes change
 optVesselList.addEventListener('change', updateOptVesselCount);
+
+// Mode change: clear deep-relic-only effects and demerits when switching to normal
+optMode.addEventListener('change', () => {
+  if (optMode.value === 'normal') {
+    const toRemove = [];
+    optSelectedEffects.forEach((priority, key) => {
+      const eff = allUniqueEffects.find(e => e.key === key);
+      if (eff && (eff.deepOnly || eff.category === 'demerit')) toRemove.push(key);
+    });
+    toRemove.forEach(k => optSelectedEffects.delete(k));
+    if (toRemove.length > 0) renderOptEffectsTags();
+  }
+});
 
 // Preset save/load
 const optPresetSave = document.getElementById('opt-preset-save');
@@ -1586,8 +1605,8 @@ optPresetLoad.addEventListener('click', async () => {
     updateOptVesselCount();
   }
 
-  // Apply combined mode
-  if (preset.combined !== undefined) optCombined.checked = preset.combined;
+  // Apply mode
+  if (preset.combined !== undefined) optMode.value = preset.combined ? 'combined' : 'normal';
 
   // Apply effects
   optSelectedEffects.clear();
@@ -1628,12 +1647,19 @@ function closeEffectSelectInspector() {
 
 function renderEffectSelectList() {
   const query = effectSelectSearch.value.toLowerCase().trim();
+  const isNormalOnly = optMode.value === 'normal';
+  let base = allUniqueEffects;
+  // In normal-only mode, hide deep-relic-only effects and demerits
+  // (deepOnly from effects_data.json; demerits are sub-effects only on deep relics)
+  if (isNormalOnly) {
+    base = base.filter(e => !e.deepOnly && e.category !== 'demerit');
+  }
   const filtered = query
-    ? allUniqueEffects.filter(e =>
+    ? base.filter(e =>
         e.name_ja.toLowerCase().includes(query) ||
         e.name_en.toLowerCase().includes(query) ||
         e.key.toLowerCase().includes(query))
-    : allUniqueEffects;
+    : base;
 
   // Group by category
   const groups = new Map();
@@ -2177,7 +2203,9 @@ updateLangUI = function() {
   document.getElementById('opt-character-label').textContent = ja ? 'キャラクター' : 'Character';
   document.getElementById('opt-vessel-label').textContent = ja ? '献器' : 'Vessel';
   document.getElementById('opt-mode-label').textContent = ja ? 'モード' : 'Mode';
-  document.getElementById('opt-combined-label').textContent = ja ? '通常+深層' : 'Normal+Deep';
+  const modeSelect = document.getElementById('opt-mode');
+  modeSelect.options[0].textContent = ja ? '通常+深層' : 'Normal+Deep';
+  modeSelect.options[1].textContent = ja ? '通常のみ' : 'Normal Only';
   document.getElementById('opt-effects-label').textContent = ja ? '効果指定' : 'Effect Specs';
   document.getElementById('opt-add-effect-label').textContent = ja ? '効果を追加' : 'Add Effect';
   // Effect selection inspector labels
