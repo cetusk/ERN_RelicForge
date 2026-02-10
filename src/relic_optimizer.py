@@ -166,6 +166,34 @@ class RelicOptimizer:
                 self._resolve_name_matches(
                     name_ja, name_en, spec, weight, self.exclude_lookup)
 
+        # === Integer-indexed arrays for fast scoring ===
+        # Spec keys → contiguous int indices
+        self._spec_key_list = sorted(self.effect_lookup.keys())
+        self._spec_key_to_idx = {k: i for i, k in enumerate(self._spec_key_list)}
+        self._n_spec = len(self._spec_key_list)
+        self._spec_weights = [self.effect_lookup[k]['weight']
+                              for k in self._spec_key_list]
+        self._spec_stacking = [self.stacking_data.get(k, False)
+                               for k in self._spec_key_list]
+        self._required_idx_set = frozenset(
+            i for i, k in enumerate(self._spec_key_list)
+            if self.effect_lookup[k]['priority'] == 'required')
+
+        # Exclude keys → contiguous int indices
+        self._excl_key_list = sorted(self.exclude_lookup.keys())
+        self._excl_key_to_idx = {k: i for i, k in enumerate(self._excl_key_list)}
+        self._n_excl = len(self._excl_key_list)
+        self._excl_weights = [self.exclude_lookup[k]['weight']
+                              for k in self._excl_key_list]
+        self._excl_is_required = [self.exclude_lookup[k]['priority'] == 'required'
+                                  for k in self._excl_key_list]
+
+        # Relic-by-id lookup for deferred result construction
+        self._relic_by_id = {r['id']: r for r in relics}
+
+        # Phase cache for cross-vessel reuse
+        self._phase_cache: Dict[tuple, list] = {}
+
     def _resolve_name_matches(self, name_ja: Optional[str], name_en: Optional[str],
                                spec: Dict, weight: int,
                                target_lookup: Dict[str, Dict]):
@@ -256,6 +284,214 @@ class RelicOptimizer:
         self._exclude_keys_cache[rid] = result
         return result
 
+    # === Fast scoring and compact representations for optimize_combined ===
+
+    def _fast_stacking_score(self, counts):
+        """配列ベースの高速スコア計算。counts: list[int], 長さ n_spec"""
+        score = 0
+        weights = self._spec_weights
+        stacking = self._spec_stacking
+        for i in range(self._n_spec):
+            c = counts[i]
+            if c == 0:
+                continue
+            w = weights[i]
+            s = stacking[i]
+            if s is True:
+                score += w * c
+            elif s == 'conditional':
+                score += w
+                if c > 1:
+                    score -= int(w * 0.3 * (c - 1))
+            else:
+                score += w
+                if c > 1:
+                    score -= int(w * 0.5 * (c - 1))
+        return score
+
+    def _compact_relic(self, relic: Dict) -> Tuple:
+        """レリックをコンパクトなタプルに変換
+        Returns: (rid, spec_indices, excl_penalty, has_excl_req, conc_bonus)
+        """
+        rid = relic['id']
+        spec_keys = self._get_spec_keys(relic)
+        spec_indices = tuple(self._spec_key_to_idx[k] for k in spec_keys)
+
+        excl_keys = self._get_exclude_keys(relic)
+        excl_penalty = 0
+        has_excl_req = False
+        for k in excl_keys:
+            idx = self._excl_key_to_idx[k]
+            excl_penalty += self._excl_weights[idx]
+            if self._excl_is_required[idx]:
+                has_excl_req = True
+
+        n_sk = len(spec_indices)
+        conc_bonus = CONCENTRATION_BONUS * n_sk * (n_sk - 1) // 2 \
+            if n_sk >= 2 else 0
+
+        return (rid, spec_indices, excl_penalty, has_excl_req, conc_bonus)
+
+    def _enumerate_combos(self, compact_cands, slot_colors):
+        """スロット色パターンに応じた最適なコンボ列挙
+        Returns: list of (score, counts_tuple, conc, excl_pen,
+                          has_excl_req, relic_ids)
+        """
+        n_spec = self._n_spec
+        n_slots = len(slot_colors)
+
+        # Classify the slot pattern
+        has_any = 'Any' in slot_colors
+        colors_no_any = [c for c in slot_colors if c != 'Any']
+        unique_colors = set(colors_no_any)
+
+        if n_slots == 3 and not has_any and len(unique_colors) == 1:
+            return self._enum_all_same(compact_cands[0], n_spec)
+        elif n_slots == 3 and not has_any and len(unique_colors) == 3:
+            return self._enum_all_diff(compact_cands, n_spec)
+        elif n_slots == 3 and not has_any and len(unique_colors) == 2:
+            return self._enum_two_same(compact_cands, slot_colors, n_spec)
+        else:
+            return self._enum_general(compact_cands, n_spec)
+
+    def _enum_all_same(self, cands, n_spec):
+        """全スロット同色: C(n,3) で列挙"""
+        results = []
+        n = len(cands)
+        for i in range(n):
+            ri_id, ri_si, ri_ep, ri_her, ri_cb = cands[i]
+            for j in range(i + 1, n):
+                rj_id, rj_si, rj_ep, rj_her, rj_cb = cands[j]
+                for k in range(j + 1, n):
+                    rk_id, rk_si, rk_ep, rk_her, rk_cb = cands[k]
+                    counts = [0] * n_spec
+                    for idx in ri_si:
+                        counts[idx] += 1
+                    for idx in rj_si:
+                        counts[idx] += 1
+                    for idx in rk_si:
+                        counts[idx] += 1
+                    score = self._fast_stacking_score(counts)
+                    score += ri_cb + rj_cb + rk_cb
+                    score -= ri_ep + rj_ep + rk_ep
+                    her = ri_her or rj_her or rk_her
+                    results.append((
+                        score,
+                        tuple(counts),
+                        ri_cb + rj_cb + rk_cb,
+                        ri_ep + rj_ep + rk_ep,
+                        her,
+                        (ri_id, rj_id, rk_id)))
+        return results
+
+    def _enum_all_diff(self, compact_cands, n_spec):
+        """全スロット異色: 重複チェック不要"""
+        results = []
+        c0, c1, c2 = compact_cands[0], compact_cands[1], compact_cands[2]
+        for ri_id, ri_si, ri_ep, ri_her, ri_cb in c0:
+            for rj_id, rj_si, rj_ep, rj_her, rj_cb in c1:
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb in c2:
+                    counts = [0] * n_spec
+                    for idx in ri_si:
+                        counts[idx] += 1
+                    for idx in rj_si:
+                        counts[idx] += 1
+                    for idx in rk_si:
+                        counts[idx] += 1
+                    score = self._fast_stacking_score(counts)
+                    score += ri_cb + rj_cb + rk_cb
+                    score -= ri_ep + rj_ep + rk_ep
+                    her = ri_her or rj_her or rk_her
+                    results.append((
+                        score,
+                        tuple(counts),
+                        ri_cb + rj_cb + rk_cb,
+                        ri_ep + rj_ep + rk_ep,
+                        her,
+                        (ri_id, rj_id, rk_id)))
+        return results
+
+    def _enum_two_same(self, compact_cands, slot_colors, n_spec):
+        """2同色+1異色: C(n,2)*m"""
+        results = []
+        # Identify which slots share the same color
+        from collections import Counter
+        color_counts = Counter(slot_colors)
+        same_color = max(color_counts, key=color_counts.get)
+        # Find which slot index has the different color
+        same_idx = [i for i, c in enumerate(slot_colors) if c == same_color]
+        diff_idx = [i for i, c in enumerate(slot_colors) if c != same_color][0]
+
+        same_cands = compact_cands[same_idx[0]]
+        diff_cands = compact_cands[diff_idx]
+        n_same = len(same_cands)
+
+        for i in range(n_same):
+            ri_id, ri_si, ri_ep, ri_her, ri_cb = same_cands[i]
+            for j in range(i + 1, n_same):
+                rj_id, rj_si, rj_ep, rj_her, rj_cb = same_cands[j]
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb in diff_cands:
+                    if rk_id == ri_id or rk_id == rj_id:
+                        continue
+                    counts = [0] * n_spec
+                    for idx in ri_si:
+                        counts[idx] += 1
+                    for idx in rj_si:
+                        counts[idx] += 1
+                    for idx in rk_si:
+                        counts[idx] += 1
+                    score = self._fast_stacking_score(counts)
+                    score += ri_cb + rj_cb + rk_cb
+                    score -= ri_ep + rj_ep + rk_ep
+                    her = ri_her or rj_her or rk_her
+                    results.append((
+                        score,
+                        tuple(counts),
+                        ri_cb + rj_cb + rk_cb,
+                        ri_ep + rj_ep + rk_ep,
+                        her,
+                        (ri_id, rj_id, rk_id)))
+        return results
+
+    def _enum_general(self, compact_cands, n_spec):
+        """汎用列挙: Any スロットやその他のパターン"""
+        results = []
+        seen = set()
+
+        def recurse(slot_idx, chosen_ids, partial_si, partial_ep,
+                     partial_her, partial_cb):
+            if slot_idx == len(compact_cands):
+                canon = tuple(sorted(chosen_ids))
+                if canon in seen:
+                    return
+                seen.add(canon)
+                counts = [0] * n_spec
+                for si_list in partial_si:
+                    for idx in si_list:
+                        counts[idx] += 1
+                score = self._fast_stacking_score(counts)
+                score += partial_cb - partial_ep
+                results.append((
+                    score,
+                    tuple(counts),
+                    partial_cb, partial_ep, partial_her,
+                    tuple(chosen_ids)))
+                return
+
+            for rid, si, ep, her, cb in compact_cands[slot_idx]:
+                if rid in chosen_ids:
+                    continue
+                recurse(
+                    slot_idx + 1,
+                    chosen_ids + (rid,),
+                    partial_si + (si,),
+                    partial_ep + ep,
+                    partial_her or her,
+                    partial_cb + cb)
+
+        recurse(0, (), (), 0, False, 0)
+        return results
+
     def is_stackable(self, key: str) -> bool:
         """効果がスタック可能かどうか（重複装備で恩恵があるか）"""
         return self.stacking_data.get(key, False) is True
@@ -305,6 +541,9 @@ class RelicOptimizer:
                     score -= int(weight * 0.3 * (count - 1))
             else:
                 score += weight  # 非スタック: 1回のみカウント
+                # 重複ペナルティ: 重複不可の効果が重複 → weight の 50% 減点
+                if count > 1:
+                    score -= int(weight * 0.5 * (count - 1))
         return score
 
     def score_combination(self, combo: Tuple[Dict, ...]):
@@ -561,83 +800,33 @@ class RelicOptimizer:
         print(f"  Deep candidates:   {dc} (product: {d_product})",
               file=sys.stderr)
 
-        # Phase 1: Enumerate normal combos (3 slots)
-        # Store effect_counts, concentration, exclusion per combo
-        normal_combos = []
-        seen_n = set()
-        if all(len(sc) > 0 for sc in normal_cands):
-            for combo in product(*normal_cands):
-                ids = tuple(r['id'] for r in combo)
-                if len(set(ids)) != n_normal:
-                    continue
-                canon = tuple(sorted(ids))
-                if canon in seen_n:
-                    continue
-                seen_n.add(canon)
-                effect_counts: Dict[str, int] = {}
-                conc = 0
-                excl_pen = 0
-                has_excl_req = False
-                excl_keys: Set[str] = set()
-                for r in combo:
-                    sk = self._get_spec_keys(r)
-                    for k in sk:
-                        effect_counts[k] = \
-                            effect_counts.get(k, 0) + 1
-                    n_sk = len(sk)
-                    if n_sk >= 2:
-                        conc += CONCENTRATION_BONUS * \
-                            n_sk * (n_sk - 1) // 2
-                    for k in self._get_exclude_keys(r):
-                        excl_pen += self.exclude_lookup[k]['weight']
-                        excl_keys.add(k)
-                        if self.exclude_lookup[k]['priority'] \
-                                == 'required':
-                            has_excl_req = True
-                score = self._stacking_aware_score(effect_counts) \
-                    + conc - excl_pen
-                normal_combos.append((
-                    score, combo, effect_counts,
-                    conc, excl_pen, has_excl_req, excl_keys))
+        # Phase 1: Enumerate normal combos using optimized enumeration
+        # Compact format: (score, counts_tuple, conc, excl_pen,
+        #                   has_excl_req, relic_ids)
+        n_cache_key = tuple(sorted(normal_slot_colors))
+        if n_cache_key in self._phase_cache:
+            normal_combos = self._phase_cache[n_cache_key]
+        elif all(len(sc) > 0 for sc in normal_cands):
+            compact_n = [[self._compact_relic(r) for r in sc]
+                         for sc in normal_cands]
+            normal_combos = self._enumerate_combos(
+                compact_n, normal_slot_colors)
+            self._phase_cache[n_cache_key] = normal_combos
+        else:
+            normal_combos = []
 
-        # Phase 2: Enumerate deep combos (3 slots)
-        deep_combos = []
-        seen_d = set()
-        n_deep = len(deep_slot_colors)
-        if all(len(sc) > 0 for sc in deep_cands):
-            for combo in product(*deep_cands):
-                ids = tuple(r['id'] for r in combo)
-                if len(set(ids)) != n_deep:
-                    continue
-                canon = tuple(sorted(ids))
-                if canon in seen_d:
-                    continue
-                seen_d.add(canon)
-                effect_counts: Dict[str, int] = {}
-                conc = 0
-                excl_pen = 0
-                has_excl_req = False
-                excl_keys: Set[str] = set()
-                for r in combo:
-                    sk = self._get_spec_keys(r)
-                    for k in sk:
-                        effect_counts[k] = \
-                            effect_counts.get(k, 0) + 1
-                    n_sk = len(sk)
-                    if n_sk >= 2:
-                        conc += CONCENTRATION_BONUS * \
-                            n_sk * (n_sk - 1) // 2
-                    for k in self._get_exclude_keys(r):
-                        excl_pen += self.exclude_lookup[k]['weight']
-                        excl_keys.add(k)
-                        if self.exclude_lookup[k]['priority'] \
-                                == 'required':
-                            has_excl_req = True
-                score = self._stacking_aware_score(effect_counts) \
-                    + conc - excl_pen
-                deep_combos.append((
-                    score, combo, effect_counts,
-                    conc, excl_pen, has_excl_req, excl_keys))
+        # Phase 2: Enumerate deep combos
+        d_cache_key = ('deep', tuple(sorted(deep_slot_colors)))
+        if d_cache_key in self._phase_cache:
+            deep_combos = self._phase_cache[d_cache_key]
+        elif all(len(sc) > 0 for sc in deep_cands):
+            compact_d = [[self._compact_relic(r) for r in sc]
+                         for sc in deep_cands]
+            deep_combos = self._enumerate_combos(
+                compact_d, deep_slot_colors)
+            self._phase_cache[d_cache_key] = deep_combos
+        else:
+            deep_combos = []
 
         print(f"  Normal combos: {len(normal_combos)}, "
               f"Deep combos: {len(deep_combos)}", file=sys.stderr)
@@ -649,89 +838,113 @@ class RelicOptimizer:
         normal_combos.sort(key=lambda x: x[0], reverse=True)
         deep_combos.sort(key=lambda x: x[0], reverse=True)
 
+        n_spec = self._n_spec
+        spec_weights = self._spec_weights
+        spec_stacking = self._spec_stacking
+        required_idx_set = self._required_idx_set
+        relic_by_id = self._relic_by_id
+        spec_key_list = self._spec_key_list
+
         # Handle single-side cases
         if not normal_combos:
-            return self._combos_to_results(
-                [(s, ec, (), c, cn, ep, hr, ek)
-                 for s, c, ec, cn, ep, hr, ek
-                 in deep_combos[:top_n]])
+            return self._combos_to_results_compact(
+                deep_combos[:top_n], is_deep_only=True)
         if not deep_combos:
-            return self._combos_to_results(
-                [(s, ec, c, (), cn, ep, hr, ek)
-                 for s, c, ec, cn, ep, hr, ek
-                 in normal_combos[:top_n]])
+            return self._combos_to_results_compact(
+                normal_combos[:top_n], is_deep_only=False)
 
         # Phase 3: Cross-pair with heap-based top-N and pruning
         max_pairs = 500
         n_top = min(len(normal_combos), max_pairs)
         d_top = min(len(deep_combos), max_pairs)
 
-        required_keys = frozenset(
-            k for k, v in self.effect_lookup.items()
-            if v['priority'] == 'required'
-        )
-
         normal_top = normal_combos[:n_top]
         deep_top = deep_combos[:d_top]
         best_deep_score = deep_top[0][0] if deep_top else 0
 
+        # Fix pruning: check if req_met=True is achievable
+        req_met_bound = True
+        if required_idx_set:
+            possible_from_normal = set()
+            for _, n_cts, _, _, _, _ in normal_top:
+                for i in range(n_spec):
+                    if n_cts[i] > 0:
+                        possible_from_normal.add(i)
+            possible_from_deep = set()
+            for _, d_cts, _, _, _, _ in deep_top:
+                for i in range(n_spec):
+                    if d_cts[i] > 0:
+                        possible_from_deep.add(i)
+            possible_all = possible_from_normal | possible_from_deep
+            if not required_idx_set.issubset(possible_all):
+                req_met_bound = False
+        if req_met_bound:
+            has_n_no_excl = any(not h for _, _, _, _, h, _ in normal_top)
+            has_d_no_excl = any(not h for _, _, _, _, h, _ in deep_top)
+            if not (has_n_no_excl and has_d_no_excl):
+                req_met_bound = False
+        bound_req_int = -1 if req_met_bound else 0
+
         # Min-heap for top-N: heap_key = (-req_met_int, -score, counter)
         heap: list = []
-        result_map: Dict[int, Dict] = {}
+        result_map: Dict[int, tuple] = {}
         counter = 0
         evaluated = 0
 
-        for ns, ncombo, n_counts, n_conc, n_ep, n_her, n_ek \
-                in normal_top:
-            # Outer pruning: best possible = req_met=True, score=ns+best_deep
+        for ns, n_cts, n_conc, n_ep, n_her, n_rids in normal_top:
+            # Outer pruning
             if len(heap) >= top_n:
-                best_possible = (-1, -(ns + best_deep_score))
-                heap_worst = (heap[0][0], heap[0][1])
-                if best_possible >= heap_worst:
+                best_possible = (bound_req_int, -(ns + best_deep_score))
+                if best_possible >= (heap[0][0], heap[0][1]):
                     break
 
-            for ds, dcombo, d_counts, d_conc, d_ep, d_her, d_ek \
-                    in deep_top:
+            for ds, d_cts, d_conc, d_ep, d_her, d_rids in deep_top:
                 # Inner pruning
                 if len(heap) >= top_n:
-                    best_possible = (-1, -(ns + ds))
-                    heap_worst = (heap[0][0], heap[0][1])
-                    if best_possible >= heap_worst:
+                    best_possible = (bound_req_int, -(ns + ds))
+                    if best_possible >= (heap[0][0], heap[0][1]):
                         break
 
-                # Merge effect counts (dict merge instead of relic re-scan)
-                merged = dict(n_counts)
-                for k, v in d_counts.items():
-                    merged[k] = merged.get(k, 0) + v
+                # Inline merged scoring (array-based)
+                score = 0
+                has_all_required = True
+                for i in range(n_spec):
+                    c = n_cts[i] + d_cts[i]
+                    if c == 0:
+                        if i in required_idx_set:
+                            has_all_required = False
+                        continue
+                    w = spec_weights[i]
+                    s = spec_stacking[i]
+                    if s is True:
+                        score += w * c
+                    elif s == 'conditional':
+                        score += w
+                        if c > 1:
+                            score -= int(w * 0.3 * (c - 1))
+                    else:
+                        score += w
+                        if c > 1:
+                            score -= int(w * 0.5 * (c - 1))
 
-                score = self._stacking_aware_score(merged) \
-                    + n_conc + d_conc - n_ep - d_ep
-                matched_keys = set(merged.keys())
-                missing = sorted(required_keys - matched_keys)
+                score += n_conc + d_conc - n_ep - d_ep
                 has_excl_req = n_her or d_her
-                req_met = len(missing) == 0 and not has_excl_req
-                excluded_present = n_ek | d_ek
+                req_met = has_all_required and not has_excl_req
                 evaluated += 1
 
                 heap_key = (-int(req_met), -score, counter)
-                result = {
-                    'required_met': req_met,
-                    'score': score,
-                    'matched_keys': matched_keys,
-                    'missing_required': missing,
-                    'excluded_present': excluded_present,
-                    'relics': tuple(ncombo) + tuple(dcombo),
-                    'normal_relics': ncombo,
-                    'deep_relics': dcombo,
-                }
-
+                # Check heap eligibility BEFORE building result
                 if len(heap) < top_n:
                     heapq.heappush(heap, heap_key)
-                    result_map[counter] = result
+                    result_map[counter] = (
+                        req_met, score, n_cts, d_cts,
+                        n_rids, d_rids)
                 elif heap_key < heap[0]:
                     evicted = heapq.heapreplace(heap, heap_key)
                     del result_map[evicted[2]]
-                    result_map[counter] = result
+                    result_map[counter] = (
+                        req_met, score, n_cts, d_cts,
+                        n_rids, d_rids)
 
                 counter += 1
 
@@ -739,8 +952,37 @@ class RelicOptimizer:
               f"(max {n_top * d_top}, evaluated {evaluated})",
               file=sys.stderr)
 
-        # Extract results from heap
-        results = [result_map[key[2]] for key in heap]
+        # Build full results only for heap entries (lazy construction)
+        results = []
+        for hk in heap:
+            data = result_map[hk[2]]
+            req_met, score, n_cts, d_cts, n_rids, d_rids = data
+            # Reconstruct matched_keys from merged counts
+            matched_keys = set()
+            for i in range(n_spec):
+                if n_cts[i] + d_cts[i] > 0:
+                    matched_keys.add(spec_key_list[i])
+            missing = sorted(
+                spec_key_list[i] for i in required_idx_set
+                if n_cts[i] + d_cts[i] == 0)
+            # Reconstruct exclude info from relics
+            excluded_present = set()
+            all_rids = n_rids + d_rids
+            for rid in all_rids:
+                for k in self._get_exclude_keys(relic_by_id[rid]):
+                    excluded_present.add(k)
+            n_relics = tuple(relic_by_id[rid] for rid in n_rids)
+            d_relics = tuple(relic_by_id[rid] for rid in d_rids)
+            results.append({
+                'required_met': req_met,
+                'score': score,
+                'matched_keys': matched_keys,
+                'missing_required': missing,
+                'excluded_present': excluded_present,
+                'relics': n_relics + d_relics,
+                'normal_relics': n_relics,
+                'deep_relics': d_relics,
+            })
         results.sort(
             key=lambda x: (x['required_met'], x['score']), reverse=True)
 
@@ -750,28 +992,51 @@ class RelicOptimizer:
 
         return results
 
-    def _combos_to_results(self, items):
-        """Single-side combo list to result format"""
+    def _combos_to_results_compact(self, combos, is_deep_only=False):
+        """Compact combo list to result format (single-side)"""
         results = []
-        required_keys = {
-            k for k, v in self.effect_lookup.items()
-            if v['priority'] == 'required'
-        }
-        for score, effect_counts, ncombo, dcombo, \
-                conc, excl_pen, has_excl_req, excl_keys in items:
-            matched = set(effect_counts.keys())
-            missing = sorted(required_keys - matched)
-            results.append({
-                'required_met': len(missing) == 0
-                    and not has_excl_req,
-                'score': score,
-                'matched_keys': matched,
-                'missing_required': missing,
-                'excluded_present': excl_keys,
-                'relics': tuple(ncombo) + tuple(dcombo),
-                'normal_relics': ncombo,
-                'deep_relics': dcombo,
-            })
+        spec_key_list = self._spec_key_list
+        required_idx_set = self._required_idx_set
+        n_spec = self._n_spec
+        relic_by_id = self._relic_by_id
+        for score, counts, conc, excl_pen, has_excl_req, rids in combos:
+            matched_keys = set()
+            for i in range(n_spec):
+                if counts[i] > 0:
+                    matched_keys.add(spec_key_list[i])
+            missing = sorted(
+                spec_key_list[i] for i in required_idx_set
+                if counts[i] == 0)
+            excluded_present = set()
+            for rid in rids:
+                for k in self._get_exclude_keys(relic_by_id[rid]):
+                    excluded_present.add(k)
+            relics = tuple(relic_by_id[rid] for rid in rids)
+            if is_deep_only:
+                entry = {
+                    'required_met': len(missing) == 0
+                        and not has_excl_req,
+                    'score': score,
+                    'matched_keys': matched_keys,
+                    'missing_required': missing,
+                    'excluded_present': excluded_present,
+                    'relics': relics,
+                    'normal_relics': (),
+                    'deep_relics': relics,
+                }
+            else:
+                entry = {
+                    'required_met': len(missing) == 0
+                        and not has_excl_req,
+                    'score': score,
+                    'matched_keys': matched_keys,
+                    'missing_required': missing,
+                    'excluded_present': excluded_present,
+                    'relics': relics,
+                    'normal_relics': relics,
+                    'deep_relics': (),
+                }
+            results.append(entry)
         return results
 
     def optimize_legacy(self, color: Optional[str] = None,
