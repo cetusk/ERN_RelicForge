@@ -503,8 +503,8 @@ function updateLangUI() {
     : 'Save file location — paste in Explorer address bar to open:';
   const pathHintNote = document.getElementById('path-hint-note');
   if (pathHintNote) pathHintNote.textContent = ja
-    ? '上記パスをエクスプローラーで開き、.sl2.bak ファイルを下のドロップゾーンにドラッグしてください。'
-    : 'Open the path above in Explorer and drag the .sl2.bak file to the drop zone below.';
+    ? '上記パスをエクスプローラーで開き、.sl2.bak ファイルを選択 or 下のドロップゾーンにドラッグすることも可能です。'
+    : 'Open the path above in Explorer to select or drag the .sl2.bak file to the drop zone below.';
   document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
   // Header button
   document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';
