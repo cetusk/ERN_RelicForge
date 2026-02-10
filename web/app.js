@@ -414,13 +414,10 @@ async function tryRestoreDirHandle() {
   }
 }
 
-// Feature detection: hide auto-load button if not supported
-// Feature detection: hide auto-load button if not supported (path hint stays for drag & drop)
-if (!window.showDirectoryPicker) {
-  if (btnAutoLoad) btnAutoLoad.style.display = 'none';
-} else {
-  btnAutoLoad.addEventListener('click', autoLoad);
-  // Attempt to restore previous folder handle
+// Auto-load button is hidden (AppData not accessible from browser)
+// Keep the logic available in case of future use with non-system directories
+if (btnAutoLoad) btnAutoLoad.style.display = 'none';
+if (window.showDirectoryPicker) {
   tryRestoreDirHandle();
 }
 
@@ -500,15 +497,14 @@ function updateLangUI() {
     ? 'セーブファイル (.sl2 / .bak) を選択して遺物を確認'
     : 'Open a save file (.sl2 / .bak) to view relics';
   document.getElementById('btn-open-welcome').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
-  if (btnAutoLoad) btnAutoLoad.textContent = ja ? 'フォルダから自動読み込み' : 'Auto-load from Folder';
   const pathHintLabel = document.getElementById('path-hint-label');
   if (pathHintLabel) pathHintLabel.textContent = ja
     ? 'セーブファイルの場所 — エクスプローラーのアドレスバーに貼り付けて開けます:'
     : 'Save file location — paste in Explorer address bar to open:';
   const pathHintNote = document.getElementById('path-hint-note');
-  if (pathHintNote) pathHintNote.innerHTML = ja
-    ? '※ ブラウザの制限により「フォルダから自動読み込み」では AppData 内は開けません。<br>上記パスをエクスプローラーで開き、ファイルを下のドロップゾーンにドラッグしてください。'
-    : '* Browser restrictions prevent "Auto-load from Folder" from accessing AppData.<br>Open the path above in Explorer and drag the file to the drop zone below.';
+  if (pathHintNote) pathHintNote.textContent = ja
+    ? '上記パスをエクスプローラーで開き、.sl2.bak ファイルを下のドロップゾーンにドラッグしてください。'
+    : 'Open the path above in Explorer and drag the .sl2.bak file to the drop zone below.';
   document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
   // Header button
   document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';

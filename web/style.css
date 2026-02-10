@@ -409,7 +409,7 @@ body {
 /* Drop Zone */
 .drop-zone {
   margin-top: 16px;
-  padding: 24px 40px;
+  padding: 48px 40px;
   border: 2px dashed var(--border);
   border-radius: 12px;
   text-align: center;
@@ -417,7 +417,7 @@ body {
   cursor: default;
 }
 .drop-zone p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 0;
   pointer-events: none;
