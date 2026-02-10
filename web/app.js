@@ -1636,6 +1636,7 @@ function closeOptimizerInspector() {
 function renderOptimizerCharacterSelect() {
   if (!vesselsData) return;
   const ja = displayLang === 'ja';
+  const prev = optCharacter.value;
 
   let html = '';
   const chars = vesselsData.characters || {};
@@ -1644,30 +1645,45 @@ function renderOptimizerCharacterSelect() {
     html += `<option value="${charJa}">${charName}</option>`;
   }
   optCharacter.innerHTML = html;
+
+  // Restore previous selection if it still exists
+  if (prev && optCharacter.querySelector(`option[value="${CSS.escape(prev)}"]`)) {
+    optCharacter.value = prev;
+  }
 }
 
 function renderOptimizerVesselList() {
   if (!vesselsData) return;
   const ja = displayLang === 'ja';
 
+  // Save previous check states
+  const prevChecked = new Set();
+  let hasPrev = false;
+  optVesselList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    hasPrev = true;
+    if (cb.checked) prevChecked.add(cb.value);
+  });
+
   const vesselTypes = vesselsData.vesselTypes || [];
   let html = '';
 
-  // Character-specific vessels (all checked by default)
+  // Character-specific vessels
   vesselTypes.forEach(vt => {
     const vesselName = ja ? vt.nameJa : vt.nameEn;
+    const checked = hasPrev ? prevChecked.has(vt.key) : true;
     html += `<label class="opt-vessel-item" data-vessel="${vt.key}">
-      <input type="checkbox" checked value="${vt.key}">
+      <input type="checkbox" ${checked ? 'checked' : ''} value="${vt.key}">
       <span>${vesselName}</span>
     </label>`;
   });
 
-  // Universal vessels (all checked by default)
+  // Universal vessels
   const universalVessels = vesselsData.universalVessels || [];
   universalVessels.forEach(uv => {
     const vesselName = ja ? uv.nameJa : uv.nameEn;
+    const checked = hasPrev ? prevChecked.has(uv.key) : true;
     html += `<label class="opt-vessel-item" data-vessel="${uv.key}">
-      <input type="checkbox" checked value="${uv.key}">
+      <input type="checkbox" ${checked ? 'checked' : ''} value="${uv.key}">
       <span>${vesselName}</span>
     </label>`;
   });
