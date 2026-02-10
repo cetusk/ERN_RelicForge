@@ -1279,6 +1279,73 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
 }
 .opt-effect-remove:hover { color: var(--color-red); }
 
+/* === Sub-priority: grouped drag-and-drop === */
+.opt-effect-group {
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.opt-effect-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.opt-effect-group-label.required { border-left: 3px solid var(--accent); }
+.opt-effect-group-label.preferred { border-left: 3px solid var(--color-blue); }
+.opt-effect-group-label.nice_to_have { border-left: 3px solid var(--color-yellow); }
+.opt-effect-group-label.exclude_required { border-left: 3px solid var(--color-red); }
+.opt-effect-group-label.exclude_preferred { border-left: 3px solid var(--color-red); }
+.opt-effect-group-label.exclude_nice_to_have { border-left: 3px solid var(--color-red); }
+.opt-effect-group-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+}
+.opt-effect-rank {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.opt-effect-drag-handle {
+  color: var(--text-muted);
+  cursor: grab;
+  font-size: 12px;
+  padding: 0 2px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  user-select: none;
+}
+.opt-effect-drag-handle:hover {
+  opacity: 1;
+  color: var(--text-primary);
+}
+.opt-effect-tag[draggable="true"] { cursor: grab; }
+.opt-effect-tag[draggable="true"]:active { cursor: grabbing; }
+.opt-effect-tag.dragging { opacity: 0.4; }
+.opt-effect-tag.drag-over-above {
+  border-top: 2px solid var(--accent);
+  margin-top: -2px;
+}
+.opt-effect-tag.drag-over-below {
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: -2px;
+}
+.opt-sub-score {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
 .opt-add-effect-btn {
   width: 100%;
   justify-content: center;

@@ -99,11 +99,12 @@ class MinHeap {
     }
   }
 
-  // Compare tuples: [reqMetInt, negScore, counter]
+  // Compare tuples: [reqMetInt, negScore, negSubScore, counter]
   _compare(a, b) {
     if (a[0] !== b[0]) return a[0] - b[0];
     if (a[1] !== b[1]) return a[1] - b[1];
-    return a[2] - b[2];
+    if (a[2] !== b[2]) return a[2] - b[2];
+    return a[3] - b[3];
   }
 }
 
@@ -181,6 +182,26 @@ class RelicOptimizer {
     for (let i = 0; i < this._specKeyList.length; i++) {
       if (this.effectLookup[this._specKeyList[i]].priority === 'required') {
         this._requiredIdxSet.add(i);
+      }
+    }
+
+    // Sub-priority rank values (for tiebreaker scoring)
+    const priorityGroups = {};
+    for (const spec of includeSpecs) {
+      const key = spec.key;
+      if (key && key in this._specKeyToIdx) {
+        const idx = this._specKeyToIdx[key];
+        const p = spec.priority || 'nice_to_have';
+        if (!priorityGroups[p]) priorityGroups[p] = [];
+        priorityGroups[p].push([idx, spec.rank || 0]);
+      }
+    }
+    this._specSubRankValues = new Array(this._nSpec).fill(0);
+    for (const [priority, entries] of Object.entries(priorityGroups)) {
+      const groupSize = entries.length;
+      const pw = PRIORITY_WEIGHTS[priority] || 1;
+      for (const [idx, rank] of entries) {
+        this._specSubRankValues[idx] = (groupSize - 1 - rank) * pw;
       }
     }
 
@@ -321,6 +342,15 @@ class RelicOptimizer {
     return score;
   }
 
+  _fastSubScore(counts) {
+    let sub = 0;
+    const subRanks = this._specSubRankValues;
+    for (let i = 0; i < this._nSpec; i++) {
+      if (counts[i] > 0) sub += subRanks[i];
+    }
+    return sub;
+  }
+
   _compactRelic(relic) {
     const rid = relic.id;
     const specKeys = this._getSpecKeys(relic);
@@ -376,7 +406,8 @@ class RelicOptimizer {
           score += riCb + rjCb + rkCb;
           score -= riEp + rjEp + rkEp;
           const her = riHer || rjHer || rkHer;
-          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId]]);
+          const subScore = this._fastSubScore(counts);
+          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId], subScore]);
         }
       }
     }
@@ -397,7 +428,8 @@ class RelicOptimizer {
           score += riCb + rjCb + rkCb;
           score -= riEp + rjEp + rkEp;
           const her = riHer || rjHer || rkHer;
-          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId]]);
+          const subScore = this._fastSubScore(counts);
+          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId], subScore]);
         }
       }
     }
@@ -439,7 +471,8 @@ class RelicOptimizer {
           score += riCb + rjCb + rkCb;
           score -= riEp + rjEp + rkEp;
           const her = riHer || rjHer || rkHer;
-          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId]]);
+          const subScore = this._fastSubScore(counts);
+          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId], subScore]);
         }
       }
     }
@@ -461,7 +494,8 @@ class RelicOptimizer {
         }
         let score = this._fastStackingScore(counts);
         score += partialCb - partialEp;
-        results.push([score, counts, partialCb, partialEp, partialHer, [...chosenIds]]);
+        const subScore = this._fastSubScore(counts);
+        results.push([score, counts, partialCb, partialEp, partialHer, [...chosenIds], subScore]);
         return;
       }
 
@@ -700,15 +734,22 @@ class RelicOptimizer {
         const hasExclReq = nHer || dHer;
         const reqMet = hasAllRequired && !hasExclReq;
 
-        const heapKey = [reqMet ? -1 : 0, -score, counter];
+        // Calculate sub_score for tiebreaker
+        let subScore = 0;
+        const subRankValues = this._specSubRankValues;
+        for (let i = 0; i < nSpec; i++) {
+          if (nCts[i] + dCts[i] > 0) subScore += subRankValues[i];
+        }
+
+        const heapKey = [reqMet ? -1 : 0, -score, -subScore, counter];
 
         if (heap.size < topN) {
           heap.push(heapKey);
-          resultMap[counter] = [reqMet, score, nCts, dCts, nRids, dRids];
+          resultMap[counter] = [reqMet, score, subScore, nCts, dCts, nRids, dRids];
         } else if (this._heapCompare(heapKey, heap.peek()) < 0) {
           const evicted = heap.replace(heapKey);
-          delete resultMap[evicted[2]];
-          resultMap[counter] = [reqMet, score, nCts, dCts, nRids, dRids];
+          delete resultMap[evicted[3]];
+          resultMap[counter] = [reqMet, score, subScore, nCts, dCts, nRids, dRids];
         }
 
         counter++;
@@ -719,8 +760,8 @@ class RelicOptimizer {
     const results = [];
     while (heap.size > 0) {
       const hk = heap.pop();
-      const data = resultMap[hk[2]];
-      const [reqMet, score, nCts, dCts, nRids, dRids] = data;
+      const data = resultMap[hk[3]];
+      const [reqMet, score, subScore, nCts, dCts, nRids, dRids] = data;
 
       const matchedKeys = new Set();
       for (let i = 0; i < nSpec; i++) {
@@ -746,6 +787,7 @@ class RelicOptimizer {
       results.push({
         required_met: reqMet,
         score,
+        sub_score: subScore,
         matched_keys: matchedKeys,
         missing_required: missing,
         excluded_present: excludedPresent,
@@ -757,7 +799,9 @@ class RelicOptimizer {
 
     results.sort((a, b) => {
       if (a.required_met !== b.required_met) return b.required_met ? 1 : -1;
-      return b.score - a.score;
+      const sc = b.score - a.score;
+      if (sc !== 0) return sc;
+      return (b.sub_score || 0) - (a.sub_score || 0);
     });
 
     return results;
@@ -766,12 +810,13 @@ class RelicOptimizer {
   _heapCompare(a, b) {
     if (a[0] !== b[0]) return a[0] - b[0];
     if (a[1] !== b[1]) return a[1] - b[1];
-    return a[2] - b[2];
+    if (a[2] !== b[2]) return a[2] - b[2];
+    return a[3] - b[3];
   }
 
   _combosToResultsCompact(combos, isDeepOnly) {
     const results = [];
-    for (const [score, counts, conc, exclPen, hasExclReq, rids] of combos) {
+    for (const [score, counts, conc, exclPen, hasExclReq, rids, comboSubScore] of combos) {
       const matchedKeys = new Set();
       for (let i = 0; i < this._nSpec; i++) {
         if (counts[i] > 0) matchedKeys.add(this._specKeyList[i]);
@@ -790,9 +835,11 @@ class RelicOptimizer {
       }
 
       const relics = rids.map(rid => this._relicById[rid]);
+      const subScore = comboSubScore !== undefined ? comboSubScore : this._fastSubScore(counts);
       results.push({
         required_met: missing.length === 0 && !hasExclReq,
         score,
+        sub_score: subScore,
         matched_keys: matchedKeys,
         missing_required: missing,
         excluded_present: excludedPresent,
@@ -863,6 +910,7 @@ class RelicOptimizer {
         entry = {
           rank: rank + 1,
           score: res.score,
+          subScore: res.sub_score || 0,
           requiredMet: res.required_met,
           normalRelics: normalOut,
           deepRelics: deepOut,
@@ -875,6 +923,7 @@ class RelicOptimizer {
         entry = {
           rank: rank + 1,
           score: res.score,
+          subScore: res.sub_score || 0,
           requiredMet: res.required_met,
           relics: relicsOut,
           matchedEffects: [...matchedKeys].sort(),
@@ -926,7 +975,9 @@ function buildOutput(allOutput, topN = 50) {
 
   flat.sort((a, b) => {
     if (a.requiredMet !== b.requiredMet) return b.requiredMet ? 1 : -1;
-    return (b.score || 0) - (a.score || 0);
+    const sc = (b.score || 0) - (a.score || 0);
+    if (sc !== 0) return sc;
+    return (b.subScore || 0) - (a.subScore || 0);
   });
 
   const trimmed = flat.slice(0, topN);

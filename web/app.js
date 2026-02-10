@@ -1705,22 +1705,44 @@ function toggleOptVesselCollapse() {
   optVesselList.classList.toggle('collapsed', optVesselCollapsed);
 }
 
-// Render selected effects as tags in the optimizer inspector
+// Render selected effects as tags in the optimizer inspector (grouped by priority with ranking)
 function renderOptEffectsTags() {
   const ja = displayLang === 'ja';
-  let html = '';
+  const groupOrder = [
+    'required', 'preferred', 'nice_to_have',
+    'exclude_required', 'exclude_preferred', 'exclude_nice_to_have',
+  ];
+  // Group effects by priority
+  const groups = {};
   optSelectedEffects.forEach((priority, key) => {
-    const eff = allUniqueEffects.find(e => e.key === key);
-    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
-    const priorityLabel = PRIORITY_LABELS[priority]
-      ? (ja ? PRIORITY_LABELS[priority].ja : PRIORITY_LABELS[priority].en)
-      : priority;
-    html += `<div class="opt-effect-tag" data-key="${key}">
-      <span class="opt-effect-tag-priority ${priority}">${priorityLabel}</span>
-      <span class="opt-effect-tag-name" title="${key}">${name}</span>
-      <button class="opt-effect-remove" data-key="${key}">&times;</button>
-    </div>`;
+    if (!groups[priority]) groups[priority] = [];
+    groups[priority].push(key);
   });
+
+  let html = '';
+  for (const gp of groupOrder) {
+    const keys = groups[gp];
+    if (!keys || keys.length === 0) continue;
+    const isExclude = gp.startsWith('exclude_');
+    const groupLabel = PRIORITY_LABELS[gp]
+      ? (ja ? PRIORITY_LABELS[gp].ja : PRIORITY_LABELS[gp].en) : gp;
+    html += `<div class="opt-effect-group" data-priority="${gp}">`;
+    html += `<div class="opt-effect-group-label ${gp}">${groupLabel}</div>`;
+    html += `<div class="opt-effect-group-cards">`;
+    keys.forEach((key, idx) => {
+      const eff = allUniqueEffects.find(e => e.key === key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      const rankHtml = isExclude ? '' : `<span class="opt-effect-rank">${idx + 1}</span>`;
+      const dragHandle = isExclude ? '' : '<span class="opt-effect-drag-handle">&#x2630;</span>';
+      html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="${!isExclude}">
+        ${rankHtml}
+        <span class="opt-effect-tag-name" title="${key}">${name}</span>
+        ${dragHandle}
+        <button class="opt-effect-remove" data-key="${key}">&times;</button>
+      </div>`;
+    });
+    html += '</div></div>';
+  }
   optEffectsList.innerHTML = html;
 
   // Attach remove handlers
@@ -1732,7 +1754,85 @@ function renderOptEffectsTags() {
     });
   });
 
+  // Attach drag-and-drop handlers
+  attachEffectDragHandlers();
   updateOptEffectsCount();
+}
+
+// === Effect card drag-and-drop reordering ===
+function attachEffectDragHandlers() {
+  let draggedEl = null;
+  let draggedPriority = null;
+
+  optEffectsList.querySelectorAll('.opt-effect-tag[draggable="true"]').forEach(tag => {
+    tag.addEventListener('dragstart', (e) => {
+      draggedEl = tag;
+      draggedPriority = tag.closest('.opt-effect-group').dataset.priority;
+      tag.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', tag.dataset.key);
+    });
+    tag.addEventListener('dragend', () => {
+      if (draggedEl) draggedEl.classList.remove('dragging');
+      optEffectsList.querySelectorAll('.drag-over-above, .drag-over-below').forEach(el => {
+        el.classList.remove('drag-over-above', 'drag-over-below');
+      });
+      draggedEl = null;
+      draggedPriority = null;
+    });
+  });
+
+  optEffectsList.querySelectorAll('.opt-effect-group').forEach(group => {
+    group.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!draggedEl || group.dataset.priority !== draggedPriority) return;
+      e.dataTransfer.dropEffect = 'move';
+      const target = e.target.closest('.opt-effect-tag');
+      if (!target || target === draggedEl) return;
+      // Clear previous indicators
+      group.querySelectorAll('.drag-over-above, .drag-over-below').forEach(el => {
+        el.classList.remove('drag-over-above', 'drag-over-below');
+      });
+      const rect = target.getBoundingClientRect();
+      if (e.clientY < rect.top + rect.height / 2) {
+        target.classList.add('drag-over-above');
+      } else {
+        target.classList.add('drag-over-below');
+      }
+    });
+
+    group.addEventListener('dragleave', (e) => {
+      const target = e.target.closest('.opt-effect-tag');
+      if (target) target.classList.remove('drag-over-above', 'drag-over-below');
+    });
+
+    group.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!draggedEl || group.dataset.priority !== draggedPriority) return;
+      const target = e.target.closest('.opt-effect-tag');
+      if (!target || target === draggedEl) return;
+      const cardsContainer = group.querySelector('.opt-effect-group-cards');
+      const rect = target.getBoundingClientRect();
+      if (e.clientY < rect.top + rect.height / 2) {
+        cardsContainer.insertBefore(draggedEl, target);
+      } else {
+        cardsContainer.insertBefore(draggedEl, target.nextSibling);
+      }
+      // Rebuild Map from DOM order and re-render
+      rebuildEffectsMapFromDOM();
+      renderOptEffectsTags();
+    });
+  });
+}
+
+function rebuildEffectsMapFromDOM() {
+  const newMap = new Map();
+  optEffectsList.querySelectorAll('.opt-effect-tag').forEach(tag => {
+    const key = tag.dataset.key;
+    const priority = tag.dataset.priority;
+    newMap.set(key, priority);
+  });
+  optSelectedEffects = newMap;
 }
 
 function updateOptEffectsCount() {
@@ -1752,13 +1852,16 @@ function collectOptimizerParams() {
 
   const combined = optMode.value === 'combined';
 
-  // Collect effects from optSelectedEffects map
+  // Collect effects from optSelectedEffects map (with rank for sub-priority)
   const effects = [];
+  const rankCounters = {};
   optSelectedEffects.forEach((priority, key) => {
     if (priority.startsWith('exclude_')) {
       effects.push({ key, priority: priority.replace('exclude_', ''), exclude: true });
     } else {
-      effects.push({ key, priority });
+      const rank = rankCounters[priority] || 0;
+      rankCounters[priority] = rank + 1;
+      effects.push({ key, priority, rank });
     }
   });
 
@@ -1993,10 +2096,14 @@ function applyPreset(preset) {
   // Apply mode
   if (preset.combined !== undefined) optMode.value = preset.combined ? 'combined' : 'normal';
 
-  // Apply effects
+  // Apply effects (sort by rank within same priority for sub-priority ordering)
   optSelectedEffects.clear();
   if (preset.effects && Array.isArray(preset.effects)) {
-    preset.effects.forEach(e => {
+    const sorted = [...preset.effects].sort((a, b) => {
+      if (a.priority !== b.priority) return 0;
+      return (a.rank || 0) - (b.rank || 0);
+    });
+    sorted.forEach(e => {
       const priority = e.exclude
         ? `exclude_${e.priority || 'required'}`
         : (e.priority || 'required');
@@ -2240,7 +2347,10 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     if (sortKey === 'score') {
       const cmp = (b.requiredMet === a.requiredMet) ? 0 : (b.requiredMet ? 1 : -1);
       if (cmp !== 0) return cmp;
-      return sortDir === 'desc' ? b.score - a.score : a.score - b.score;
+      const scoreCmp = sortDir === 'desc' ? b.score - a.score : a.score - b.score;
+      if (scoreCmp !== 0) return scoreCmp;
+      // subScore tiebreaker (always descending)
+      return (b.subScore || 0) - (a.subScore || 0);
     }
     return 0;
   });
@@ -2369,6 +2479,7 @@ function renderResultCard(res, ja, isBest, params, idx) {
   html += `<div class="opt-result-header">`;
   html += `<span class="opt-rank">#${idx + 1}</span>`;
   html += `<span class="opt-score">${ja ? 'スコア' : 'Score'}: ${res.score}</span>`;
+  if (res.subScore) html += `<span class="opt-sub-score">(sub: ${res.subScore})</span>`;
   html += `<span class="opt-required-badge ${res.requiredMet ? 'met' : 'not-met'}">`;
   html += `${res.requiredMet ? '\u2713' : '\u2717'}</span>`;
   html += `<span class="opt-vessel-name">${vesselName}</span>`;
@@ -2433,6 +2544,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   html += `<div class="detail-section">`;
   html += `<h3>${ja ? 'スコア情報' : 'Score Info'}</h3>`;
   html += field(ja ? 'スコア' : 'Score', res.score);
+  if (res.subScore) html += field(ja ? 'サブスコア' : 'Sub Score', res.subScore);
   html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? '\u2713' : '\u2717');
   html += field(ja ? '献器' : 'Vessel', vesselName);
   html += `</div>`;

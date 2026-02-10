@@ -179,6 +179,23 @@ class RelicOptimizer:
             i for i, k in enumerate(self._spec_key_list)
             if self.effect_lookup[k]['priority'] == 'required')
 
+        # Sub-priority rank values (for tiebreaker scoring)
+        priority_groups: Dict[str, list] = {}
+        for spec in include_specs:
+            key = spec.get('key')
+            if key and key in self._spec_key_to_idx:
+                idx = self._spec_key_to_idx[key]
+                p = spec['priority']
+                priority_groups.setdefault(p, []).append(
+                    (idx, spec.get('rank', 0)))
+
+        self._spec_sub_rank_values = [0] * self._n_spec
+        for priority, entries in priority_groups.items():
+            group_size = len(entries)
+            pw = PRIORITY_WEIGHTS[priority]
+            for idx, rank in entries:
+                self._spec_sub_rank_values[idx] = (group_size - 1 - rank) * pw
+
         # Exclude keys → contiguous int indices
         self._excl_key_list = sorted(self.exclude_lookup.keys())
         self._excl_key_to_idx = {k: i for i, k in enumerate(self._excl_key_list)}
@@ -308,6 +325,15 @@ class RelicOptimizer:
                 if c > 1:
                     score -= int(w * 0.5 * (c - 1))
         return score
+
+    def _fast_sub_score(self, counts):
+        """サブ優先度タイブレーカースコア。存在判定のみ (count>0)"""
+        sub = 0
+        sub_ranks = self._spec_sub_rank_values
+        for i in range(self._n_spec):
+            if counts[i] > 0:
+                sub += sub_ranks[i]
+        return sub
 
     def _compact_relic(self, relic: Dict) -> Tuple:
         """レリックをコンパクトなタプルに変換
@@ -582,6 +608,13 @@ class RelicOptimizer:
         score = self._stacking_aware_score(effect_counts)
         score += concentration - exclude_penalty
 
+        # Sub-priority tiebreaker
+        sub_score = 0
+        for key in effect_counts:
+            idx = self._spec_key_to_idx.get(key)
+            if idx is not None:
+                sub_score += self._spec_sub_rank_values[idx]
+
         matched_keys = set(effect_counts.keys())
         required_keys = {
             k for k, v in self.effect_lookup.items()
@@ -590,7 +623,7 @@ class RelicOptimizer:
         missing_required = sorted(required_keys - matched_keys)
         required_met = len(missing_required) == 0 and not has_exclude_required
 
-        return required_met, score, matched_keys, missing_required, excluded_present
+        return required_met, score, sub_score, matched_keys, missing_required, excluded_present
 
     def get_vessel_configs(self, character: str,
                            vessel_types: Optional[List[str]] = None,
@@ -691,18 +724,20 @@ class RelicOptimizer:
                 continue
             seen.add(canon)
 
-            req_met, score, matched, missing, excl_present = \
+            req_met, score, sub_score, matched, missing, excl_present = \
                 self.score_combination(combo)
             results.append({
                 'required_met': req_met,
                 'score': score,
+                'sub_score': sub_score,
                 'matched_keys': matched,
                 'missing_required': missing,
                 'excluded_present': excl_present,
                 'relics': combo,
             })
 
-        results.sort(key=lambda x: (x['required_met'], x['score']), reverse=True)
+        results.sort(key=lambda x: (x['required_met'], x['score'],
+                                    x['sub_score']), reverse=True)
         return results[:top_n]
 
     def _build_slot_candidates(self, slot_colors: List[str],
@@ -842,6 +877,7 @@ class RelicOptimizer:
         spec_weights = self._spec_weights
         spec_stacking = self._spec_stacking
         required_idx_set = self._required_idx_set
+        sub_rank_values = self._spec_sub_rank_values
         relic_by_id = self._relic_by_id
         spec_key_list = self._spec_key_list
 
@@ -930,20 +966,27 @@ class RelicOptimizer:
                 score += n_conc + d_conc - n_ep - d_ep
                 has_excl_req = n_her or d_her
                 req_met = has_all_required and not has_excl_req
+
+                # Sub-priority tiebreaker
+                sub_score = 0
+                for i in range(n_spec):
+                    if n_cts[i] + d_cts[i] > 0:
+                        sub_score += sub_rank_values[i]
+
                 evaluated += 1
 
-                heap_key = (-int(req_met), -score, counter)
+                heap_key = (-int(req_met), -score, -sub_score, counter)
                 # Check heap eligibility BEFORE building result
                 if len(heap) < top_n:
                     heapq.heappush(heap, heap_key)
                     result_map[counter] = (
-                        req_met, score, n_cts, d_cts,
+                        req_met, score, sub_score, n_cts, d_cts,
                         n_rids, d_rids)
                 elif heap_key < heap[0]:
                     evicted = heapq.heapreplace(heap, heap_key)
-                    del result_map[evicted[2]]
+                    del result_map[evicted[3]]
                     result_map[counter] = (
-                        req_met, score, n_cts, d_cts,
+                        req_met, score, sub_score, n_cts, d_cts,
                         n_rids, d_rids)
 
                 counter += 1
@@ -955,8 +998,8 @@ class RelicOptimizer:
         # Build full results only for heap entries (lazy construction)
         results = []
         for hk in heap:
-            data = result_map[hk[2]]
-            req_met, score, n_cts, d_cts, n_rids, d_rids = data
+            data = result_map[hk[3]]
+            req_met, score, sub_score, n_cts, d_cts, n_rids, d_rids = data
             # Reconstruct matched_keys from merged counts
             matched_keys = set()
             for i in range(n_spec):
@@ -976,6 +1019,7 @@ class RelicOptimizer:
             results.append({
                 'required_met': req_met,
                 'score': score,
+                'sub_score': sub_score,
                 'matched_keys': matched_keys,
                 'missing_required': missing,
                 'excluded_present': excluded_present,
@@ -984,7 +1028,8 @@ class RelicOptimizer:
                 'deep_relics': d_relics,
             })
         results.sort(
-            key=lambda x: (x['required_met'], x['score']), reverse=True)
+            key=lambda x: (x['required_met'], x['score'],
+                           x['sub_score']), reverse=True)
 
         print(f"  Best score: {results[0]['score']} "
               f"(required met: {results[0]['required_met']})"
@@ -1007,6 +1052,7 @@ class RelicOptimizer:
             missing = sorted(
                 spec_key_list[i] for i in required_idx_set
                 if counts[i] == 0)
+            sub_score = self._fast_sub_score(counts)
             excluded_present = set()
             for rid in rids:
                 for k in self._get_exclude_keys(relic_by_id[rid]):
@@ -1017,6 +1063,7 @@ class RelicOptimizer:
                     'required_met': len(missing) == 0
                         and not has_excl_req,
                     'score': score,
+                    'sub_score': sub_score,
                     'matched_keys': matched_keys,
                     'missing_required': missing,
                     'excluded_present': excluded_present,
@@ -1029,6 +1076,7 @@ class RelicOptimizer:
                     'required_met': len(missing) == 0
                         and not has_excl_req,
                     'score': score,
+                    'sub_score': sub_score,
                     'matched_keys': matched_keys,
                     'missing_required': missing,
                     'excluded_present': excluded_present,
@@ -1066,18 +1114,20 @@ class RelicOptimizer:
 
         results = []
         for combo in combinations(candidate_relics, actual_slots):
-            req_met, score, matched, missing, excl_present = \
+            req_met, score, sub_score, matched, missing, excl_present = \
                 self.score_combination(combo)
             results.append({
                 'required_met': req_met,
                 'score': score,
+                'sub_score': sub_score,
                 'matched_keys': matched,
                 'missing_required': missing,
                 'excluded_present': excl_present,
                 'relics': combo,
             })
 
-        results.sort(key=lambda x: (x['required_met'], x['score']), reverse=True)
+        results.sort(key=lambda x: (x['required_met'], x['score'],
+                                    x['sub_score']), reverse=True)
         return results[:top_n]
 
     def _format_relic(self, relic: Dict, matched_keys: Set[str],
@@ -1143,6 +1193,7 @@ class RelicOptimizer:
                 entry = {
                     'rank': rank,
                     'score': res['score'],
+                    'subScore': res.get('sub_score', 0),
                     'requiredMet': res['required_met'],
                     'normalRelics': normal_out,
                     'deepRelics': deep_out,
@@ -1157,6 +1208,7 @@ class RelicOptimizer:
                 entry = {
                     'rank': rank,
                     'score': res['score'],
+                    'subScore': res.get('sub_score', 0),
                     'requiredMet': res['required_met'],
                     'relics': relics_out,
                     'matchedEffects': sorted(matched_keys),
@@ -1207,8 +1259,9 @@ def _build_output(all_output: List[Dict], top_n: int = 50) -> Dict:
                 entry['_color'] = params['color']
             flat.append(entry)
 
-    # ソート: requiredMet 優先、次にスコア降順
-    flat.sort(key=lambda r: (r.get('requiredMet', False), r.get('score', 0)),
+    # ソート: requiredMet 優先、次にスコア降順、次にサブスコア降順
+    flat.sort(key=lambda r: (r.get('requiredMet', False), r.get('score', 0),
+                              r.get('subScore', 0)),
               reverse=True)
 
     # グローバル top_n に絞る
