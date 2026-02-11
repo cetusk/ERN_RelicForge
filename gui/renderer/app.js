@@ -90,6 +90,10 @@ const inspectorApply = document.getElementById('inspector-apply');
 // Tab bar
 const tabBar = document.getElementById('tab-bar');
 
+// Export button
+const btnExportTable = document.getElementById('btn-export-table');
+const btnExportTableLabel = document.getElementById('btn-export-table-label');
+
 // Optimizer inspector elements
 const btnOptimizer = document.getElementById('btn-optimizer');
 const btnOptimizerLabel = document.getElementById('btn-optimizer-label');
@@ -213,6 +217,7 @@ async function loadAndDisplay(filePath) {
     toolbar.classList.remove('hidden');
     btnInspector.classList.remove('hidden');
     btnOptimizer.classList.remove('hidden');
+    btnExportTable.classList.remove('hidden');
     tabBar.classList.remove('hidden');
     updateInspectorButton();
     updateOptimizerButton();
@@ -1204,6 +1209,7 @@ function updateAndGroupTabs() {
 
 // Inspector event listeners
 btnInspector.addEventListener('click', openInspector);
+btnExportTable.addEventListener('click', exportRelicTableToHTML);
 inspectorClose.addEventListener('click', closeInspector);
 inspectorBackdrop.addEventListener('click', closeInspector);
 
@@ -1345,7 +1351,7 @@ function switchTab(tabId) {
   });
 
   // Update toolbar visibility: show filters only on main tab
-  const filterElements = toolbar.querySelectorAll('.search-wrapper, .filter-group, #result-count, #btn-inspector');
+  const filterElements = toolbar.querySelectorAll('.search-wrapper, .filter-group, #result-count, #btn-inspector, #btn-export-table');
   filterElements.forEach(el => {
     if (tabId === 'main') {
       el.style.display = '';
@@ -2148,6 +2154,7 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     html += `<span>${ja ? '献器' : 'Vessel'}: ${vesselName}</span>`;
     html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? '✓' : '✗'}</span>`;
     html += `<span>${ja ? '総件数' : 'Total'}: ${flatResults.length}</span>`;
+    html += `<button class="btn-export-optimizer" data-tab="${tabId}">&#128190; ${ja ? 'エクスポート' : 'Export'}</button>`;
     html += `</div></div>`;
   }
 
@@ -2241,6 +2248,14 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
       let dir = 'desc';
       if (key === sortKey) dir = sortDir === 'desc' ? 'asc' : 'desc';
       renderOptimizerResults(tabId, data, params, key, dir);
+    });
+  });
+
+  // Export button handler
+  container.querySelectorAll('.btn-export-optimizer').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      exportOptimizerResultsToHTML(btn.dataset.tab);
     });
   });
 }
@@ -2587,6 +2602,405 @@ function renderOptDetailRelic(relic, ja) {
 }
 
 // ============================================================
+// === HTML Export ===
+// ============================================================
+
+const EXPORT_CSS = `
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-primary: #1a1a1a; --bg-secondary: #242424; --bg-tertiary: #2d2d2d;
+  --bg-hover: #363636; --text-primary: #e0e0e0; --text-secondary: #a0a0a0;
+  --text-muted: #707070; --accent: #4cc9b0; --accent-hover: #5cd4bc;
+  --border: #3a3a3a; --color-red: #e74c3c; --color-blue: #3498db;
+  --color-yellow: #f1c40f; --color-green: #2ecc71;
+}
+body {
+  font-family: 'Segoe UI', 'Meiryo', sans-serif;
+  background: var(--bg-primary); color: var(--text-primary);
+  padding: 24px; line-height: 1.5;
+}
+.export-header { margin-bottom: 20px; }
+.export-header h1 { font-size: 20px; color: var(--accent); margin-bottom: 4px; }
+.export-meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 12px; color: var(--text-secondary);
+  padding: 10px 14px; background: var(--bg-secondary);
+  border-radius: 6px; border: 1px solid var(--border); margin-bottom: 16px;
+}
+.export-meta span { white-space: nowrap; }
+.export-section { margin-top: 28px; }
+.export-section-title {
+  font-size: 16px; color: var(--accent); font-weight: 600;
+  border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 14px;
+}
+.export-footer {
+  margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border);
+  text-align: center; font-size: 11px; color: var(--text-muted);
+}
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: var(--bg-tertiary); color: var(--accent);
+  padding: 10px 12px; text-align: left; font-weight: 600;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border); white-space: nowrap;
+}
+td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody tr:hover { background: var(--bg-hover); }
+/* Badges */
+.color-badge {
+  display: inline-block; width: 14px; height: 14px;
+  border-radius: 3px; margin-right: 6px; vertical-align: middle;
+}
+.color-badge.Red { background: var(--color-red); }
+.color-badge.Blue { background: var(--color-blue); }
+.color-badge.Yellow { background: var(--color-yellow); }
+.color-badge.Green { background: var(--color-green); }
+.color-label { vertical-align: middle; }
+.type-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 3px;
+  font-size: 11px; font-weight: 600;
+}
+.type-badge.Relic { background: rgba(76,201,176,0.15); color: var(--accent); border: 1px solid rgba(76,201,176,0.3); }
+.type-badge.DeepRelic { background: rgba(128,0,255,0.15); color: #b080ff; border: 1px solid rgba(128,0,255,0.3); }
+.type-badge.UniqueRelic { background: rgba(231,76,60,0.15); color: #ff8070; border: 1px solid rgba(231,76,60,0.3); }
+/* Effects in table */
+.effect-item { position: relative; padding-left: 14px; margin-bottom: 4px; }
+.effect-item::before { content: '•'; position: absolute; left: 0; top: 0; color: var(--accent); font-size: 14px; line-height: 1.6; }
+.effect-main { line-height: 1.6; font-size: 12px; }
+.effect-debuff { color: #e07070; font-size: 11px; line-height: 1.5; padding-left: 10px; position: relative; }
+.effect-debuff::before { content: '└'; position: absolute; left: -2px; top: -1px; color: #e07070; font-size: 11px; }
+/* Optimizer cards */
+.opt-results-summary {
+  margin-bottom: 16px; padding: 12px 16px; background: var(--bg-secondary);
+  border-radius: 6px; border: 1px solid var(--border);
+}
+.opt-results-summary-title { font-size: 14px; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+.opt-results-summary-info { font-size: 12px; color: var(--text-secondary); display: flex; gap: 16px; flex-wrap: wrap; }
+.opt-conditions-summary {
+  margin-bottom: 12px; padding: 10px 14px; background: var(--bg-secondary);
+  border-radius: 6px; border: 1px solid var(--border); font-size: 12px;
+}
+.opt-conditions-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.opt-conditions-row { display: flex; gap: 6px; margin-bottom: 3px; align-items: flex-start; }
+.opt-conditions-label { color: var(--text-secondary); flex-shrink: 0; }
+.opt-conditions-value { color: var(--text-primary); }
+.opt-conditions-effects { display: flex; flex-wrap: wrap; gap: 4px; }
+.opt-conditions-effect-tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; }
+.opt-conditions-effect-tag.required { background: rgba(76,201,176,0.15); color: var(--accent); }
+.opt-conditions-effect-tag.preferred { background: rgba(52,152,219,0.15); color: var(--color-blue); }
+.opt-conditions-effect-tag.nice_to_have { background: rgba(241,196,15,0.15); color: var(--color-yellow); }
+.opt-conditions-effect-tag.exclude_required { background: rgba(231,76,60,0.2); color: #e07070; text-decoration: line-through; }
+.opt-conditions-effect-tag.exclude_preferred { background: rgba(231,76,60,0.12); color: #d4877a; text-decoration: line-through; }
+.opt-conditions-effect-tag.exclude_nice_to_have { background: rgba(231,76,60,0.08); color: #c09080; text-decoration: line-through; }
+.opt-conditions-effect-tag small { opacity: 0.7; }
+.opt-result-card {
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: 4px; margin-bottom: 2px; overflow: hidden;
+}
+.opt-result-card.best { border-color: var(--accent); }
+.opt-result-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+.opt-rank { font-size: 12px; color: var(--text-muted); font-weight: 600; width: 36px; text-align: center; flex-shrink: 0; }
+.opt-score { font-size: 13px; color: var(--text-primary); font-weight: 600; width: 120px; flex-shrink: 0; }
+.opt-sub-score { font-size: 11px; color: var(--text-muted); }
+.opt-required-badge { font-size: 11px; padding: 2px 8px; border-radius: 3px; font-weight: 600; width: 80px; flex-shrink: 0; text-align: center; }
+.opt-required-badge.met { background: rgba(46,204,113,0.15); color: var(--color-green); border: 1px solid rgba(46,204,113,0.3); }
+.opt-required-badge.not-met { background: rgba(231,76,60,0.15); color: var(--color-red); border: 1px solid rgba(231,76,60,0.3); }
+.opt-vessel-name { font-size: 12px; color: var(--text-secondary); flex: 1; }
+.opt-card-body { display: flex; flex-direction: column; gap: 2px; padding: 0 14px 8px; font-size: 11px; }
+.opt-card-row { display: flex; align-items: baseline; gap: 10px; min-height: 20px; }
+.opt-card-relic { flex-shrink: 0; display: flex; align-items: center; gap: 3px; color: var(--text-secondary); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 180px; min-width: 0; }
+.opt-card-relic .color-badge { width: 8px; height: 8px; margin-right: 2px; flex-shrink: 0; }
+.opt-card-effects { flex: 1; display: flex; flex-wrap: wrap; gap: 3px; align-items: baseline; min-width: 0; }
+.opt-card-effect { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 10px; background: var(--bg-tertiary); color: var(--text-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.5; }
+.opt-card-effect.matched.required { background: rgba(76,201,176,0.2); color: var(--accent); font-weight: 600; }
+.opt-card-effect.matched.preferred { background: rgba(52,152,219,0.2); color: var(--color-blue); font-weight: 600; }
+.opt-card-effect.matched.nice_to_have { background: rgba(241,196,15,0.2); color: var(--color-yellow); font-weight: 600; }
+.opt-card-effect.excluded { background: rgba(231,76,60,0.15); color: #e07070; text-decoration: line-through; }
+.opt-card-effect.excluded.exclude_required { background: rgba(231,76,60,0.25); font-weight: 600; }
+/* Detail / Score breakdown */
+.detail-section { margin-bottom: 18px; }
+.detail-section h3 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.detail-field { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.detail-field .label { color: var(--text-secondary); }
+.detail-field .value { color: var(--text-primary); font-weight: 500; }
+.detail-effect { background: var(--bg-tertiary); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; }
+.detail-effect-main { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+.detail-score-row { background: var(--bg-tertiary); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.detail-score-row .detail-effect-main { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.detail-effect-meta { font-size: 11px; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
+.detail-effect-score { font-size: 13px; font-weight: 600; font-family: 'Consolas','Monaco',monospace; white-space: nowrap; flex-shrink: 0; min-width: 48px; text-align: right; }
+.detail-score-row.summary { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 10px; }
+.detail-score-row.total { border-top: 2px solid var(--text-secondary); margin-top: 4px; padding-top: 10px; background: transparent; }
+.detail-score-row.total .detail-effect-main { font-size: 14px; font-weight: 700; }
+.detail-score-row.total .detail-effect-score { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+/* Relic detail in optimizer */
+.opt-relic-section { margin-bottom: 8px; }
+.opt-relic-section h5 { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.opt-relic-card { display: flex; align-items: flex-start; gap: 8px; padding: 6px 8px; background: var(--bg-tertiary); border-radius: 4px; margin-bottom: 4px; }
+.opt-relic-name { font-size: 12px; color: var(--text-primary); font-weight: 500; min-width: 120px; }
+.opt-relic-effects { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.opt-effect-group { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; }
+.opt-effect { font-size: 11px; padding: 1px 6px; border-radius: 3px; background: var(--bg-primary); color: var(--text-secondary); }
+.opt-effect.matched { background: rgba(76,201,176,0.12); color: var(--accent); font-weight: 500; }
+.opt-effect.matched-required { background: rgba(76,201,176,0.2); color: var(--accent); font-weight: 600; }
+.opt-effect.debuff { color: #e07070; background: rgba(224,112,112,0.1); font-size: 10px; }
+.opt-effect-debuff-link { font-size: 10px; color: #e07070; margin-left: 2px; }
+`;
+
+function downloadHTML(filename, htmlContent) {
+  const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function buildExportHTML(title, bodyHTML, metaItems) {
+  const metaHTML = metaItems.map(m => `<span>${m}</span>`).join('');
+  return `<!DOCTYPE html>
+<html lang="${displayLang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title}</title>
+<style>${EXPORT_CSS}</style>
+</head>
+<body>
+<div class="export-header">
+<h1>${title}</h1>
+</div>
+<div class="export-meta">${metaHTML}</div>
+${bodyHTML}
+<div class="export-footer">ERN RelicForge ${APP_NIGHTREIGN_VERSION} — Exported ${new Date().toLocaleString()}</div>
+</body>
+</html>`;
+}
+
+// --- Relic Table Export ---
+function exportRelicTableToHTML() {
+  if (!filteredRelics || filteredRelics.length === 0) return;
+  const ja = displayLang === 'ja';
+
+  const metaItems = [];
+  if (loadedFileName) metaItems.push(`${ja ? 'ファイル' : 'File'}: ${loadedFileName}`);
+  metaItems.push(`${ja ? '件数' : 'Count'}: ${filteredRelics.length}`);
+  if (colorFilterValue) metaItems.push(`${ja ? '色' : 'Color'}: ${colorFilterValue}`);
+  const typeVal = filterType.value;
+  if (typeVal) metaItems.push(`${ja ? 'タイプ' : 'Type'}: ${typeLabel(typeVal)}`);
+  const searchVal = searchInput.value.trim();
+  if (searchVal) metaItems.push(`${ja ? '検索' : 'Search'}: ${searchVal}`);
+
+  let html = `<table><thead><tr>`;
+  html += `<th>#</th>`;
+  html += `<th>${ja ? '色' : 'Color'}</th>`;
+  html += `<th>${ja ? 'タイプ' : 'Type'}</th>`;
+  html += `<th>${ja ? 'アイテム' : 'Item'}</th>`;
+  html += `<th>${ja ? '効果' : 'Effects'}</th>`;
+  html += `</tr></thead><tbody>`;
+
+  filteredRelics.forEach((relic, idx) => {
+    html += `<tr>`;
+    html += `<td style="color:var(--text-muted)">${idx + 1}</td>`;
+    html += `<td><span class="color-badge ${relic.itemColor}"></span><span class="color-label">${relic.itemColor || '-'}</span></td>`;
+    html += `<td><span class="type-badge ${relic.itemType}">${typeLabel(relic.itemType)}</span></td>`;
+    const itemName = ja
+      ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
+      : (relic.itemNameEn || relic.itemKey);
+    html += `<td style="font-size:12px">${itemName}</td>`;
+    html += `<td>`;
+    relic.effects.forEach(group => {
+      const main = group[0];
+      const mainName = ja ? (main.name_ja || main.name_en || main.key) : (main.name_en || main.key);
+      html += `<div class="effect-item"><div class="effect-main">${mainName}</div>`;
+      for (let i = 1; i < group.length; i++) {
+        const d = group[i];
+        const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
+        html += `<div class="effect-debuff">${dName}</div>`;
+      }
+      html += `</div>`;
+    });
+    html += `</td></tr>`;
+  });
+
+  html += `</tbody></table>`;
+
+  const title = ja ? '遺物一覧 — ERN RelicForge' : 'Relic List — ERN RelicForge';
+  const fullHTML = buildExportHTML(title, html, metaItems);
+  const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  downloadHTML(`relicforge_relics_${ts}.html`, fullHTML);
+}
+
+// --- Optimizer Results Export ---
+function exportOptimizerResultsToHTML(tabId) {
+  const tabData = optimizerTabs.get(tabId);
+  if (!tabData || !tabData.data) return;
+  const ja = displayLang === 'ja';
+  const { data, params, label } = tabData;
+
+  const flatResults = [];
+  (data.allResults || []).forEach(vesselOutput => {
+    const vesselInfo = vesselOutput.parameters && vesselOutput.parameters.vessel;
+    (vesselOutput.results || []).forEach(res => {
+      const vi = res.vessel || vesselInfo;
+      flatResults.push({
+        ...res,
+        _vesselInfo: vi || null,
+        _vesselNameJa: vi ? vi.nameJa : (vesselOutput.parameters.color || res._color || '?'),
+        _vesselNameEn: vi ? vi.nameEn : (vesselOutput.parameters.color || res._color || '?'),
+      });
+    });
+  });
+  flatResults.sort((a, b) => {
+    const cmp = (b.requiredMet === a.requiredMet) ? 0 : (b.requiredMet ? 1 : -1);
+    if (cmp !== 0) return cmp;
+    const scoreCmp = b.score - a.score;
+    if (scoreCmp !== 0) return scoreCmp;
+    return (b.subScore || 0) - (a.subScore || 0);
+  });
+
+  const metaItems = [];
+  if (loadedFileName) metaItems.push(`${ja ? 'ファイル' : 'File'}: ${loadedFileName}`);
+  metaItems.push(`${ja ? '件数' : 'Results'}: ${flatResults.length}`);
+  if (params.character) metaItems.push(`${ja ? 'キャラクター' : 'Character'}: ${params.character}`);
+
+  let bodyHTML = '';
+
+  bodyHTML += `<div class="opt-conditions-summary">`;
+  bodyHTML += `<div class="opt-conditions-title">${ja ? '検索条件' : 'Search Conditions'}</div>`;
+  bodyHTML += `<div class="opt-conditions-row"><span class="opt-conditions-label">${ja ? 'キャラクター' : 'Character'}:</span><span class="opt-conditions-value">${params.character || '-'}</span></div>`;
+  if (params.vessel) {
+    const vesselKeys = params.vessel.split(',');
+    const vesselNames = vesselKeys.map(vk => {
+      if (vesselsData) {
+        const vt = (vesselsData.vesselTypes || []).find(v => v.key === vk);
+        if (vt) return ja ? vt.nameJa : vt.nameEn;
+        const uv = (vesselsData.universalVessels || []).find(v => v.key === vk);
+        if (uv) return ja ? uv.nameJa : uv.nameEn;
+      }
+      return vk;
+    });
+    bodyHTML += `<div class="opt-conditions-row"><span class="opt-conditions-label">${ja ? '献器' : 'Vessels'}:</span><span class="opt-conditions-value">${vesselNames.join(', ')}</span></div>`;
+  }
+  bodyHTML += `<div class="opt-conditions-row"><span class="opt-conditions-label">${ja ? 'モード' : 'Mode'}:</span><span class="opt-conditions-value">${params.combined ? (ja ? '通常+深層' : 'Combined') : (ja ? '通常のみ' : 'Normal only')}</span></div>`;
+  if (params.effects && params.effects.length > 0) {
+    bodyHTML += `<div class="opt-conditions-row"><span class="opt-conditions-label">${ja ? '効果' : 'Effects'}:</span><div class="opt-conditions-effects">`;
+    params.effects.forEach(e => {
+      const eff = allUniqueEffects.find(u => u.key === e.key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
+      const displayPriority = e.exclude ? `exclude_${e.priority}` : e.priority;
+      const pLabel = PRIORITY_LABELS[displayPriority]
+        ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
+      bodyHTML += `<span class="opt-conditions-effect-tag ${displayPriority}">${name} <small>(${pLabel})</small></span>`;
+    });
+    bodyHTML += `</div></div>`;
+  }
+  bodyHTML += `</div>`;
+
+  const bestResult = data.bestResult;
+  const bestKey = bestResult && bestResult.parameters && bestResult.parameters.vessel
+    ? bestResult.parameters.vessel.key : null;
+  const bestScore = bestResult ? bestResult.result.score : -1;
+
+  flatResults.forEach((res, idx) => {
+    const isBest = bestKey && res._vesselInfo && res._vesselInfo.key === bestKey
+      && res.score === bestScore && res.rank === 1;
+    bodyHTML += renderResultCard(res, ja, isBest, params, idx);
+
+    bodyHTML += `<div style="margin: 0 0 12px 0; padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 0 0 6px 6px; border-top: none;">`;
+
+    if (res.normalRelics && res.normalRelics.length > 0) {
+      bodyHTML += `<div class="detail-section"><h3>${ja ? '通常遺物' : 'Normal Relics'}</h3>`;
+      res.normalRelics.forEach(r => { bodyHTML += renderOptDetailRelic(r, ja); });
+      bodyHTML += `</div>`;
+    }
+    if (res.deepRelics && res.deepRelics.length > 0) {
+      bodyHTML += `<div class="detail-section"><h3>${ja ? '深層遺物' : 'Deep Relics'}</h3>`;
+      res.deepRelics.forEach(r => { bodyHTML += renderOptDetailRelic(r, ja); });
+      bodyHTML += `</div>`;
+    }
+    if (res.relics && !res.normalRelics) {
+      bodyHTML += `<div class="detail-section"><h3>${ja ? '遺物' : 'Relics'}</h3>`;
+      res.relics.forEach(r => { bodyHTML += renderOptDetailRelic(r, ja); });
+      bodyHTML += `</div>`;
+    }
+
+    const bd = computeScoreBreakdown(res, params);
+    bodyHTML += `<div class="detail-section"><h3>${ja ? 'スコア内訳' : 'Score Breakdown'}</h3>`;
+    for (const ef of bd.effects) {
+      const eff = allUniqueEffects.find(e => e.key === ef.key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : ef.key;
+      const pLabel = PRIORITY_LABELS[ef.priority]
+        ? (ja ? PRIORITY_LABELS[ef.priority].ja : PRIORITY_LABELS[ef.priority].en) : ef.priority;
+      const stackLabel = ef.stackable === true ? (ja ? '重複:○' : 'Stack:Y')
+        : ef.stackable === 'conditional' ? (ja ? '重複:△' : 'Stack:C')
+        : (ja ? '重複:×' : 'Stack:N');
+      const countInfo = ef.count > 1 ? ` ×${ef.count}` : '';
+      bodyHTML += `<div class="detail-score-row">`;
+      bodyHTML += `<div class="detail-effect-main">${name}</div>`;
+      bodyHTML += `<div class="detail-effect-meta">${pLabel}${countInfo} ${stackLabel}</div>`;
+      bodyHTML += `<div class="detail-effect-score" style="color:#80d080">+${ef.contribution}</div>`;
+      bodyHTML += `</div>`;
+    }
+    (res.missingRequired || []).forEach(key => {
+      const eff = allUniqueEffects.find(e => e.key === key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      bodyHTML += `<div class="detail-score-row" style="opacity:0.5">`;
+      bodyHTML += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
+      bodyHTML += `<div class="detail-effect-meta">${ja ? '未達' : 'Missing'}</div>`;
+      bodyHTML += `<div class="detail-effect-score"></div></div>`;
+    });
+    if (bd.concentrationBonus > 0) {
+      bodyHTML += `<div class="detail-score-row summary">`;
+      bodyHTML += `<div class="detail-effect-main">${ja ? '集中ボーナス' : 'Concentration Bonus'}</div>`;
+      bodyHTML += `<div class="detail-effect-meta"></div>`;
+      bodyHTML += `<div class="detail-effect-score" style="color:#80d080">+${bd.concentrationBonus}</div></div>`;
+      for (const cd of bd.concentrationDetails) {
+        const relicName = ja ? cd.itemNameJa : cd.itemNameEn;
+        const effNames = cd.matchedNames.map(k => {
+          const e = allUniqueEffects.find(u => u.key === k);
+          return e ? (ja ? e.name_ja : e.name_en) : k;
+        }).join(', ');
+        bodyHTML += `<div class="detail-score-row" style="padding-left:20px;opacity:0.7">`;
+        bodyHTML += `<div class="detail-effect-main" style="font-size:11px">${relicName} (${effNames})</div>`;
+        bodyHTML += `<div class="detail-effect-meta">×${cd.matchedCount}</div>`;
+        bodyHTML += `<div class="detail-effect-score" style="color:#80d080;font-size:11px">+${cd.bonus}</div></div>`;
+      }
+    }
+    for (const ef of bd.excludeEffects) {
+      const eff = allUniqueEffects.find(e => e.key === ef.key);
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : ef.key;
+      const displayPriority = `exclude_${ef.priority}`;
+      const pLabel = PRIORITY_LABELS[displayPriority]
+        ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
+      const countInfo = ef.count > 1 ? ` ×${ef.count}` : '';
+      bodyHTML += `<div class="detail-score-row">`;
+      bodyHTML += `<div class="detail-effect-main" style="color:#e07070;text-decoration:line-through">${name}</div>`;
+      bodyHTML += `<div class="detail-effect-meta">${pLabel}${countInfo}</div>`;
+      bodyHTML += `<div class="detail-effect-score" style="color:#e07070">-${ef.contribution}</div></div>`;
+    }
+    bodyHTML += `<div class="detail-score-row total">`;
+    bodyHTML += `<div class="detail-effect-main">${ja ? '合計' : 'Total'}</div>`;
+    bodyHTML += `<div class="detail-effect-meta"></div>`;
+    bodyHTML += `<div class="detail-effect-score">${bd.total}</div></div>`;
+    bodyHTML += `</div>`;
+
+    bodyHTML += `</div>`;
+  });
+
+  if (flatResults.length === 0) {
+    bodyHTML += `<p style="color:var(--text-muted)">${ja ? '結果なし' : 'No results'}</p>`;
+  }
+
+  const title = ja ? `ビルド探索結果 — ${label}` : `Build Results — ${label}`;
+  const fullHTML = buildExportHTML(title, bodyHTML, metaItems);
+  const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  downloadHTML(`relicforge_optimizer_${ts}.html`, fullHTML);
+}
+
+// ============================================================
 // === Language UI updates for new elements ===
 // ============================================================
 
@@ -2601,6 +3015,9 @@ updateLangUI = function() {
 
   // Optimizer button
   updateOptimizerButton();
+
+  // Export button
+  btnExportTableLabel.textContent = ja ? 'エクスポート' : 'Export';
 
   // Optimizer inspector labels
   document.getElementById('optimizer-title').textContent = ja ? 'ビルド探索' : 'Build Search';
