@@ -71,13 +71,14 @@ body {
 }
 
 .header-meta-link {
-  color: var(--text-muted);
-  text-decoration: none;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
   transition: color 0.15s;
 }
 .header-meta-link:hover {
   color: var(--accent);
-  text-decoration: underline;
 }
 
 /* === Buttons === */
