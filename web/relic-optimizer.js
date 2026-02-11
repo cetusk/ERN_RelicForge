@@ -74,18 +74,21 @@ class MinHeap {
 
   _siftUp(i) {
     const d = this._data;
+    const item = d[i];
     while (i > 0) {
       const parent = (i - 1) >> 1;
-      if (this._compare(d[i], d[parent]) < 0) {
-        [d[i], d[parent]] = [d[parent], d[i]];
+      if (this._compare(item, d[parent]) < 0) {
+        d[i] = d[parent];
         i = parent;
       } else break;
     }
+    d[i] = item;
   }
 
   _siftDown(i) {
     const d = this._data;
     const n = d.length;
+    const item = d[i];
     while (true) {
       let smallest = i;
       const left = 2 * i + 1;
@@ -93,10 +96,11 @@ class MinHeap {
       if (left < n && this._compare(d[left], d[smallest]) < 0) smallest = left;
       if (right < n && this._compare(d[right], d[smallest]) < 0) smallest = right;
       if (smallest !== i) {
-        [d[i], d[smallest]] = [d[smallest], d[i]];
+        d[i] = d[smallest];
         i = smallest;
       } else break;
     }
+    d[i] = item;
   }
 
   // Compare tuples: [reqMetInt, negScore, negSubScore, counter]
@@ -175,17 +179,36 @@ class RelicOptimizer {
     for (let i = 0; i < this._specKeyList.length; i++) {
       this._specKeyToIdx[this._specKeyList[i]] = i;
     }
-    this._nSpec = this._specKeyList.length;
-    this._specWeights = this._specKeyList.map(k => this.effectLookup[k].weight);
-    this._specStacking = this._specKeyList.map(k => this.stackingData[k] !== undefined ? this.stackingData[k] : false);
-    this._requiredIdxSet = new Set();
-    for (let i = 0; i < this._specKeyList.length; i++) {
-      if (this.effectLookup[this._specKeyList[i]].priority === 'required') {
+    const nSpec = this._specKeyList.length;
+    this._nSpec = nSpec;
+
+    // TypedArrays for hot-loop data (cache-friendly, no boxing)
+    // Stacking codes: 0=non-stackable, 1=stackable, 2=conditional
+    this._specWeights = new Int32Array(nSpec);
+    this._specStackingInt = new Int8Array(nSpec);
+    this._specPenalty30 = new Int32Array(nSpec); // Math.trunc(w * 0.3) for conditional
+    this._specPenalty50 = new Int32Array(nSpec); // Math.trunc(w * 0.5) for non-stackable
+    this._isRequired = new Uint8Array(nSpec);    // 1 if required, 0 otherwise
+    this._requiredIdxSet = new Set(); // kept for non-hot-path usage
+
+    for (let i = 0; i < nSpec; i++) {
+      const k = this._specKeyList[i];
+      const w = this.effectLookup[k].weight;
+      this._specWeights[i] = w;
+      const s = this.stackingData[k];
+      this._specStackingInt[i] = s === true ? 1 : s === 'conditional' ? 2 : 0;
+      this._specPenalty30[i] = Math.trunc(w * 0.3);
+      this._specPenalty50[i] = Math.trunc(w * 0.5);
+      if (this.effectLookup[k].priority === 'required') {
+        this._isRequired[i] = 1;
         this._requiredIdxSet.add(i);
       }
     }
 
     // Sub-priority rank values (for tiebreaker scoring)
+    // Tier multipliers ensure required always dominates preferred,
+    // which always dominates nice_to_have, regardless of group sizes.
+    const SUB_RANK_TIER = { required: 10000, preferred: 100, nice_to_have: 1 };
     const priorityGroups = {};
     for (const spec of includeSpecs) {
       const key = spec.key;
@@ -196,12 +219,12 @@ class RelicOptimizer {
         priorityGroups[p].push([idx, spec.rank || 0]);
       }
     }
-    this._specSubRankValues = new Array(this._nSpec).fill(0);
+    this._specSubRankValues = new Int32Array(nSpec);
     for (const [priority, entries] of Object.entries(priorityGroups)) {
       const groupSize = entries.length;
-      const pw = PRIORITY_WEIGHTS[priority] || 1;
+      const tier = SUB_RANK_TIER[priority] || 1;
       for (const [idx, rank] of entries) {
-        this._specSubRankValues[idx] = (groupSize - 1 - rank) * pw;
+        this._specSubRankValues[idx] = (groupSize - rank) * tier;
       }
     }
 
@@ -223,6 +246,9 @@ class RelicOptimizer {
 
     // Phase cache for cross-vessel reuse
     this._phaseCache = {};
+
+    // Compact relic map: rid -> specIndices (populated by _compactRelic)
+    this._compactMap = {};
   }
 
   _resolveNameMatches(nameJa, nameEn, spec, weight, targetLookup) {
@@ -249,18 +275,11 @@ class RelicOptimizer {
     if (color) {
       filtered = filtered.filter(r => r.itemColor === color);
     }
-    if (character) {
-      const charJa = resolveCharacterNameJa(character);
-      filtered = filtered.filter(r => {
-        for (const group of r.effects) {
-          const mainEff = group[0];
-          const name = mainEff.name_ja || '';
-          const m = name.match(/^【(.+?)】/);
-          if (m && m[1] !== charJa) return false;
-        }
-        return true;
-      });
-    }
+    // Note: character parameter is accepted but no longer used for filtering.
+    // Relics with other-character effects (e.g. 【無頼漢】) are kept in the pool
+    // because the relic itself is equippable by any character — only the
+    // character-specific effect is inactive.  Scoring already ignores
+    // effects not in the user's spec list.
     return filtered;
   }
 
@@ -280,8 +299,8 @@ class RelicOptimizer {
     if (this._specKeysCache[rid]) return this._specKeysCache[rid];
     const keys = [];
     for (const group of relic.effects) {
-      if (group.length > 0) {
-        const k = group[0].key;
+      for (const e of group) {
+        const k = e.key;
         if (k in this.effectLookup) keys.push(k);
       }
     }
@@ -322,21 +341,22 @@ class RelicOptimizer {
 
   _fastStackingScore(counts) {
     let score = 0;
-    const weights = this._specWeights;
-    const stacking = this._specStacking;
-    for (let i = 0; i < this._nSpec; i++) {
+    const w = this._specWeights;
+    const st = this._specStackingInt;
+    const p30 = this._specPenalty30;
+    const p50 = this._specPenalty50;
+    const n = this._nSpec;
+    for (let i = 0; i < n; i++) {
       const c = counts[i];
       if (c === 0) continue;
-      const w = weights[i];
-      const s = stacking[i];
-      if (s === true) {
-        score += w * c;
-      } else if (s === 'conditional') {
-        score += w;
-        if (c > 1) score -= Math.trunc(w * 0.3 * (c - 1));
-      } else {
-        score += w;
-        if (c > 1) score -= Math.trunc(w * 0.5 * (c - 1));
+      if (st[i] === 1) {        // stackable
+        score += w[i] * c;
+      } else if (st[i] === 2) { // conditional
+        score += w[i];
+        if (c > 1) score -= p30[i] * (c - 1);
+      } else {                   // non-stackable
+        score += w[i];
+        if (c > 1) score -= p50[i] * (c - 1);
       }
     }
     return score;
@@ -344,9 +364,10 @@ class RelicOptimizer {
 
   _fastSubScore(counts) {
     let sub = 0;
-    const subRanks = this._specSubRankValues;
-    for (let i = 0; i < this._nSpec; i++) {
-      if (counts[i] > 0) sub += subRanks[i];
+    const sr = this._specSubRankValues;
+    const n = this._nSpec;
+    for (let i = 0; i < n; i++) {
+      if (counts[i] > 0) sub += sr[i];
     }
     return sub;
   }
@@ -355,6 +376,8 @@ class RelicOptimizer {
     const rid = relic.id;
     const specKeys = this._getSpecKeys(relic);
     const specIndices = specKeys.map(k => this._specKeyToIdx[k]);
+    // Cache specIndices for Phase 3 counts rebuild
+    this._compactMap[rid] = specIndices;
 
     const exclKeys = this._getExcludeKeys(relic);
     let exclPenalty = 0;
@@ -384,30 +407,64 @@ class RelicOptimizer {
       return this._enumAllDiff(compactCands, nSpec);
     } else if (nSlots === 3 && !hasAny && uniqueColors.size === 2) {
       return this._enumTwoSame(compactCands, slotColors, nSpec);
+    } else if (nSlots === 3) {
+      return this._enumWithOverlap(compactCands, nSpec);
     } else {
       return this._enumGeneral(compactCands, nSpec);
     }
   }
 
+  // Lightweight combo scoring: reuses pre-allocated counts, returns score + subScore only
+  // Avoids cloning counts (deferred to _rebuildCounts for top-N only)
+  _inlineScoreAndReset(counts, ri, rj, rk) {
+    const w = this._specWeights;
+    const st = this._specStackingInt;
+    const p30 = this._specPenalty30;
+    const p50 = this._specPenalty50;
+    const sr = this._specSubRankValues;
+    // Populate counts & track touched indices
+    let touchedLen = 0;
+    const touched = this._touchedBuf;
+    for (const idx of ri[1]) { if (counts[idx]++ === 0) touched[touchedLen++] = idx; }
+    for (const idx of rj[1]) { if (counts[idx]++ === 0) touched[touchedLen++] = idx; }
+    for (const idx of rk[1]) { if (counts[idx]++ === 0) touched[touchedLen++] = idx; }
+    let score = 0, sub = 0;
+    for (let t = 0; t < touchedLen; t++) {
+      const i = touched[t];
+      const c = counts[i];
+      counts[i] = 0; // reset immediately
+      if (st[i] === 1) {
+        score += w[i] * c;
+      } else if (st[i] === 2) {
+        score += w[i];
+        if (c > 1) score -= p30[i] * (c - 1);
+      } else {
+        score += w[i];
+        if (c > 1) score -= p50[i] * (c - 1);
+      }
+      sub += sr[i];
+    }
+    score += ri[4] + rj[4] + rk[4]; // concentration bonus
+    score -= ri[2] + rj[2] + rk[2]; // exclusion penalty
+    return [score, sub, ri[4] + rj[4] + rk[4], ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3]];
+  }
+
+  // Enum result format (lightweight): [score, rids, cb, ep, her, subScore]
+  // No counts array — rebuilt later for top-N only via _rebuildCounts()
+
   _enumAllSame(cands, nSpec) {
     const results = [];
     const n = cands.length;
+    const counts = new Int32Array(nSpec);
+    this._touchedBuf = new Int32Array(nSpec);
     for (let i = 0; i < n; i++) {
-      const [riId, riSi, riEp, riHer, riCb] = cands[i];
+      const ri = cands[i];
       for (let j = i + 1; j < n; j++) {
-        const [rjId, rjSi, rjEp, rjHer, rjCb] = cands[j];
+        const rj = cands[j];
         for (let k = j + 1; k < n; k++) {
-          const [rkId, rkSi, rkEp, rkHer, rkCb] = cands[k];
-          const counts = new Array(nSpec).fill(0);
-          for (const idx of riSi) counts[idx]++;
-          for (const idx of rjSi) counts[idx]++;
-          for (const idx of rkSi) counts[idx]++;
-          let score = this._fastStackingScore(counts);
-          score += riCb + rjCb + rkCb;
-          score -= riEp + rjEp + rkEp;
-          const her = riHer || rjHer || rkHer;
-          const subScore = this._fastSubScore(counts);
-          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId], subScore]);
+          const rk = cands[k];
+          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub]);
         }
       }
     }
@@ -417,19 +474,15 @@ class RelicOptimizer {
   _enumAllDiff(compactCands, nSpec) {
     const results = [];
     const [c0, c1, c2] = compactCands;
-    for (const [riId, riSi, riEp, riHer, riCb] of c0) {
-      for (const [rjId, rjSi, rjEp, rjHer, rjCb] of c1) {
-        for (const [rkId, rkSi, rkEp, rkHer, rkCb] of c2) {
-          const counts = new Array(nSpec).fill(0);
-          for (const idx of riSi) counts[idx]++;
-          for (const idx of rjSi) counts[idx]++;
-          for (const idx of rkSi) counts[idx]++;
-          let score = this._fastStackingScore(counts);
-          score += riCb + rjCb + rkCb;
-          score -= riEp + rjEp + rkEp;
-          const her = riHer || rjHer || rkHer;
-          const subScore = this._fastSubScore(counts);
-          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId], subScore]);
+    const counts = new Int32Array(nSpec);
+    this._touchedBuf = new Int32Array(nSpec);
+    for (let a = 0; a < c0.length; a++) {
+      const ri = c0[a];
+      for (let b = 0; b < c1.length; b++) {
+        const rj = c1[b];
+        for (let g = 0; g < c2.length; g++) {
+          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, c2[g]);
+          results.push([sc, [ri[0], rj[0], c2[g][0]], cb, ep, her, sub]);
         }
       }
     }
@@ -438,7 +491,6 @@ class RelicOptimizer {
 
   _enumTwoSame(compactCands, slotColors, nSpec) {
     const results = [];
-    // Count colors
     const colorCounts = {};
     for (const c of slotColors) colorCounts[c] = (colorCounts[c] || 0) + 1;
     let sameColor = null;
@@ -456,23 +508,61 @@ class RelicOptimizer {
     const sameCands = compactCands[sameIdx[0]];
     const diffCands = compactCands[diffIdx];
     const nSame = sameCands.length;
+    const counts = new Int32Array(nSpec);
+    this._touchedBuf = new Int32Array(nSpec);
 
     for (let i = 0; i < nSame; i++) {
-      const [riId, riSi, riEp, riHer, riCb] = sameCands[i];
+      const ri = sameCands[i];
       for (let j = i + 1; j < nSame; j++) {
-        const [rjId, rjSi, rjEp, rjHer, rjCb] = sameCands[j];
-        for (const [rkId, rkSi, rkEp, rkHer, rkCb] of diffCands) {
+        const rj = sameCands[j];
+        for (let g = 0; g < diffCands.length; g++) {
+          const rk = diffCands[g];
+          if (rk[0] === ri[0] || rk[0] === rj[0]) continue;
+          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub]);
+        }
+      }
+    }
+    return results;
+  }
+
+  // Optimized flat-loop enum for 3 slots with possible overlap (e.g. "Any" slots)
+  _enumWithOverlap(compactCands, nSpec) {
+    const results = [];
+    const seen = new Set();
+    const [c0, c1, c2] = compactCands;
+    const counts = new Int32Array(nSpec);
+    this._touchedBuf = new Int32Array(nSpec);
+
+    for (let a = 0; a < c0.length; a++) {
+      const ri = c0[a];
+      const riId = ri[0];
+      for (let b = 0; b < c1.length; b++) {
+        const rj = c1[b];
+        const rjId = rj[0];
+        if (rjId === riId) continue;
+        for (let g = 0; g < c2.length; g++) {
+          const rk = c2[g];
+          const rkId = rk[0];
           if (rkId === riId || rkId === rjId) continue;
-          const counts = new Array(nSpec).fill(0);
-          for (const idx of riSi) counts[idx]++;
-          for (const idx of rjSi) counts[idx]++;
-          for (const idx of rkSi) counts[idx]++;
-          let score = this._fastStackingScore(counts);
-          score += riCb + rjCb + rkCb;
-          score -= riEp + rjEp + rkEp;
-          const her = riHer || rjHer || rkHer;
-          const subScore = this._fastSubScore(counts);
-          results.push([score, counts, riCb + rjCb + rkCb, riEp + rjEp + rkEp, her, [riId, rjId, rkId], subScore]);
+
+          // Dedup: canonical sorted ID triple
+          let lo, mid, hi;
+          if (riId <= rjId) {
+            if (rjId <= rkId) { lo = riId; mid = rjId; hi = rkId; }
+            else if (riId <= rkId) { lo = riId; mid = rkId; hi = rjId; }
+            else { lo = rkId; mid = riId; hi = rjId; }
+          } else {
+            if (riId <= rkId) { lo = rjId; mid = riId; hi = rkId; }
+            else if (rjId <= rkId) { lo = rjId; mid = rkId; hi = riId; }
+            else { lo = rkId; mid = rjId; hi = riId; }
+          }
+          const key = lo + ',' + mid + ',' + hi;
+          if (seen.has(key)) continue;
+          seen.add(key);
+
+          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [lo, mid, hi], cb, ep, her, sub]);
         }
       }
     }
@@ -482,37 +572,69 @@ class RelicOptimizer {
   _enumGeneral(compactCands, nSpec) {
     const results = [];
     const seen = new Set();
+    const nSlots = compactCands.length;
+    // Pre-allocated mutable state for recursion (avoids spread copies)
+    const chosenIds = new Array(nSlots);
+    const chosenSi = new Array(nSlots);
+    let partialEp = 0, partialHer = false, partialCb = 0;
 
-    const recurse = (slotIdx, chosenIds, partialSi, partialEp, partialHer, partialCb) => {
-      if (slotIdx === compactCands.length) {
-        const canon = [...chosenIds].sort((a, b) => a - b).join(',');
+    const self = this;
+    const recurse = (slotIdx) => {
+      if (slotIdx === nSlots) {
+        // Canonical key for deduplication (sort IDs numerically)
+        const sorted = chosenIds.slice(0, nSlots).sort((a, b) => a - b);
+        const canon = sorted[0] + ',' + sorted[1] + ',' + sorted[2];
         if (seen.has(canon)) return;
         seen.add(canon);
-        const counts = new Array(nSpec).fill(0);
-        for (const siList of partialSi) {
-          for (const idx of siList) counts[idx]++;
+        const counts = new Int32Array(nSpec);
+        const touched = [];
+        for (let s = 0; s < nSlots; s++) {
+          for (const idx of chosenSi[s]) { if (counts[idx]++ === 0) touched.push(idx); }
         }
-        let score = this._fastStackingScore(counts);
+        const w = self._specWeights, st = self._specStackingInt;
+        const p30 = self._specPenalty30, p50 = self._specPenalty50;
+        const sr = self._specSubRankValues;
+        let score = 0, sub = 0;
+        for (let t = 0; t < touched.length; t++) {
+          const i = touched[t], c = counts[i];
+          counts[i] = 0;
+          if (st[i] === 1) score += w[i] * c;
+          else if (st[i] === 2) { score += w[i]; if (c > 1) score -= p30[i] * (c - 1); }
+          else { score += w[i]; if (c > 1) score -= p50[i] * (c - 1); }
+          sub += sr[i];
+        }
         score += partialCb - partialEp;
-        const subScore = this._fastSubScore(counts);
-        results.push([score, counts, partialCb, partialEp, partialHer, [...chosenIds], subScore]);
+        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub]);
         return;
       }
 
-      for (const [rid, si, ep, her, cb] of compactCands[slotIdx]) {
-        if (chosenIds.includes(rid)) continue;
-        recurse(
-          slotIdx + 1,
-          [...chosenIds, rid],
-          [...partialSi, si],
-          partialEp + ep,
-          partialHer || her,
-          partialCb + cb
-        );
+      const slot = compactCands[slotIdx];
+      for (let ci = 0; ci < slot.length; ci++) {
+        const cand = slot[ci];
+        const rid = cand[0];
+        // Check for duplicate relic (linear scan on small array)
+        let dup = false;
+        for (let d = 0; d < slotIdx; d++) { if (chosenIds[d] === rid) { dup = true; break; } }
+        if (dup) continue;
+
+        // Save state
+        chosenIds[slotIdx] = rid;
+        chosenSi[slotIdx] = cand[1];
+        const savedEp = partialEp, savedHer = partialHer, savedCb = partialCb;
+        partialEp += cand[2];
+        partialHer = partialHer || cand[3];
+        partialCb += cand[4];
+
+        recurse(slotIdx + 1);
+
+        // Restore state
+        partialEp = savedEp;
+        partialHer = savedHer;
+        partialCb = savedCb;
       }
     };
 
-    recurse(0, [], [], 0, false, 0);
+    recurse(0);
     return results;
   }
 
@@ -575,15 +697,24 @@ class RelicOptimizer {
     for (const slotColor of slotColors) {
       const candidates = slotColor === 'Any' ? filtered : (byColor[slotColor] || []);
 
-      const mustInclude = candidates.filter(r => wantedIds.has(r.id));
+      let mustInclude = candidates.filter(r => wantedIds.has(r.id));
+      // Cap must_include to prevent unbounded candidate lists (esp. for "Any" slots)
+      if (mustInclude.length > candidatesPerSlot) {
+        mustInclude.sort((a, b) => this.scoreRelic(b) - this.scoreRelic(a));
+        mustInclude = mustInclude.slice(0, candidatesPerSlot);
+      }
       const mustIds = new Set(mustInclude.map(r => r.id));
 
-      const others = candidates.filter(r => !mustIds.has(r.id))
-        .map(r => [this.scoreRelic(r), r])
-        .sort((a, b) => b[0] - a[0]);
-
       const remaining = candidatesPerSlot - mustInclude.length;
-      const topOthers = remaining > 0 ? others.slice(0, remaining).map(x => x[1]) : [];
+      let topOthers;
+      if (remaining > 0) {
+        const others = candidates.filter(r => !mustIds.has(r.id))
+          .map(r => [this.scoreRelic(r), r])
+          .sort((a, b) => b[0] - a[0]);
+        topOthers = others.slice(0, remaining).map(x => x[1]);
+      } else {
+        topOthers = [];
+      }
 
       const combined = [...mustInclude, ...topOthers];
       combined.sort((a, b) => this.scoreRelic(b) - this.scoreRelic(a));
@@ -636,13 +767,17 @@ class RelicOptimizer {
 
     if (!normalCombos.length && !deepCombos.length) return [];
 
+    // Lightweight combo format: [score, rids, cb, ep, her, subScore]
     // Sort each side by score descending
     normalCombos.sort((a, b) => b[0] - a[0]);
     deepCombos.sort((a, b) => b[0] - a[0]);
 
     const nSpec = this._nSpec;
     const specWeights = this._specWeights;
-    const specStacking = this._specStacking;
+    const specStackingInt = this._specStackingInt;
+    const specPenalty30 = this._specPenalty30;
+    const specPenalty50 = this._specPenalty50;
+    const isRequired = this._isRequired;
     const requiredIdxSet = this._requiredIdxSet;
 
     // Handle single-side cases
@@ -662,20 +797,37 @@ class RelicOptimizer {
     const deepTop = deepCombos.slice(0, dTop);
     const bestDeepScore = deepTop[0][0];
 
+    // Build rid -> specIndices lookup from compact cache for counts rebuild
+    const compactMap = this._compactMap;
+
+    // Rebuild counts for top combos only (lazy, from relic IDs)
+    const rebuildCounts = (rids) => {
+      const cts = new Int32Array(nSpec);
+      for (const rid of rids) {
+        const si = compactMap[rid];
+        if (si) for (const idx of si) cts[idx]++;
+      }
+      return cts;
+    };
+
+    // Pre-build counts for top combos
+    const nCountsArr = new Array(nTop);
+    for (let i = 0; i < nTop; i++) nCountsArr[i] = rebuildCounts(normalTop[i][1]);
+    const dCountsArr = new Array(dTop);
+    for (let i = 0; i < dTop; i++) dCountsArr[i] = rebuildCounts(deepTop[i][1]);
+
     // Fix pruning: check if req_met=True is achievable
     let reqMetBound = true;
     if (requiredIdxSet.size > 0) {
       const possibleFromNormal = new Set();
-      for (const [, nCts, , , ,] of normalTop) {
-        for (let i = 0; i < nSpec; i++) {
-          if (nCts[i] > 0) possibleFromNormal.add(i);
-        }
+      for (let x = 0; x < nTop; x++) {
+        const cts = nCountsArr[x];
+        for (let i = 0; i < nSpec; i++) { if (cts[i] > 0) possibleFromNormal.add(i); }
       }
       const possibleFromDeep = new Set();
-      for (const [, dCts, , , ,] of deepTop) {
-        for (let i = 0; i < nSpec; i++) {
-          if (dCts[i] > 0) possibleFromDeep.add(i);
-        }
+      for (let x = 0; x < dTop; x++) {
+        const cts = dCountsArr[x];
+        for (let i = 0; i < nSpec; i++) { if (cts[i] > 0) possibleFromDeep.add(i); }
       }
       const possibleAll = new Set([...possibleFromNormal, ...possibleFromDeep]);
       for (const idx of requiredIdxSet) {
@@ -691,65 +843,66 @@ class RelicOptimizer {
 
     // Min-heap for top-N
     const heap = new MinHeap();
-    const resultMap = {};
+    const resultMap = new Map();
     let counter = 0;
+    const subRankValues = this._specSubRankValues;
 
-    for (const [ns, nCts, nConc, nEp, nHer, nRids] of normalTop) {
+    for (let ni = 0; ni < nTop; ni++) {
+      const nCombo = normalTop[ni];
+      const ns = nCombo[0], nRids = nCombo[1], nConc = nCombo[2], nEp = nCombo[3], nHer = nCombo[4];
+      const nCts = nCountsArr[ni];
       // Outer pruning
       if (heap.size >= topN) {
         const h = heap.peek();
         if (boundReqInt >= h[0] && -(ns + bestDeepScore) >= h[1]) break;
       }
 
-      for (const [ds, dCts, dConc, dEp, dHer, dRids] of deepTop) {
+      for (let di = 0; di < dTop; di++) {
+        const dCombo = deepTop[di];
+        const ds = dCombo[0], dRids = dCombo[1], dConc = dCombo[2], dEp = dCombo[3], dHer = dCombo[4];
+        const dCts = dCountsArr[di];
         // Inner pruning
         if (heap.size >= topN) {
           const h = heap.peek();
           if (boundReqInt >= h[0] && -(ns + ds) >= h[1]) break;
         }
 
-        // Inline merged scoring
+        // Inline merged scoring (integer stacking codes, pre-computed penalties)
         let score = 0;
         let hasAllRequired = true;
+        let subScore = 0;
         for (let i = 0; i < nSpec; i++) {
           const c = nCts[i] + dCts[i];
           if (c === 0) {
-            if (requiredIdxSet.has(i)) hasAllRequired = false;
+            if (isRequired[i]) hasAllRequired = false;
             continue;
           }
-          const w = specWeights[i];
-          const s = specStacking[i];
-          if (s === true) {
-            score += w * c;
-          } else if (s === 'conditional') {
-            score += w;
-            if (c > 1) score -= Math.trunc(w * 0.3 * (c - 1));
+          const si = specStackingInt[i];
+          if (si === 1) {
+            score += specWeights[i] * c;
+          } else if (si === 2) {
+            score += specWeights[i];
+            if (c > 1) score -= specPenalty30[i] * (c - 1);
           } else {
-            score += w;
-            if (c > 1) score -= Math.trunc(w * 0.5 * (c - 1));
+            score += specWeights[i];
+            if (c > 1) score -= specPenalty50[i] * (c - 1);
           }
+          subScore += subRankValues[i];
         }
 
         score += nConc + dConc - nEp - dEp;
         const hasExclReq = nHer || dHer;
         const reqMet = hasAllRequired && !hasExclReq;
 
-        // Calculate sub_score for tiebreaker
-        let subScore = 0;
-        const subRankValues = this._specSubRankValues;
-        for (let i = 0; i < nSpec; i++) {
-          if (nCts[i] + dCts[i] > 0) subScore += subRankValues[i];
-        }
-
         const heapKey = [reqMet ? -1 : 0, -score, -subScore, counter];
 
         if (heap.size < topN) {
           heap.push(heapKey);
-          resultMap[counter] = [reqMet, score, subScore, nCts, dCts, nRids, dRids];
+          resultMap.set(counter, [reqMet, score, subScore, nCts, dCts, nRids, dRids]);
         } else if (this._heapCompare(heapKey, heap.peek()) < 0) {
           const evicted = heap.replace(heapKey);
-          delete resultMap[evicted[3]];
-          resultMap[counter] = [reqMet, score, subScore, nCts, dCts, nRids, dRids];
+          resultMap.delete(evicted[3]);
+          resultMap.set(counter, [reqMet, score, subScore, nCts, dCts, nRids, dRids]);
         }
 
         counter++;
@@ -760,7 +913,7 @@ class RelicOptimizer {
     const results = [];
     while (heap.size > 0) {
       const hk = heap.pop();
-      const data = resultMap[hk[3]];
+      const data = resultMap.get(hk[3]);
       const [reqMet, score, subScore, nCts, dCts, nRids, dRids] = data;
 
       const matchedKeys = new Set();
@@ -814,11 +967,22 @@ class RelicOptimizer {
     return a[3] - b[3];
   }
 
+  // New lightweight format: [score, rids, cb, ep, her, subScore]
   _combosToResultsCompact(combos, isDeepOnly) {
+    const nSpec = this._nSpec;
+    const compactMap = this._compactMap;
     const results = [];
-    for (const [score, counts, conc, exclPen, hasExclReq, rids, comboSubScore] of combos) {
+    for (const combo of combos) {
+      const score = combo[0], rids = combo[1], her = combo[4], comboSubScore = combo[5];
+      // Rebuild counts from rids
+      const counts = new Int32Array(nSpec);
+      for (const rid of rids) {
+        const si = compactMap[rid];
+        if (si) for (const idx of si) counts[idx]++;
+      }
+
       const matchedKeys = new Set();
-      for (let i = 0; i < this._nSpec; i++) {
+      for (let i = 0; i < nSpec; i++) {
         if (counts[i] > 0) matchedKeys.add(this._specKeyList[i]);
       }
       const missing = [];
@@ -835,9 +999,9 @@ class RelicOptimizer {
       }
 
       const relics = rids.map(rid => this._relicById[rid]);
-      const subScore = comboSubScore !== undefined ? comboSubScore : this._fastSubScore(counts);
+      const subScore = comboSubScore !== undefined ? comboSubScore : 0;
       results.push({
-        required_met: missing.length === 0 && !hasExclReq,
+        required_met: missing.length === 0 && !her,
         score,
         sub_score: subScore,
         matched_keys: matchedKeys,
@@ -873,13 +1037,17 @@ class RelicOptimizer {
       }
       effectsOut.push(effEntry);
       for (let si = 1; si < group.length; si++) {
+        const subMatched = matchedKeys.has(group[si].key);
         const subEntry = {
           key: group[si].key,
           name_ja: group[si].name_ja || '',
           name_en: group[si].name_en || '',
-          matched: false,
+          matched: subMatched,
           isDebuff: true,
         };
+        if (subMatched && group[si].key in this.effectLookup) {
+          subEntry.priority = this.effectLookup[group[si].key].priority;
+        }
         if (group[si].key in this.excludeLookup) {
           subEntry.excluded = true;
           subEntry.excludePriority = this.excludeLookup[group[si].key].priority;

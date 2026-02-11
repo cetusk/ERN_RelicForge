@@ -170,16 +170,33 @@ class RelicOptimizer:
         # Spec keys → contiguous int indices
         self._spec_key_list = sorted(self.effect_lookup.keys())
         self._spec_key_to_idx = {k: i for i, k in enumerate(self._spec_key_list)}
-        self._n_spec = len(self._spec_key_list)
+        n_spec = len(self._spec_key_list)
+        self._n_spec = n_spec
         self._spec_weights = [self.effect_lookup[k]['weight']
                               for k in self._spec_key_list]
+        # Stacking codes: 0=non-stackable, 1=stackable, 2=conditional
+        self._spec_stacking_int = []
+        self._spec_penalty30 = []
+        self._spec_penalty50 = []
+        self._is_required = [False] * n_spec
+        for i, k in enumerate(self._spec_key_list):
+            s = self.stacking_data.get(k, False)
+            self._spec_stacking_int.append(1 if s is True else 2 if s == 'conditional' else 0)
+            w = self._spec_weights[i]
+            self._spec_penalty30.append(int(w * 0.3))
+            self._spec_penalty50.append(int(w * 0.5))
+            if self.effect_lookup[k]['priority'] == 'required':
+                self._is_required[i] = True
+        self._required_idx_set = frozenset(
+            i for i in range(n_spec) if self._is_required[i])
+        # Keep original for backward compatibility
         self._spec_stacking = [self.stacking_data.get(k, False)
                                for k in self._spec_key_list]
-        self._required_idx_set = frozenset(
-            i for i, k in enumerate(self._spec_key_list)
-            if self.effect_lookup[k]['priority'] == 'required')
 
         # Sub-priority rank values (for tiebreaker scoring)
+        # Tier multipliers ensure required always dominates preferred,
+        # which always dominates nice_to_have, regardless of group sizes.
+        SUB_RANK_TIER = {'required': 10000, 'preferred': 100, 'nice_to_have': 1}
         priority_groups: Dict[str, list] = {}
         for spec in include_specs:
             key = spec.get('key')
@@ -192,9 +209,9 @@ class RelicOptimizer:
         self._spec_sub_rank_values = [0] * self._n_spec
         for priority, entries in priority_groups.items():
             group_size = len(entries)
-            pw = PRIORITY_WEIGHTS[priority]
+            tier = SUB_RANK_TIER.get(priority, 1)
             for idx, rank in entries:
-                self._spec_sub_rank_values[idx] = (group_size - 1 - rank) * pw
+                self._spec_sub_rank_values[idx] = (group_size - rank) * tier
 
         # Exclude keys → contiguous int indices
         self._excl_key_list = sorted(self.exclude_lookup.keys())
@@ -243,19 +260,11 @@ class RelicOptimizer:
         if color:
             filtered = [r for r in filtered if r.get('itemColor') == color]
 
-        if character:
-            char_ja = resolve_character_name_ja(character)
-
-            def has_other_char_effect(relic):
-                for group in relic['effects']:
-                    main_eff = group[0]
-                    name = main_eff.get('name_ja', '')
-                    m = re.match(r'【(.+?)】', name)
-                    if m and m.group(1) != char_ja:
-                        return True
-                return False
-
-            filtered = [r for r in filtered if not has_other_char_effect(r)]
+        # Note: character parameter is accepted but no longer used for filtering.
+        # Relics with other-character effects (e.g. 【無頼漢】) are kept in the pool
+        # because the relic itself is equippable by any character — only the
+        # character-specific effect is inactive.  Scoring already ignores
+        # effects not in the user's spec list.
 
         return filtered
 
@@ -272,14 +281,15 @@ class RelicOptimizer:
         return keys
 
     def _get_spec_keys(self, relic: Dict) -> Tuple:
-        """遺物の効果キーのうち指定効果にマッチするもののみ返す（キャッシュ付き）"""
+        """遺物の効果キーのうち指定効果にマッチするもののみ返す（キャッシュ付き）
+        サブ効果（デメリット等）も含め全効果を走査する。"""
         rid = relic['id']
         if rid in self._spec_keys_cache:
             return self._spec_keys_cache[rid]
         keys = []
         for group in relic['effects']:
-            if group:
-                k = group[0]['key']
+            for e in group:
+                k = e['key']
                 if k in self.effect_lookup:
                     keys.append(k)
         result = tuple(keys)
@@ -308,23 +318,24 @@ class RelicOptimizer:
         """配列ベースの高速スコア計算。counts: list[int], 長さ n_spec"""
         score = 0
         weights = self._spec_weights
-        stacking = self._spec_stacking
+        stacking_int = self._spec_stacking_int
+        penalty30 = self._spec_penalty30
+        penalty50 = self._spec_penalty50
         for i in range(self._n_spec):
             c = counts[i]
             if c == 0:
                 continue
-            w = weights[i]
-            s = stacking[i]
-            if s is True:
-                score += w * c
-            elif s == 'conditional':
-                score += w
+            si = stacking_int[i]
+            if si == 1:  # stackable
+                score += weights[i] * c
+            elif si == 2:  # conditional
+                score += weights[i]
                 if c > 1:
-                    score -= int(w * 0.3 * (c - 1))
-            else:
-                score += w
+                    score -= penalty30[i] * (c - 1)
+            else:  # non-stackable
+                score += weights[i]
                 if c > 1:
-                    score -= int(w * 0.5 * (c - 1))
+                    score -= penalty50[i] * (c - 1)
         return score
 
     def _fast_sub_score(self, counts):
@@ -771,6 +782,12 @@ class RelicOptimizer:
             # Ensure relics with wanted effects are always included
             must_include = [r for r in candidates
                            if r['id'] in wanted_ids]
+            # Cap must_include to prevent unbounded candidate lists
+            # (esp. for "Any" slots)
+            if len(must_include) > candidates_per_slot:
+                must_include.sort(
+                    key=lambda r: self.score_relic(r), reverse=True)
+                must_include = must_include[:candidates_per_slot]
             must_ids = {r['id'] for r in must_include}
 
             # Fill remaining slots with top-scored others
@@ -876,7 +893,10 @@ class RelicOptimizer:
 
         n_spec = self._n_spec
         spec_weights = self._spec_weights
-        spec_stacking = self._spec_stacking
+        spec_stacking_int = self._spec_stacking_int
+        spec_penalty30 = self._spec_penalty30
+        spec_penalty50 = self._spec_penalty50
+        is_required = self._is_required
         required_idx_set = self._required_idx_set
         sub_rank_values = self._spec_sub_rank_values
         relic_by_id = self._relic_by_id
@@ -942,27 +962,26 @@ class RelicOptimizer:
                     if best_possible >= (heap[0][0], heap[0][1]):
                         break
 
-                # Inline merged scoring (array-based)
+                # Inline merged scoring (integer stacking codes)
                 score = 0
                 has_all_required = True
                 for i in range(n_spec):
                     c = n_cts[i] + d_cts[i]
                     if c == 0:
-                        if i in required_idx_set:
+                        if is_required[i]:
                             has_all_required = False
                         continue
-                    w = spec_weights[i]
-                    s = spec_stacking[i]
-                    if s is True:
-                        score += w * c
-                    elif s == 'conditional':
-                        score += w
+                    si = spec_stacking_int[i]
+                    if si == 1:  # stackable
+                        score += spec_weights[i] * c
+                    elif si == 2:  # conditional
+                        score += spec_weights[i]
                         if c > 1:
-                            score -= int(w * 0.3 * (c - 1))
-                    else:
-                        score += w
+                            score -= spec_penalty30[i] * (c - 1)
+                    else:  # non-stackable
+                        score += spec_weights[i]
                         if c > 1:
-                            score -= int(w * 0.5 * (c - 1))
+                            score -= spec_penalty50[i] * (c - 1)
 
                 score += n_conc + d_conc - n_ep - d_ep
                 has_excl_req = n_her or d_her
@@ -1155,13 +1174,17 @@ class RelicOptimizer:
                     self.exclude_lookup[main_eff['key']]['priority']
             effects_out.append(eff_entry)
             for sub in group[1:]:
+                sub_matched = sub['key'] in matched_keys
                 sub_entry = {
                     'key': sub['key'],
                     'name_ja': sub.get('name_ja', ''),
                     'name_en': sub.get('name_en', ''),
-                    'matched': False,
+                    'matched': sub_matched,
                     'isDebuff': True,
                 }
+                if sub_matched and sub['key'] in self.effect_lookup:
+                    sub_entry['priority'] = \
+                        self.effect_lookup[sub['key']]['priority']
                 if sub['key'] in excl_set:
                     sub_entry['excluded'] = True
                     sub_entry['excludePriority'] = \
