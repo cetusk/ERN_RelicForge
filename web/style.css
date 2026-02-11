@@ -58,6 +58,28 @@ body {
   color: var(--text-secondary);
 }
 
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.header-meta-sep {
+  color: var(--border);
+}
+
+.header-meta-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.header-meta-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 /* === Buttons === */
 .btn-primary {
   background: #5b9bd5;

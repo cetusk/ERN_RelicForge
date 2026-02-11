@@ -44,6 +44,10 @@ const PRIORITY_LABELS = {
 const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
 const CONCENTRATION_BONUS = 5;
 
+// App metadata
+const APP_NIGHTREIGN_VERSION = 'v1.03.4';
+const APP_LAST_UPDATED = '2026-02-11';
+
 // === Type Display Names ===
 const TYPE_LABELS = {
   Relic:       { ja: '通常', en: 'Relic' },
@@ -508,6 +512,13 @@ function updateLangUI() {
     ? '上記パスをエクスプローラーで開き、.sl2.bak ファイルを選択 or 下のドロップゾーンにドラッグすることも可能です。'
     : 'Open the path above in Explorer to select or drag the .sl2.bak file to the drop zone below.';
   document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
+  // Header meta
+  document.getElementById('header-meta-version').textContent = ja
+    ? `Nightreign ${APP_NIGHTREIGN_VERSION} 対応`
+    : `Nightreign ${APP_NIGHTREIGN_VERSION}`;
+  document.getElementById('header-meta-updated').textContent = ja
+    ? `最終更新: ${APP_LAST_UPDATED}`
+    : `Updated: ${APP_LAST_UPDATED}`;
   // Header button
   document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';
   // Toolbar labels
@@ -583,7 +594,7 @@ function updateResultCount() {
   const deepLabel = ja ? '深層' : 'Deep';
   const uniqueLabel = ja ? '固有' : 'Unique';
   resultCount.textContent =
-    `${hit} ${hitLabel} / ${total}  (${normalLabel}: ${nR} / ${deepLabel}: ${nD} / ${uniqueLabel}: ${nU})`;
+    `${hit} ${hitLabel}(${normalLabel}: ${nR} / ${deepLabel}: ${nD} / ${uniqueLabel}: ${nU})`;
 }
 
 // === Search Suggestions ===
