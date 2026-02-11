@@ -41,8 +41,7 @@ const PRIORITY_LABELS = {
   exclude_preferred:    { ja: '除外:推奨', en: 'Exclude:Preferred' },
   exclude_nice_to_have: { ja: '除外:任意', en: 'Exclude:Nice to have' },
 };
-const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
-const CONCENTRATION_BONUS = 5;
+// PRIORITY_WEIGHTS and CONCENTRATION_BONUS are defined in relic-optimizer.js (loaded before app.js)
 
 // App metadata
 const APP_NIGHTREIGN_VERSION = 'v1.03.4';
