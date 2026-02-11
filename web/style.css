@@ -703,15 +703,74 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
 .detail-effect {
   background: var(--bg-tertiary);
   border-radius: 6px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
 }
 
 .detail-effect-main {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-primary);
-  margin-bottom: 4px;
   font-weight: 500;
+}
+
+/* Score breakdown row: horizontal flex layout */
+.detail-score-row {
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-score-row .detail-effect-main {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-effect-meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.detail-effect-score {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Consolas', 'Monaco', monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 48px;
+  text-align: right;
+}
+
+.detail-score-row.summary {
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 10px;
+}
+
+.detail-score-row.total {
+  border-top: 2px solid var(--text-secondary);
+  margin-top: 4px;
+  padding-top: 10px;
+  background: transparent;
+}
+
+.detail-score-row.total .detail-effect-main {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.detail-score-row.total .detail-effect-score {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .detail-effect-sub {
@@ -1946,6 +2005,22 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   flex-direction: column;
   overflow: hidden;
   flex-shrink: 0;
+  position: relative;
+}
+
+.opt-detail-resize-handle {
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 5;
+}
+.opt-detail-resize-handle:hover,
+.opt-detail-resize-handle.active {
+  background: var(--accent);
+  opacity: 0.4;
 }
 .opt-detail-body {
   flex: 1;

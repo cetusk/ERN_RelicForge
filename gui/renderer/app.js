@@ -31,6 +31,8 @@ const PRIORITY_LABELS = {
   exclude_preferred:    { ja: '除外:推奨', en: 'Exclude:Preferred' },
   exclude_nice_to_have: { ja: '除外:任意', en: 'Exclude:Nice to have' },
 };
+const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
+const CONCENTRATION_BONUS = 5;
 
 // === Type Display Names ===
 const TYPE_LABELS = {
@@ -1023,6 +1025,30 @@ setupInspectorResize(document.getElementById('inspector'));
 setupInspectorResize(document.getElementById('optimizer-inspector'));
 setupInspectorResize(document.getElementById('effect-select-inspector'));
 
+// --- Opt detail panel resize (left edge, right-side panel) ---
+function setupOptDetailResize(panelEl) {
+  const handle = panelEl.querySelector('.opt-detail-resize-handle');
+  if (!handle) return;
+  let startX, startWidth;
+  handle.addEventListener('mousedown', (e) => {
+    startX = e.clientX;
+    startWidth = panelEl.offsetWidth;
+    handle.classList.add('active');
+    const onMove = (ev) => {
+      const w = Math.max(280, Math.min(800, startWidth - (ev.clientX - startX)));
+      panelEl.style.width = w + 'px';
+    };
+    const onUp = () => {
+      handle.classList.remove('active');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  });
+}
+
 function renderInspectorEffects() {
   const query = inspectorSearch.value.toLowerCase().trim();
   const filtered = query
@@ -1341,11 +1367,13 @@ function addOptimizerTab(label, data, params) {
   detail.id = `opt-detail-${tabId}`;
   detail.className = 'opt-detail-panel hidden';
   detail.innerHTML = `
+    <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
       <button class="btn-close opt-detail-close">&times;</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
+  setupOptDetailResize(detail);
   wrapper.appendChild(detail);
 
   document.getElementById('main-content').appendChild(wrapper);
@@ -1383,11 +1411,13 @@ function addOptimizerTabLoading(label, params) {
   detail.id = `opt-detail-${tabId}`;
   detail.className = 'opt-detail-panel hidden';
   detail.innerHTML = `
+    <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
       <button class="btn-close opt-detail-close">&times;</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
+  setupOptDetailResize(detail);
   wrapper.appendChild(detail);
 
   document.getElementById('main-content').appendChild(wrapper);
@@ -2262,6 +2292,104 @@ function renderResultCard(res, ja, isBest, params, idx) {
   return html;
 }
 
+function computeScoreBreakdown(res, params) {
+  const allRelics = [...(res.normalRelics || []), ...(res.deepRelics || [])];
+  const matchedKeys = new Set(res.matchedEffects || []);
+  const excludedKeys = new Set(res.excludedPresent || []);
+
+  // Count matched effect occurrences across all relics
+  const matchedCounts = {};
+  const excludedCounts = {};
+  for (const relic of allRelics) {
+    for (const eff of relic.effects) {
+      if (eff.matched && matchedKeys.has(eff.key)) {
+        matchedCounts[eff.key] = (matchedCounts[eff.key] || 0) + 1;
+      }
+      if (eff.excluded && excludedKeys.has(eff.key)) {
+        excludedCounts[eff.key] = (excludedCounts[eff.key] || 0) + 1;
+      }
+    }
+  }
+
+  // Build key -> stackable lookup
+  const keyToStackable = {};
+  for (const [id, info] of Object.entries(stackingLookup)) {
+    if (info.key) keyToStackable[info.key] = info.stackable;
+  }
+
+  // Compute per-effect score contribution
+  const effects = [];
+  let effectsTotal = 0;
+  for (const key of (res.matchedEffects || [])) {
+    const spec = params.effects.find(e => e.key === key && !e.exclude);
+    const priority = spec ? spec.priority : 'nice_to_have';
+    const w = PRIORITY_WEIGHTS[priority] || 1;
+    const count = matchedCounts[key] || 1;
+    const stackable = keyToStackable[key];
+
+    let contribution;
+    if (stackable === true) {
+      contribution = w * count;
+    } else if (stackable === 'conditional') {
+      contribution = w;
+      if (count > 1) contribution -= Math.trunc(w * 0.3) * (count - 1);
+    } else {
+      contribution = w;
+      if (count > 1) contribution -= Math.trunc(w * 0.5) * (count - 1);
+    }
+    effects.push({ key, priority, weight: w, count, stackable, contribution });
+    effectsTotal += contribution;
+  }
+
+  // Compute concentration bonus per relic
+  let concentrationBonus = 0;
+  const concentrationDetails = [];
+  for (const relic of allRelics) {
+    let matchedOnRelic = 0;
+    const matchedNames = [];
+    for (const eff of relic.effects) {
+      if (eff.matched && matchedKeys.has(eff.key)) {
+        matchedOnRelic++;
+        matchedNames.push(eff.key);
+      }
+    }
+    if (matchedOnRelic >= 2) {
+      const bonus = Math.trunc(CONCENTRATION_BONUS * matchedOnRelic * (matchedOnRelic - 1) / 2);
+      concentrationBonus += bonus;
+      concentrationDetails.push({
+        itemNameJa: relic.itemNameJa || relic.itemNameEn || relic.itemKey,
+        itemNameEn: relic.itemNameEn || relic.itemKey,
+        matchedCount: matchedOnRelic,
+        matchedNames,
+        bonus,
+      });
+    }
+  }
+
+  // Compute exclude penalty
+  const excludeEffects = [];
+  let excludePenalty = 0;
+  for (const key of (res.excludedPresent || [])) {
+    const spec = params.effects.find(e => e.key === key && e.exclude);
+    const priority = spec ? spec.priority : 'nice_to_have';
+    const w = PRIORITY_WEIGHTS[priority] || 1;
+    const count = excludedCounts[key] || 1;
+    const contribution = w * count;
+    excludeEffects.push({ key, priority, count, contribution });
+    excludePenalty += contribution;
+  }
+
+  return {
+    effects,
+    effectsTotal,
+    concentrationBonus,
+    concentrationDetails,
+    excludeEffects,
+    excludePenalty,
+    total: effectsTotal + concentrationBonus - excludePenalty,
+  };
+}
+
 // === Optimizer Result Detail Panel ===
 
 function showOptResultDetail(tabId, res, params, idx) {
@@ -2310,51 +2438,83 @@ function showOptResultDetail(tabId, res, params, idx) {
     html += `</div>`;
   }
 
-  // Matched effects section
+  // Score breakdown section
+  const bd = computeScoreBreakdown(res, params);
   html += `<div class="detail-section">`;
-  html += `<h3>${ja ? 'マッチした効果' : 'Matched Effects'}</h3>`;
-  (res.matchedEffects || []).forEach(key => {
-    const spec = params.effects.find(e => e.key === key && !e.exclude);
-    const priority = spec ? spec.priority : 'nice_to_have';
-    const eff = allUniqueEffects.find(e => e.key === key);
-    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
-    const pLabel = PRIORITY_LABELS[priority]
-      ? (ja ? PRIORITY_LABELS[priority].ja : PRIORITY_LABELS[priority].en) : priority;
-    html += `<div class="detail-effect">`;
+  html += `<h3>${ja ? 'スコア内訳' : 'Score Breakdown'}</h3>`;
+
+  // Matched effects with score contribution
+  for (const ef of bd.effects) {
+    const eff = allUniqueEffects.find(e => e.key === ef.key);
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : ef.key;
+    const pLabel = PRIORITY_LABELS[ef.priority]
+      ? (ja ? PRIORITY_LABELS[ef.priority].ja : PRIORITY_LABELS[ef.priority].en) : ef.priority;
+    const stackLabel = ef.stackable === true ? (ja ? '重複:○' : 'Stack:Y')
+      : ef.stackable === 'conditional' ? (ja ? '重複:△' : 'Stack:C')
+      : (ja ? '重複:×' : 'Stack:N');
+    const countInfo = ef.count > 1 ? ` ×${ef.count}` : '';
+    html += `<div class="detail-score-row">`;
     html += `<div class="detail-effect-main">${name}</div>`;
-    html += `<div class="detail-effect-stacking">${pLabel}</div>`;
+    html += `<div class="detail-effect-meta">${pLabel}${countInfo} ${stackLabel}</div>`;
+    html += `<div class="detail-effect-score" style="color:#80d080">+${ef.contribution}</div>`;
     html += `</div>`;
-  });
+  }
+
   // Missing required
   (res.missingRequired || []).forEach(key => {
     const eff = allUniqueEffects.find(e => e.key === key);
     const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
-    html += `<div class="detail-effect" style="opacity:0.5">`;
+    html += `<div class="detail-score-row" style="opacity:0.5">`;
     html += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
-    html += `<div class="detail-effect-stacking">${ja ? '未達' : 'Missing'}</div>`;
+    html += `<div class="detail-effect-meta">${ja ? '未達' : 'Missing'}</div>`;
+    html += `<div class="detail-effect-score"></div>`;
     html += `</div>`;
   });
-  html += `</div>`;
 
-  // Excluded effects present section
-  if (res.excludedPresent && res.excludedPresent.length > 0) {
-    html += `<div class="detail-section">`;
-    html += `<h3>${ja ? '除外効果（含有）' : 'Excluded Effects Present'}</h3>`;
-    (res.excludedPresent || []).forEach(key => {
-      const spec = params.effects.find(e => e.key === key && e.exclude);
-      const priority = spec ? spec.priority : 'nice_to_have';
-      const displayPriority = `exclude_${priority}`;
-      const eff = allUniqueEffects.find(e => e.key === key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
-      const pLabel = PRIORITY_LABELS[displayPriority]
-        ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
-      html += `<div class="detail-effect">`;
-      html += `<div class="detail-effect-main" style="color:#e07070;text-decoration:line-through">${name}</div>`;
-      html += `<div class="detail-effect-stacking">${pLabel}</div>`;
+  // Concentration bonus
+  if (bd.concentrationBonus > 0) {
+    html += `<div class="detail-score-row summary">`;
+    html += `<div class="detail-effect-main">${ja ? '集中ボーナス' : 'Concentration Bonus'}</div>`;
+    html += `<div class="detail-effect-meta"></div>`;
+    html += `<div class="detail-effect-score" style="color:#80d080">+${bd.concentrationBonus}</div>`;
+    html += `</div>`;
+    for (const cd of bd.concentrationDetails) {
+      const relicName = ja ? cd.itemNameJa : cd.itemNameEn;
+      const effNames = cd.matchedNames.map(k => {
+        const e = allUniqueEffects.find(u => u.key === k);
+        return e ? (ja ? e.name_ja : e.name_en) : k;
+      }).join(', ');
+      html += `<div class="detail-score-row" style="padding-left:20px;opacity:0.7">`;
+      html += `<div class="detail-effect-main" style="font-size:11px">${relicName} (${effNames})</div>`;
+      html += `<div class="detail-effect-meta">×${cd.matchedCount}</div>`;
+      html += `<div class="detail-effect-score" style="color:#80d080;font-size:11px">+${cd.bonus}</div>`;
       html += `</div>`;
-    });
+    }
+  }
+
+  // Exclude effects with penalty
+  for (const ef of bd.excludeEffects) {
+    const eff = allUniqueEffects.find(e => e.key === ef.key);
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : ef.key;
+    const displayPriority = `exclude_${ef.priority}`;
+    const pLabel = PRIORITY_LABELS[displayPriority]
+      ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
+    const countInfo = ef.count > 1 ? ` ×${ef.count}` : '';
+    html += `<div class="detail-score-row">`;
+    html += `<div class="detail-effect-main" style="color:#e07070;text-decoration:line-through">${name}</div>`;
+    html += `<div class="detail-effect-meta">${pLabel}${countInfo}</div>`;
+    html += `<div class="detail-effect-score" style="color:#e07070">-${ef.contribution}</div>`;
     html += `</div>`;
   }
+
+  // Total
+  html += `<div class="detail-score-row total">`;
+  html += `<div class="detail-effect-main">${ja ? '合計' : 'Total'}</div>`;
+  html += `<div class="detail-effect-meta"></div>`;
+  html += `<div class="detail-effect-score">${bd.total}</div>`;
+  html += `</div>`;
+
+  html += `</div>`;
 
   body.innerHTML = html;
 
