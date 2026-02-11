@@ -3530,9 +3530,9 @@
       "stackNotes": "キャラクター固有効果"
     },
     "7034400": {
-      "key": "executorCharacterSkillBoostsAttackButDrainsHP",
-      "name_en": "Executor Character Skill Boosts Attack But Drains Hp",
-      "name_ja": "【執行者】スキル使用で攻撃力上昇、HP減少",
+      "key": "executorSkillBoostsAttackReducesCutRate",
+      "name_en": "Executor Skill Boosts Attack, Reduces Cut Rate",
+      "name_ja": "【執行者】スキル中の攻撃力上昇、攻撃時にカット率低下",
       "stackable": false,
       "stackNotes": "キャラクター固有効果"
     },
