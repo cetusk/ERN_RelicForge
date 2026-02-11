@@ -1547,9 +1547,9 @@ function renderOptEffectsTags() {
     keys.forEach((key, idx) => {
       const eff = allUniqueEffects.find(e => e.key === key);
       const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
-      const rankHtml = isExclude ? '' : `<span class="opt-effect-rank">${idx + 1}</span>`;
-      const dragHandle = isExclude ? '' : '<span class="opt-effect-drag-handle">&#x2630;</span>';
-      html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="${!isExclude}">
+      const rankHtml = `<span class="opt-effect-rank">${idx + 1}</span>`;
+      const dragHandle = '<span class="opt-effect-drag-handle">&#x2630;</span>';
+      html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="true">
         ${rankHtml}
         <span class="opt-effect-tag-name" title="${key}">${name}</span>
         ${dragHandle}
@@ -1672,7 +1672,9 @@ function collectOptimizerParams() {
   const rankCounters = {};
   optSelectedEffects.forEach((priority, key) => {
     if (priority.startsWith('exclude_')) {
-      effects.push({ key, priority: priority.replace('exclude_', ''), exclude: true });
+      const rank = rankCounters[priority] || 0;
+      rankCounters[priority] = rank + 1;
+      effects.push({ key, priority: priority.replace('exclude_', ''), exclude: true, rank });
     } else {
       const rank = rankCounters[priority] || 0;
       rankCounters[priority] = rank + 1;

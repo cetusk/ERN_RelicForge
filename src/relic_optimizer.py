@@ -222,6 +222,23 @@ class RelicOptimizer:
         self._excl_is_required = [self.exclude_lookup[k]['priority'] == 'required'
                                   for k in self._excl_key_list]
 
+        # Exclude sub-priority rank values (same tier formula as include)
+        excl_priority_groups: Dict[str, list] = {}
+        for spec in exclude_specs:
+            key = spec.get('key')
+            if key and key in self._excl_key_to_idx:
+                idx = self._excl_key_to_idx[key]
+                p = spec['priority']
+                excl_priority_groups.setdefault(p, []).append(
+                    (idx, spec.get('rank', 0)))
+
+        self._excl_sub_rank_values = [0] * self._n_excl
+        for priority, entries in excl_priority_groups.items():
+            group_size = len(entries)
+            tier = SUB_RANK_TIER.get(priority, 1)
+            for idx, rank in entries:
+                self._excl_sub_rank_values[idx] = (group_size - rank) * tier
+
         # Relic-by-id lookup for deferred result construction
         self._relic_by_id = {r['id']: r for r in relics}
 
@@ -349,7 +366,8 @@ class RelicOptimizer:
 
     def _compact_relic(self, relic: Dict) -> Tuple:
         """レリックをコンパクトなタプルに変換
-        Returns: (rid, spec_indices, excl_penalty, has_excl_req, conc_bonus)
+        Returns: (rid, spec_indices, excl_penalty, has_excl_req,
+                  conc_bonus, excl_sub_rank)
         """
         rid = relic['id']
         spec_keys = self._get_spec_keys(relic)
@@ -358,22 +376,25 @@ class RelicOptimizer:
         excl_keys = self._get_exclude_keys(relic)
         excl_penalty = 0
         has_excl_req = False
+        excl_sub_rank = 0
         for k in excl_keys:
             idx = self._excl_key_to_idx[k]
             excl_penalty += self._excl_weights[idx]
             if self._excl_is_required[idx]:
                 has_excl_req = True
+            excl_sub_rank += self._excl_sub_rank_values[idx]
 
         n_sk = len(spec_indices)
         conc_bonus = CONCENTRATION_BONUS * n_sk * (n_sk - 1) // 2 \
             if n_sk >= 2 else 0
 
-        return (rid, spec_indices, excl_penalty, has_excl_req, conc_bonus)
+        return (rid, spec_indices, excl_penalty, has_excl_req,
+                conc_bonus, excl_sub_rank)
 
     def _enumerate_combos(self, compact_cands, slot_colors):
         """スロット色パターンに応じた最適なコンボ列挙
         Returns: list of (score, counts_tuple, conc, excl_pen,
-                          has_excl_req, relic_ids)
+                          has_excl_req, relic_ids, excl_sub_sum)
         """
         n_spec = self._n_spec
         n_slots = len(slot_colors)
@@ -397,11 +418,11 @@ class RelicOptimizer:
         results = []
         n = len(cands)
         for i in range(n):
-            ri_id, ri_si, ri_ep, ri_her, ri_cb = cands[i]
+            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr = cands[i]
             for j in range(i + 1, n):
-                rj_id, rj_si, rj_ep, rj_her, rj_cb = cands[j]
+                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr = cands[j]
                 for k in range(j + 1, n):
-                    rk_id, rk_si, rk_ep, rk_her, rk_cb = cands[k]
+                    rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr = cands[k]
                     counts = [0] * n_spec
                     for idx in ri_si:
                         counts[idx] += 1
@@ -419,16 +440,17 @@ class RelicOptimizer:
                         ri_cb + rj_cb + rk_cb,
                         ri_ep + rj_ep + rk_ep,
                         her,
-                        (ri_id, rj_id, rk_id)))
+                        (ri_id, rj_id, rk_id),
+                        ri_esr + rj_esr + rk_esr))
         return results
 
     def _enum_all_diff(self, compact_cands, n_spec):
         """全スロット異色: 重複チェック不要"""
         results = []
         c0, c1, c2 = compact_cands[0], compact_cands[1], compact_cands[2]
-        for ri_id, ri_si, ri_ep, ri_her, ri_cb in c0:
-            for rj_id, rj_si, rj_ep, rj_her, rj_cb in c1:
-                for rk_id, rk_si, rk_ep, rk_her, rk_cb in c2:
+        for ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr in c0:
+            for rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr in c1:
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr in c2:
                     counts = [0] * n_spec
                     for idx in ri_si:
                         counts[idx] += 1
@@ -446,7 +468,8 @@ class RelicOptimizer:
                         ri_cb + rj_cb + rk_cb,
                         ri_ep + rj_ep + rk_ep,
                         her,
-                        (ri_id, rj_id, rk_id)))
+                        (ri_id, rj_id, rk_id),
+                        ri_esr + rj_esr + rk_esr))
         return results
 
     def _enum_two_same(self, compact_cands, slot_colors, n_spec):
@@ -465,10 +488,10 @@ class RelicOptimizer:
         n_same = len(same_cands)
 
         for i in range(n_same):
-            ri_id, ri_si, ri_ep, ri_her, ri_cb = same_cands[i]
+            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr = same_cands[i]
             for j in range(i + 1, n_same):
-                rj_id, rj_si, rj_ep, rj_her, rj_cb = same_cands[j]
-                for rk_id, rk_si, rk_ep, rk_her, rk_cb in diff_cands:
+                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr = same_cands[j]
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr in diff_cands:
                     if rk_id == ri_id or rk_id == rj_id:
                         continue
                     counts = [0] * n_spec
@@ -488,7 +511,8 @@ class RelicOptimizer:
                         ri_cb + rj_cb + rk_cb,
                         ri_ep + rj_ep + rk_ep,
                         her,
-                        (ri_id, rj_id, rk_id)))
+                        (ri_id, rj_id, rk_id),
+                        ri_esr + rj_esr + rk_esr))
         return results
 
     def _enum_general(self, compact_cands, n_spec):
@@ -497,7 +521,7 @@ class RelicOptimizer:
         seen = set()
 
         def recurse(slot_idx, chosen_ids, partial_si, partial_ep,
-                     partial_her, partial_cb):
+                     partial_her, partial_cb, partial_esr):
             if slot_idx == len(compact_cands):
                 canon = tuple(sorted(chosen_ids))
                 if canon in seen:
@@ -513,10 +537,11 @@ class RelicOptimizer:
                     score,
                     tuple(counts),
                     partial_cb, partial_ep, partial_her,
-                    tuple(chosen_ids)))
+                    tuple(chosen_ids),
+                    partial_esr))
                 return
 
-            for rid, si, ep, her, cb in compact_cands[slot_idx]:
+            for rid, si, ep, her, cb, esr in compact_cands[slot_idx]:
                 if rid in chosen_ids:
                     continue
                 recurse(
@@ -525,9 +550,10 @@ class RelicOptimizer:
                     partial_si + (si,),
                     partial_ep + ep,
                     partial_her or her,
-                    partial_cb + cb)
+                    partial_cb + cb,
+                    partial_esr + esr)
 
-        recurse(0, (), (), 0, False, 0)
+        recurse(0, (), (), 0, False, 0, 0)
         return results
 
     def is_stackable(self, key: str) -> bool:
@@ -855,7 +881,7 @@ class RelicOptimizer:
 
         # Phase 1: Enumerate normal combos using optimized enumeration
         # Compact format: (score, counts_tuple, conc, excl_pen,
-        #                   has_excl_req, relic_ids)
+        #                   has_excl_req, relic_ids, excl_sub_sum)
         n_cache_key = tuple(sorted(normal_slot_colors))
         if n_cache_key in self._phase_cache:
             normal_combos = self._phase_cache[n_cache_key]
@@ -923,12 +949,12 @@ class RelicOptimizer:
         req_met_bound = True
         if required_idx_set:
             possible_from_normal = set()
-            for _, n_cts, _, _, _, _ in normal_top:
+            for _, n_cts, _, _, _, _, _ in normal_top:
                 for i in range(n_spec):
                     if n_cts[i] > 0:
                         possible_from_normal.add(i)
             possible_from_deep = set()
-            for _, d_cts, _, _, _, _ in deep_top:
+            for _, d_cts, _, _, _, _, _ in deep_top:
                 for i in range(n_spec):
                     if d_cts[i] > 0:
                         possible_from_deep.add(i)
@@ -936,8 +962,8 @@ class RelicOptimizer:
             if not required_idx_set.issubset(possible_all):
                 req_met_bound = False
         if req_met_bound:
-            has_n_no_excl = any(not h for _, _, _, _, h, _ in normal_top)
-            has_d_no_excl = any(not h for _, _, _, _, h, _ in deep_top)
+            has_n_no_excl = any(not h for _, _, _, _, h, _, _ in normal_top)
+            has_d_no_excl = any(not h for _, _, _, _, h, _, _ in deep_top)
             if not (has_n_no_excl and has_d_no_excl):
                 req_met_bound = False
         bound_req_int = -1 if req_met_bound else 0
@@ -948,14 +974,14 @@ class RelicOptimizer:
         counter = 0
         evaluated = 0
 
-        for ns, n_cts, n_conc, n_ep, n_her, n_rids in normal_top:
+        for ns, n_cts, n_conc, n_ep, n_her, n_rids, n_esr in normal_top:
             # Outer pruning
             if len(heap) >= top_n:
                 best_possible = (bound_req_int, -(ns + best_deep_score))
                 if best_possible >= (heap[0][0], heap[0][1]):
                     break
 
-            for ds, d_cts, d_conc, d_ep, d_her, d_rids in deep_top:
+            for ds, d_cts, d_conc, d_ep, d_her, d_rids, d_esr in deep_top:
                 # Inner pruning
                 if len(heap) >= top_n:
                     best_possible = (bound_req_int, -(ns + ds))
@@ -987,11 +1013,12 @@ class RelicOptimizer:
                 has_excl_req = n_her or d_her
                 req_met = has_all_required and not has_excl_req
 
-                # Sub-priority tiebreaker
+                # Sub-priority tiebreaker (include sub-rank minus exclude sub-rank)
                 sub_score = 0
                 for i in range(n_spec):
                     if n_cts[i] + d_cts[i] > 0:
                         sub_score += sub_rank_values[i]
+                sub_score -= (n_esr + d_esr)
 
                 evaluated += 1
 
@@ -1064,7 +1091,7 @@ class RelicOptimizer:
         required_idx_set = self._required_idx_set
         n_spec = self._n_spec
         relic_by_id = self._relic_by_id
-        for score, counts, conc, excl_pen, has_excl_req, rids in combos:
+        for score, counts, conc, excl_pen, has_excl_req, rids, excl_sub_sum in combos:
             matched_keys = set()
             for i in range(n_spec):
                 if counts[i] > 0:
@@ -1072,7 +1099,7 @@ class RelicOptimizer:
             missing = sorted(
                 spec_key_list[i] for i in required_idx_set
                 if counts[i] == 0)
-            sub_score = self._fast_sub_score(counts)
+            sub_score = self._fast_sub_score(counts) - excl_sub_sum
             excluded_present = set()
             for rid in rids:
                 for k in self._get_exclude_keys(relic_by_id[rid]):

@@ -238,6 +238,26 @@ class RelicOptimizer {
     this._exclWeights = this._exclKeyList.map(k => this.excludeLookup[k].weight);
     this._exclIsRequired = this._exclKeyList.map(k => this.excludeLookup[k].priority === 'required');
 
+    // Exclude sub-priority rank values (same tier formula as include)
+    const exclPriorityGroups = {};
+    for (const spec of excludeSpecs) {
+      const key = spec.key;
+      if (key && key in this._exclKeyToIdx) {
+        const idx = this._exclKeyToIdx[key];
+        const p = spec.priority || 'nice_to_have';
+        if (!exclPriorityGroups[p]) exclPriorityGroups[p] = [];
+        exclPriorityGroups[p].push([idx, spec.rank || 0]);
+      }
+    }
+    this._exclSubRankValues = new Int32Array(this._nExcl);
+    for (const [priority, entries] of Object.entries(exclPriorityGroups)) {
+      const groupSize = entries.length;
+      const tier = SUB_RANK_TIER[priority] || 1;
+      for (const [idx, rank] of entries) {
+        this._exclSubRankValues[idx] = (groupSize - rank) * tier;
+      }
+    }
+
     // Relic by id lookup
     this._relicById = {};
     for (const r of relics) {
@@ -382,16 +402,18 @@ class RelicOptimizer {
     const exclKeys = this._getExcludeKeys(relic);
     let exclPenalty = 0;
     let hasExclReq = false;
+    let exclSubRank = 0;
     for (const k of exclKeys) {
       const idx = this._exclKeyToIdx[k];
       exclPenalty += this._exclWeights[idx];
       if (this._exclIsRequired[idx]) hasExclReq = true;
+      exclSubRank += this._exclSubRankValues[idx];
     }
 
     const nSk = specIndices.length;
     const concBonus = nSk >= 2 ? Math.trunc(CONCENTRATION_BONUS * nSk * (nSk - 1) / 2) : 0;
 
-    return [rid, specIndices, exclPenalty, hasExclReq, concBonus];
+    return [rid, specIndices, exclPenalty, hasExclReq, concBonus, exclSubRank];
   }
 
   _enumerateCombos(compactCands, slotColors) {
@@ -446,10 +468,11 @@ class RelicOptimizer {
     }
     score += ri[4] + rj[4] + rk[4]; // concentration bonus
     score -= ri[2] + rj[2] + rk[2]; // exclusion penalty
-    return [score, sub, ri[4] + rj[4] + rk[4], ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3]];
+    const exclSub = ri[5] + rj[5] + rk[5]; // exclude sub-rank sum
+    return [score, sub, ri[4] + rj[4] + rk[4], ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3], exclSub];
   }
 
-  // Enum result format (lightweight): [score, rids, cb, ep, her, subScore]
+  // Enum result format (lightweight): [score, rids, cb, ep, her, subScore, exclSub]
   // No counts array — rebuilt later for top-N only via _rebuildCounts()
 
   _enumAllSame(cands, nSpec) {
@@ -463,8 +486,8 @@ class RelicOptimizer {
         const rj = cands[j];
         for (let k = j + 1; k < n; k++) {
           const rk = cands[k];
-          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub]);
+          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr]);
         }
       }
     }
@@ -481,8 +504,8 @@ class RelicOptimizer {
       for (let b = 0; b < c1.length; b++) {
         const rj = c1[b];
         for (let g = 0; g < c2.length; g++) {
-          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, c2[g]);
-          results.push([sc, [ri[0], rj[0], c2[g][0]], cb, ep, her, sub]);
+          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, c2[g]);
+          results.push([sc, [ri[0], rj[0], c2[g][0]], cb, ep, her, sub, esr]);
         }
       }
     }
@@ -518,8 +541,8 @@ class RelicOptimizer {
         for (let g = 0; g < diffCands.length; g++) {
           const rk = diffCands[g];
           if (rk[0] === ri[0] || rk[0] === rj[0]) continue;
-          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub]);
+          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr]);
         }
       }
     }
@@ -561,8 +584,8 @@ class RelicOptimizer {
           if (seen.has(key)) continue;
           seen.add(key);
 
-          const [sc, sub, cb, ep, her] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [lo, mid, hi], cb, ep, her, sub]);
+          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [lo, mid, hi], cb, ep, her, sub, esr]);
         }
       }
     }
@@ -576,7 +599,7 @@ class RelicOptimizer {
     // Pre-allocated mutable state for recursion (avoids spread copies)
     const chosenIds = new Array(nSlots);
     const chosenSi = new Array(nSlots);
-    let partialEp = 0, partialHer = false, partialCb = 0;
+    let partialEp = 0, partialHer = false, partialCb = 0, partialEsr = 0;
 
     const self = this;
     const recurse = (slotIdx) => {
@@ -604,7 +627,7 @@ class RelicOptimizer {
           sub += sr[i];
         }
         score += partialCb - partialEp;
-        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub]);
+        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub, partialEsr]);
         return;
       }
 
@@ -620,10 +643,11 @@ class RelicOptimizer {
         // Save state
         chosenIds[slotIdx] = rid;
         chosenSi[slotIdx] = cand[1];
-        const savedEp = partialEp, savedHer = partialHer, savedCb = partialCb;
+        const savedEp = partialEp, savedHer = partialHer, savedCb = partialCb, savedEsr = partialEsr;
         partialEp += cand[2];
         partialHer = partialHer || cand[3];
         partialCb += cand[4];
+        partialEsr += cand[5];
 
         recurse(slotIdx + 1);
 
@@ -631,6 +655,7 @@ class RelicOptimizer {
         partialEp = savedEp;
         partialHer = savedHer;
         partialCb = savedCb;
+        partialEsr = savedEsr;
       }
     };
 
@@ -767,7 +792,7 @@ class RelicOptimizer {
 
     if (!normalCombos.length && !deepCombos.length) return [];
 
-    // Lightweight combo format: [score, rids, cb, ep, her, subScore]
+    // Lightweight combo format: [score, rids, cb, ep, her, subScore, exclSub]
     // Sort each side by score descending
     normalCombos.sort((a, b) => b[0] - a[0]);
     deepCombos.sort((a, b) => b[0] - a[0]);
@@ -849,7 +874,7 @@ class RelicOptimizer {
 
     for (let ni = 0; ni < nTop; ni++) {
       const nCombo = normalTop[ni];
-      const ns = nCombo[0], nRids = nCombo[1], nConc = nCombo[2], nEp = nCombo[3], nHer = nCombo[4];
+      const ns = nCombo[0], nRids = nCombo[1], nConc = nCombo[2], nEp = nCombo[3], nHer = nCombo[4], nExclSub = nCombo[6] || 0;
       const nCts = nCountsArr[ni];
       // Outer pruning
       if (heap.size >= topN) {
@@ -859,7 +884,7 @@ class RelicOptimizer {
 
       for (let di = 0; di < dTop; di++) {
         const dCombo = deepTop[di];
-        const ds = dCombo[0], dRids = dCombo[1], dConc = dCombo[2], dEp = dCombo[3], dHer = dCombo[4];
+        const ds = dCombo[0], dRids = dCombo[1], dConc = dCombo[2], dEp = dCombo[3], dHer = dCombo[4], dExclSub = dCombo[6] || 0;
         const dCts = dCountsArr[di];
         // Inner pruning
         if (heap.size >= topN) {
@@ -889,6 +914,7 @@ class RelicOptimizer {
           }
           subScore += subRankValues[i];
         }
+        subScore -= (nExclSub + dExclSub);
 
         score += nConc + dConc - nEp - dEp;
         const hasExclReq = nHer || dHer;
@@ -967,13 +993,13 @@ class RelicOptimizer {
     return a[3] - b[3];
   }
 
-  // New lightweight format: [score, rids, cb, ep, her, subScore]
+  // New lightweight format: [score, rids, cb, ep, her, subScore, exclSub]
   _combosToResultsCompact(combos, isDeepOnly) {
     const nSpec = this._nSpec;
     const compactMap = this._compactMap;
     const results = [];
     for (const combo of combos) {
-      const score = combo[0], rids = combo[1], her = combo[4], comboSubScore = combo[5];
+      const score = combo[0], rids = combo[1], her = combo[4], comboSubScore = combo[5], exclSubSum = combo[6] || 0;
       // Rebuild counts from rids
       const counts = new Int32Array(nSpec);
       for (const rid of rids) {
@@ -999,7 +1025,7 @@ class RelicOptimizer {
       }
 
       const relics = rids.map(rid => this._relicById[rid]);
-      const subScore = comboSubScore !== undefined ? comboSubScore : 0;
+      const subScore = (comboSubScore !== undefined ? comboSubScore : 0) - exclSubSum;
       results.push({
         required_met: missing.length === 0 && !her,
         score,
