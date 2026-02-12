@@ -16,7 +16,7 @@
     <div class="header-meta">
       <span id="header-meta-version" class="header-meta-item">Nightreign v1.03.4 対応</span>
       <span class="header-meta-sep">|</span>
-      <span id="header-meta-updated" class="header-meta-item">最終更新: 2026-02-11</span>
+      <span id="header-meta-updated" class="header-meta-item">最終更新: 2026-02-12</span>
       <span class="header-meta-sep">|</span>
       <span class="header-meta-item">by cetusk (<a href="https://github.com/cetusk" class="header-meta-link" target="_blank" rel="noopener noreferrer">GitHub</a>)</span>
     </div>
@@ -66,6 +66,7 @@
     </div>
     <button id="btn-inspector" class="btn-inspector hidden">&#9881; <span id="btn-inspector-label">高度な検索</span></button>
     <button id="btn-optimizer" class="btn-inspector hidden">&#9881; <span id="btn-optimizer-label">ビルド探索</span></button>
+    <button id="btn-catalog" class="btn-inspector hidden">&#128218; <span id="btn-catalog-label">効果カタログ</span></button>
     <button id="btn-export-table" class="btn-inspector hidden">&#128190; <span id="btn-export-table-label">エクスポート</span></button>
     <span id="result-count" class="result-count"></span>
   </div>
@@ -128,6 +129,42 @@
         </div>
         <div id="detail-body" class="detail-body"></div>
       </div>
+    </div>
+
+    <div id="catalog-content" class="catalog-content hidden">
+      <div class="catalog-toolbar">
+        <div class="catalog-search-wrapper">
+          <input type="text" id="catalog-search" class="catalog-search-input"
+                 placeholder="効果名で検索..." autocomplete="off" />
+          <button id="catalog-search-clear" class="search-clear hidden">&times;</button>
+        </div>
+        <div class="catalog-filter-group">
+          <label id="catalog-label-category">カテゴリ:</label>
+          <select id="catalog-filter-category">
+            <option value="">すべて</option>
+          </select>
+        </div>
+        <div class="catalog-filter-group">
+          <label id="catalog-label-deep">通常/深層:</label>
+          <select id="catalog-filter-deep">
+            <option value="">すべて</option>
+            <option value="yes">深層</option>
+            <option value="no">通常</option>
+          </select>
+        </div>
+        <div class="catalog-filter-group">
+          <label id="catalog-label-stack">重複:</label>
+          <select id="catalog-filter-stack">
+            <option value="">すべて</option>
+            <option value="yes">○ 重複可</option>
+            <option value="no">× 重複不可</option>
+            <option value="conditional">△ 条件付き</option>
+          </select>
+        </div>
+        <span id="catalog-result-count" class="result-count"></span>
+        <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
+      </div>
+      <div id="catalog-list" class="catalog-list"></div>
     </div>
   </div>
 

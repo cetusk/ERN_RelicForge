@@ -22,6 +22,10 @@ let optSelectedEffects = new Map(); // effectKey -> priority
 let optVesselCollapsed = true;  // vessel list collapsed state
 let effectSelectCollapsed = new Set(); // collapsed categories in effect selector
 
+// Catalog state
+let catalogTabOpen = false;
+let catalogCollapsedCategories = new Set();
+
 // Priority display labels
 const PRIORITY_LABELS = {
   required:             { ja: '必須', en: 'Required' },
@@ -110,6 +114,18 @@ const optTop = document.getElementById('opt-top');
 const optimizerClearBtn = document.getElementById('optimizer-clear');
 const optimizerRunBtn = document.getElementById('optimizer-run');
 const optVesselHeader = document.getElementById('opt-vessel-header');
+
+// Catalog elements
+const btnCatalog = document.getElementById('btn-catalog');
+const btnCatalogLabel = document.getElementById('btn-catalog-label');
+const catalogContent = document.getElementById('catalog-content');
+const catalogList = document.getElementById('catalog-list');
+const catalogSearch = document.getElementById('catalog-search');
+const catalogSearchClear = document.getElementById('catalog-search-clear');
+const catalogFilterCategory = document.getElementById('catalog-filter-category');
+const catalogFilterDeep = document.getElementById('catalog-filter-deep');
+const catalogFilterStack = document.getElementById('catalog-filter-stack');
+const catalogResultCount = document.getElementById('catalog-result-count');
 
 // Effect selection inspector elements
 const effectSelectBackdrop = document.getElementById('effect-select-backdrop');
@@ -217,6 +233,7 @@ async function loadAndDisplay(filePath) {
     toolbar.classList.remove('hidden');
     btnInspector.classList.remove('hidden');
     btnOptimizer.classList.remove('hidden');
+    btnCatalog.classList.remove('hidden');
     btnExportTable.classList.remove('hidden');
     tabBar.classList.remove('hidden');
     updateInspectorButton();
@@ -225,6 +242,10 @@ async function loadAndDisplay(filePath) {
     sortDirection = 'desc';
     updateSortIndicators();
     applyFilters();
+    // Update catalog if open
+    if (catalogTabOpen && activeTab === 'catalog') {
+      renderCatalog();
+    }
     showView('content');
   } catch (err) {
     alert(`解析エラー:\n${err}`);
@@ -993,6 +1014,183 @@ function buildUniqueEffects() {
     .sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));
 }
 
+// ============================================================
+// === Effect Catalog ===
+// ============================================================
+
+function buildCatalogEffects() {
+  if (!allUniqueEffects || allUniqueEffects.length === 0) return [];
+  // Build a key->metadata map from stackingLookup for enrichment
+  const metaByKey = new Map();
+  if (stackingLookup) {
+    for (const [id, entry] of Object.entries(stackingLookup)) {
+      const k = entry.key;
+      if (!k) continue;
+      if (!metaByKey.has(k)) {
+        metaByKey.set(k, entry);
+      } else if (entry.deepOnly) {
+        const existing = metaByKey.get(k);
+        metaByKey.set(k, { ...existing, deepOnly: true });
+      }
+    }
+  }
+  // Only include effects that the player owns
+  const effectsByKey = new Map();
+  for (const ue of allUniqueEffects) {
+    const k = ue.key;
+    if (!k || effectsByKey.has(k)) continue;
+    const meta = metaByKey.get(k);
+    effectsByKey.set(k, {
+      key: k,
+      name_ja: meta ? (meta.name_ja || meta.name_en || k) : k,
+      name_en: meta ? (meta.name_en || k) : k,
+      category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
+      deepOnly: meta ? !!meta.deepOnly : false,
+      stackable: meta ? meta.stackable : undefined,
+      stackNotes: meta ? (meta.stackNotes || '') : '',
+      count: ue.count || 0,
+    });
+  }
+  return Array.from(effectsByKey.values())
+    .sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));
+}
+
+function populateCatalogCategoryFilter() {
+  const ja = displayLang === 'ja';
+  const current = catalogFilterCategory.value;
+  catalogFilterCategory.innerHTML = `<option value="">${ja ? 'すべて' : 'All'}</option>`;
+  EFFECT_CATEGORIES.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = ja ? c.ja : c.en;
+    catalogFilterCategory.appendChild(opt);
+  });
+  catalogFilterCategory.value = current;
+}
+
+function renderCatalog() {
+  const effects = buildCatalogEffects();
+  const ja = displayLang === 'ja';
+  const hasSaveData = allUniqueEffects && allUniqueEffects.length > 0;
+
+  // Apply filters
+  const searchTerm = (catalogSearch.value || '').trim().toLowerCase();
+  const catFilter = catalogFilterCategory.value;
+  const deepFilter = catalogFilterDeep.value;
+  const stackFilter = catalogFilterStack.value;
+
+  const filtered = effects.filter(e => {
+    if (searchTerm) {
+      const nameJa = (e.name_ja || '').toLowerCase();
+      const nameEn = (e.name_en || '').toLowerCase();
+      if (!nameJa.includes(searchTerm) && !nameEn.includes(searchTerm)) return false;
+    }
+    if (catFilter && e.category !== catFilter) return false;
+    if (deepFilter === 'yes' && !e.deepOnly) return false;
+    if (deepFilter === 'no' && e.deepOnly) return false;
+    if (stackFilter === 'yes' && e.stackable !== true) return false;
+    if (stackFilter === 'no' && e.stackable !== false) return false;
+    if (stackFilter === 'conditional' && e.stackable !== 'conditional') return false;
+    return true;
+  });
+
+  catalogResultCount.textContent = ja
+    ? `${filtered.length} / ${effects.length} 件`
+    : `${filtered.length} / ${effects.length}`;
+
+  const groups = new Map();
+  EFFECT_CATEGORIES.forEach(c => groups.set(c.id, []));
+  filtered.forEach(e => {
+    const cat = groups.has(e.category) ? e.category : 'other';
+    groups.get(cat).push(e);
+  });
+
+  let html = '';
+  EFFECT_CATEGORIES.forEach(cat => {
+    const items = groups.get(cat.id);
+    if (!items || items.length === 0) return;
+    const catName = ja ? cat.ja : cat.en;
+    const isCollapsed = catalogCollapsedCategories.has(cat.id);
+
+    html += `<div class="catalog-group-header${isCollapsed ? ' collapsed' : ''}" data-cat="${cat.id}">`;
+    html += `<span class="catalog-group-arrow">&#9660;</span>`;
+    html += `<span>${catName}</span>`;
+    html += `<span class="catalog-group-count">(${items.length})</span>`;
+    html += `</div>`;
+    html += `<div class="catalog-group-tiles${isCollapsed ? ' collapsed' : ''}" data-cat="${cat.id}" style="${isCollapsed ? '' : `max-height: ${items.length * 100 + 200}px`}">`;
+
+    items.forEach(e => {
+      const name = ja ? e.name_ja : e.name_en;
+      const deepClass = e.deepOnly ? ' deep-only' : '';
+      html += `<div class="catalog-card${deepClass}">`;
+      html += `<div class="catalog-card-name">${name}</div>`;
+      html += `<div class="catalog-card-meta">`;
+
+      if (e.stackable === true) {
+        html += `<span class="catalog-stack-badge yes">${ja ? '○ 重複可' : '○ Stackable'}</span>`;
+      } else if (e.stackable === false) {
+        html += `<span class="catalog-stack-badge no">${ja ? '× 重複不可' : '× No Stack'}</span>`;
+      } else if (e.stackable === 'conditional') {
+        html += `<span class="catalog-stack-badge conditional">${ja ? '△ 条件付き' : '△ Conditional'}</span>`;
+      }
+
+      if (e.deepOnly) {
+        html += `<span class="catalog-deep-badge">${ja ? '深層' : 'Deep'}</span>`;
+      }
+
+      html += `</div>`;
+
+      if (e.stackNotes) {
+        html += `<div class="catalog-card-notes">${e.stackNotes}</div>`;
+      }
+
+      if (hasSaveData) {
+        html += `<div class="catalog-card-count">${ja ? '所持数' : 'Owned'}: ${e.count}</div>`;
+      }
+
+      html += `</div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  catalogList.innerHTML = html;
+
+  catalogList.querySelectorAll('.catalog-group-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const catId = header.dataset.cat;
+      const tiles = catalogList.querySelector(`.catalog-group-tiles[data-cat="${catId}"]`);
+      if (catalogCollapsedCategories.has(catId)) {
+        catalogCollapsedCategories.delete(catId);
+        header.classList.remove('collapsed');
+        tiles.classList.remove('collapsed');
+        tiles.style.maxHeight = tiles.scrollHeight + 'px';
+      } else {
+        catalogCollapsedCategories.add(catId);
+        header.classList.add('collapsed');
+        tiles.classList.add('collapsed');
+      }
+    });
+  });
+}
+
+function openCatalogTab() {
+  catalogTabOpen = true;
+  populateCatalogCategoryFilter();
+  switchTab('catalog');
+}
+
+function closeCatalogTab() {
+  catalogTabOpen = false;
+  catalogContent.classList.add('hidden');
+
+  if (activeTab === 'catalog') {
+    switchTab('main');
+  } else {
+    renderTabBar();
+  }
+}
+
 function openInspector() {
   inspectorBackdrop.classList.remove('hidden');
   inspector.classList.add('open');
@@ -1207,6 +1405,28 @@ function updateAndGroupTabs() {
   });
 }
 
+// Catalog event listeners
+btnCatalog.addEventListener('click', () => {
+  if (catalogTabOpen) {
+    switchTab('catalog');
+  } else {
+    openCatalogTab();
+  }
+});
+catalogSearch.addEventListener('input', () => {
+  catalogSearchClear.classList.toggle('hidden', !catalogSearch.value);
+  renderCatalog();
+});
+catalogSearchClear.addEventListener('click', () => {
+  catalogSearch.value = '';
+  catalogSearchClear.classList.add('hidden');
+  renderCatalog();
+  catalogSearch.focus();
+});
+catalogFilterCategory.addEventListener('change', renderCatalog);
+catalogFilterDeep.addEventListener('change', renderCatalog);
+catalogFilterStack.addEventListener('change', renderCatalog);
+
 // Inspector event listeners
 btnInspector.addEventListener('click', openInspector);
 btnExportTable.addEventListener('click', exportRelicTableToHTML);
@@ -1330,6 +1550,31 @@ function renderTabBar() {
     tabBar.appendChild(tab);
   });
 
+  // Add catalog tab if open
+  if (catalogTabOpen) {
+    const ja = displayLang === 'ja';
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (activeTab === 'catalog' ? ' active' : '');
+    tab.dataset.tab = 'catalog';
+
+    const label = document.createElement('span');
+    label.className = 'tab-label';
+    label.textContent = ja ? '効果カタログ' : 'Effect Catalog';
+    tab.appendChild(label);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'tab-close';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeTab('catalog');
+    });
+    tab.appendChild(closeBtn);
+
+    tab.addEventListener('click', () => switchTab('catalog'));
+    tabBar.appendChild(tab);
+  }
+
   // Update main tab active state
   const mainTab = tabBar.querySelector('[data-tab="main"]');
   if (mainTab) mainTab.className = 'tab' + (activeTab === 'main' ? ' active' : '');
@@ -1343,6 +1588,7 @@ function switchTab(tabId) {
 
   // Toggle content visibility
   contentArea.classList.toggle('hidden', tabId !== 'main');
+  catalogContent.classList.toggle('hidden', tabId !== 'catalog');
 
   // Show/hide optimizer tab wrappers
   optimizerTabs.forEach((info, tid) => {
@@ -1359,6 +1605,11 @@ function switchTab(tabId) {
       el.style.display = 'none';
     }
   });
+
+  // Render catalog when switching to it
+  if (tabId === 'catalog') {
+    renderCatalog();
+  }
 
   renderTabBar();
 }
@@ -1455,6 +1706,11 @@ function updateOptimizerTabProgress(tabId, current, total) {
 
 function closeTab(tabId) {
   if (tabId === 'main') return;
+
+  if (tabId === 'catalog') {
+    closeCatalogTab();
+    return;
+  }
 
   optimizerTabs.delete(tabId);
   const wrapper = document.getElementById(`opt-wrapper-${tabId}`);
@@ -3018,6 +3274,29 @@ updateLangUI = function() {
 
   // Export button
   btnExportTableLabel.textContent = ja ? 'エクスポート' : 'Export';
+
+  // Catalog button & labels
+  btnCatalogLabel.textContent = ja ? '効果カタログ' : 'Effect Catalog';
+  catalogSearch.placeholder = ja ? '効果名で検索...' : 'Search effects...';
+  document.getElementById('catalog-label-category').textContent = ja ? 'カテゴリ:' : 'Category:';
+  document.getElementById('catalog-label-deep').textContent = ja ? '通常/深層:' : 'Normal/Deep:';
+  document.getElementById('catalog-label-stack').textContent = ja ? '重複:' : 'Stack:';
+  document.getElementById('catalog-owned-note').textContent = ja ? '※ 所持効果のみ表示' : '* Owned effects only';
+  const deepOpts = catalogFilterDeep.options;
+  deepOpts[0].textContent = ja ? 'すべて' : 'All';
+  deepOpts[1].textContent = ja ? '深層' : 'Deep';
+  deepOpts[2].textContent = ja ? '通常' : 'Normal';
+  const stackOpts = catalogFilterStack.options;
+  stackOpts[0].textContent = ja ? 'すべて' : 'All';
+  stackOpts[1].textContent = ja ? '○ 重複可' : '○ Stackable';
+  stackOpts[2].textContent = ja ? '× 重複不可' : '× No Stack';
+  stackOpts[3].textContent = ja ? '△ 条件付き' : '△ Conditional';
+  if (catalogTabOpen) {
+    populateCatalogCategoryFilter();
+  }
+  if (catalogTabOpen && activeTab === 'catalog') {
+    renderCatalog();
+  }
 
   // Optimizer inspector labels
   document.getElementById('optimizer-title').textContent = ja ? 'ビルド探索' : 'Build Search';
