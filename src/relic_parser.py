@@ -41,18 +41,10 @@ SLOT_SIZE_MAP = {
 
 @dataclass
 class BND4Entry:
-    """Represents a BND4 entry in the save file"""
+    """Represents a decrypted BND4 entry"""
     index: int
-    size: int
-    data_offset: int
-    footer_length: int
-    raw_data: bytes
-    encrypted_data: bytes
-    iv: bytes
-    encrypted_payload: bytes
-    clean_data: bytes
     name: str
-    decrypted: bool
+    clean_data: bytes
 
 
 class SaveFileDecryptor:
@@ -73,21 +65,6 @@ class SaveFileDecryptor:
         """Decrypt AES-CBC encrypted data"""
         cipher = AES.new(key, AES.MODE_CBC, iv)
         return cipher.decrypt(data)
-    
-    @staticmethod
-    def decrypt_entry(entry: BND4Entry) -> None:
-        """Decrypt a BND4 entry"""
-        try:
-            decrypted_raw = SaveFileDecryptor.decrypt_aes(
-                DS2_KEY,
-                entry.iv,
-                entry.encrypted_payload
-            )
-            entry.clean_data = decrypted_raw[4:]
-            entry.decrypted = True
-        except Exception as e:
-            print(f"Error decrypting entry {entry.index}: {e}", file=sys.stderr)
-            raise
     
     @staticmethod
     def decrypt_save_file(file_path: str) -> List[BND4Entry]:
@@ -122,7 +99,6 @@ class SaveFileDecryptor:
             
             entry_size = SaveFileDecryptor.read_int32_le(entry_header, 8)
             entry_data_offset = SaveFileDecryptor.read_int32_le(entry_header, 16)
-            entry_footer_length = SaveFileDecryptor.read_int32_le(entry_header, 24)
             
             # Validity checks
             if not (0 < entry_size <= 1000000000):
@@ -134,25 +110,17 @@ class SaveFileDecryptor:
                 continue
             
             try:
-                encrypted_data = raw[entry_data_offset:entry_data_offset + entry_size]
-                iv = encrypted_data[:IV_SIZE]
-                encrypted_payload = encrypted_data[IV_SIZE:]
-                
+                iv = raw[entry_data_offset:entry_data_offset + IV_SIZE]
+                encrypted_payload = raw[entry_data_offset + IV_SIZE:entry_data_offset + entry_size]
+
+                decrypted_raw = SaveFileDecryptor.decrypt_aes(DS2_KEY, iv, encrypted_payload)
+                clean_data = decrypted_raw[4:]
+
                 entry = BND4Entry(
                     index=i,
-                    size=entry_size,
-                    data_offset=entry_data_offset,
-                    footer_length=entry_footer_length,
-                    raw_data=raw,
-                    encrypted_data=encrypted_data,
-                    iv=iv,
-                    encrypted_payload=encrypted_payload,
-                    clean_data=b'',
                     name=f'USERDATA_{i:02d}',
-                    decrypted=False
+                    clean_data=clean_data
                 )
-                
-                SaveFileDecryptor.decrypt_entry(entry)
                 bnd4_entries.append(entry)
             except Exception as e:
                 print(f"Error processing entry #{i}: {e}", file=sys.stderr)
@@ -221,40 +189,33 @@ class RelicParser:
         """Parse relics with validation from entry data (optimized)"""
         data_length = len(entry_data)
         potential_slots = []
-        
+        unpack_u32 = struct.unpack_from
+
         # Pre-compute commonly used values
         search_limit = data_length - 4
-        
+
         # First pass: find potential relic slots
         pos = 0
         while pos < search_limit:
             b3 = entry_data[pos + 2]
             b4 = entry_data[pos + 3]
-            
+
             if b3 in VALID_B3_VALUES and b4 in VALID_B4_VALUES:
-                slot_size = RelicParser.get_slot_size(b4)
-                
+                slot_size = SLOT_SIZE_MAP.get(b4)
+
                 if slot_size and pos + slot_size <= data_length:
-                    slot_data = entry_data[pos:pos + slot_size]
-                    
-                    # Extract IDs
-                    id_bytes = slot_data[0:4]
-                    relic_id = RelicParser.read_int_le(id_bytes)
-                    item_id = RelicParser.read_int_le(slot_data[4:7])
-                    
+                    # Extract IDs directly from entry_data (no slice)
+                    relic_id = unpack_u32('<I', entry_data, pos)[0]
+                    item_id = int.from_bytes(entry_data[pos + 4:pos + 7], 'little')
+
                     # Validate item ID (early exit if invalid)
                     if item_id not in valid_items:
                         pos += 1
                         continue
-                    
-                    # Extract effect IDs (batch slicing)
-                    effect_keys = [
-                        RelicParser.read_int_le(slot_data[16:20]),
-                        RelicParser.read_int_le(slot_data[20:24]),
-                        RelicParser.read_int_le(slot_data[24:28]),
-                        RelicParser.read_int_le(slot_data[28:32]),
-                    ]
-                    
+
+                    # Extract 4 effect IDs in one unpack call
+                    effect_keys = unpack_u32('<IIII', entry_data, pos + 16)
+
                     # Validate effects (early exit on first invalid)
                     valid_count = 0
                     all_valid = True
@@ -264,20 +225,15 @@ class RelicParser:
                                 all_valid = False
                                 break
                             valid_count += 1
-                    
+
                     if not all_valid or valid_count == 0:
                         pos += 1
                         continue
-                    
-                    # Extract debuff keys
-                    debuff_keys = [
-                        RelicParser.read_int_le(slot_data[56:60]),
-                        RelicParser.read_int_le(slot_data[60:64]),
-                        RelicParser.read_int_le(slot_data[64:68]),
-                        RelicParser.read_int_le(slot_data[68:72]),
-                    ]
-                    
-                    # Build effects list (list comprehension for efficiency)
+
+                    # Extract 4 debuff keys in one unpack call
+                    debuff_keys = unpack_u32('<IIII', entry_data, pos + 56)
+
+                    # Build effects list
                     effects = []
                     for idx, eff_key in enumerate(effect_keys):
                         if eff_key != EMPTY_EFFECT:
@@ -286,83 +242,72 @@ class RelicParser:
                                 effects.append([eff_key, debuff_key])
                             else:
                                 effects.append([eff_key])
-                    
-                    # Store potential slot (id_bytes already is bytes, no conversion needed)
+
+                    # Store potential slot
                     potential_slots.append({
                         'id': relic_id,
-                        'id_bytes': id_bytes,
                         'item_id': item_id,
                         'effects': effects,
                     })
-            
+
             pos += 1
-        
-        # Second pass: find sort keys (pre-allocate list)
+
+        # Build sort key index using C-level find (O(N) amortized)
+        sort_key_index = {}
+        marker = b'\x01\x00\x00\x00'
+        search_pos = 4
+        while True:
+            search_pos = entry_data.find(marker, search_pos)
+            if search_pos == -1:
+                break
+            candidate_id = unpack_u32('<I', entry_data, search_pos - 4)[0]
+            if candidate_id not in sort_key_index:
+                sort_key_index[candidate_id] = search_pos - 4
+            search_pos += 1
+
+        # Second pass: look up sort keys from index (O(1) per relic)
         relics = []
-        relics_reserve = len(potential_slots)
-        
         for slot in potential_slots:
-            # Pre-compute hex pattern
-            hex_pattern = slot['id_bytes'].hex() + "01000000"
-            sort_key_offset = RelicParser.find_hex_offset(entry_data, hex_pattern, 0)
-            
-            if sort_key_offset is not None:
-                sort_key = RelicParser.read_int_le(entry_data[sort_key_offset + 8:sort_key_offset + 10])
+            sort_key_pos = sort_key_index.get(slot['id'])
+            if sort_key_pos is not None:
+                sort_key = unpack_u32('<H', entry_data, sort_key_pos + 8)[0]
                 relics.append({
                     'id': slot['id'],
                     'item_id': slot['item_id'],
                     'effects': slot['effects'],
                     'sort_key': sort_key
                 })
-        
+
         # Sort by sort key (descending)
         relics.sort(key=lambda x: x['sort_key'], reverse=True)
         return relics
     
     @staticmethod
     def set_coordinates(relics: List[Dict], items_data: Dict) -> List[Dict]:
-        """Set coordinates for relics (optimized)"""
-        # Pre-compute item types
-        def is_deep_relic(item_id: int) -> bool:
-            return items_data.get(item_id, {}).get('type') == 'DeepRelic'
-        
-        def get_color(item_id: int) -> str:
-            return items_data.get(item_id, {}).get('color', 'Red')
-        
-        # Separate normal and deep relics (single pass)
-        normal_relics = []
-        deep_relics = []
+        """Set coordinates for relics (optimized single-pass)"""
+        normal_color_counters = {'Red': 0, 'Blue': 0, 'Yellow': 0, 'Green': 0}
+        deep_color_counters = {'Red': 0, 'Blue': 0, 'Yellow': 0, 'Green': 0}
+        normal_idx = 0
+        deep_idx = 0
+
         for relic in relics:
-            if is_deep_relic(relic['item_id']):
-                deep_relics.append(relic)
+            item = items_data.get(relic['item_id'], {})
+            color = item.get('color', 'Red')
+            is_deep = item.get('type') == 'DeepRelic'
+
+            if is_deep:
+                relic['coordinates'] = [deep_idx >> 3, deep_idx & 7]
+                color_idx = deep_color_counters[color]
+                relic['coordinates_by_color'] = [color_idx >> 3, color_idx & 7]
+                deep_color_counters[color] += 1
+                deep_idx += 1
             else:
-                normal_relics.append(relic)
-        
-        # Group by color (optimized with dict comprehension)
-        colors = ['Red', 'Blue', 'Yellow', 'Green']
-        relics_by_color = {
-            color: [r for r in normal_relics if get_color(r['item_id']) == color]
-            for color in colors
-        }
-        deep_relics_by_color = {
-            color: [r for r in deep_relics if get_color(r['item_id']) == color]
-            for color in colors
-        }
-        
-        # Set coordinates for normal relics (8 per row)
-        for i, relic in enumerate(normal_relics):
-            relic['coordinates'] = [i >> 3, i & 7]  # Bit operations instead of //, %
-            color = get_color(relic['item_id'])
-            index = relics_by_color[color].index(relic)
-            relic['coordinates_by_color'] = [index >> 3, index & 7]
-        
-        # Set coordinates for deep relics (8 per row)
-        for i, relic in enumerate(deep_relics):
-            relic['coordinates'] = [i >> 3, i & 7]
-            color = get_color(relic['item_id'])
-            index = deep_relics_by_color[color].index(relic)
-            relic['coordinates_by_color'] = [index >> 3, index & 7]
-        
+                relic['coordinates'] = [normal_idx >> 3, normal_idx & 7]
+                color_idx = normal_color_counters[color]
+                relic['coordinates_by_color'] = [color_idx >> 3, color_idx & 7]
+                normal_color_counters[color] += 1
+                normal_idx += 1
+
         return relics
 
 

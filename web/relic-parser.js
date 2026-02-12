@@ -6,6 +6,7 @@
 
 // === Constants ===
 const DS2_KEY_HEX = '18f6326605bd178a5524523ac0a0c609';
+const DS2_KEY_PARSED = CryptoJS.enc.Hex.parse(DS2_KEY_HEX);
 const IV_SIZE = 0x10;
 const BND4_HEADER_LEN = 64;
 const BND4_ENTRY_HEADER_LEN = 32;
@@ -110,7 +111,7 @@ function hexToBytes(hex) {
  * @returns {Uint8Array} decrypted data
  */
 function decryptAES(iv, encryptedPayload) {
-  const key = CryptoJS.enc.Hex.parse(DS2_KEY_HEX);
+  const key = DS2_KEY_PARSED;
   const ivWords = CryptoJS.lib.WordArray.create(iv);
   const ciphertext = CryptoJS.lib.WordArray.create(encryptedPayload);
 
@@ -318,24 +319,33 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
       }
 
       // Store potential slot
-      const idBytes = entryData.slice(pos, pos + 4);
       potentialSlots.push({
         id: relicId,
-        idBytes: idBytes,
         itemId: itemId,
         effects: effects,
       });
     }
   }
 
-  // Second pass: find sort keys
+  // Build sort key index in single O(N) pass
+  const sortKeyIndex = new Map();
+  const scanEnd = dataLength - 8;
+  for (let i = 0; i <= scanEnd; i++) {
+    if (entryData[i + 4] === 0x01 && entryData[i + 5] === 0x00 &&
+        entryData[i + 6] === 0x00 && entryData[i + 7] === 0x00) {
+      const candidateId = readUint32LE(entryData, i);
+      if (!sortKeyIndex.has(candidateId)) {
+        sortKeyIndex.set(candidateId, i);
+      }
+    }
+  }
+
+  // Second pass: look up sort keys from index (O(1) per relic)
   const relics = [];
   for (const slot of potentialSlots) {
-    const hexPattern = hexToBytes(bytesToHex(slot.idBytes) + '01000000');
-    const sortKeyOffset = findPattern(entryData, hexPattern, 0);
-
-    if (sortKeyOffset !== -1) {
-      const sortKey = readUint16LE(entryData, sortKeyOffset + 8);
+    const sortKeyPos = sortKeyIndex.get(slot.id);
+    if (sortKeyPos !== undefined) {
+      const sortKey = readUint16LE(entryData, sortKeyPos + 8);
       relics.push({
         id: slot.id,
         itemId: slot.itemId,
@@ -359,53 +369,30 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
  * @returns {Array} relics with coordinates set
  */
 function setCoordinates(relics, itemsData) {
-  function isDeepRelic(itemId) {
-    const item = itemsData[itemId];
-    return item && item.type === 'DeepRelic';
-  }
+  // Single pass: separate normal/deep, assign coordinates and color indices
+  const normalColorCounters = { Red: 0, Blue: 0, Yellow: 0, Green: 0 };
+  const deepColorCounters = { Red: 0, Blue: 0, Yellow: 0, Green: 0 };
+  let normalIdx = 0;
+  let deepIdx = 0;
 
-  function getColor(itemId) {
-    const item = itemsData[itemId];
-    return item ? item.color || 'Red' : 'Red';
-  }
-
-  // Separate normal and deep relics
-  const normalRelics = [];
-  const deepRelics = [];
   for (const relic of relics) {
-    if (isDeepRelic(relic.itemId)) {
-      deepRelics.push(relic);
+    const item = itemsData[relic.itemId];
+    const color = item ? item.color || 'Red' : 'Red';
+    const isDeep = item && item.type === 'DeepRelic';
+
+    if (isDeep) {
+      relic.coordinates = [deepIdx >> 3, deepIdx & 7];
+      const colorIdx = deepColorCounters[color];
+      relic.coordinatesByColor = [colorIdx >> 3, colorIdx & 7];
+      deepColorCounters[color]++;
+      deepIdx++;
     } else {
-      normalRelics.push(relic);
+      relic.coordinates = [normalIdx >> 3, normalIdx & 7];
+      const colorIdx = normalColorCounters[color];
+      relic.coordinatesByColor = [colorIdx >> 3, colorIdx & 7];
+      normalColorCounters[color]++;
+      normalIdx++;
     }
-  }
-
-  const colors = ['Red', 'Blue', 'Yellow', 'Green'];
-
-  // Group by color
-  const relicsByColor = {};
-  const deepRelicsByColor = {};
-  for (const color of colors) {
-    relicsByColor[color] = normalRelics.filter(r => getColor(r.itemId) === color);
-    deepRelicsByColor[color] = deepRelics.filter(r => getColor(r.itemId) === color);
-  }
-
-  // Set coordinates for normal relics (8 per row)
-  for (let i = 0; i < normalRelics.length; i++) {
-    const relic = normalRelics[i];
-    relic.coordinates = [i >> 3, i & 7];
-    const color = getColor(relic.itemId);
-    const colorIndex = relicsByColor[color].indexOf(relic);
-    relic.coordinatesByColor = [colorIndex >> 3, colorIndex & 7];
-  }
-
-  // Set coordinates for deep relics (8 per row)
-  for (let i = 0; i < deepRelics.length; i++) {
-    const relic = deepRelics[i];
-    relic.coordinates = [i >> 3, i & 7];
-    const color = getColor(relic.itemId);
-    const colorIndex = deepRelicsByColor[color].indexOf(relic);
-    relic.coordinatesByColor = [colorIndex >> 3, colorIndex & 7];
   }
 
   return relics;
@@ -421,19 +408,22 @@ function setCoordinates(relics, itemsData) {
  * @returns {Object} parsed relic data
  */
 function parseSaveFile(arrayBuffer, itemsData, effectsData) {
-  // Build lookup maps
+  // Build lookup maps and validation sets in single pass
   const itemsMap = {};
+  const validItems = new Set();
   for (const [id, item] of Object.entries(itemsData.items || {})) {
-    itemsMap[parseInt(id)] = item;
+    const numId = parseInt(id);
+    itemsMap[numId] = item;
+    validItems.add(numId);
   }
 
   const effectsMap = {};
+  const validEffects = new Set();
   for (const [id, effect] of Object.entries(effectsData.effects || {})) {
-    effectsMap[parseInt(id)] = effect;
+    const numId = parseInt(id);
+    effectsMap[numId] = effect;
+    validEffects.add(numId);
   }
-
-  const validItems = new Set(Object.keys(itemsMap).map(Number));
-  const validEffects = new Set(Object.keys(effectsMap).map(Number));
 
   // Decrypt save file
   const entries = decryptSaveFile(arrayBuffer);
