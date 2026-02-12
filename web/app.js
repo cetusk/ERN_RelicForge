@@ -54,7 +54,7 @@ const PRIORITY_LABELS = {
 
 // App metadata
 const APP_NIGHTREIGN_VERSION = 'v1.03.4';
-const APP_LAST_UPDATED = '2026-02-11';
+const APP_LAST_UPDATED = '2026-02-12';
 
 // === Type Display Names ===
 const TYPE_LABELS = {

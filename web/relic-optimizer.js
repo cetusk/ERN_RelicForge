@@ -894,12 +894,12 @@ class RelicOptimizer {
         const dReqMask = dCombo[7] || 0;
         const dCts = dCountsArr[di];
 
-        // Inner pruning (score-only, tier-aware)
+        // Inner pruning (score-only, against heapTrue only)
+        // Note: pruning against heapFalse is unsafe — it can skip pairs
+        // whose merged score is low but still satisfy all required effects
+        // (reqMet=true), missing entries that should go into heapTrue.
         if (trueFull) {
           const h = heapTrue.peek();
-          if (-(ns + ds) >= h[0]) break;
-        } else if (heapFalse.size >= topN) {
-          const h = heapFalse.peek();
           if (-(ns + ds) >= h[0]) break;
         }
 
