@@ -828,7 +828,9 @@ class RelicOptimizer {
     }
 
     // Phase 3: Cross-pair with bitmask pre-filter + two-tier heap pruning
-    const maxPairs = 500;
+    // Adaptive maxPairs: with few specs, scores are clustered so score-based pruning
+    // is ineffective. Reducing candidate count avoids evaluating millions of ~equal pairs.
+    const maxPairs = Math.min(500, Math.max(150, nSpec * 50));
     const nTop = Math.min(normalCombos.length, maxPairs);
     const dTop = Math.min(deepCombos.length, maxPairs);
 
