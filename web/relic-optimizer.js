@@ -205,9 +205,12 @@ class RelicOptimizer {
     }
 
     // Bitmask of all required effect indices (for O(1) coverage check)
+    // Disabled when nSpec >= 32 because JS bitwise ops wrap at 32 bits
     let fullReqMask = 0;
-    for (const idx of this._requiredIdxSet) {
-      fullReqMask |= (1 << idx);
+    if (nSpec < 32) {
+      for (const idx of this._requiredIdxSet) {
+        fullReqMask |= (1 << idx);
+      }
     }
     this._fullReqMask = fullReqMask;
 
@@ -420,9 +423,12 @@ class RelicOptimizer {
     const concBonus = nSk >= 2 ? Math.trunc(CONCENTRATION_BONUS * nSk * (nSk - 1) / 2) : 0;
 
     // Bitmask of which required effect indices this relic covers
+    // Only computed when nSpec < 32 (fullReqMask != 0 guard handles this)
     let reqMask = 0;
-    for (const idx of specIndices) {
-      if (this._isRequired[idx]) reqMask |= (1 << idx);
+    if (this._nSpec < 32) {
+      for (const idx of specIndices) {
+        if (this._isRequired[idx]) reqMask |= (1 << idx);
+      }
     }
 
     return [rid, specIndices, exclPenalty, hasExclReq, concBonus, exclSubRank, reqMask];

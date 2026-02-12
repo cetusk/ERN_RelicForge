@@ -1,3 +1,8 @@
+// === Utility ===
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 // === State ===
 let relicData = null;       // Full parsed data
 let filteredRelics = [];    // After filter/search
@@ -1123,7 +1128,7 @@ function renderCatalog() {
       const name = ja ? e.name_ja : e.name_en;
       const deepClass = e.deepOnly ? ' deep-only' : '';
       html += `<div class="catalog-card${deepClass}">`;
-      html += `<div class="catalog-card-name">${name}</div>`;
+      html += `<div class="catalog-card-name">${escapeHtml(name)}</div>`;
       html += `<div class="catalog-card-meta">`;
 
       if (e.stackable === true) {
@@ -1141,7 +1146,7 @@ function renderCatalog() {
       html += `</div>`;
 
       if (e.stackNotes) {
-        html += `<div class="catalog-card-notes">${e.stackNotes}</div>`;
+        html += `<div class="catalog-card-notes">${escapeHtml(e.stackNotes)}</div>`;
       }
 
       if (hasSaveData) {

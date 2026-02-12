@@ -190,6 +190,8 @@ class RelicOptimizer:
         self._required_idx_set = frozenset(
             i for i in range(n_spec) if self._is_required[i])
         # Bitmask of all required effect indices (for O(1) coverage check)
+        # Python arbitrary-precision ints: safe for any n_spec.
+        # (JS version guards against nSpec >= 32 due to 32-bit bitwise ops.)
         full_req_mask = 0
         for idx in self._required_idx_set:
             full_req_mask |= (1 << idx)

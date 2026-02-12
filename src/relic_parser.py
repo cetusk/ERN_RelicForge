@@ -174,7 +174,9 @@ class RelicParser:
             
             if pattern_offset != -1:
                 name_offset = pattern_offset - 51
-                
+                if name_offset < 0 or name_offset >= len(entry.clean_data):
+                    continue
+
                 # Find proper UTF-16LE null terminator
                 for i in range(name_offset, min(name_offset + 200, len(entry.clean_data) - 1)):
                     if entry.clean_data[i] == 0 and entry.clean_data[i + 1] == 0:
@@ -202,7 +204,7 @@ class RelicParser:
         """Parse relics with validation from entry data (optimized)"""
         data_length = len(entry_data)
         potential_slots = []
-        unpack_u32 = struct.unpack_from
+        unpack = struct.unpack_from
 
         # Pre-compute commonly used values
         search_limit = data_length - 4
@@ -218,7 +220,7 @@ class RelicParser:
 
                 if slot_size and pos + slot_size <= data_length:
                     # Extract IDs directly from entry_data (no slice)
-                    relic_id = unpack_u32('<I', entry_data, pos)[0]
+                    relic_id = unpack('<I', entry_data, pos)[0]
                     item_id = int.from_bytes(entry_data[pos + 4:pos + 7], 'little')
 
                     # Validate item ID (early exit if invalid)
@@ -227,7 +229,7 @@ class RelicParser:
                         continue
 
                     # Extract 4 effect IDs in one unpack call
-                    effect_keys = unpack_u32('<IIII', entry_data, pos + 16)
+                    effect_keys = unpack('<IIII', entry_data, pos + 16)
 
                     # Validate effects (early exit on first invalid)
                     valid_count = 0
@@ -244,7 +246,7 @@ class RelicParser:
                         continue
 
                     # Extract 4 debuff keys in one unpack call
-                    debuff_keys = unpack_u32('<IIII', entry_data, pos + 56)
+                    debuff_keys = unpack('<IIII', entry_data, pos + 56)
 
                     # Build effects list
                     effects = []
@@ -273,7 +275,7 @@ class RelicParser:
             search_pos = entry_data.find(marker, search_pos)
             if search_pos == -1:
                 break
-            candidate_id = unpack_u32('<I', entry_data, search_pos - 4)[0]
+            candidate_id = unpack('<I', entry_data, search_pos - 4)[0]
             if candidate_id not in sort_key_index:
                 sort_key_index[candidate_id] = search_pos - 4
             search_pos += 1
@@ -283,7 +285,7 @@ class RelicParser:
         for slot in potential_slots:
             sort_key_pos = sort_key_index.get(slot['id'])
             if sort_key_pos is not None:
-                sort_key = unpack_u32('<H', entry_data, sort_key_pos + 8)[0]
+                sort_key = unpack('<H', entry_data, sort_key_pos + 8)[0]
                 relics.append({
                     'id': slot['id'],
                     'item_id': slot['item_id'],

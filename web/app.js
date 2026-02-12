@@ -4,6 +4,11 @@
 // Adapted from gui/renderer/app.js for browser-only usage.
 // Replaces Electron IPC with File API, fetch, and Web Worker.
 
+// === Utility ===
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 // === Resource Data ===
 let itemsData = null;
 let effectsData = null;
@@ -1306,7 +1311,7 @@ function renderCatalog() {
       const name = ja ? e.name_ja : e.name_en;
       const deepClass = e.deepOnly ? ' deep-only' : '';
       html += `<div class="catalog-card${deepClass}">`;
-      html += `<div class="catalog-card-name">${name}</div>`;
+      html += `<div class="catalog-card-name">${escapeHtml(name)}</div>`;
       html += `<div class="catalog-card-meta">`;
 
       // Stack badge
@@ -1327,7 +1332,7 @@ function renderCatalog() {
 
       // Stack notes
       if (e.stackNotes) {
-        html += `<div class="catalog-card-notes">${e.stackNotes}</div>`;
+        html += `<div class="catalog-card-notes">${escapeHtml(e.stackNotes)}</div>`;
       }
 
       // Count (only when save file loaded)
