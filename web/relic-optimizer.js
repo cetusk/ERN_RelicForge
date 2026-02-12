@@ -103,12 +103,11 @@ class MinHeap {
     d[i] = item;
   }
 
-  // Compare tuples: [reqMetInt, negScore, negSubScore, counter]
+  // Compare tuples: [-score, -subScore, counter]
   _compare(a, b) {
     if (a[0] !== b[0]) return a[0] - b[0];
     if (a[1] !== b[1]) return a[1] - b[1];
-    if (a[2] !== b[2]) return a[2] - b[2];
-    return a[3] - b[3];
+    return (a[2] || 0) - (b[2] || 0);
   }
 }
 
@@ -204,6 +203,13 @@ class RelicOptimizer {
         this._requiredIdxSet.add(i);
       }
     }
+
+    // Bitmask of all required effect indices (for O(1) coverage check)
+    let fullReqMask = 0;
+    for (const idx of this._requiredIdxSet) {
+      fullReqMask |= (1 << idx);
+    }
+    this._fullReqMask = fullReqMask;
 
     // Sub-priority rank values (for tiebreaker scoring)
     // Tier multipliers ensure required always dominates preferred,
@@ -413,7 +419,13 @@ class RelicOptimizer {
     const nSk = specIndices.length;
     const concBonus = nSk >= 2 ? Math.trunc(CONCENTRATION_BONUS * nSk * (nSk - 1) / 2) : 0;
 
-    return [rid, specIndices, exclPenalty, hasExclReq, concBonus, exclSubRank];
+    // Bitmask of which required effect indices this relic covers
+    let reqMask = 0;
+    for (const idx of specIndices) {
+      if (this._isRequired[idx]) reqMask |= (1 << idx);
+    }
+
+    return [rid, specIndices, exclPenalty, hasExclReq, concBonus, exclSubRank, reqMask];
   }
 
   _enumerateCombos(compactCands, slotColors) {
@@ -469,7 +481,7 @@ class RelicOptimizer {
     score += ri[4] + rj[4] + rk[4]; // concentration bonus
     score -= ri[2] + rj[2] + rk[2]; // exclusion penalty
     const exclSub = ri[5] + rj[5] + rk[5]; // exclude sub-rank sum
-    return [score, sub, ri[4] + rj[4] + rk[4], ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3], exclSub];
+    return [score, sub, ri[4] + rj[4] + rk[4], ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3], exclSub, ri[6] | rj[6] | rk[6]];
   }
 
   // Enum result format (lightweight): [score, rids, cb, ep, her, subScore, exclSub]
@@ -486,8 +498,8 @@ class RelicOptimizer {
         const rj = cands[j];
         for (let k = j + 1; k < n; k++) {
           const rk = cands[k];
-          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr]);
+          const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm]);
         }
       }
     }
@@ -504,8 +516,8 @@ class RelicOptimizer {
       for (let b = 0; b < c1.length; b++) {
         const rj = c1[b];
         for (let g = 0; g < c2.length; g++) {
-          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, c2[g]);
-          results.push([sc, [ri[0], rj[0], c2[g][0]], cb, ep, her, sub, esr]);
+          const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, c2[g]);
+          results.push([sc, [ri[0], rj[0], c2[g][0]], cb, ep, her, sub, esr, rm]);
         }
       }
     }
@@ -541,8 +553,8 @@ class RelicOptimizer {
         for (let g = 0; g < diffCands.length; g++) {
           const rk = diffCands[g];
           if (rk[0] === ri[0] || rk[0] === rj[0]) continue;
-          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr]);
+          const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm]);
         }
       }
     }
@@ -584,8 +596,8 @@ class RelicOptimizer {
           if (seen.has(key)) continue;
           seen.add(key);
 
-          const [sc, sub, cb, ep, her, esr] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [lo, mid, hi], cb, ep, her, sub, esr]);
+          const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push([sc, [lo, mid, hi], cb, ep, her, sub, esr, rm]);
         }
       }
     }
@@ -599,7 +611,7 @@ class RelicOptimizer {
     // Pre-allocated mutable state for recursion (avoids spread copies)
     const chosenIds = new Array(nSlots);
     const chosenSi = new Array(nSlots);
-    let partialEp = 0, partialHer = false, partialCb = 0, partialEsr = 0;
+    let partialEp = 0, partialHer = false, partialCb = 0, partialEsr = 0, partialReqMask = 0;
 
     const self = this;
     const recurse = (slotIdx) => {
@@ -627,7 +639,7 @@ class RelicOptimizer {
           sub += sr[i];
         }
         score += partialCb - partialEp;
-        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub, partialEsr]);
+        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
         return;
       }
 
@@ -643,11 +655,12 @@ class RelicOptimizer {
         // Save state
         chosenIds[slotIdx] = rid;
         chosenSi[slotIdx] = cand[1];
-        const savedEp = partialEp, savedHer = partialHer, savedCb = partialCb, savedEsr = partialEsr;
+        const savedEp = partialEp, savedHer = partialHer, savedCb = partialCb, savedEsr = partialEsr, savedReqMask = partialReqMask;
         partialEp += cand[2];
         partialHer = partialHer || cand[3];
         partialCb += cand[4];
         partialEsr += cand[5];
+        partialReqMask |= cand[6];
 
         recurse(slotIdx + 1);
 
@@ -656,6 +669,7 @@ class RelicOptimizer {
         partialHer = savedHer;
         partialCb = savedCb;
         partialEsr = savedEsr;
+        partialReqMask = savedReqMask;
       }
     };
 
@@ -813,7 +827,7 @@ class RelicOptimizer {
       return this._combosToResultsCompact(normalCombos.slice(0, topN), false);
     }
 
-    // Phase 3: Cross-pair with heap-based top-N and pruning
+    // Phase 3: Cross-pair with bitmask pre-filter + two-tier heap pruning
     const maxPairs = 500;
     const nTop = Math.min(normalCombos.length, maxPairs);
     const dTop = Math.min(deepCombos.length, maxPairs);
@@ -841,55 +855,50 @@ class RelicOptimizer {
     const dCountsArr = new Array(dTop);
     for (let i = 0; i < dTop; i++) dCountsArr[i] = rebuildCounts(deepTop[i][1]);
 
-    // Fix pruning: check if req_met=True is achievable
-    let reqMetBound = true;
-    if (requiredIdxSet.size > 0) {
-      const possibleFromNormal = new Set();
-      for (let x = 0; x < nTop; x++) {
-        const cts = nCountsArr[x];
-        for (let i = 0; i < nSpec; i++) { if (cts[i] > 0) possibleFromNormal.add(i); }
-      }
-      const possibleFromDeep = new Set();
-      for (let x = 0; x < dTop; x++) {
-        const cts = dCountsArr[x];
-        for (let i = 0; i < nSpec; i++) { if (cts[i] > 0) possibleFromDeep.add(i); }
-      }
-      const possibleAll = new Set([...possibleFromNormal, ...possibleFromDeep]);
-      for (const idx of requiredIdxSet) {
-        if (!possibleAll.has(idx)) { reqMetBound = false; break; }
-      }
-    }
-    if (reqMetBound) {
-      const hasNNoExcl = normalTop.some(x => !x[4]);
-      const hasDNoExcl = deepTop.some(x => !x[4]);
-      if (!(hasNNoExcl && hasDNoExcl)) reqMetBound = false;
-    }
-    const boundReqInt = reqMetBound ? -1 : 0;
+    // Bitmask pre-filter setup
+    const fullReqMask = this._fullReqMask;
+    const hasAnyRequired = fullReqMask !== 0;
 
-    // Min-heap for top-N
-    const heap = new MinHeap();
+    // Two-tier heap: separate heaps for required_met=true and false
+    // This eliminates pruning threshold oscillation between the two categories
+    const heapTrue = new MinHeap();   // entries where required_met = true
+    const heapFalse = new MinHeap();  // entries where required_met = false
     const resultMap = new Map();
     let counter = 0;
+    let trueFull = false; // once heapTrue.size >= topN, stop accepting false entries
     const subRankValues = this._specSubRankValues;
 
     for (let ni = 0; ni < nTop; ni++) {
       const nCombo = normalTop[ni];
       const ns = nCombo[0], nRids = nCombo[1], nConc = nCombo[2], nEp = nCombo[3], nHer = nCombo[4], nExclSub = nCombo[6] || 0;
+      const nReqMask = nCombo[7] || 0;
       const nCts = nCountsArr[ni];
-      // Outer pruning
-      if (heap.size >= topN) {
-        const h = heap.peek();
-        if (boundReqInt >= h[0] && -(ns + bestDeepScore) >= h[1]) break;
+
+      // Outer pruning: if trueFull, use heapTrue threshold for score-only pruning
+      if (trueFull) {
+        const h = heapTrue.peek();
+        if (-(ns + bestDeepScore) >= h[0]) break;
       }
 
       for (let di = 0; di < dTop; di++) {
         const dCombo = deepTop[di];
         const ds = dCombo[0], dRids = dCombo[1], dConc = dCombo[2], dEp = dCombo[3], dHer = dCombo[4], dExclSub = dCombo[6] || 0;
+        const dReqMask = dCombo[7] || 0;
         const dCts = dCountsArr[di];
-        // Inner pruning
-        if (heap.size >= topN) {
-          const h = heap.peek();
-          if (boundReqInt >= h[0] && -(ns + ds) >= h[1]) break;
+
+        // Inner pruning (score-only, tier-aware)
+        if (trueFull) {
+          const h = heapTrue.peek();
+          if (-(ns + ds) >= h[0]) break;
+        } else if (heapFalse.size >= topN) {
+          const h = heapFalse.peek();
+          if (-(ns + ds) >= h[0]) break;
+        }
+
+        // Bitmask pre-filter: skip pairs that can NEVER satisfy all required include-effects
+        if (hasAnyRequired && ((nReqMask | dReqMask) !== fullReqMask)) {
+          if (trueFull) continue; // true side full — skip entirely
+          // Otherwise still score — may enter heapFalse as fallback
         }
 
         // Inline merged scoring (integer stacking codes, pre-computed penalties)
@@ -920,26 +929,39 @@ class RelicOptimizer {
         const hasExclReq = nHer || dHer;
         const reqMet = hasAllRequired && !hasExclReq;
 
-        const heapKey = [reqMet ? -1 : 0, -score, -subScore, counter];
+        // Heap key: [-score, -subScore, counter] (no reqMet — heaps are separate)
+        const heapKey = [-score, -subScore, counter];
 
-        if (heap.size < topN) {
-          heap.push(heapKey);
-          resultMap.set(counter, [reqMet, score, subScore, nCts, dCts, nRids, dRids]);
-        } else if (this._heapCompare(heapKey, heap.peek()) < 0) {
-          const evicted = heap.replace(heapKey);
-          resultMap.delete(evicted[3]);
-          resultMap.set(counter, [reqMet, score, subScore, nCts, dCts, nRids, dRids]);
+        if (reqMet) {
+          // Insert into heapTrue
+          if (heapTrue.size < topN) {
+            heapTrue.push(heapKey);
+            resultMap.set(counter, [true, score, subScore, nCts, dCts, nRids, dRids]);
+            if (heapTrue.size >= topN) trueFull = true;
+          } else if (this._heapCompare3(heapKey, heapTrue.peek()) < 0) {
+            const evicted = heapTrue.replace(heapKey);
+            resultMap.delete(evicted[2]);
+            resultMap.set(counter, [true, score, subScore, nCts, dCts, nRids, dRids]);
+          }
+        } else if (!trueFull) {
+          // Insert into heapFalse only if heapTrue not yet full
+          if (heapFalse.size < topN) {
+            heapFalse.push(heapKey);
+            resultMap.set(counter, [false, score, subScore, nCts, dCts, nRids, dRids]);
+          } else if (this._heapCompare3(heapKey, heapFalse.peek()) < 0) {
+            const evicted = heapFalse.replace(heapKey);
+            resultMap.delete(evicted[2]);
+            resultMap.set(counter, [false, score, subScore, nCts, dCts, nRids, dRids]);
+          }
         }
 
         counter++;
       }
     }
 
-    // Build full results
-    const results = [];
-    while (heap.size > 0) {
-      const hk = heap.pop();
-      const data = resultMap.get(hk[3]);
+    // Build full results from both heaps
+    const buildResult = (hk) => {
+      const data = resultMap.get(hk[2]);
       const [reqMet, score, subScore, nCts, dCts, nRids, dRids] = data;
 
       const matchedKeys = new Set();
@@ -963,7 +985,7 @@ class RelicOptimizer {
       const nRelics = nRids.map(rid => this._relicById[rid]);
       const dRelics = dRids.map(rid => this._relicById[rid]);
 
-      results.push({
+      return {
         required_met: reqMet,
         score,
         sub_score: subScore,
@@ -973,24 +995,43 @@ class RelicOptimizer {
         relics: [...nRelics, ...dRelics],
         normal_relics: nRelics,
         deep_relics: dRelics,
-      });
-    }
+      };
+    };
 
-    results.sort((a, b) => {
-      if (a.required_met !== b.required_met) return b.required_met ? 1 : -1;
+    // Drain heapTrue (all true entries)
+    const trueResults = [];
+    while (heapTrue.size > 0) trueResults.push(buildResult(heapTrue.pop()));
+    trueResults.sort((a, b) => {
       const sc = b.score - a.score;
       if (sc !== 0) return sc;
       return (b.sub_score || 0) - (a.sub_score || 0);
     });
 
+    // Drain heapFalse (all false entries)
+    const falseResults = [];
+    while (heapFalse.size > 0) falseResults.push(buildResult(heapFalse.pop()));
+    falseResults.sort((a, b) => {
+      const sc = b.score - a.score;
+      if (sc !== 0) return sc;
+      return (b.sub_score || 0) - (a.sub_score || 0);
+    });
+
+    // Merge: true first, fill remainder with false up to topN
+    const results = [...trueResults];
+    const need = topN - results.length;
+    if (need > 0) {
+      for (let i = 0; i < Math.min(need, falseResults.length); i++) {
+        results.push(falseResults[i]);
+      }
+    }
+
     return results;
   }
 
-  _heapCompare(a, b) {
+  _heapCompare3(a, b) {
     if (a[0] !== b[0]) return a[0] - b[0];
     if (a[1] !== b[1]) return a[1] - b[1];
-    if (a[2] !== b[2]) return a[2] - b[2];
-    return a[3] - b[3];
+    return a[2] - b[2];
   }
 
   // New lightweight format: [score, rids, cb, ep, her, subScore, exclSub]
