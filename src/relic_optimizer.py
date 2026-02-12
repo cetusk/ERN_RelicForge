@@ -189,6 +189,11 @@ class RelicOptimizer:
                 self._is_required[i] = True
         self._required_idx_set = frozenset(
             i for i in range(n_spec) if self._is_required[i])
+        # Bitmask of all required effect indices (for O(1) coverage check)
+        full_req_mask = 0
+        for idx in self._required_idx_set:
+            full_req_mask |= (1 << idx)
+        self._full_req_mask = full_req_mask
         # Keep original for backward compatibility
         self._spec_stacking = [self.stacking_data.get(k, False)
                                for k in self._spec_key_list]
@@ -367,7 +372,7 @@ class RelicOptimizer:
     def _compact_relic(self, relic: Dict) -> Tuple:
         """レリックをコンパクトなタプルに変換
         Returns: (rid, spec_indices, excl_penalty, has_excl_req,
-                  conc_bonus, excl_sub_rank)
+                  conc_bonus, excl_sub_rank, req_mask)
         """
         rid = relic['id']
         spec_keys = self._get_spec_keys(relic)
@@ -388,13 +393,19 @@ class RelicOptimizer:
         conc_bonus = CONCENTRATION_BONUS * n_sk * (n_sk - 1) // 2 \
             if n_sk >= 2 else 0
 
+        # Bitmask of which required effect indices this relic covers
+        req_mask = 0
+        for idx in spec_indices:
+            if self._is_required[idx]:
+                req_mask |= (1 << idx)
+
         return (rid, spec_indices, excl_penalty, has_excl_req,
-                conc_bonus, excl_sub_rank)
+                conc_bonus, excl_sub_rank, req_mask)
 
     def _enumerate_combos(self, compact_cands, slot_colors):
         """スロット色パターンに応じた最適なコンボ列挙
         Returns: list of (score, counts_tuple, conc, excl_pen,
-                          has_excl_req, relic_ids, excl_sub_sum)
+                          has_excl_req, relic_ids, excl_sub_sum, req_mask)
         """
         n_spec = self._n_spec
         n_slots = len(slot_colors)
@@ -418,11 +429,11 @@ class RelicOptimizer:
         results = []
         n = len(cands)
         for i in range(n):
-            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr = cands[i]
+            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm = cands[i]
             for j in range(i + 1, n):
-                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr = cands[j]
+                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm = cands[j]
                 for k in range(j + 1, n):
-                    rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr = cands[k]
+                    rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm = cands[k]
                     counts = [0] * n_spec
                     for idx in ri_si:
                         counts[idx] += 1
@@ -441,16 +452,17 @@ class RelicOptimizer:
                         ri_ep + rj_ep + rk_ep,
                         her,
                         (ri_id, rj_id, rk_id),
-                        ri_esr + rj_esr + rk_esr))
+                        ri_esr + rj_esr + rk_esr,
+                        ri_rm | rj_rm | rk_rm))
         return results
 
     def _enum_all_diff(self, compact_cands, n_spec):
         """全スロット異色: 重複チェック不要"""
         results = []
         c0, c1, c2 = compact_cands[0], compact_cands[1], compact_cands[2]
-        for ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr in c0:
-            for rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr in c1:
-                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr in c2:
+        for ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm in c0:
+            for rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm in c1:
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm in c2:
                     counts = [0] * n_spec
                     for idx in ri_si:
                         counts[idx] += 1
@@ -469,7 +481,8 @@ class RelicOptimizer:
                         ri_ep + rj_ep + rk_ep,
                         her,
                         (ri_id, rj_id, rk_id),
-                        ri_esr + rj_esr + rk_esr))
+                        ri_esr + rj_esr + rk_esr,
+                        ri_rm | rj_rm | rk_rm))
         return results
 
     def _enum_two_same(self, compact_cands, slot_colors, n_spec):
@@ -488,10 +501,10 @@ class RelicOptimizer:
         n_same = len(same_cands)
 
         for i in range(n_same):
-            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr = same_cands[i]
+            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm = same_cands[i]
             for j in range(i + 1, n_same):
-                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr = same_cands[j]
-                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr in diff_cands:
+                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm = same_cands[j]
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm in diff_cands:
                     if rk_id == ri_id or rk_id == rj_id:
                         continue
                     counts = [0] * n_spec
@@ -512,7 +525,8 @@ class RelicOptimizer:
                         ri_ep + rj_ep + rk_ep,
                         her,
                         (ri_id, rj_id, rk_id),
-                        ri_esr + rj_esr + rk_esr))
+                        ri_esr + rj_esr + rk_esr,
+                        ri_rm | rj_rm | rk_rm))
         return results
 
     def _enum_general(self, compact_cands, n_spec):
@@ -521,7 +535,7 @@ class RelicOptimizer:
         seen = set()
 
         def recurse(slot_idx, chosen_ids, partial_si, partial_ep,
-                     partial_her, partial_cb, partial_esr):
+                     partial_her, partial_cb, partial_esr, partial_rm):
             if slot_idx == len(compact_cands):
                 canon = tuple(sorted(chosen_ids))
                 if canon in seen:
@@ -538,10 +552,10 @@ class RelicOptimizer:
                     tuple(counts),
                     partial_cb, partial_ep, partial_her,
                     tuple(chosen_ids),
-                    partial_esr))
+                    partial_esr, partial_rm))
                 return
 
-            for rid, si, ep, her, cb, esr in compact_cands[slot_idx]:
+            for rid, si, ep, her, cb, esr, rm in compact_cands[slot_idx]:
                 if rid in chosen_ids:
                     continue
                 recurse(
@@ -551,9 +565,10 @@ class RelicOptimizer:
                     partial_ep + ep,
                     partial_her or her,
                     partial_cb + cb,
-                    partial_esr + esr)
+                    partial_esr + esr,
+                    partial_rm | rm)
 
-        recurse(0, (), (), 0, False, 0, 0)
+        recurse(0, (), (), 0, False, 0, 0, 0)
         return results
 
     def is_stackable(self, key: str) -> bool:
@@ -936,8 +951,10 @@ class RelicOptimizer:
             return self._combos_to_results_compact(
                 normal_combos[:top_n], is_deep_only=False)
 
-        # Phase 3: Cross-pair with heap-based top-N and pruning
-        max_pairs = 500
+        # Phase 3: Cross-pair with bitmask pre-filter + two-tier heap pruning
+        # Adaptive maxPairs: with few specs, scores are clustered so
+        # score-based pruning is ineffective.
+        max_pairs = min(500, max(150, n_spec * 50))
         n_top = min(len(normal_combos), max_pairs)
         d_top = min(len(deep_combos), max_pairs)
 
@@ -945,48 +962,43 @@ class RelicOptimizer:
         deep_top = deep_combos[:d_top]
         best_deep_score = deep_top[0][0] if deep_top else 0
 
-        # Fix pruning: check if req_met=True is achievable
-        req_met_bound = True
-        if required_idx_set:
-            possible_from_normal = set()
-            for _, n_cts, _, _, _, _, _ in normal_top:
-                for i in range(n_spec):
-                    if n_cts[i] > 0:
-                        possible_from_normal.add(i)
-            possible_from_deep = set()
-            for _, d_cts, _, _, _, _, _ in deep_top:
-                for i in range(n_spec):
-                    if d_cts[i] > 0:
-                        possible_from_deep.add(i)
-            possible_all = possible_from_normal | possible_from_deep
-            if not required_idx_set.issubset(possible_all):
-                req_met_bound = False
-        if req_met_bound:
-            has_n_no_excl = any(not h for _, _, _, _, h, _, _ in normal_top)
-            has_d_no_excl = any(not h for _, _, _, _, h, _, _ in deep_top)
-            if not (has_n_no_excl and has_d_no_excl):
-                req_met_bound = False
-        bound_req_int = -1 if req_met_bound else 0
+        # Bitmask pre-filter setup
+        full_req_mask = self._full_req_mask
+        has_any_required = full_req_mask != 0
 
-        # Min-heap for top-N: heap_key = (-req_met_int, -score, counter)
-        heap: list = []
+        # Two-tier heap: separate heaps for required_met=true and false
+        # This eliminates pruning threshold oscillation between the two categories
+        heap_true: list = []   # entries where required_met = True
+        heap_false: list = []  # entries where required_met = False
         result_map: Dict[int, tuple] = {}
         counter = 0
+        true_full = False  # once heap_true >= topN, stop accepting false entries
         evaluated = 0
 
-        for ns, n_cts, n_conc, n_ep, n_her, n_rids, n_esr in normal_top:
-            # Outer pruning
-            if len(heap) >= top_n:
-                best_possible = (bound_req_int, -(ns + best_deep_score))
-                if best_possible >= (heap[0][0], heap[0][1]):
+        for ns, n_cts, n_conc, n_ep, n_her, n_rids, n_esr, n_rm \
+                in normal_top:
+            # Outer pruning (score-based, against heap_true)
+            if true_full and len(heap_true) >= top_n:
+                best_possible_score = ns + best_deep_score
+                # heap_true min element: (-score, -sub_score, counter)
+                if -best_possible_score >= heap_true[0][0]:
                     break
 
-            for ds, d_cts, d_conc, d_ep, d_her, d_rids, d_esr in deep_top:
+            for ds, d_cts, d_conc, d_ep, d_her, d_rids, d_esr, d_rm \
+                    in deep_top:
                 # Inner pruning
-                if len(heap) >= top_n:
-                    best_possible = (bound_req_int, -(ns + ds))
-                    if best_possible >= (heap[0][0], heap[0][1]):
+                if true_full and len(heap_true) >= top_n:
+                    best_possible_score = ns + ds
+                    if -best_possible_score >= heap_true[0][0]:
                         break
+
+                # Bitmask pre-filter: skip pairs that can NEVER satisfy
+                # all required include-effects
+                if has_any_required \
+                        and ((n_rm | d_rm) != full_req_mask):
+                    if true_full:
+                        continue  # true side full — skip entirely
+                    # Otherwise still score — may enter heap_false
 
                 # Inline merged scoring (integer stacking codes)
                 score = 0
@@ -1013,7 +1025,7 @@ class RelicOptimizer:
                 has_excl_req = n_her or d_her
                 req_met = has_all_required and not has_excl_req
 
-                # Sub-priority tiebreaker (include sub-rank minus exclude sub-rank)
+                # Sub-priority tiebreaker
                 sub_score = 0
                 for i in range(n_spec):
                     if n_cts[i] + d_cts[i] > 0:
@@ -1022,19 +1034,35 @@ class RelicOptimizer:
 
                 evaluated += 1
 
-                heap_key = (-int(req_met), -score, -sub_score, counter)
-                # Check heap eligibility BEFORE building result
-                if len(heap) < top_n:
-                    heapq.heappush(heap, heap_key)
-                    result_map[counter] = (
-                        req_met, score, sub_score, n_cts, d_cts,
-                        n_rids, d_rids)
-                elif heap_key < heap[0]:
-                    evicted = heapq.heapreplace(heap, heap_key)
-                    del result_map[evicted[3]]
-                    result_map[counter] = (
-                        req_met, score, sub_score, n_cts, d_cts,
-                        n_rids, d_rids)
+                heap_key = (-score, -sub_score, counter)
+                if req_met:
+                    # Insert into heap_true
+                    if len(heap_true) < top_n:
+                        heapq.heappush(heap_true, heap_key)
+                        result_map[counter] = (
+                            True, score, sub_score, n_cts, d_cts,
+                            n_rids, d_rids)
+                        if len(heap_true) >= top_n:
+                            true_full = True
+                    elif heap_key < heap_true[0]:
+                        evicted = heapq.heapreplace(heap_true, heap_key)
+                        del result_map[evicted[2]]
+                        result_map[counter] = (
+                            True, score, sub_score, n_cts, d_cts,
+                            n_rids, d_rids)
+                elif not true_full:
+                    # Insert into heap_false only if heap_true not yet full
+                    if len(heap_false) < top_n:
+                        heapq.heappush(heap_false, heap_key)
+                        result_map[counter] = (
+                            False, score, sub_score, n_cts, d_cts,
+                            n_rids, d_rids)
+                    elif heap_key < heap_false[0]:
+                        evicted = heapq.heapreplace(heap_false, heap_key)
+                        del result_map[evicted[2]]
+                        result_map[counter] = (
+                            False, score, sub_score, n_cts, d_cts,
+                            n_rids, d_rids)
 
                 counter += 1
 
@@ -1042,41 +1070,46 @@ class RelicOptimizer:
               f"(max {n_top * d_top}, evaluated {evaluated})",
               file=sys.stderr)
 
-        # Build full results only for heap entries (lazy construction)
-        results = []
-        for hk in heap:
-            data = result_map[hk[3]]
-            req_met, score, sub_score, n_cts, d_cts, n_rids, d_rids = data
-            # Reconstruct matched_keys from merged counts
-            matched_keys = set()
+        # Build full results from both heaps (lazy construction)
+        def build_result(hk):
+            data = result_map[hk[2]]
+            rm, sc, ss, nc, dc, nr, dr = data
+            matched = set()
             for i in range(n_spec):
-                if n_cts[i] + d_cts[i] > 0:
-                    matched_keys.add(spec_key_list[i])
-            missing = sorted(
+                if nc[i] + dc[i] > 0:
+                    matched.add(spec_key_list[i])
+            miss = sorted(
                 spec_key_list[i] for i in required_idx_set
-                if n_cts[i] + d_cts[i] == 0)
-            # Reconstruct exclude info from relics
-            excluded_present = set()
-            all_rids = n_rids + d_rids
-            for rid in all_rids:
+                if nc[i] + dc[i] == 0)
+            excl = set()
+            for rid in nr + dr:
                 for k in self._get_exclude_keys(relic_by_id[rid]):
-                    excluded_present.add(k)
-            n_relics = tuple(relic_by_id[rid] for rid in n_rids)
-            d_relics = tuple(relic_by_id[rid] for rid in d_rids)
-            results.append({
-                'required_met': req_met,
-                'score': score,
-                'sub_score': sub_score,
-                'matched_keys': matched_keys,
-                'missing_required': missing,
-                'excluded_present': excluded_present,
-                'relics': n_relics + d_relics,
-                'normal_relics': n_relics,
-                'deep_relics': d_relics,
-            })
-        results.sort(
-            key=lambda x: (x['required_met'], x['score'],
-                           x['sub_score']), reverse=True)
+                    excl.add(k)
+            n_rel = tuple(relic_by_id[rid] for rid in nr)
+            d_rel = tuple(relic_by_id[rid] for rid in dr)
+            return {
+                'required_met': rm, 'score': sc, 'sub_score': ss,
+                'matched_keys': matched, 'missing_required': miss,
+                'excluded_present': excl,
+                'relics': n_rel + d_rel,
+                'normal_relics': n_rel, 'deep_relics': d_rel,
+            }
+
+        # Drain heap_true (all true entries), sorted by score desc
+        true_results = [build_result(hk) for hk in heap_true]
+        true_results.sort(
+            key=lambda x: (x['score'], x['sub_score']), reverse=True)
+
+        # Drain heap_false, sorted by score desc
+        false_results = [build_result(hk) for hk in heap_false]
+        false_results.sort(
+            key=lambda x: (x['score'], x['sub_score']), reverse=True)
+
+        # Merge: true first, fill remainder with false up to topN
+        results = list(true_results)
+        need = top_n - len(results)
+        if need > 0:
+            results.extend(false_results[:need])
 
         print(f"  Best score: {results[0]['score']} "
               f"(required met: {results[0]['required_met']})"
@@ -1091,7 +1124,7 @@ class RelicOptimizer:
         required_idx_set = self._required_idx_set
         n_spec = self._n_spec
         relic_by_id = self._relic_by_id
-        for score, counts, conc, excl_pen, has_excl_req, rids, excl_sub_sum in combos:
+        for score, counts, conc, excl_pen, has_excl_req, rids, excl_sub_sum, *_ in combos:
             matched_keys = set()
             for i in range(n_spec):
                 if counts[i] > 0:

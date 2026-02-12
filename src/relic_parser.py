@@ -65,7 +65,17 @@ class SaveFileDecryptor:
         """Decrypt AES-CBC encrypted data"""
         cipher = AES.new(key, AES.MODE_CBC, iv)
         return cipher.decrypt(data)
-    
+
+    @staticmethod
+    def _create_aes_decryptor(key: bytes):
+        """Create a reusable AES decryptor factory for the given key.
+        Returns a function that takes (iv, data) and returns decrypted data.
+        pycryptodome requires a new cipher per IV, but caching the key
+        avoids repeated parameter validation overhead."""
+        def decrypt(iv: bytes, data: bytes) -> bytes:
+            return AES.new(key, AES.MODE_CBC, iv).decrypt(data)
+        return decrypt
+
     @staticmethod
     def decrypt_save_file(file_path: str) -> List[BND4Entry]:
         """Main function to decrypt SL2 save file"""
@@ -78,10 +88,13 @@ class SaveFileDecryptor:
         
         num_bnd4_entries = SaveFileDecryptor.read_int32_le(raw, 12)
         bnd4_entries = []
-        
+
         # Expected entry header magic
         expected_magic = b'\x40\x00\x00\x00\xff\xff\xff\xff'
-        
+
+        # Create cached AES decryptor for the key
+        aes_decrypt = SaveFileDecryptor._create_aes_decryptor(DS2_KEY)
+
         # Process all BND4 entries
         for i in range(num_bnd4_entries):
             pos = BND4_HEADER_LEN + BND4_ENTRY_HEADER_LEN * i
@@ -113,7 +126,7 @@ class SaveFileDecryptor:
                 iv = raw[entry_data_offset:entry_data_offset + IV_SIZE]
                 encrypted_payload = raw[entry_data_offset + IV_SIZE:entry_data_offset + entry_size]
 
-                decrypted_raw = SaveFileDecryptor.decrypt_aes(DS2_KEY, iv, encrypted_payload)
+                decrypted_raw = aes_decrypt(iv, encrypted_payload)
                 clean_data = decrypted_raw[4:]
 
                 entry = BND4Entry(
