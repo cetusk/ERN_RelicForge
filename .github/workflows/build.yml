@@ -45,7 +45,6 @@ jobs:
             gui/dist/*.dmg
             gui/dist/*.AppImage
             gui/dist/*.zip
-            gui/dist/*.yml
           if-no-files-found: ignore
 
   release:
