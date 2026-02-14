@@ -1006,23 +1006,29 @@ class RelicOptimizer {
       };
     };
 
+    // Deterministic sort: score desc, sub_score desc, sorted relic IDs asc
+    const _resultCmp = (a, b) => {
+      const sc = b.score - a.score;
+      if (sc !== 0) return sc;
+      const ss = (b.sub_score || 0) - (a.sub_score || 0);
+      if (ss !== 0) return ss;
+      const aIds = a.relics.map(r => r.id).sort((x, y) => x - y);
+      const bIds = b.relics.map(r => r.id).sort((x, y) => x - y);
+      for (let i = 0; i < Math.min(aIds.length, bIds.length); i++) {
+        if (aIds[i] !== bIds[i]) return aIds[i] - bIds[i];
+      }
+      return aIds.length - bIds.length;
+    };
+
     // Drain heapTrue (all true entries)
     const trueResults = [];
     while (heapTrue.size > 0) trueResults.push(buildResult(heapTrue.pop()));
-    trueResults.sort((a, b) => {
-      const sc = b.score - a.score;
-      if (sc !== 0) return sc;
-      return (b.sub_score || 0) - (a.sub_score || 0);
-    });
+    trueResults.sort(_resultCmp);
 
     // Drain heapFalse (all false entries)
     const falseResults = [];
     while (heapFalse.size > 0) falseResults.push(buildResult(heapFalse.pop()));
-    falseResults.sort((a, b) => {
-      const sc = b.score - a.score;
-      if (sc !== 0) return sc;
-      return (b.sub_score || 0) - (a.sub_score || 0);
-    });
+    falseResults.sort(_resultCmp);
 
     // Merge: true first, fill remainder with false up to topN
     const results = [...trueResults];
@@ -1225,7 +1231,15 @@ function buildOutput(allOutput, topN = 50) {
     if (a.requiredMet !== b.requiredMet) return b.requiredMet ? 1 : -1;
     const sc = (b.score || 0) - (a.score || 0);
     if (sc !== 0) return sc;
-    return (b.subScore || 0) - (a.subScore || 0);
+    const ss = (b.subScore || 0) - (a.subScore || 0);
+    if (ss !== 0) return ss;
+    // Deterministic tiebreaker: sorted relic IDs (ascending)
+    const aIds = [...(a.normalRelics || []), ...(a.deepRelics || []), ...(a.relics || [])].map(r => r.id).sort((x, y) => x - y);
+    const bIds = [...(b.normalRelics || []), ...(b.deepRelics || []), ...(b.relics || [])].map(r => r.id).sort((x, y) => x - y);
+    for (let i = 0; i < Math.min(aIds.length, bIds.length); i++) {
+      if (aIds[i] !== bIds[i]) return aIds[i] - bIds[i];
+    }
+    return aIds.length - bIds.length;
   });
 
   const trimmed = flat.slice(0, topN);

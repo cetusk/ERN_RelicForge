@@ -65,6 +65,7 @@ ERN_RelicForge/
 - 適応的候補数制御（スペック数に応じた maxPairs 動的調整）
 - 2 層ヒープ分離（required_met の True/False を独立管理し枝刈り安定化）
 - JS 版ビットマスク演算の 32bit 溢れ防止ガード（nSpec >= 32 時は自動無効化）
+- 同スコア時の決定的タイブレーカー（ソート済み遺物 ID による Python/JS 間の結果一致保証）
 
 ### Web 版
 - GitHub Pages 対応 — インストール不要でブラウザから利用可能

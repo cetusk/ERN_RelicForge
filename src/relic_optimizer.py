@@ -791,8 +791,9 @@ class RelicOptimizer:
                 'relics': combo,
             })
 
-        results.sort(key=lambda x: (x['required_met'], x['score'],
-                                    x['sub_score']), reverse=True)
+        results.sort(key=lambda x: (
+            not x['required_met'], -x['score'], -x['sub_score'],
+            tuple(sorted(r['id'] for r in x['relics']))))
         return results[:top_n]
 
     def _build_slot_candidates(self, slot_colors: List[str],
@@ -1097,15 +1098,18 @@ class RelicOptimizer:
                 'normal_relics': n_rel, 'deep_relics': d_rel,
             }
 
+        # Deterministic tiebreaker: sorted relic IDs (ascending)
+        def _result_sort_key(x):
+            return (-x['score'], -x['sub_score'],
+                    tuple(sorted(r['id'] for r in x['relics'])))
+
         # Drain heap_true (all true entries), sorted by score desc
         true_results = [build_result(hk) for hk in heap_true]
-        true_results.sort(
-            key=lambda x: (x['score'], x['sub_score']), reverse=True)
+        true_results.sort(key=_result_sort_key)
 
         # Drain heap_false, sorted by score desc
         false_results = [build_result(hk) for hk in heap_false]
-        false_results.sort(
-            key=lambda x: (x['score'], x['sub_score']), reverse=True)
+        false_results.sort(key=_result_sort_key)
 
         # Merge: true first, fill remainder with false up to topN
         results = list(true_results)
@@ -1208,8 +1212,9 @@ class RelicOptimizer:
                 'relics': combo,
             })
 
-        results.sort(key=lambda x: (x['required_met'], x['score'],
-                                    x['sub_score']), reverse=True)
+        results.sort(key=lambda x: (
+            not x['required_met'], -x['score'], -x['sub_score'],
+            tuple(sorted(r['id'] for r in x['relics']))))
         return results[:top_n]
 
     def _format_relic(self, relic: Dict, matched_keys: Set[str],
@@ -1350,10 +1355,16 @@ def _build_output(all_output: List[Dict], top_n: int = 50) -> Dict:
                 entry['_color'] = params['color']
             flat.append(entry)
 
-    # ソート: requiredMet 優先、次にスコア降順、次にサブスコア降順
-    flat.sort(key=lambda r: (r.get('requiredMet', False), r.get('score', 0),
-                              r.get('subScore', 0)),
-              reverse=True)
+    # ソート: requiredMet 優先、次にスコア降順、次にサブスコア降順、
+    # 同スコア時は遺物ID昇順で決定的に
+    def _flat_sort_key(r):
+        ids = [rl['id'] for rl in r.get('normalRelics', [])]
+        ids.extend(rl['id'] for rl in r.get('deepRelics', []))
+        ids.extend(rl['id'] for rl in r.get('relics', []))
+        return (not r.get('requiredMet', False),
+                -r.get('score', 0), -r.get('subScore', 0),
+                tuple(sorted(ids)))
+    flat.sort(key=_flat_sort_key)
 
     # グローバル top_n に絞る
     flat = flat[:top_n]

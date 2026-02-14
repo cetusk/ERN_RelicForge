@@ -45,7 +45,7 @@ const CONCENTRATION_BONUS = 5;
 
 // App metadata
 const APP_NIGHTREIGN_VERSION = 'v1.03.4';
-const APP_LAST_UPDATED = '2026-02-12';
+const APP_LAST_UPDATED = '2026-02-14';
 
 // === Type Display Names ===
 const TYPE_LABELS = {
