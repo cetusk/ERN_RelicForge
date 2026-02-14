@@ -52,8 +52,9 @@ node_modules/
 package-lock.json
 package.json
 
-# Allow web/lib/ (crypto-js for browser)
+# Allow web/lib/ and gui/renderer/lib/ (crypto-js for browser)
 !web/lib/
+!gui/renderer/lib/
 
 # Debugs
 debugs/

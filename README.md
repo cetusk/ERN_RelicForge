@@ -21,13 +21,17 @@ ERN_RelicForge/
 │   ├── effects_data.json        # エフェクトデータ (1117件, 日英名称・重複可否・備考付き)
 │   └── vessels_data.json        # 献器データ (全10キャラ・4汎用献器)
 │
-├── gui/                         # Electron GUI アプリ
+├── gui/                         # Electron GUI アプリ (Python 不要)
 │   ├── package.json
 │   ├── main.js                  # メインプロセス
 │   ├── preload.js               # IPC ブリッジ
 │   └── renderer/
 │       ├── index.html
 │       ├── app.js               # UI ロジック
+│       ├── relic-parser.js      # JS 版パーサー (web/ と共通)
+│       ├── relic-optimizer.js   # JS 版最適化 (web/ と共通)
+│       ├── lib/
+│       │   └── crypto-js.min.js # AES-CBC 復号化用
 │       └── style.css            # ダークテーマスタイル
 │
 ├── web/                         # Web 版 (GitHub Pages 対応)
@@ -75,6 +79,8 @@ ERN_RelicForge/
 - Electron 版と同等の全機能を提供
 
 ### GUI ビューアー (Electron / Web 共通)
+- Electron 版は Python 不要のスタンドアロンアプリ（JS 版パーサー・オプティマイザを内蔵）
+- Windows / macOS / Linux 対応のクロスプラットフォームビルド
 - 日本語 / English 対応（テーブル、詳細パネル、インスペクターすべてに反映）
 - 効果名のテキスト検索（日英両対応、サジェスト付き）
 - 色・タイプフィルター
@@ -118,24 +124,31 @@ ERN_RelicForge/
 
 ## Requirements
 
-**Web 版**: 不要（ブラウザのみ）
+**Web 版 / Electron GUI**: 不要（Python 不要、スタンドアロンで動作）
 
-**CLI / Electron GUI**:
+**CLI**:
 - Python 3.7 以上
 - [pycryptodome](https://pypi.org/project/pycryptodome/)
-- Node.js (Electron GUI を使う場合)
 
 ## Installation
 
-Web 版はインストール不要。CLI / Electron GUI を使う場合:
+**Web 版**: インストール不要。ブラウザでアクセスするだけで利用可能。
 
+**Electron GUI**: [GitHub Releases](https://github.com/cetusk/ERN_RelicForge/releases) からプラットフォーム別の実行ファイルをダウンロード:
+- **Windows**: `.exe` インストーラーまたはポータブル版
+- **macOS**: `.dmg`
+- **Linux**: `.AppImage`
+
+**CLI** (Python):
 ```bash
-# Python 依存パッケージ
 pip install -r requirements.txt
+```
 
-# Electron GUI 依存パッケージ
+**開発者向け** (ソースから実行):
+```bash
 cd gui
 npm install
+npm start
 ```
 
 ## Usage
@@ -264,11 +277,11 @@ Web 版では 3 つの方法でセーブファイルを読み込める:
 
 #### 技術的な違い (Electron 版 vs Web 版)
 
-- パーサー・最適化ツールは Python → JavaScript に完全移植（結果一致を検証済み）
-- AES-CBC 復号化: pycryptodome → CryptoJS
-- 最適化処理: メインスレッド → Web Worker (UI ブロック防止)
-- セーブファイルアクセス: ファイルシステム直接 → File API / File System Access API
-- プリセット保存: ファイルダイアログ → ブラウザダウンロード / アップロード
+- Electron 版・Web 版ともに JavaScript 版パーサー・オプティマイザを使用（Python 不要）
+- AES-CBC 復号化: CryptoJS（両版共通）
+- 最適化処理: Web Worker による非同期実行（両版共通）
+- セーブファイルアクセス: Electron 版はネイティブダイアログ、Web 版は File API / File System Access API
+- プリセット保存: Electron 版はファイルダイアログ、Web 版はブラウザダウンロード / アップロード
 - HTML エクスポート: 遺物一覧・ビルド探索結果を CSS 埋め込みスタンドアロン HTML として出力
 
 ### Electron GUI

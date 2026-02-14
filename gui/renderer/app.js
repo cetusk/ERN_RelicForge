@@ -3,6 +3,21 @@ function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function buildStackingLookup(effectsData) {
+  const lookup = {};
+  for (const [id, entry] of Object.entries(effectsData.effects || {})) {
+    lookup[id] = {
+      stackable: entry.stackable,
+      stackNotes: entry.stackNotes || '',
+      key: entry.key || '',
+      name_ja: entry.name_ja || '',
+      name_en: entry.name_en || '',
+      deepOnly: entry.deepOnly || false,
+    };
+  }
+  return lookup;
+}
+
 // === State ===
 let relicData = null;       // Full parsed data
 let filteredRelics = [];    // After filter/search
@@ -16,6 +31,9 @@ let activeAndGroup = 0;             // active AND group index
 let allUniqueEffects = [];          // unique effects with counts
 let collapsedCategories = new Set(); // collapsed category IDs in inspector
 let stackingLookup = {};           // effectId -> { stackable, stackNotes }
+let itemsData = null;              // cached items_data.json
+let effectsData = null;            // cached effects_data.json
+let currentOptWorker = null;       // current optimizer Worker
 const AND_GROUP_COLORS = ['#e74c3c', '#3498db', '#2ecc71']; // group indicator colors
 
 // === Tab State ===
@@ -228,8 +246,15 @@ async function openFile() {
 async function loadAndDisplay(filePath) {
   showView('loading');
   try {
-    relicData = await window.api.parseSaveFile(filePath);
-    stackingLookup = await window.api.loadStackingData();
+    if (!itemsData || !effectsData) {
+      [itemsData, effectsData] = await Promise.all([
+        window.api.loadItemsData(),
+        window.api.loadEffectsData(),
+      ]);
+    }
+    const fileBuffer = await window.api.readFileBuffer(filePath);
+    relicData = parseSaveFile(fileBuffer.buffer, itemsData, effectsData);
+    stackingLookup = buildStackingLookup(effectsData);
     loadedFileName = filePath.split(/[/\\]/).pop();
     buildSearchTerms();
     buildUniqueEffects();
@@ -2021,53 +2046,109 @@ async function runOptimization() {
 
   closeOptimizerInspector();
 
-  // Listen for progress updates
-  const removeProgressListener = window.api.onOptimizerProgress((data) => {
-    updateOptimizerTabProgress(tabId, data.current, data.total);
-  });
-
-  try {
-    const result = await window.api.runOptimizer({
-      relicData: relicData,
-      character: params.character,
-      vessel: params.vessel,
-      combined: params.combined,
-      effects: params.effects,
-      candidates: params.candidates,
-      top: params.top,
-    });
-
-    removeProgressListener();
-
-    // Replace loading state with results
-    optimizerTabs.set(tabId, { label, data: result, params });
-    const container = document.getElementById(`opt-result-${tabId}`);
-    if (container) {
-      container.classList.remove('opt-loading');
-      renderOptimizerResults(tabId, result, params);
+  // Build stacking data for optimizer (key-based lookup)
+  const stackingData = {};
+  if (effectsData) {
+    for (const [eid, entry] of Object.entries(effectsData.effects || {})) {
+      const key = entry.key;
+      const stackable = entry.stackable !== undefined ? entry.stackable : false;
+      if (!(key in stackingData)) {
+        stackingData[key] = stackable === true ? true : stackable === 'conditional' ? 'conditional' : false;
+      } else if (stackable === true) {
+        stackingData[key] = true;
+      } else if (stackable === 'conditional' && stackingData[key] === false) {
+        stackingData[key] = 'conditional';
+      }
     }
-    // Update tab label (remove spinner icon)
-    renderTabBar();
-  } catch (err) {
-    removeProgressListener();
-    // Show error in the tab
+  }
+
+  // Terminate previous worker if running
+  if (currentOptWorker) {
+    currentOptWorker.terminate();
+    currentOptWorker = null;
+  }
+
+  // Create Web Worker
+  const worker = new Worker('relic-optimizer.js');
+  currentOptWorker = worker;
+
+  worker.onmessage = function(e) {
+    const data = e.data;
+
+    if (data.progress) {
+      updateOptimizerTabProgress(tabId, data.progress.current, data.progress.total);
+      return;
+    }
+
+    if (data.error) {
+      const container = document.getElementById(`opt-result-${tabId}`);
+      if (container) {
+        container.classList.remove('opt-loading');
+        container.innerHTML = `<div class="opt-loading-content">
+          <div class="opt-loading-error">${ja ? 'エラー' : 'Error'}</div>
+          <div class="opt-loading-message">${String(data.error).substring(0, 300)}</div>
+        </div>`;
+      }
+      const tabInfo = optimizerTabs.get(tabId);
+      if (tabInfo) tabInfo._error = true;
+      renderTabBar();
+      optimizerRunBtn.disabled = false;
+      document.getElementById('optimizer-run-label').textContent =
+        ja ? '実行' : 'Run';
+      worker.terminate();
+      currentOptWorker = null;
+      return;
+    }
+
+    if (data.result) {
+      optimizerTabs.set(tabId, { label, data: data.result, params });
+      const container = document.getElementById(`opt-result-${tabId}`);
+      if (container) {
+        container.classList.remove('opt-loading');
+        renderOptimizerResults(tabId, data.result, params);
+      }
+      renderTabBar();
+      optimizerRunBtn.disabled = false;
+      document.getElementById('optimizer-run-label').textContent =
+        ja ? '実行' : 'Run';
+      worker.terminate();
+      currentOptWorker = null;
+    }
+  };
+
+  worker.onerror = function(err) {
     const container = document.getElementById(`opt-result-${tabId}`);
     if (container) {
       container.classList.remove('opt-loading');
       container.innerHTML = `<div class="opt-loading-content">
         <div class="opt-loading-error">${ja ? 'エラー' : 'Error'}</div>
-        <div class="opt-loading-message">${String(err).substring(0, 300)}</div>
+        <div class="opt-loading-message">${String(err.message || err).substring(0, 300)}</div>
       </div>`;
     }
-    // Mark tab as error
     const tabInfo = optimizerTabs.get(tabId);
     if (tabInfo) tabInfo._error = true;
     renderTabBar();
-  } finally {
     optimizerRunBtn.disabled = false;
     document.getElementById('optimizer-run-label').textContent =
       ja ? '実行' : 'Run';
-  }
+    worker.terminate();
+    currentOptWorker = null;
+  };
+
+  // Send data to worker
+  worker.postMessage({
+    relics: relicData.relics,
+    effectSpecs: params.effects,
+    vesselsData: vesselsData,
+    stackingData: stackingData,
+    params: {
+      character: params.character,
+      vessel: params.vessel,
+      combined: params.combined,
+      candidates: params.candidates,
+      top: params.top,
+    },
+  });
 }
 
 // Optimizer inspector event listeners

@@ -1,12 +1,46 @@
 {
-  "name": "ern-relicforge-gui",
+  "name": "ern-relicforge",
   "version": "1.0.0",
-  "description": "Elden Ring Nightreign Relic Viewer",
+  "description": "Elden Ring Nightreign Relic Viewer & Optimizer",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.cetusk.ern-relicforge",
+    "productName": "ERN RelicForge",
+    "directories": {
+      "output": "dist"
+    },
+    "extraResources": [
+      {
+        "from": "../resources",
+        "to": "resources"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
   },
   "devDependencies": {
-    "electron": "^33.4.11"
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
   }
 }
