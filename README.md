@@ -43,10 +43,16 @@ ERN_RelicForge/
 │   └── lib/
 │       └── crypto-js.min.js     # AES-CBC 復号化用
 │
-└── examples/
-    ├── sample_output.json       # パーサーサンプル出力
-    ├── sample_effects_config.json  # 効果指定サンプル
-    └── test_wylder_effects.json    # 追跡者テスト用効果指定
+├── examples/
+│   ├── sample_output.json       # パーサーサンプル出力
+│   ├── sample_effects_config.json  # 効果指定サンプル
+│   └── test_wylder_effects.json    # 追跡者テスト用効果指定
+│
+└── tests/                       # 回帰テスト (GitHub Actions で自動実行)
+    ├── test_*.py                # Python 版パーサー・オプティマイザ・データ整合性
+    ├── *.test.js                # JS 版 (web / gui) パーサー・オプティマイザ・共通ファイル一致
+    ├── check_real_saves.py      # 実セーブファイルでの確認 (ローカル専用)
+    └── fixtures/                # 合成セーブファイル・遺物プール・期待値 (generate.py で生成)
 ```
 
 ## Features
@@ -334,6 +340,22 @@ npm start
 #### 詳細表示
 
 テーブルの行をクリックすると右側に詳細パネルが開き、基本情報と効果一覧（備考情報を含む）を確認できる
+
+## Tests
+
+push / PR 時に GitHub Actions (Python 3.12 / Node.js 22) で自動実行される。ローカルでは以下で実行:
+
+```bash
+pip install -r requirements.txt
+python -m unittest discover -s tests -v   # Python 版
+node --test tests/*.test.js               # JS 版 (web / gui)
+```
+
+- 実際のセーブファイルは個人情報を含むためリポジトリに含めず、遺物スロットの構造を再現した合成セーブファイル (`tests/fixtures/synthetic_save.sl2`) と、ゲームデータから決定的に生成した遺物プールでテストする
+- 期待値は Python 版で生成し、Python 版・JS 版 (web / gui) がすべて同じ結果を返すことを確認する
+- `web/` と `gui/renderer/` の共通ファイル (パーサー・オプティマイザ・CryptoJS) が一致していることも確認する
+- 挙動を意図的に変更した場合は `python tests/fixtures/generate.py` で期待値を再生成し、差分を確認してからコミットする
+- 手元の実セーブファイルでの確認: `python tests/check_real_saves.py` (`debugs/*.sl2` を対象に Python/JS の一致と未知の遺物の有無を確認)
 
 ## Output Example
 

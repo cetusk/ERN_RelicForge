@@ -1,0 +1,32 @@
+{
+ "items": {
+  "100": {
+   "key": "delicateBurningScene",
+   "color": "Red",
+   "type": "Relic",
+   "name_en": "Delicate Burning Scene",
+   "name_ja": "繊細な燃える景色"
+  },
+  "109": {
+   "key": "delicateDrizzlyScene",
+   "color": "Blue",
+   "type": "Relic",
+   "name_en": "Delicate Drizzly Scene",
+   "name_ja": "繊細な滴る景色"
+  },
+  "2000000": {
+   "key": "deepDelicateBurningScene",
+   "color": "Red",
+   "type": "DeepRelic",
+   "name_en": "Deep Delicate Burning Scene",
+   "name_ja": "繊細な燃える景色（深層）"
+  },
+  "12002": {
+   "key": "witchsBrooch",
+   "color": "Blue",
+   "type": "UniqueRelic",
+   "name_en": "Witchs Brooch",
+   "name_ja": "魔女のブローチ"
+  }
+ }
+}

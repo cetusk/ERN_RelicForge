@@ -1,0 +1,86 @@
+{
+ "effects": {
+  "6000800": {
+   "key": "characterSkillCooldownReductionPlus4",
+   "name_en": "Character Skill Cooldown Reduction Plus 4",
+   "name_ja": "スキルクールタイム軽減+4",
+   "stackable": true,
+   "stackNotes": "5%/7.5%/10%ほど軽減",
+   "deepOnly": true
+  },
+  "6000801": {
+   "key": "characterSkillCooldownReductionPlus5",
+   "name_en": "Character Skill Cooldown Reduction Plus 5",
+   "name_ja": "スキルクールタイム軽減+5",
+   "stackable": true,
+   "stackNotes": "5%/7.5%/10%ほど軽減",
+   "deepOnly": true
+  },
+  "6000900": {
+   "key": "ultimateArtAutoChargePlus4",
+   "name_en": "Ultimate Art Auto Charge Plus 4",
+   "name_ja": "アーツゲージ自然蓄積+4",
+   "stackable": true,
+   "stackNotes": "5%/7.5%/10%ほど増加",
+   "deepOnly": true
+  },
+  "6800000": {
+   "key": "reducedVigor",
+   "name_en": "Reduced Vigor",
+   "name_ja": "生命力低下",
+   "stackable": true,
+   "stackNotes": "",
+   "deepOnly": true
+  },
+  "6800200": {
+   "key": "reducedEndurance",
+   "name_en": "Reduced Endurance",
+   "name_ja": "持久力低下",
+   "stackable": true,
+   "stackNotes": "",
+   "deepOnly": true
+  },
+  "7000000": {
+   "key": "vigorPlus1",
+   "name_en": "Vigor Plus 1",
+   "name_ja": "生命力+1",
+   "stackable": true,
+   "stackNotes": ""
+  },
+  "7000001": {
+   "key": "vigorPlus2",
+   "name_en": "Vigor Plus 2",
+   "name_ja": "生命力+2",
+   "stackable": true,
+   "stackNotes": ""
+  },
+  "7000002": {
+   "key": "vigorPlus3",
+   "name_en": "Vigor Plus 3",
+   "name_ja": "生命力+3",
+   "stackable": true,
+   "stackNotes": ""
+  },
+  "7000090": {
+   "key": "increasedMaximumHP",
+   "name_en": "Increased Maximum Hp",
+   "name_ja": "最大HP上昇",
+   "stackable": false,
+   "stackNotes": "深層版は重複可"
+  },
+  "7000100": {
+   "key": "mindPlus1",
+   "name_en": "Mind Plus 1",
+   "name_ja": "精神力+1",
+   "stackable": true,
+   "stackNotes": ""
+  },
+  "7000101": {
+   "key": "mindPlus2",
+   "name_en": "Mind Plus 2",
+   "name_ja": "精神力+2",
+   "stackable": true,
+   "stackNotes": ""
+  }
+ }
+}

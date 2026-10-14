@@ -39,6 +39,8 @@ env/
 # Output files
 output.json
 *.sl2
+# Synthetic save file for tests (no personal data; see tests/fixtures/generate.py)
+!tests/fixtures/*.sl2
 
 # OS
 .DS_Store
