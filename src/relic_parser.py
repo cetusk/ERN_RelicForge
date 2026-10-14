@@ -38,6 +38,9 @@ SLOT_SIZE_MAP = {
     0x80: SLOT_SIZE_FULL,
 }
 
+# Effect/item IDs fit in 24 bits; anything larger is not a relic slot
+MAX_RELIC_FIELD_ID = 0x01000000
+
 
 @dataclass
 class BND4Entry:
@@ -194,6 +197,26 @@ class RelicParser:
     def get_slot_size(b4: int) -> Optional[int]:
         """Get slot size based on b4 byte value (O(1) dict lookup)"""
         return SLOT_SIZE_MAP.get(b4)
+
+    @staticmethod
+    def has_relic_slot_layout(entry_data: bytes, pos: int, effect_keys, debuff_keys) -> bool:
+        """Check whether a slot has the full relic slot layout.
+
+        Used for slots containing IDs missing from items/effects data (e.g. added
+        by a game update), which cannot be validated against the data files.
+        Layout: [relicId (b4=0xC0)][itemId|0x80000000][itemId|0x80000000][FFFFFFFF]
+                [4 effect IDs] ... [4 debuff IDs at +56]
+        """
+        if entry_data[pos + 3] != 0xc0:
+            return False
+        if entry_data[pos + 7] != 0x80 or entry_data[pos + 11] != 0x80:
+            return False
+        if struct.unpack_from('<I', entry_data, pos + 12)[0] != EMPTY_EFFECT:
+            return False
+        for id_ in (*effect_keys, *debuff_keys):
+            if id_ != EMPTY_EFFECT and id_ >= MAX_RELIC_FIELD_ID:
+                return False
+        return True
     
     @staticmethod
     def parse_relics_from_entry(
@@ -223,30 +246,35 @@ class RelicParser:
                     relic_id = unpack('<I', entry_data, pos)[0]
                     item_id = int.from_bytes(entry_data[pos + 4:pos + 7], 'little')
 
-                    # Validate item ID (early exit if invalid)
-                    if item_id not in valid_items:
+                    # Effect/debuff fields must lie inside the data
+                    if pos + 72 > data_length:
                         pos += 1
                         continue
 
                     # Extract 4 effect IDs in one unpack call
                     effect_keys = unpack('<IIII', entry_data, pos + 16)
 
-                    # Validate effects (early exit on first invalid)
-                    valid_count = 0
-                    all_valid = True
+                    # Validate item and effects against known data
+                    known = item_id in valid_items
+                    effect_count = 0
                     for eff_id in effect_keys:
                         if eff_id != EMPTY_EFFECT:
                             if eff_id not in valid_effects:
-                                all_valid = False
-                                break
-                            valid_count += 1
+                                known = False
+                            effect_count += 1
 
-                    if not all_valid or valid_count == 0:
+                    if effect_count == 0:
                         pos += 1
                         continue
 
                     # Extract 4 debuff keys in one unpack call
                     debuff_keys = unpack('<IIII', entry_data, pos + 56)
+
+                    # Unknown IDs: keep only slots with the full relic slot layout
+                    if not known and not RelicParser.has_relic_slot_layout(
+                            entry_data, pos, effect_keys, debuff_keys):
+                        pos += 1
+                        continue
 
                     # Build effects list
                     effects = []
@@ -263,9 +291,13 @@ class RelicParser:
                         'id': relic_id,
                         'item_id': item_id,
                         'effects': effects,
+                        'known': known,
                     })
 
             pos += 1
+
+        # Relic IDs already found with known data (unknown slots with these IDs are skipped)
+        known_ids = {slot['id'] for slot in potential_slots if slot['known']}
 
         # Build sort key index using C-level find (O(N) amortized)
         sort_key_index = {}
@@ -283,6 +315,10 @@ class RelicParser:
         # Second pass: look up sort keys from index (O(1) per relic)
         relics = []
         for slot in potential_slots:
+            if not slot['known']:
+                if slot['id'] in known_ids:
+                    continue
+                known_ids.add(slot['id'])
             sort_key_pos = sort_key_index.get(slot['id'])
             if sort_key_pos is not None:
                 sort_key = unpack('<H', entry_data, sort_key_pos + 8)[0]
@@ -306,8 +342,13 @@ class RelicParser:
         deep_idx = 0
 
         for relic in relics:
-            item = items_data.get(relic['item_id'], {})
-            color = item.get('color', 'Red')
+            item = items_data.get(relic['item_id'])
+            if item is None:
+                # Unknown item: color/type unknown, so its grid position cannot be determined
+                relic['coordinates'] = None
+                relic['coordinates_by_color'] = None
+                continue
+            color = item.get('color') or 'Red'
             is_deep = item.get('type') == 'DeepRelic'
 
             if is_deep:
@@ -405,12 +446,25 @@ def main():
         
         # Convert to output format
         relics_output = []
+        unknown_relics = 0
         for relic in relics:
+            has_unknown = False
             effects_list = []
             for effect_group in relic['effects']:
                 effect_dict = []
                 for eff_id in effect_group:
-                    eff_info = effects_data.get(eff_id, {})
+                    if eff_id not in effects_data:
+                        # Effect missing from effects data (e.g. added by a game update)
+                        has_unknown = True
+                        effect_dict.append({
+                            'id': eff_id,
+                            'key': f"unknownEffect_{eff_id}",
+                            'name_en': f"Unknown Effect (ID: {eff_id})",
+                            'name_ja': f"未知の効果 (ID: {eff_id})",
+                            'unknown': True
+                        })
+                        continue
+                    eff_info = effects_data[eff_id]
                     if isinstance(eff_info, dict):
                         eff_name_en = eff_info.get('name_en', eff_info.get('key', f"Unknown Effect {eff_id}"))
                         eff_name_ja = eff_info.get('name_ja', eff_name_en)
@@ -428,12 +482,20 @@ def main():
                     })
                 effects_list.append(effect_dict)
             
-            item_info = items_data.get(relic['item_id'], {})
-            item_key = item_info.get('key', f"Unknown Item {relic['item_id']}")
-            item_name_en = item_info.get('name_en', item_key)
-            item_name_ja = item_info.get('name_ja', item_name_en)
+            if relic['item_id'] in items_data:
+                item_info = items_data[relic['item_id']]
+                item_key = item_info.get('key', f"Unknown Item {relic['item_id']}")
+                item_name_en = item_info.get('name_en', item_key)
+                item_name_ja = item_info.get('name_ja', item_name_en)
+            else:
+                # Item missing from items data (e.g. added by a game update)
+                has_unknown = True
+                item_info = {}
+                item_key = f"unknownItem_{relic['item_id']}"
+                item_name_en = f"Unknown Relic (ID: {relic['item_id']})"
+                item_name_ja = f"未知の遺物 (ID: {relic['item_id']})"
 
-            relics_output.append({
+            relic_out = {
                 'id': relic['id'],
                 'itemId': relic['item_id'],
                 'itemKey': item_key,
@@ -445,13 +507,23 @@ def main():
                 'coordinates': relic['coordinates'],
                 'coordinatesByColor': relic['coordinates_by_color'],
                 'sortKey': relic.get('sort_key', 0)
-            })
-        
+            }
+            if has_unknown:
+                relic_out['unknown'] = True
+                unknown_relics += 1
+            relics_output.append(relic_out)
+
+        if unknown_relics:
+            print(f"Warning: {unknown_relics} relics contain items/effects missing from the data files "
+                  f"(shown as 'Unknown'). The data files may need updating for a newer game version.",
+                  file=sys.stderr)
+
         # Output JSON
         output_data = {
             'file': args.input_file,
             'characterName': character_name,
             'totalRelics': len(relics_output),
+            'unknownRelics': unknown_relics,
             'relics': relics_output
         }
         

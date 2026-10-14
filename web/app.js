@@ -68,6 +68,7 @@ const btnOpen = document.getElementById('btn-open');
 const btnOpenWelcome = document.getElementById('btn-open-welcome');
 const fileInput = document.getElementById('file-input');
 const headerInfo = document.getElementById('header-info');
+const headerWarning = document.getElementById('header-warning');
 const toolbar = document.getElementById('toolbar');
 const welcome = document.getElementById('welcome');
 const loading = document.getElementById('loading');
@@ -603,11 +604,23 @@ function updateHeaderInfo() {
   const fileLabel = ja ? 'ファイル' : 'File';
   headerInfo.textContent =
     `${playerLabel}: ${relicData.characterName} | ${totalLabel}: ${total}  (${normalLabel}: ${normal} / ${deepLabel}: ${deep} / ${uniqueLabel}: ${unique}) | ${fileLabel}: ${loadedFileName}`;
+
+  // Warn when relics contain items/effects missing from the data files
+  const unknown = relicData.unknownRelics || 0;
+  headerWarning.hidden = unknown === 0;
+  if (unknown > 0) {
+    headerWarning.textContent = ja
+      ? `⚠ 未知の遺物: ${unknown}件`
+      : `⚠ Unknown relics: ${unknown}`;
+    headerWarning.title = ja
+      ? 'データに無いアイテム・効果を含む遺物があります（「未知の効果 (ID: …)」等と表示）。ゲームのアップデートにツールが未対応の可能性があります。'
+      : 'Some relics contain items/effects missing from the data files (shown as "Unknown Effect (ID: …)" etc.). The tool may not support the latest game update yet.';
+  }
 }
 
 function typeLabel(itemType) {
   const entry = TYPE_LABELS[itemType];
-  return entry ? entry[displayLang] : itemType;
+  return entry ? entry[displayLang] : (itemType || '-');
 }
 
 // === Result Count ===
@@ -851,11 +864,11 @@ function showDetail(relic) {
   html += field('ID', relic.id);
   html += field(ja ? 'アイテムID' : 'Item ID', relic.itemId);
   html += field(ja ? 'アイテムKey' : 'Item Key', relic.itemKey);
-  html += field(ja ? '色' : 'Color', `<span class="color-badge ${relic.itemColor}"></span> ${relic.itemColor}`);
+  html += field(ja ? '色' : 'Color', `<span class="color-badge ${relic.itemColor}"></span> ${relic.itemColor || '-'}`);
   html += field(displayLang === 'ja' ? 'タイプ' : 'Type',
     `<span class="type-badge ${relic.itemType}">${typeLabel(relic.itemType)}</span>`);
-  html += field(ja ? '座標' : 'Coordinates', `[${relic.coordinates.join(', ')}]`);
-  html += field(ja ? '色別座標' : 'Color Coords', `[${relic.coordinatesByColor.join(', ')}]`);
+  html += field(ja ? '座標' : 'Coordinates', relic.coordinates ? `[${relic.coordinates.join(', ')}]` : '-');
+  html += field(ja ? '色別座標' : 'Color Coords', relic.coordinatesByColor ? `[${relic.coordinatesByColor.join(', ')}]` : '-');
   html += field(ja ? 'ソートキー' : 'Sort Key', relic.sortKey);
   html += `</div>`;
 
@@ -1224,8 +1237,8 @@ function buildCatalogEffects() {
     const meta = metaByKey.get(k);
     effectsByKey.set(k, {
       key: k,
-      name_ja: meta ? (meta.name_ja || meta.name_en || k) : k,
-      name_en: meta ? (meta.name_en || k) : k,
+      name_ja: meta ? (meta.name_ja || meta.name_en || k) : (ue.name_ja || k),
+      name_en: meta ? (meta.name_en || k) : (ue.name_en || k),
       category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
       deepOnly: meta ? !!meta.deepOnly : false,
       stackable: meta ? meta.stackable : undefined,
@@ -3095,7 +3108,7 @@ function renderOptDetailRelic(relic, ja) {
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
   const typeBadge = TYPE_LABELS[relic.itemType];
-  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : relic.itemType;
+  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : (relic.itemType || '-');
 
   let html = `<div class="detail-effect">`;
   html += `<div class="detail-effect-main">`;

@@ -24,7 +24,30 @@ const ENTRY_MAGIC = [0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff];
 // Character name search pattern: hex "27000046414345"
 const NAME_PATTERN = [0x27, 0x00, 0x00, 0x46, 0x41, 0x43, 0x45];
 
+// Effect/item IDs fit in 24 bits; anything larger is not a relic slot
+const MAX_RELIC_FIELD_ID = 0x01000000;
+
 // === Helper Functions ===
+
+/**
+ * Check whether a slot has the full relic slot layout.
+ * Used for slots containing IDs missing from items/effects data (e.g. added
+ * by a game update), which cannot be validated against the data files.
+ * Layout: [relicId (b4=0xC0)][itemId|0x80000000][itemId|0x80000000][FFFFFFFF]
+ *         [4 effect IDs] ... [4 debuff IDs at +56]
+ */
+function hasRelicSlotLayout(entryData, pos, effectKeys, debuffKeys) {
+  if (entryData[pos + 3] !== 0xc0) return false;
+  if (entryData[pos + 7] !== 0x80 || entryData[pos + 11] !== 0x80) return false;
+  if (readUint32LE(entryData, pos + 12) !== EMPTY_EFFECT) return false;
+  for (const id of effectKeys) {
+    if (id !== EMPTY_EFFECT && id >= MAX_RELIC_FIELD_ID) return false;
+  }
+  for (const id of debuffKeys) {
+    if (id !== EMPTY_EFFECT && id >= MAX_RELIC_FIELD_ID) return false;
+  }
+  return true;
+}
 
 /**
  * Read a little-endian 24-bit unsigned integer from Uint8Array
@@ -270,9 +293,6 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
       const relicId = readUint32LE(entryData, pos);
       const itemId = readUint24LE(entryData, pos + 4);
 
-      // Validate item ID
-      if (!validItems.has(itemId)) continue;
-
       // Extract effect IDs
       const effectKeys = [
         readUint32LE(entryData, pos + 16),
@@ -281,20 +301,17 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
         readUint32LE(entryData, pos + 28),
       ];
 
-      // Validate effects
-      let allValid = true;
-      let validCount = 0;
+      // Validate item and effects against known data
+      let known = validItems.has(itemId);
+      let effectCount = 0;
       for (const effId of effectKeys) {
         if (effId !== EMPTY_EFFECT) {
-          if (!validEffects.has(effId)) {
-            allValid = false;
-            break;
-          }
-          validCount++;
+          if (!validEffects.has(effId)) known = false;
+          effectCount++;
         }
       }
 
-      if (!allValid || validCount === 0) continue;
+      if (effectCount === 0) continue;
 
       // Extract debuff keys
       const debuffKeys = [
@@ -303,6 +320,9 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
         readUint32LE(entryData, pos + 64),
         readUint32LE(entryData, pos + 68),
       ];
+
+      // Unknown IDs: keep only slots with the full relic slot layout
+      if (!known && !hasRelicSlotLayout(entryData, pos, effectKeys, debuffKeys)) continue;
 
       // Build effects list
       const effects = [];
@@ -323,8 +343,15 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
         id: relicId,
         itemId: itemId,
         effects: effects,
+        known: known,
       });
     }
+  }
+
+  // Relic IDs already found with known data (unknown slots with these IDs are skipped)
+  const knownIds = new Set();
+  for (const slot of potentialSlots) {
+    if (slot.known) knownIds.add(slot.id);
   }
 
   // Build sort key index in single O(N) pass
@@ -343,6 +370,10 @@ function parseRelicsFromEntry(entryData, validItems, validEffects) {
   // Second pass: look up sort keys from index (O(1) per relic)
   const relics = [];
   for (const slot of potentialSlots) {
+    if (!slot.known) {
+      if (knownIds.has(slot.id)) continue;
+      knownIds.add(slot.id);
+    }
     const sortKeyPos = sortKeyIndex.get(slot.id);
     if (sortKeyPos !== undefined) {
       const sortKey = readUint16LE(entryData, sortKeyPos + 8);
@@ -377,8 +408,14 @@ function setCoordinates(relics, itemsData) {
 
   for (const relic of relics) {
     const item = itemsData[relic.itemId];
-    const color = item ? item.color || 'Red' : 'Red';
-    const isDeep = item && item.type === 'DeepRelic';
+    if (!item) {
+      // Unknown item: color/type unknown, so its grid position cannot be determined
+      relic.coordinates = null;
+      relic.coordinatesByColor = null;
+      continue;
+    }
+    const color = item.color || 'Red';
+    const isDeep = item.type === 'DeepRelic';
 
     if (isDeep) {
       relic.coordinates = [deepIdx >> 3, deepIdx & 7];
@@ -443,12 +480,26 @@ function parseSaveFile(arrayBuffer, itemsData, effectsData) {
 
   // Convert to output format
   const relicsOutput = [];
+  let unknownRelics = 0;
   for (const relic of relics) {
+    let hasUnknown = false;
     const effectsList = [];
     for (const effectGroup of relic.effects) {
       const effectDict = [];
       for (const effId of effectGroup) {
-        const effInfo = effectsMap[effId] || {};
+        const effInfo = effectsMap[effId];
+        if (!effInfo) {
+          // Effect missing from effects data (e.g. added by a game update)
+          hasUnknown = true;
+          effectDict.push({
+            id: effId,
+            key: `unknownEffect_${effId}`,
+            name_en: `Unknown Effect (ID: ${effId})`,
+            name_ja: `未知の効果 (ID: ${effId})`,
+            unknown: true,
+          });
+          continue;
+        }
         const effNameEn = effInfo.name_en || effInfo.key || `Unknown Effect ${effId}`;
         const effNameJa = effInfo.name_ja || effNameEn;
         const effKey = effInfo.key || String(effId);
@@ -463,30 +514,45 @@ function parseSaveFile(arrayBuffer, itemsData, effectsData) {
       effectsList.push(effectDict);
     }
 
-    const itemInfo = itemsMap[relic.itemId] || {};
-    const itemKey = itemInfo.key || `Unknown Item ${relic.itemId}`;
-    const itemNameEn = itemInfo.name_en || itemKey;
-    const itemNameJa = itemInfo.name_ja || itemNameEn;
+    const itemInfo = itemsMap[relic.itemId];
+    let itemKey, itemNameEn, itemNameJa;
+    if (itemInfo) {
+      itemKey = itemInfo.key || `Unknown Item ${relic.itemId}`;
+      itemNameEn = itemInfo.name_en || itemKey;
+      itemNameJa = itemInfo.name_ja || itemNameEn;
+    } else {
+      // Item missing from items data (e.g. added by a game update)
+      hasUnknown = true;
+      itemKey = `unknownItem_${relic.itemId}`;
+      itemNameEn = `Unknown Relic (ID: ${relic.itemId})`;
+      itemNameJa = `未知の遺物 (ID: ${relic.itemId})`;
+    }
 
-    relicsOutput.push({
+    const relicOut = {
       id: relic.id,
       itemId: relic.itemId,
       itemKey: itemKey,
       itemNameEn: itemNameEn,
       itemNameJa: itemNameJa,
-      itemColor: itemInfo.color || null,
-      itemType: itemInfo.type || null,
+      itemColor: (itemInfo && itemInfo.color) || null,
+      itemType: (itemInfo && itemInfo.type) || null,
       effects: effectsList,
       coordinates: relic.coordinates,
       coordinatesByColor: relic.coordinatesByColor,
       sortKey: relic.sortKey || 0,
-    });
+    };
+    if (hasUnknown) {
+      relicOut.unknown = true;
+      unknownRelics++;
+    }
+    relicsOutput.push(relicOut);
   }
 
   return {
     file: 'uploaded',
     characterName: characterName,
     totalRelics: relicsOutput.length,
+    unknownRelics: unknownRelics,
     relics: relicsOutput,
   };
 }

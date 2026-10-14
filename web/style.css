@@ -11,6 +11,7 @@
   --text-muted: #707070;
   --accent: #4cc9b0;
   --accent-hover: #5cd4bc;
+  --warning: #f0a830;
   --border: #3a3a3a;
   --color-red: #e74c3c;
   --color-blue: #3498db;
@@ -56,6 +57,16 @@ body {
 .header-info {
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+.header-warning {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bg-primary);
+  background: var(--warning);
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: help;
 }
 
 .header-meta {
