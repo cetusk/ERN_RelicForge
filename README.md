@@ -345,7 +345,7 @@ npm start
 
 ## Tests
 
-push / PR 時に GitHub Actions (Python 3.12 / Node.js 22) で自動実行される。ローカルでは以下で実行:
+push / PR 時に GitHub Actions (Python 3.12 / Node.js 24) で自動実行される。ローカルでは以下で実行:
 
 ```bash
 pip install -r requirements.txt

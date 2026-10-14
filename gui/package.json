@@ -2,6 +2,10 @@
   "name": "ern-relicforge",
   "version": "1.0.0",
   "description": "Elden Ring Nightreign Relic Viewer & Optimizer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cetusk/ERN_RelicForge.git"
+  },
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -40,7 +44,7 @@
     }
   },
   "devDependencies": {
-    "electron": "^33.4.11",
-    "electron-builder": "^25.1.8"
+    "electron": "^44.7.2",
+    "electron-builder": "^26.15.3"
   }
 }
