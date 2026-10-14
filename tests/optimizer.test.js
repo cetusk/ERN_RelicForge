@@ -4,13 +4,13 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { APP_DIRS, loadFixture, runOptimizer, normalizeOptimizerOutput } = require('./helpers');
 
-const pool = loadFixture('relic_pool.json');
 const scenarios = loadFixture('optimizer_scenarios.json');
 const expected = loadFixture('optimizer_expected.json');
 
 for (const dir of APP_DIRS) {
   for (const sc of scenarios) {
     test(`${dir}: ${sc.name}`, () => {
+      const pool = loadFixture(sc.pool || 'relic_pool.json');
       const output = runOptimizer(dir, pool.relics, sc);
       assert.deepStrictEqual(normalizeOptimizerOutput(output), expected[sc.name]);
     });

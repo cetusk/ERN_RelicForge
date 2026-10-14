@@ -8949,5 +8949,746 @@
     "vessel": "urn"
    }
   ]
+ },
+ "wylder_normal_stackable_required_tie": {
+  "best": {
+   "rank": 1,
+   "score": 300,
+   "subScore": 60000,
+   "requiredMet": true,
+   "relics": [
+    {
+     "id": 3229679617,
+     "itemKey": "delicateBurningScene",
+     "itemNameJa": "繊細な燃える景色",
+     "itemNameEn": "Delicate Burning Scene",
+     "itemColor": "Red",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "vigorPlus1",
+       "name_ja": "生命力+1",
+       "name_en": "Vigor Plus 1",
+       "matched": true,
+       "priority": "required"
+      }
+     ]
+    },
+    {
+     "id": 3229679629,
+     "itemKey": "delicateBurningScene",
+     "itemNameJa": "繊細な燃える景色",
+     "itemNameEn": "Delicate Burning Scene",
+     "itemColor": "Red",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "increasedMaximumHP",
+       "name_ja": "最大HP上昇",
+       "name_en": "Increased Maximum Hp",
+       "matched": true,
+       "priority": "required"
+      }
+     ]
+    },
+    {
+     "id": 3229679635,
+     "itemKey": "delicateDrizzlyScene",
+     "itemNameJa": "繊細な滴る景色",
+     "itemNameEn": "Delicate Drizzly Scene",
+     "itemColor": "Blue",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "attacksInflictPoison",
+       "name_ja": "攻撃に毒の状態異常を付加",
+       "name_en": "Attacks Inflict Poison",
+       "matched": true,
+       "priority": "required"
+      }
+     ]
+    }
+   ],
+   "matchedEffects": [
+    "attacksInflictPoison",
+    "increasedMaximumHP",
+    "vigorPlus1"
+   ],
+   "missingRequired": [],
+   "excludedPresent": [],
+   "vessel": "urn"
+  },
+  "results": [
+   {
+    "rank": 1,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679617,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 2,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679618,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 3,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679619,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 4,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679620,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 5,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679621,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 6,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679622,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 7,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679623,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 8,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679624,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 9,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679625,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 10,
+    "score": 300,
+    "subScore": 60000,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229679626,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "vigorPlus1",
+        "name_ja": "生命力+1",
+        "name_en": "Vigor Plus 1",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679629,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "increasedMaximumHP",
+        "name_ja": "最大HP上昇",
+        "name_en": "Increased Maximum Hp",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     },
+     {
+      "id": 3229679635,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictPoison",
+        "name_ja": "攻撃に毒の状態異常を付加",
+        "name_en": "Attacks Inflict Poison",
+        "matched": true,
+        "priority": "required"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictPoison",
+     "increasedMaximumHP",
+     "vigorPlus1"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   }
+  ]
  }
 }

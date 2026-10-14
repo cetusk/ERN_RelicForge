@@ -367,15 +367,6 @@ class RelicOptimizer:
                     score -= penalty50[i] * (c - 1)
         return score
 
-    def _fast_sub_score(self, counts):
-        """サブ優先度タイブレーカースコア。存在判定のみ (count>0)"""
-        sub = 0
-        sub_ranks = self._spec_sub_rank_values
-        for i in range(self._n_spec):
-            if counts[i] > 0:
-                sub += sub_ranks[i]
-        return sub
-
     def _compact_relic(self, relic: Dict) -> Tuple:
         """レリックをコンパクトなタプルに変換
         Returns: (rid, spec_indices, excl_penalty, has_excl_req,
@@ -951,18 +942,24 @@ class RelicOptimizer:
         relic_by_id = self._relic_by_id
         spec_key_list = self._spec_key_list
 
-        # Handle single-side cases
+        # Single-side (normal-only / deep-only, or one side without candidates):
+        # pair with one empty combo so both modes share the Phase 3 ranking
+        # (required-met first, sub-score tiebreak, deterministic order)
+        empty_combo = (0, (0,) * n_spec, 0, 0, False, (), 0, 0)
+        single_side = not normal_combos or not deep_combos
         if not normal_combos:
-            return self._combos_to_results_compact(
-                deep_combos[:top_n], is_deep_only=True)
+            normal_combos = [empty_combo]
         if not deep_combos:
-            return self._combos_to_results_compact(
-                normal_combos[:top_n], is_deep_only=False)
+            deep_combos = [empty_combo]
 
         # Phase 3: Cross-pair with bitmask pre-filter + two-tier heap pruning
         # Adaptive maxPairs: with few specs, scores are clustered so
         # score-based pruning is ineffective.
-        max_pairs = min(500, max(150, n_spec * 50))
+        # Single-side pairs every combo with the one empty combo (linear cost), so
+        # no cap: a cap would cut arbitrarily inside large equal-score groups and
+        # could drop combos meeting all required effects.
+        max_pairs = len(normal_combos) * len(deep_combos) if single_side \
+            else min(500, max(150, n_spec * 50))
         n_top = min(len(normal_combos), max_pairs)
         d_top = min(len(deep_combos), max_pairs)
 
@@ -1126,56 +1123,6 @@ class RelicOptimizer:
               f"(required met: {results[0]['required_met']})"
               if results else "  No results", file=sys.stderr)
 
-        return results
-
-    def _combos_to_results_compact(self, combos, is_deep_only=False):
-        """Compact combo list to result format (single-side)"""
-        results = []
-        spec_key_list = self._spec_key_list
-        required_idx_set = self._required_idx_set
-        n_spec = self._n_spec
-        relic_by_id = self._relic_by_id
-        for score, counts, conc, excl_pen, has_excl_req, rids, excl_sub_sum, *_ in combos:
-            matched_keys = set()
-            for i in range(n_spec):
-                if counts[i] > 0:
-                    matched_keys.add(spec_key_list[i])
-            missing = sorted(
-                spec_key_list[i] for i in required_idx_set
-                if counts[i] == 0)
-            sub_score = self._fast_sub_score(counts) - excl_sub_sum
-            excluded_present = set()
-            for rid in rids:
-                for k in self._get_exclude_keys(relic_by_id[rid]):
-                    excluded_present.add(k)
-            relics = tuple(relic_by_id[rid] for rid in rids)
-            if is_deep_only:
-                entry = {
-                    'required_met': len(missing) == 0
-                        and not has_excl_req,
-                    'score': score,
-                    'sub_score': sub_score,
-                    'matched_keys': matched_keys,
-                    'missing_required': missing,
-                    'excluded_present': excluded_present,
-                    'relics': relics,
-                    'normal_relics': (),
-                    'deep_relics': relics,
-                }
-            else:
-                entry = {
-                    'required_met': len(missing) == 0
-                        and not has_excl_req,
-                    'score': score,
-                    'sub_score': sub_score,
-                    'matched_keys': matched_keys,
-                    'missing_required': missing,
-                    'excluded_present': excluded_present,
-                    'relics': relics,
-                    'normal_relics': relics,
-                    'deep_relics': (),
-                }
-            results.append(entry)
         return results
 
     def optimize_legacy(self, color: Optional[str] = None,

@@ -199,5 +199,33 @@
     "rank": 3
    }
   ]
+ },
+ {
+  "name": "wylder_normal_stackable_required_tie",
+  "pool": "relic_pool_stack_tie.json",
+  "params": {
+   "character": "追跡者",
+   "vessel": "urn",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "vigorPlus1",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "increasedMaximumHP",
+    "priority": "required",
+    "rank": 1
+   },
+   {
+    "key": "attacksInflictPoison",
+    "priority": "required",
+    "rank": 2
+   }
+  ]
  }
 ]

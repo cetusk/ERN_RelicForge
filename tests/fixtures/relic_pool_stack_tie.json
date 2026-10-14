@@ -1,0 +1,386 @@
+{
+ "characterName": "Synthetic",
+ "totalRelics": 19,
+ "relics": [
+  {
+   "id": 3229679617,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 19
+  },
+  {
+   "id": 3229679618,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 18
+  },
+  {
+   "id": 3229679619,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 17
+  },
+  {
+   "id": 3229679620,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 16
+  },
+  {
+   "id": 3229679621,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 15
+  },
+  {
+   "id": 3229679622,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 14
+  },
+  {
+   "id": 3229679623,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 13
+  },
+  {
+   "id": 3229679624,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 12
+  },
+  {
+   "id": 3229679625,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 11
+  },
+  {
+   "id": 3229679626,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 10
+  },
+  {
+   "id": 3229679627,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 9
+  },
+  {
+   "id": 3229679628,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 8
+  },
+  {
+   "id": 3229679629,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000090,
+      "key": "increasedMaximumHP",
+      "name_en": "Increased Maximum Hp",
+      "name_ja": "最大HP上昇"
+     }
+    ]
+   ],
+   "sortKey": 7
+  },
+  {
+   "id": 3229679630,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 6
+  },
+  {
+   "id": 3229679631,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 5
+  },
+  {
+   "id": 3229679632,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 4
+  },
+  {
+   "id": 3229679633,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 3
+  },
+  {
+   "id": 3229679634,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ]
+   ],
+   "sortKey": 2
+  },
+  {
+   "id": 3229679635,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7001900,
+      "key": "attacksInflictPoison",
+      "name_en": "Attacks Inflict Poison",
+      "name_ja": "攻撃に毒の状態異常を付加"
+     }
+    ]
+   ],
+   "sortKey": 1
+  }
+ ]
+}

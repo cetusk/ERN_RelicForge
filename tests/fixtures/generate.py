@@ -12,6 +12,7 @@
   effects_min.json         パーサーテスト用の最小効果データ
   parser_expected.json     合成セーブの期待される解析結果
   relic_pool.json          オプティマイザテスト用の遺物プール (パーサー出力形式)
+  relic_pool_stack_tie.json  同点で必須充足/未充足が混在するケース用の小さな遺物プール
   optimizer_scenarios.json オプティマイザのテストシナリオ
   optimizer_expected.json  各シナリオの期待される結果
 
@@ -333,16 +334,54 @@ def normalize_optimizer_output(output):
     return {'best': norm(best['result']) if best else None, 'results': results}
 
 
+def generate_stack_tie_pool(items_all, effects_all):
+    """Pool where many combos that miss a required effect tie with the few that meet all.
+
+    Required S (stackable), A, B: S+S+S = S+S+A = S+A+B = 300 points, but only S+A+B
+    satisfies every required effect. Ranking by score alone (the former normal-only
+    algorithm) returned only combos missing a required effect.
+    Wylder's Urn normal slots are Red, Red, Blue.
+    """
+    eff_ids = sorted(int(k) for k in effects_all)
+    normal = [i for i in eff_ids if 7000000 <= i < 7400000 and not effects_all[str(i)].get('deepOnly')]
+    s_id = next(i for i in normal if effects_all[str(i)]['stackable'] is True)
+    a_id, b_id = [i for i in normal if effects_all[str(i)]['stackable'] is False][:2]
+    red = sorted(int(k) for k, v in items_all.items() if v['type'] == 'Relic' and v['color'] == 'Red')[0]
+    blue = sorted(int(k) for k, v in items_all.items() if v['type'] == 'Relic' and v['color'] == 'Blue')[0]
+    layout = [(red, s_id)] * 12 + [(red, a_id)] + [(blue, s_id)] * 5 + [(blue, b_id)]
+    relics = []
+    for n, (item_id, eid) in enumerate(layout):
+        item = items_all[str(item_id)]
+        relics.append({
+            'id': 0xC0810001 + n, 'itemId': item_id, 'itemKey': item['key'],
+            'itemNameEn': item['name_en'], 'itemNameJa': item['name_ja'],
+            'itemColor': item['color'], 'itemType': 'Relic',
+            'effects': [[effect_entry(effects_all, eid)]], 'sortKey': len(layout) - n,
+        })
+    pool = {'characterName': 'Synthetic', 'totalRelics': len(relics), 'relics': relics}
+    scenario = {
+        'name': 'wylder_normal_stackable_required_tie', 'pool': 'relic_pool_stack_tie.json',
+        'params': {'character': '追跡者', 'vessel': 'urn', 'combined': False, 'candidates': 30, 'top': 10},
+        'effects': gui_effect_specs((effects_all[str(i)]['key'], 'required') for i in (s_id, a_id, b_id)),
+    }
+    return pool, scenario
+
+
+def scenario_pool_path(scenario):
+    return os.path.join(FIXTURES_DIR, scenario.get('pool', 'relic_pool.json'))
+
+
 def generate_optimizer_fixtures(items_all, effects_all):
     pool = generate_relic_pool(items_all, effects_all)
     write_json('relic_pool.json', pool)
-    scenarios = generate_scenarios(pool)
+    tie_pool, tie_scenario = generate_stack_tie_pool(items_all, effects_all)
+    write_json('relic_pool_stack_tie.json', tie_pool)
+    scenarios = generate_scenarios(pool) + [tie_scenario]
     write_json('optimizer_scenarios.json', scenarios)
 
-    pool_path = os.path.join(FIXTURES_DIR, 'relic_pool.json')
     expected = {}
     for sc in scenarios:
-        expected[sc['name']] = normalize_optimizer_output(run_python_optimizer(pool_path, sc))
+        expected[sc['name']] = normalize_optimizer_output(run_python_optimizer(scenario_pool_path(sc), sc))
         res = expected[sc['name']]['results']
         print(f"optimizer {sc['name']}: {len(res)} results, best score "
               f"{res[0]['score'] if res else '-'} (requiredMet {res[0]['requiredMet'] if res else '-'})")

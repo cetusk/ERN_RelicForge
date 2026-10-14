@@ -14,7 +14,7 @@ FIXTURES_DIR = os.path.join(TESTS_DIR, 'fixtures')
 sys.path.insert(0, FIXTURES_DIR)
 sys.path.insert(0, os.path.join(os.path.dirname(TESTS_DIR), 'src'))
 
-from generate import normalize_optimizer_output, run_python_optimizer  # noqa: E402
+from generate import normalize_optimizer_output, run_python_optimizer, scenario_pool_path  # noqa: E402
 
 
 def load_fixture(name):
@@ -28,12 +28,11 @@ class TestOptimizerScenarios(unittest.TestCase):
     def setUpClass(cls):
         cls.scenarios = load_fixture('optimizer_scenarios.json')
         cls.expected = load_fixture('optimizer_expected.json')
-        cls.pool_path = os.path.join(FIXTURES_DIR, 'relic_pool.json')
 
     def test_scenarios_match_expected(self):
         for sc in self.scenarios:
             with self.subTest(scenario=sc['name']):
-                actual = normalize_optimizer_output(run_python_optimizer(self.pool_path, sc))
+                actual = normalize_optimizer_output(run_python_optimizer(scenario_pool_path(sc), sc))
                 self.assertEqual(actual, self.expected[sc['name']])
 
     def test_results_are_ranked(self):
@@ -54,6 +53,12 @@ class TestOptimizerScenarios(unittest.TestCase):
         for r in self.expected[sc['name']]['results']:
             if r['requiredMet']:
                 self.assertFalse(excl_required & set(r['excludedPresent']))
+
+    def test_required_met_preferred_over_tied_scores(self):
+        # Combos missing a required effect tie on score; all top results must still meet them
+        results = self.expected['wylder_normal_stackable_required_tie']['results']
+        self.assertEqual(len(results), 10)
+        self.assertTrue(all(r['requiredMet'] for r in results))
 
     def test_forced_exclusion_is_penalized(self):
         sc = next(s for s in self.scenarios if s['name'] == 'revenant_combined_forced_exclusion')
