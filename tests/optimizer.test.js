@@ -12,7 +12,7 @@ for (const dir of APP_DIRS) {
   for (const sc of scenarios) {
     test(`${dir}: ${sc.name}`, () => {
       const output = runOptimizer(dir, pool.relics, sc);
-      assert.deepStrictEqual(normalizeOptimizerOutput(output, !!sc.unorderedRelics), expected[sc.name]);
+      assert.deepStrictEqual(normalizeOptimizerOutput(output), expected[sc.name]);
     });
   }
 }

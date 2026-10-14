@@ -72,15 +72,10 @@ function runOptimizer(appDir, relics, scenario) {
 }
 
 /** Same as normalize_optimizer_output() in fixtures/generate.py */
-function normalizeOptimizerOutput(output, unorderedRelics = false) {
+function normalizeOptimizerOutput(output) {
   const norm = (res) => {
     const r = { ...res };
     if (r.vessel) r.vessel = r.vessel.key;
-    if (unorderedRelics) {
-      for (const k of ['relics', 'normalRelics', 'deepRelics']) {
-        if (r[k]) r[k] = [...r[k]].sort((a, b) => a.id - b.id);
-      }
-    }
     return r;
   };
   const results = (output.allResults || []).flatMap(g => g.results.map(norm));

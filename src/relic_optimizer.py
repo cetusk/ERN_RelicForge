@@ -282,7 +282,7 @@ class RelicOptimizer:
         """前処理フィルタリング"""
         filtered = self.all_relics
 
-        if types:
+        if types is not None:
             type_set = set(types)
             filtered = [r for r in filtered if r.get('itemType') in type_set]
 
@@ -1445,8 +1445,10 @@ def main():
                         help='通常遺物3つ＋深層遺物3つの組み合わせ最適化')
     parser.add_argument('--color', default=None,
                         help='遺物の色 - 献器未使用時 (Red, Blue, Yellow, Green)')
-    parser.add_argument('--types', default='Relic',
-                        help='許可する遺物タイプ, カンマ区切り (default: Relic)')
+    parser.add_argument('--types', default=None,
+                        help='許可する遺物タイプ, カンマ区切り '
+                             '(default: 献器指定時 Relic,UniqueRelic / --deep 時 DeepRelic / '
+                             '献器未使用時 Relic)')
     parser.add_argument('--effects', default=None,
                         help='効果指定ファイル (JSON)')
     parser.add_argument('--vessels-data', default=None,
@@ -1489,8 +1491,8 @@ def main():
         print(f"Warning: Vessels data not found at {vessels_file}",
               file=sys.stderr)
 
-    # Parse types
-    types = [t.strip() for t in args.types.split(',')]
+    # Parse types (None = mode-specific default)
+    types = [t.strip() for t in args.types.split(',')] if args.types else None
 
     # Parse vessel types
     vessel_types = None
@@ -1560,13 +1562,18 @@ def main():
                     candidates=args.candidates, combined=True,
                 )
             else:
-                # Single mode (normal or deep)
+                # Single mode (normal or deep): same search as the GUI's
+                # normal-only mode (combined search with the other side disabled)
                 print(f"  Slots: {vc['slots']}", file=sys.stderr)
                 vessel_info['slots'] = vc['slots']
+                slot_types = types or (
+                    ['DeepRelic'] if args.deep else ['Relic', 'UniqueRelic'])
 
-                results = optimizer.optimize_for_vessel(
-                    slot_colors=vc['slots'],
-                    types=types,
+                results = optimizer.optimize_combined(
+                    normal_slot_colors=vc['normalSlots'],
+                    deep_slot_colors=vc['deepSlots'],
+                    normal_types=[] if args.deep else slot_types,
+                    deep_types=slot_types if args.deep else [],
                     character=args.character,
                     candidates_per_slot=args.candidates,
                     top_n=args.top,
@@ -1574,7 +1581,7 @@ def main():
 
                 formatted = optimizer.format_results(
                     results, vessel_info=vessel_info,
-                    character=args.character, types=types,
+                    character=args.character, types=slot_types,
                     candidates=args.candidates, deep=args.deep,
                 )
 
@@ -1597,6 +1604,7 @@ def main():
         # Legacy mode: color-based optimization (no vessel constraints)
         colors = [args.color] if args.color else \
             ['Red', 'Blue', 'Yellow', 'Green']
+        types = types or ['Relic']
         all_output = []
         total_colors = len(colors)
         for ci, color in enumerate(colors):

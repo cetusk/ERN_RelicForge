@@ -194,7 +194,7 @@ python src/relic_optimizer.py --input <parser_output.json> --effects <effects_co
 | `--combined` | 通常3＋深層3の6スロット一括最適化 | off |
 | `--deep` | 深層遺物スロットを使用 (非combined時) | off |
 | `--color COLOR` | 遺物の色 (献器未使用時) | なし (全色) |
-| `--types TYPES` | 遺物タイプ, カンマ区切り | `Relic` |
+| `--types TYPES` | 遺物タイプ, カンマ区切り | 献器指定時 `Relic,UniqueRelic` (`--deep` 時 `DeepRelic`) / 献器未使用時 `Relic` |
 | `--top N` | 献器あたりの出力候補数 | `10` |
 | `--candidates N` | スロットあたりの候補数 | `30` |
 
@@ -239,6 +239,7 @@ python src/relic_optimizer.py --input output.json \
 - **スタック不可な効果**: 重み × 1（重複しても1回のみ）
 - **集中ボーナス**: 1 つの遺物に望ましい効果が複数含まれる場合、追加スコアを加算
 - required 充足の組み合わせがスコアに関わらず優先される
+- 献器指定時の探索アルゴリズムは GUI / Web 版と共通（非 combined モードも GUI の「通常のみ」と同じ探索を行い、同じ結果を返す）
 
 #### 出力構造
 

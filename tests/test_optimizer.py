@@ -33,8 +33,7 @@ class TestOptimizerScenarios(unittest.TestCase):
     def test_scenarios_match_expected(self):
         for sc in self.scenarios:
             with self.subTest(scenario=sc['name']):
-                actual = normalize_optimizer_output(
-                    run_python_optimizer(self.pool_path, sc), sc.get('unorderedRelics', False))
+                actual = normalize_optimizer_output(run_python_optimizer(self.pool_path, sc))
                 self.assertEqual(actual, self.expected[sc['name']])
 
     def test_results_are_ranked(self):

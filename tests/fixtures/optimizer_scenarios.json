@@ -102,7 +102,6 @@
  },
  {
   "name": "guardian_normal_only",
-  "unorderedRelics": true,
   "params": {
    "character": "守護者",
    "combined": false,

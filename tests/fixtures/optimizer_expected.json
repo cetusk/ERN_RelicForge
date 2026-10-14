@@ -4480,66 +4480,6 @@
     "requiredMet": true,
     "relics": [
      {
-      "id": 3229614126,
-      "itemKey": "grandDrizzlyScene",
-      "itemNameJa": "壮大な滴る景色",
-      "itemNameEn": "Grand Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "hpRestorationUponAxeAttacks",
-        "name_ja": "斧の攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Axe Attacks",
-        "matched": true,
-        "priority": "nice_to_have"
-       },
-       {
-        "key": "improvedSkillAttackPower",
-        "name_ja": "戦技攻撃力上昇",
-        "name_en": "Improved Skill Attack Power",
-        "matched": false
-       },
-       {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
-        "matched": true,
-        "priority": "preferred"
-       }
-      ]
-     },
-     {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
-     },
-     {
       "id": 3229614208,
       "itemKey": "polishedDrizzlyScene",
       "itemNameJa": "端正な滴る景色",
@@ -4567,25 +4507,7 @@
         "matched": false
        }
       ]
-     }
-    ],
-    "matchedEffects": [
-     "attacksInflictSleepPlus1",
-     "guardianDamageNegationForAlliesImproved",
-     "hpRestorationUponAxeAttacks",
-     "maxFpUpWith3PlusSacredSealsEquipped",
-     "starlightShardsInPossessionAtStartOfExpedition"
-    ],
-    "missingRequired": [],
-    "excludedPresent": [],
-    "vessel": "goblet"
-   },
-   {
-    "rank": 5,
-    "score": 231,
-    "subScore": 30302,
-    "requiredMet": true,
-    "relics": [
+     },
      {
       "id": 3229614126,
       "itemKey": "grandDrizzlyScene",
@@ -4645,7 +4567,25 @@
         "matched": false
        }
       ]
-     },
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictSleepPlus1",
+     "guardianDamageNegationForAlliesImproved",
+     "hpRestorationUponAxeAttacks",
+     "maxFpUpWith3PlusSacredSealsEquipped",
+     "starlightShardsInPossessionAtStartOfExpedition"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "goblet"
+   },
+   {
+    "rank": 5,
+    "score": 231,
+    "subScore": 30302,
+    "requiredMet": true,
+    "relics": [
      {
       "id": 3229614228,
       "itemKey": "delicateDrizzlyScene",
@@ -4671,6 +4611,66 @@
         "key": "hpRestorationUponColossalSwordAttacks",
         "name_ja": "特大剣の攻撃でHP回復",
         "name_en": "Hp Restoration Upon Colossal Sword Attacks",
+        "matched": false
+       }
+      ]
+     },
+     {
+      "id": 3229614126,
+      "itemKey": "grandDrizzlyScene",
+      "itemNameJa": "壮大な滴る景色",
+      "itemNameEn": "Grand Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestorationUponAxeAttacks",
+        "name_ja": "斧の攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Axe Attacks",
+        "matched": true,
+        "priority": "nice_to_have"
+       },
+       {
+        "key": "improvedSkillAttackPower",
+        "name_ja": "戦技攻撃力上昇",
+        "name_en": "Improved Skill Attack Power",
+        "matched": false
+       },
+       {
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
         "matched": false
        }
       ]
@@ -4723,6 +4723,35 @@
       ]
      },
      {
+      "id": 3229614244,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "hpRestorationUponFlailAttacks",
+        "name_ja": "フレイルの攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Flail Attacks",
+        "matched": false
+       },
+       {
+        "key": "vigorPlus2",
+        "name_ja": "生命力+2",
+        "name_en": "Vigor Plus 2",
+        "matched": false
+       }
+      ]
+     },
+     {
       "id": 3229614137,
       "itemKey": "delicateTranquilScene",
       "itemNameJa": "繊細な静まる景色",
@@ -4748,35 +4777,6 @@
         "key": "smallPouchInPossessionAtStartOfExpedition",
         "name_ja": "出撃時に「小さなポーチ」を持つ",
         "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
-     },
-     {
-      "id": 3229614244,
-      "itemKey": "delicateDrizzlyScene",
-      "itemNameJa": "繊細な滴る景色",
-      "itemNameEn": "Delicate Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "hpRestorationUponFlailAttacks",
-        "name_ja": "フレイルの攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Flail Attacks",
-        "matched": false
-       },
-       {
-        "key": "vigorPlus2",
-        "name_ja": "生命力+2",
-        "name_en": "Vigor Plus 2",
         "matched": false
        }
       ]
@@ -4906,66 +4906,6 @@
     "requiredMet": true,
     "relics": [
      {
-      "id": 3229614126,
-      "itemKey": "grandDrizzlyScene",
-      "itemNameJa": "壮大な滴る景色",
-      "itemNameEn": "Grand Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "hpRestorationUponAxeAttacks",
-        "name_ja": "斧の攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Axe Attacks",
-        "matched": true,
-        "priority": "nice_to_have"
-       },
-       {
-        "key": "improvedSkillAttackPower",
-        "name_ja": "戦技攻撃力上昇",
-        "name_en": "Improved Skill Attack Power",
-        "matched": false
-       },
-       {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
-        "matched": true,
-        "priority": "preferred"
-       }
-      ]
-     },
-     {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
-     },
-     {
       "id": 3229614208,
       "itemKey": "polishedDrizzlyScene",
       "itemNameJa": "端正な滴る景色",
@@ -4993,25 +4933,7 @@
         "matched": false
        }
       ]
-     }
-    ],
-    "matchedEffects": [
-     "attacksInflictSleepPlus1",
-     "guardianDamageNegationForAlliesImproved",
-     "hpRestorationUponAxeAttacks",
-     "maxFpUpWith3PlusSacredSealsEquipped",
-     "starlightShardsInPossessionAtStartOfExpedition"
-    ],
-    "missingRequired": [],
-    "excludedPresent": [],
-    "vessel": "forgottenGoblet"
-   },
-   {
-    "rank": 6,
-    "score": 231,
-    "subScore": 30302,
-    "requiredMet": true,
-    "relics": [
+     },
      {
       "id": 3229614126,
       "itemKey": "grandDrizzlyScene",
@@ -5071,7 +4993,25 @@
         "matched": false
        }
       ]
-     },
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictSleepPlus1",
+     "guardianDamageNegationForAlliesImproved",
+     "hpRestorationUponAxeAttacks",
+     "maxFpUpWith3PlusSacredSealsEquipped",
+     "starlightShardsInPossessionAtStartOfExpedition"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "forgottenGoblet"
+   },
+   {
+    "rank": 6,
+    "score": 231,
+    "subScore": 30302,
+    "requiredMet": true,
+    "relics": [
      {
       "id": 3229614228,
       "itemKey": "delicateDrizzlyScene",
@@ -5097,6 +5037,66 @@
         "key": "hpRestorationUponColossalSwordAttacks",
         "name_ja": "特大剣の攻撃でHP回復",
         "name_en": "Hp Restoration Upon Colossal Sword Attacks",
+        "matched": false
+       }
+      ]
+     },
+     {
+      "id": 3229614126,
+      "itemKey": "grandDrizzlyScene",
+      "itemNameJa": "壮大な滴る景色",
+      "itemNameEn": "Grand Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestorationUponAxeAttacks",
+        "name_ja": "斧の攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Axe Attacks",
+        "matched": true,
+        "priority": "nice_to_have"
+       },
+       {
+        "key": "improvedSkillAttackPower",
+        "name_ja": "戦技攻撃力上昇",
+        "name_en": "Improved Skill Attack Power",
+        "matched": false
+       },
+       {
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
         "matched": false
        }
       ]
@@ -5149,6 +5149,35 @@
       ]
      },
      {
+      "id": 3229614244,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "hpRestorationUponFlailAttacks",
+        "name_ja": "フレイルの攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Flail Attacks",
+        "matched": false
+       },
+       {
+        "key": "vigorPlus2",
+        "name_ja": "生命力+2",
+        "name_en": "Vigor Plus 2",
+        "matched": false
+       }
+      ]
+     },
+     {
       "id": 3229614137,
       "itemKey": "delicateTranquilScene",
       "itemNameJa": "繊細な静まる景色",
@@ -5174,35 +5203,6 @@
         "key": "smallPouchInPossessionAtStartOfExpedition",
         "name_ja": "出撃時に「小さなポーチ」を持つ",
         "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
-     },
-     {
-      "id": 3229614244,
-      "itemKey": "delicateDrizzlyScene",
-      "itemNameJa": "繊細な滴る景色",
-      "itemNameEn": "Delicate Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "hpRestorationUponFlailAttacks",
-        "name_ja": "フレイルの攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Flail Attacks",
-        "matched": false
-       },
-       {
-        "key": "vigorPlus2",
-        "name_ja": "生命力+2",
-        "name_en": "Vigor Plus 2",
         "matched": false
        }
       ]
@@ -5255,6 +5255,35 @@
       ]
      },
      {
+      "id": 3229614247,
+      "itemKey": "polishedLuminousScene",
+      "itemNameJa": "端正な輝く景色",
+      "itemNameEn": "Polished Luminous Scene",
+      "itemColor": "Yellow",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictSleepPlus1",
+        "name_ja": "攻撃に睡眠の状態異常を付加+1",
+        "name_en": "Attacks Inflict Sleep Plus 1",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "improvedAttackPowerWith3PlusColossalWeaponsEquipped",
+        "name_ja": "特大武器を3つ以上装備していると攻撃力上昇",
+        "name_en": "Improved Attack Power With 3Plus Colossal Weapons Equipped",
+        "matched": false
+       },
+       {
+        "key": "hpRestorationUponHalberdAttacks",
+        "name_ja": "斧槍の攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Halberd Attacks",
+        "matched": false
+       }
+      ]
+     },
+     {
       "id": 3229614137,
       "itemKey": "delicateTranquilScene",
       "itemNameJa": "繊細な静まる景色",
@@ -5280,35 +5309,6 @@
         "key": "smallPouchInPossessionAtStartOfExpedition",
         "name_ja": "出撃時に「小さなポーチ」を持つ",
         "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
-     },
-     {
-      "id": 3229614247,
-      "itemKey": "polishedLuminousScene",
-      "itemNameJa": "端正な輝く景色",
-      "itemNameEn": "Polished Luminous Scene",
-      "itemColor": "Yellow",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "attacksInflictSleepPlus1",
-        "name_ja": "攻撃に睡眠の状態異常を付加+1",
-        "name_en": "Attacks Inflict Sleep Plus 1",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "improvedAttackPowerWith3PlusColossalWeaponsEquipped",
-        "name_ja": "特大武器を3つ以上装備していると攻撃力上昇",
-        "name_en": "Improved Attack Power With 3Plus Colossal Weapons Equipped",
-        "matched": false
-       },
-       {
-        "key": "hpRestorationUponHalberdAttacks",
-        "name_ja": "斧槍の攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Halberd Attacks",
         "matched": false
        }
       ]

@@ -289,9 +289,7 @@ def generate_scenarios(pool):
                                         (debuff_keys[1], 'exclude_preferred'),
                                         (debuff_keys[2], 'exclude_preferred'),
                                         (normal_keys[7], 'exclude_nice_to_have')])},
-        # Normal-only mode: Python CLI (optimize_for_vessel) and GUI (optimizeCombined without deep
-        # slots) use different enumeration, so relic order within a result is not compared.
-        {'name': 'guardian_normal_only', 'unorderedRelics': True,
+        {'name': 'guardian_normal_only',
          'params': {'character': '守護者', 'combined': False, 'candidates': 30, 'top': 10},
          'effects': gui_effect_specs(zip(normal_keys[1:7], pri))},
         # Required effect only available on relics carrying excluded debuffs -> penalty applied
@@ -317,21 +315,18 @@ def run_python_optimizer(pool_path, scenario):
             '--character', p['character'], '--top', str(p['top']), '--candidates', str(p['candidates'])]
     if p.get('vessel'):
         args += ['--vessel', p['vessel']]
-    args += ['--combined'] if p['combined'] else ['--types', 'Relic,UniqueRelic']
+    if p['combined']:
+        args.append('--combined')
     subprocess.run(args, check=True, capture_output=True)
     return load_json(out_path)
 
 
-def normalize_optimizer_output(output, unordered_relics=False):
+def normalize_optimizer_output(output):
     """Results only, comparable across Python/JS (vessel metadata reduced to its key)."""
     def norm(res):
         r = dict(res)
         if r.get('vessel'):
             r['vessel'] = r['vessel'].get('key')
-        if unordered_relics:
-            for k in ('relics', 'normalRelics', 'deepRelics'):
-                if k in r:
-                    r[k] = sorted(r[k], key=lambda x: x['id'])
         return r
     results = [norm(r) for g in output.get('allResults', []) for r in g['results']]
     best = output.get('bestResult')
@@ -347,8 +342,7 @@ def generate_optimizer_fixtures(items_all, effects_all):
     pool_path = os.path.join(FIXTURES_DIR, 'relic_pool.json')
     expected = {}
     for sc in scenarios:
-        expected[sc['name']] = normalize_optimizer_output(
-            run_python_optimizer(pool_path, sc), sc.get('unorderedRelics', False))
+        expected[sc['name']] = normalize_optimizer_output(run_python_optimizer(pool_path, sc))
         res = expected[sc['name']]['results']
         print(f"optimizer {sc['name']}: {len(res)} results, best score "
               f"{res[0]['score'] if res else '-'} (requiredMet {res[0]['requiredMet'] if res else '-'})")
