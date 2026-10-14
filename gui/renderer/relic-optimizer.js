@@ -603,7 +603,8 @@ class RelicOptimizer {
           seen.add(key);
 
           const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [lo, mid, hi], cb, ep, her, sub, esr, rm]);
+          // Keep slot order (same as Python); the sorted triple is only the dedup key
+          results.push([sc, [riId, rjId, rkId], cb, ep, her, sub, esr, rm]);
         }
       }
     }
@@ -645,7 +646,8 @@ class RelicOptimizer {
           sub += sr[i];
         }
         score += partialCb - partialEp;
-        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
+        // Keep slot order (same as Python); the sorted IDs are only the dedup key
+        results.push([score, chosenIds.slice(0, nSlots), partialCb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
         return;
       }
 

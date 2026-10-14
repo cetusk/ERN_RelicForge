@@ -47,6 +47,11 @@ def load_effects_config(config_file: str) -> List[Dict]:
         data = json.load(f)
     effects = data.get('effects', [])
     for eff in effects:
+        # "exclude_required" etc. -> priority "required" + exclude flag (same as the GUI)
+        priority = eff.get('priority')
+        if isinstance(priority, str) and priority.startswith('exclude_'):
+            eff['priority'] = priority[len('exclude_'):]
+            eff['exclude'] = True
         if eff.get('priority') not in PRIORITY_WEIGHTS:
             print(f"Warning: Unknown priority '{eff.get('priority')}' for effect "
                   f"'{eff.get('key', eff.get('name_ja', '?'))}', defaulting to 'nice_to_have'",
