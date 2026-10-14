@@ -58,3 +58,5 @@ package.json
 
 # Debugs
 debugs/
+# Local sandbox launcher
+claude_sandbox.bat
