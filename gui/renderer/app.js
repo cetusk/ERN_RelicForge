@@ -465,6 +465,14 @@ function updateHeaderInfo() {
   }
 }
 
+// Warning mark for relics containing items/effects missing from the data files
+function unknownMarkHtml() {
+  const tip = displayLang === 'ja'
+    ? 'データに無いアイテム・効果を含む遺物'
+    : 'Contains items/effects missing from the data files';
+  return `<span class="unknown-mark" title="${tip}">\u26a0</span>`;
+}
+
 function typeLabel(itemType) {
   const entry = TYPE_LABELS[itemType];
   return entry ? entry[displayLang] : (itemType || '-');
@@ -661,6 +669,7 @@ function renderTable() {
     tdItem.textContent = displayLang === 'ja'
       ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
       : (relic.itemNameEn || relic.itemKey);
+    if (relic.unknown) tdItem.insertAdjacentHTML('afterbegin', unknownMarkHtml());
     tdItem.style.fontSize = '12px';
     tr.appendChild(tdItem);
 
@@ -672,14 +681,14 @@ function renderTable() {
         ? (main.name_ja || main.name_en || main.key)
         : (main.name_en || main.key);
       let html = `<div class="effect-item">`;
-      html += `<div class="effect-main">${mainName}</div>`;
+      html += `<div class="effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
       // Debuffs linked to main effect
       for (let i = 1; i < group.length; i++) {
         const d = group[i];
         const debuffName = displayLang === 'ja'
           ? (d.name_ja || d.name_en || d.key)
           : (d.name_en || d.key);
-        html += `<div class="effect-debuff">${debuffName}</div>`;
+        html += `<div class="effect-debuff${d.unknown ? ' unknown' : ''}">${debuffName}</div>`;
       }
       html += `</div>`;
       return html;
@@ -700,7 +709,7 @@ function showDetail(relic) {
   const itemName = displayLang === 'ja'
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
-  detailTitle.textContent = itemName;
+  detailTitle.textContent = relic.unknown ? `\u26a0 ${itemName}` : itemName;
 
   let html = '';
 
@@ -728,7 +737,7 @@ function showDetail(relic) {
       ? (main.name_ja || main.name_en || '-')
       : (main.name_en || '-');
     html += `<div class="detail-effect">`;
-    html += `<div class="detail-effect-main">${mainName}</div>`;
+    html += `<div class="detail-effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
     html += formatStackingInfo(main.id, ja);
     for (let i = 1; i < group.length; i++) {
       const d = group[i];
@@ -736,7 +745,7 @@ function showDetail(relic) {
         ? (d.name_ja || d.name_en || '-')
         : (d.name_en || '-');
       html += `<div class="detail-effect-sub">`;
-      html += `<div class="detail-effect-debuff-name">${debuffName}</div>`;
+      html += `<div class="detail-effect-debuff-name${d.unknown ? ' unknown' : ''}">${debuffName}</div>`;
       html += formatStackingInfo(d.id, ja);
       html += `</div>`;
     }
@@ -3025,6 +3034,8 @@ tbody tr:hover { background: var(--bg-hover); }
 .effect-main { line-height: 1.6; font-size: 12px; }
 .effect-debuff { color: #e07070; font-size: 11px; line-height: 1.5; padding-left: 10px; position: relative; }
 .effect-debuff::before { content: '└'; position: absolute; left: -2px; top: -1px; color: #e07070; font-size: 11px; }
+.unknown-mark { color: #f0a830; font-weight: 600; margin-right: 4px; }
+.effect-main.unknown, .effect-debuff.unknown { color: #f0a830; }
 /* Optimizer cards */
 .opt-results-summary {
   margin-bottom: 16px; padding: 12px 16px; background: var(--bg-secondary);
@@ -3164,16 +3175,16 @@ function exportRelicTableToHTML() {
     const itemName = ja
       ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
       : (relic.itemNameEn || relic.itemKey);
-    html += `<td style="font-size:12px">${itemName}</td>`;
+    html += `<td style="font-size:12px">${relic.unknown ? unknownMarkHtml() : ''}${itemName}</td>`;
     html += `<td>`;
     relic.effects.forEach(group => {
       const main = group[0];
       const mainName = ja ? (main.name_ja || main.name_en || main.key) : (main.name_en || main.key);
-      html += `<div class="effect-item"><div class="effect-main">${mainName}</div>`;
+      html += `<div class="effect-item"><div class="effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
       for (let i = 1; i < group.length; i++) {
         const d = group[i];
         const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
-        html += `<div class="effect-debuff">${dName}</div>`;
+        html += `<div class="effect-debuff${d.unknown ? ' unknown' : ''}">${dName}</div>`;
       }
       html += `</div>`;
     });

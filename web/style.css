@@ -59,6 +59,21 @@ body {
   color: var(--text-secondary);
 }
 
+/* Unknown relics/effects (missing from data files) */
+.unknown-mark {
+  color: var(--warning);
+  font-weight: 600;
+  margin-right: 4px;
+  cursor: help;
+}
+
+.effect-main.unknown,
+.effect-debuff.unknown,
+.detail-effect-main.unknown,
+.detail-effect-debuff-name.unknown {
+  color: var(--warning);
+}
+
 .header-warning {
   font-size: 12px;
   font-weight: 600;
