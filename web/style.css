@@ -2463,7 +2463,7 @@ button:has(> .icon) {
   border-color: #e07070;
 }
 
-/* === Steam Cloud guide (dialog) === */
+/* === Dialogs (Steam Cloud guide / share link) === */
 .header-actions {
   display: flex;
   align-items: center;
@@ -2476,7 +2476,7 @@ button:has(> .icon) {
   font-size: 16px;
 }
 
-.steam-guide {
+.app-dialog {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -2492,7 +2492,7 @@ button:has(> .icon) {
   z-index: 60;
 }
 
-.steam-guide.hidden {
+.app-dialog.hidden {
   display: none;
 }
 
@@ -2500,7 +2500,7 @@ button:has(> .icon) {
   z-index: 59;
 }
 
-.steam-guide-body {
+.app-dialog-body {
   padding: 14px 18px;
   overflow-y: auto;
   font-size: 13px;
@@ -2508,33 +2508,33 @@ button:has(> .icon) {
   color: var(--text-secondary);
 }
 
-.steam-guide-body ol {
+.app-dialog-body ol {
   margin: 10px 0 10px 20px;
 }
 
-.steam-guide-body li {
+.app-dialog-body li {
   margin-bottom: 6px;
   color: var(--text-primary);
 }
 
-.steam-guide-note {
+.app-dialog-note {
   font-size: 12px;
   color: var(--text-muted);
 }
 
-.steam-guide-footer {
+.app-dialog-footer {
   display: flex;
   gap: 10px;
   padding: 12px 18px;
   border-top: 1px solid var(--border);
 }
 
-.steam-guide-footer > * {
+.app-dialog-footer > * {
   flex: 1;
   padding: 10px 12px;
 }
 
-.steam-guide-link {
+.dialog-link-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2542,6 +2542,49 @@ button:has(> .icon) {
   text-decoration: none;
   border-radius: 4px;
   font-size: 13px;
+}
+
+.toolbar-actions {
+  display: contents;   /* buttons are toolbar items on wide screens */
+}
+
+.header-cache-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--accent);
+  border: none;
+  border-radius: 3px;
+  color: var(--bg-primary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.header-cache-save[hidden],
+.header-cache-delete[hidden] {
+  display: none;
+}
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.share-url {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: Consolas, monospace;
 }
 
 /* ============================================================
@@ -2599,7 +2642,7 @@ button:has(> .icon) {
   #btn-steam-header {
     padding: 8px 12px;
   }
-  .steam-guide-footer {
+  .app-dialog-footer {
     flex-direction: column;
   }
 
@@ -2629,8 +2672,12 @@ button:has(> .icon) {
     min-width: 0;
     width: 100%;
   }
-  .toolbar .btn-inspector {
-    grid-column: span 3;
+  .toolbar-actions {
+    grid-column: span 12;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 6px;
   }
   .filter-group label {
     display: none;   /* icons stay as labels */

@@ -215,6 +215,7 @@ filterLang.addEventListener('change', () => {
   displayLang = filterLang.value;
   updateLangUI();
   renderTabBar();   // tab labels (catalog etc.) follow the language
+  renderShareDialogText();
   renderTable();
   updateHeaderInfo();
   updateResultCount();
@@ -256,7 +257,9 @@ async function loadAndDisplay(filePath) {
       ]);
     }
     const fileBuffer = await window.api.readFileBuffer(filePath);
-    relicData = parseSaveFile(fileBuffer.buffer, itemsData, effectsData);
+    const { characterName, relics } = extractRelics(fileBuffer.buffer, itemsData, effectsData);
+    shownRecord = { characterName, relics: compactRelics(relics) };
+    relicData = buildRelicData(characterName, relics, itemsData, effectsData);
     stackingLookup = buildStackingLookup(effectsData);
     loadedFileName = filePath.split(/[/\\]/).pop();
     buildSearchTerms();
@@ -268,6 +271,7 @@ async function loadAndDisplay(filePath) {
     btnOptimizer.classList.remove('hidden');
     btnCatalog.classList.remove('hidden');
     btnExportTable.classList.remove('hidden');
+    document.getElementById('btn-share').classList.remove('hidden');
     tabBar.classList.remove('hidden');
     updateInspectorButton();
     updateOptimizerButton();
@@ -286,6 +290,95 @@ async function loadAndDisplay(filePath) {
     resetAutoLoadUI();
   }
 }
+
+// === Share links (open on another device, e.g. a phone, via the public Web version) ===
+let shownRecord = null;   // compact relics of the data shown now
+const shareDialog = document.getElementById('share-dialog');
+const shareBackdrop = document.getElementById('share-backdrop');
+const shareUrlInput = document.getElementById('share-url');
+let shareUrl = '';
+
+function renderShareDialogText() {
+  const ja = displayLang === 'ja';
+  const count = relicData ? relicData.relics.length : 0;
+  document.getElementById('share-title').textContent = ja ? '共有リンク' : 'Share link';
+  document.getElementById('share-intro').textContent = ja
+    ? `表示中の遺物データ（${count}件）を、Web 版で開けるリンクやファイルにします。スマホなどゲームの入っていない端末でも、セーブファイルなしで同じ一覧を表示できます。`
+    : `Turn the relics shown now (${count}) into a link or file for the Web version, so you can view them on another device (e.g. a phone) without the save file.`;
+  document.getElementById('share-include-name-label').textContent = ja ? 'キャラクター名を含める' : 'Include character name';
+  document.getElementById('share-note').textContent = ja
+    ? 'データはリンクの「#」以降に含まれ、Web サーバーには送信されません。遺物の固有 ID と取得順の番号は含まれません（並び順は保持されます）。メッセージアプリによっては長いリンクが途中で切れることがあります（例: LINE は 1 万文字まで）。その場合は「ファイルで共有」で保存したファイルを送り、受け取った側は Web 版の「ファイルを開く」でそのファイルを選んでください。'
+    : 'The data is in the part after "#" and is never sent to the web server. Relic IDs and acquisition numbers are not included (the order is kept). Some messaging apps cut long links; in that case send the file saved with "Share as file" and open it with "Open File" in the Web version.';
+  document.querySelector('#share-copy .btn-label').textContent = ja ? 'リンクをコピー' : 'Copy link';
+  document.querySelector('#share-file .btn-label').textContent = ja ? 'ファイルで共有' : 'Share as file';
+  document.getElementById('btn-share-label').textContent = ja ? '共有' : 'Share';
+  if (shareUrl) {
+    document.getElementById('share-length').textContent = ja
+      ? `リンクの長さ: ${shareUrl.length.toLocaleString()} 文字`
+      : `Link length: ${shareUrl.length.toLocaleString()} characters`;
+  }
+}
+
+async function buildShareUrl() {
+  const token = await encodeRelicShare(shownRecord,
+    { includeName: document.getElementById('share-include-name').checked });
+  shareUrl = relicShareUrl(SHARE_PUBLIC_URL, token);
+  shareUrlInput.value = shareUrl;
+  renderShareDialogText();
+}
+
+async function openShareDialog() {
+  if (!relicData || !shownRecord) return;
+  shareUrl = '';
+  shareUrlInput.value = '';
+  renderShareDialogText();
+  shareDialog.classList.remove('hidden');
+  shareBackdrop.classList.remove('hidden');
+  try {
+    await buildShareUrl();
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? '共有リンクを作成できませんでした' : 'Could not create the share link'}: ${err.message || err}`);
+    closeShareDialog();
+  }
+}
+
+function closeShareDialog() {
+  shareDialog.classList.add('hidden');
+  shareBackdrop.classList.add('hidden');
+}
+
+document.getElementById('btn-share').addEventListener('click', openShareDialog);
+document.getElementById('share-close').addEventListener('click', closeShareDialog);
+shareBackdrop.addEventListener('click', closeShareDialog);
+document.getElementById('share-include-name').addEventListener('change', () => {
+  buildShareUrl().catch(err => alert(err.message || err));
+});
+shareUrlInput.addEventListener('focus', () => shareUrlInput.select());
+document.getElementById('share-copy').addEventListener('click', async () => {
+  const ja = displayLang === 'ja';
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    alert(ja ? 'リンクをコピーしました' : 'Link copied');
+  } catch (_) {
+    shareUrlInput.focus();
+    shareUrlInput.select();
+    alert(ja ? 'コピーできませんでした。選択されたリンクを手動でコピーしてください。' : 'Could not copy. Please copy the selected link manually.');
+  }
+});
+document.getElementById('share-file').addEventListener('click', () => {
+  const ja = displayLang === 'ja';
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  const text = (ja
+    ? 'ERN RelicForge 共有データ\nこのファイルを ERN RelicForge の「ファイルを開く」で選ぶか、下のリンクを開いてください。\n\n'
+    : 'ERN RelicForge share data\nOpen this file with "Open File" in ERN RelicForge, or open the link below.\n\n') + shareUrl + '\n';
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ERN_RelicForge_share_${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.txt`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
 
 // === Auto Load ===
 function resetAutoLoadUI() {

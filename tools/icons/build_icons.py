@@ -48,6 +48,8 @@ ICONS = [
     'cloud-download',  # Steam クラウドから読み込む
     'share-2',         # 共有リンク
     'smartphone',      # 端末に保存済み
+    'link',            # リンクをコピー
+    'file-text',       # ファイルで共有
 ]
 
 HEADER = '''/**

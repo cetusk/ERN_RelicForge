@@ -13,7 +13,7 @@
       <h1>ERN RelicForge</h1>
       <span id="header-info" class="header-info"></span>
       <span id="header-warning" class="header-warning" hidden></span>
-      <span id="header-cache" class="header-cache" hidden><span class="icon" data-icon="smartphone" data-size="13"></span><span class="header-cache-text"></span><button id="header-cache-delete" class="header-cache-delete" type="button"><span class="icon" data-icon="trash-2" data-size="13"></span></button></span>
+      <span id="header-cache" class="header-cache" hidden><span class="icon" data-icon="smartphone" data-size="13"></span><span class="header-cache-text"></span><button id="header-cache-save" class="header-cache-save" type="button" hidden><span class="icon" data-icon="save" data-size="13"></span><span id="header-cache-save-label">この端末に保存</span></button><button id="header-cache-delete" class="header-cache-delete" type="button"><span class="icon" data-icon="trash-2" data-size="13"></span></button></span>
     </div>
     <div class="header-meta">
       <span id="header-meta-version" class="header-meta-item">Nightreign v1.03.4 対応</span>
@@ -28,7 +28,7 @@
         <span class="icon" data-icon="folder-open"></span><span id="btn-open-label">ファイルを開く</span>
       </button>
     </div>
-    <input type="file" id="file-input" accept=".sl2,.bak" style="display:none" />
+    <input type="file" id="file-input" accept=".sl2,.bak,.txt" style="display:none" />
   </header>
 
   <!-- Toolbar -->
@@ -71,10 +71,13 @@
         <option value="en">English</option>
       </select>
     </div>
+    <div class="toolbar-actions">
     <button id="btn-inspector" class="btn-inspector hidden"><span class="icon" data-icon="list-filter"></span><span id="btn-inspector-label">高度な検索</span></button>
     <button id="btn-optimizer" class="btn-inspector hidden"><span class="icon" data-icon="wand-sparkles"></span><span id="btn-optimizer-label">ビルド探索</span></button>
     <button id="btn-catalog" class="btn-inspector hidden"><span class="icon" data-icon="book-open"></span><span id="btn-catalog-label">効果カタログ</span></button>
     <button id="btn-export-table" class="btn-inspector hidden"><span class="icon" data-icon="file-down"></span><span id="btn-export-table-label">エクスポート</span></button>
+    <button id="btn-share" class="btn-inspector hidden"><span class="icon" data-icon="share-2"></span><span id="btn-share-label">共有</span></button>
+    </div>
     <span id="result-count" class="result-count"></span>
   </div>
 
@@ -185,19 +188,40 @@
 
   <!-- Steam Cloud guide -->
   <div id="steam-guide-backdrop" class="inspector-backdrop hidden"></div>
-  <div id="steam-guide" class="steam-guide hidden" role="dialog" aria-modal="true" aria-labelledby="steam-guide-title">
+  <div id="steam-guide" class="app-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="steam-guide-title">
     <div class="inspector-header">
       <span class="icon" data-icon="cloud-download" data-size="18"></span><h3 id="steam-guide-title"></h3>
       <button id="steam-guide-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
     </div>
-    <div class="steam-guide-body">
+    <div class="app-dialog-body">
       <p id="steam-guide-intro"></p>
       <ol id="steam-guide-steps"></ol>
-      <p id="steam-guide-note" class="steam-guide-note"></p>
+      <p id="steam-guide-note" class="app-dialog-note"></p>
     </div>
-    <div class="steam-guide-footer">
-      <a id="steam-guide-open" class="btn-secondary steam-guide-link" href="https://store.steampowered.com/account/remotestorageapp/?appid=2622380" target="_blank" rel="noopener noreferrer"><span class="icon" data-icon="cloud-download" data-size="14"></span><span class="btn-label"></span></a>
+    <div class="app-dialog-footer">
+      <a id="steam-guide-open" class="btn-secondary dialog-link-btn" href="https://store.steampowered.com/account/remotestorageapp/?appid=2622380" target="_blank" rel="noopener noreferrer"><span class="icon" data-icon="cloud-download" data-size="14"></span><span class="btn-label"></span></a>
       <button id="steam-guide-pick" class="btn-primary"><span class="icon" data-icon="folder-open" data-size="14"></span><span class="btn-label"></span></button>
+    </div>
+  </div>
+
+  <!-- Share link dialog -->
+  <div id="share-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="share-dialog" class="app-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="share-2" data-size="18"></span><h3 id="share-title"></h3>
+      <button id="share-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="app-dialog-body">
+      <p id="share-intro"></p>
+      <label class="share-option"><input type="checkbox" id="share-include-name" checked> <span id="share-include-name-label"></span></label>
+      <input type="text" id="share-url" class="share-url" readonly>
+      <p id="share-length" class="app-dialog-note"></p>
+      <p id="share-note" class="app-dialog-note"></p>
+    </div>
+    <div class="app-dialog-footer">
+      <button id="share-copy" class="btn-secondary"><span class="icon" data-icon="link" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-native" class="btn-secondary" hidden><span class="icon" data-icon="share-2" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-file" class="btn-primary"><span class="icon" data-icon="file-text" data-size="14"></span><span class="btn-label"></span></button>
     </div>
   </div>
 
@@ -323,6 +347,7 @@
   <script src="lib/icons.js"></script>
   <script src="relic-parser.js"></script>
   <script src="relic-optimizer.js"></script>
+  <script src="relic-share.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

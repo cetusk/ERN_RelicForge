@@ -2396,3 +2396,86 @@ button:has(> .icon) {
 .catalog-card.expanded .catalog-card-more::before {
   content: '\25BE  ';
 }
+
+/* === Dialogs (share link) === */
+#share-backdrop {
+  z-index: 59;
+}
+
+.app-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  z-index: 60;
+}
+
+.app-dialog.hidden {
+  display: none;
+}
+
+#steam-guide-backdrop {
+  z-index: 59;
+}
+
+.app-dialog-body {
+  padding: 14px 18px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.app-dialog-body ol {
+  margin: 10px 0 10px 20px;
+}
+
+.app-dialog-body li {
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.app-dialog-note {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.app-dialog-footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.app-dialog-footer > * {
+  flex: 1;
+  padding: 10px 12px;
+}
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.share-url {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: Consolas, monospace;
+}

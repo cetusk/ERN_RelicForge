@@ -30,6 +30,7 @@ ERN_RelicForge/
 │       ├── app.js               # UI ロジック
 │       ├── relic-parser.js      # JS 版パーサー (web/ と共通)
 │       ├── relic-optimizer.js   # JS 版最適化 (web/ と共通)
+│       ├── relic-share.js       # 共有リンクの作成・読み込み (web/ と共通)
 │       ├── lib/
 │       │   └── crypto-js.min.js # AES-CBC 復号化用
 │       └── style.css            # ダークテーマスタイル
@@ -39,6 +40,7 @@ ERN_RelicForge/
 │   ├── app.js                   # UI ロジック (ブラウザ専用)
 │   ├── relic-parser.js          # JS 版パーサー (CryptoJS 使用)
 │   ├── relic-optimizer.js       # JS 版最適化 (Web Worker 対応)
+│   ├── relic-share.js           # 共有リンクの作成・読み込み
 │   ├── style.css                # ダークテーマスタイル
 │   └── lib/
 │       └── crypto-js.min.js     # AES-CBC 復号化用
@@ -92,6 +94,7 @@ ERN_RelicForge/
 - スマートフォン対応（画面幅に応じたレイアウト。一覧はカード表示、各パネルは全画面表示、ビルド探索の優先順位は指でも並べ替え可能）
 - 読み込んだ遺物データを端末（ブラウザの IndexedDB、データベース名 `ERNRelicForge`）に保存し、次回は開くだけで表示。保存するのは遺物の ID・効果・並び順とキャラクター名・ファイル名のみで、セーブファイル本体や Steam ID は保存しない（ヘッダーのボタンで削除可能）
 - Steam クラウドからの読み込み案内: ゲームの入っていない端末でも、Steam のクラウド保存ページ（公式）からダウンロードしたセーブファイルで確認可能（ログイン情報やファイルはアプリに送信されない）
+- 共有リンク: 表示中の遺物データをリンク（約 1 万文字 / 1200 件）またはテキストファイルにして別の端末へ渡せる（Web 版・Electron 版）。データは URL の `#` 以降に含まれ Web サーバーには送信されない。遺物の固有 ID と取得順の番号は含まず（並び順は保持）、キャラクター名は任意。受け取った側では自動保存せず、ヘッダーの「この端末に保存」で保存
 
 ### GUI ビューアー (Electron / Web 共通)
 - Electron 版は Python 不要のスタンドアロンアプリ（JS 版パーサー・オプティマイザを内蔵）

@@ -70,6 +70,7 @@
     <button id="btn-optimizer" class="btn-inspector hidden"><span class="icon" data-icon="wand-sparkles"></span><span id="btn-optimizer-label">ビルド探索</span></button>
     <button id="btn-catalog" class="btn-inspector hidden"><span class="icon" data-icon="book-open"></span><span id="btn-catalog-label">効果カタログ</span></button>
     <button id="btn-export-table" class="btn-inspector hidden"><span class="icon" data-icon="file-down"></span><span id="btn-export-table-label">エクスポート</span></button>
+    <button id="btn-share" class="btn-inspector hidden"><span class="icon" data-icon="share-2"></span><span id="btn-share-label">共有</span></button>
     <span id="result-count" class="result-count"></span>
   </div>
 
@@ -167,6 +168,26 @@
         <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
       </div>
       <div id="catalog-list" class="catalog-list"></div>
+    </div>
+  </div>
+
+  <!-- Share link dialog -->
+  <div id="share-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="share-dialog" class="app-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="share-2" data-size="18"></span><h3 id="share-title"></h3>
+      <button id="share-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="app-dialog-body">
+      <p id="share-intro"></p>
+      <label class="share-option"><input type="checkbox" id="share-include-name" checked> <span id="share-include-name-label"></span></label>
+      <input type="text" id="share-url" class="share-url" readonly>
+      <p id="share-length" class="app-dialog-note"></p>
+      <p id="share-note" class="app-dialog-note"></p>
+    </div>
+    <div class="app-dialog-footer">
+      <button id="share-copy" class="btn-secondary"><span class="icon" data-icon="link" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-file" class="btn-primary"><span class="icon" data-icon="file-text" data-size="14"></span><span class="btn-label"></span></button>
     </div>
   </div>
 
@@ -291,6 +312,7 @@
   <script src="lib/crypto-js.min.js"></script>
   <script src="lib/icons.js"></script>
   <script src="relic-parser.js"></script>
+  <script src="relic-share.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
