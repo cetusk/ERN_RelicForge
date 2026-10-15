@@ -74,15 +74,22 @@ const fileInput = document.getElementById('file-input');
 if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
   fileInput.setAttribute('accept', 'application/octet-stream,text/plain');
 }
-// iPhone / iPad (iPadOS reports itself as a Mac): the file picker may open on an empty folder,
-// so tell the user where Safari puts downloaded files
-const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+// Where the downloaded save file is, per platform (the file picker cannot be told where to open).
+// iPadOS reports itself as a Mac.
+const DEVICE_KIND = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ? 'ios'
+  : /Android/.test(navigator.userAgent) ? 'android' : 'pc';
 
-function iosFileHint(ja) {
-  return ja
+function downloadedFileHint(ja) {
+  if (DEVICE_KIND === 'ios') return ja
     ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使った項目」に表示されます。見つからないときは「ブラウズ」→「iCloud Drive」（または「このiPhone内」）→「ダウンロード」を開いてください。「↑エラー」と表示されていても（iCloud の容量不足など）、選べば読み込めます。'
     : 'Downloaded files are listed under "Recents" in the file picker. If not, open "Browse" > "iCloud Drive" (or "On My iPhone") > "Downloads". Files marked "↑ Error" (e.g. iCloud storage full) can still be opened.';
+  if (DEVICE_KIND === 'android') return ja
+    ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使用したファイル」か「ダウンロード」にあります（画面の表示は機種によって異なります）。'
+    : 'Downloaded files are under "Recent" or "Downloads" in the file picker (names vary by device).';
+  return ja
+    ? 'ダウンロードしたファイルは、ブラウザの保存先（通常は「ダウンロード」フォルダ）にあります。'
+    : 'Downloaded files are in your browser\'s download folder (usually "Downloads").';
 }
 const headerInfo = document.getElementById('header-info');
 const headerWarning = document.getElementById('header-warning');
@@ -475,11 +482,11 @@ function renderSteamGuideText() {
   const steps = ja ? [
     '「Steam のページを開く」から Steam のクラウド保存ページを開きます（初回は Steam へのログインが必要です）。',
     '一覧の「NR0000.sl2」の「ダウンロード」を押して保存します（ファイル名は「…_NR0000.sl2」のようになります）。',
-    'このページに戻り、「ダウンロードしたファイルを選択」から保存したファイルを選びます。' + (IS_IOS ? iosFileHint(true) : ''),
+    'このページに戻り、「ダウンロードしたファイルを選択」から保存したファイルを選びます。' + downloadedFileHint(true),
   ] : [
     'Open Steam\'s cloud storage page with "Open Steam page" (sign in to Steam the first time).',
     'Tap "Download" for "NR0000.sl2" in the list (the file is saved as "…_NR0000.sl2").',
-    'Come back here and pick the downloaded file with "Select downloaded file". ' + (IS_IOS ? iosFileHint(false) : ''),
+    'Come back here and pick the downloaded file with "Select downloaded file". ' + downloadedFileHint(false),
   ];
   document.getElementById('steam-guide-steps').innerHTML = steps.map(s => `<li>${escapeHtml(s)}</li>`).join('');
   document.getElementById('steam-guide-note').textContent = ja
@@ -488,9 +495,10 @@ function renderSteamGuideText() {
   document.querySelector('#steam-guide-open .btn-label').textContent = ja ? 'Steam のページを開く' : 'Open Steam page';
   document.querySelector('#steam-guide-pick .btn-label').textContent = ja ? 'ダウンロードしたファイルを選択' : 'Select downloaded file';
   document.getElementById('btn-steam-header-label').textContent = ja ? 'Steam クラウド' : 'Steam Cloud';
-  const hint = document.getElementById('ios-file-hint');
-  hint.hidden = !IS_IOS;
-  hint.textContent = iosFileHint(ja);
+  // Welcome screen: phones / tablets (PCs get the save-folder hint instead)
+  const hint = document.getElementById('download-file-hint');
+  hint.hidden = DEVICE_KIND === 'pc';
+  hint.textContent = downloadedFileHint(ja);
   document.getElementById('btn-steam-welcome').querySelector('.btn-label').textContent =
     ja ? 'Steam クラウドから読み込む' : 'Load from Steam Cloud';
 }
