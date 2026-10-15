@@ -2463,6 +2463,87 @@ button:has(> .icon) {
   border-color: #e07070;
 }
 
+/* === Steam Cloud guide (dialog) === */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.welcome-buttons .btn-large {
+  padding: 14px 32px;
+  font-size: 16px;
+}
+
+.steam-guide {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  z-index: 60;
+}
+
+.steam-guide.hidden {
+  display: none;
+}
+
+#steam-guide-backdrop {
+  z-index: 59;
+}
+
+.steam-guide-body {
+  padding: 14px 18px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.steam-guide-body ol {
+  margin: 10px 0 10px 20px;
+}
+
+.steam-guide-body li {
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.steam-guide-note {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.steam-guide-footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.steam-guide-footer > * {
+  flex: 1;
+  padding: 10px 12px;
+}
+
+.steam-guide-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
 /* ============================================================
    Smartphone layout (narrow screens)
    ============================================================ */
@@ -2511,8 +2592,15 @@ button:has(> .icon) {
     padding: 8px 12px;
     flex-shrink: 0;
   }
-  #btn-open-label {
+  #btn-open-label,
+  #btn-steam-header-label {
     display: none;
+  }
+  #btn-steam-header {
+    padding: 8px 12px;
+  }
+  .steam-guide-footer {
+    flex-direction: column;
   }
 
   /* --- Toolbar: search / 3 filters / 4 action buttons / hit count --- */

@@ -197,6 +197,59 @@ function buildStackingLookup(effectsData) {
 // === Init ===
 btnOpen.addEventListener('click', openFile);
 btnOpenWelcome.addEventListener('click', openFile);
+
+// === Steam Cloud guide ===
+// The save cannot be fetched from Steam directly (cross-origin + login), so the user downloads it
+// on Steam's own page and opens the downloaded file here.
+const steamGuide = document.getElementById('steam-guide');
+const steamGuideBackdrop = document.getElementById('steam-guide-backdrop');
+
+function renderSteamGuideText() {
+  const ja = displayLang === 'ja';
+  document.getElementById('steam-guide-title').textContent = ja ? 'Steam クラウドから読み込む' : 'Load from Steam Cloud';
+  document.getElementById('steam-guide-intro').textContent = ja
+    ? 'ゲームが入っていない端末（スマホなど）でも、Steam クラウドに保存されたセーブデータで遺物を確認できます。'
+    : 'View your relics on any device (e.g. a phone) using the save data stored in Steam Cloud.';
+  const steps = ja ? [
+    '「Steam のページを開く」から Steam のクラウド保存ページを開きます（初回は Steam へのログインが必要です）。',
+    '一覧の「NR0000.sl2」の「ダウンロード」を押して保存します（ファイル名は「…_NR0000.sl2」のようになります）。',
+    'このページに戻り、「ダウンロードしたファイルを選択」から保存したファイルを選びます（iPhone では「ファイル」アプリの「ダウンロード」）。',
+  ] : [
+    'Open Steam\'s cloud storage page with "Open Steam page" (sign in to Steam the first time).',
+    'Tap "Download" for "NR0000.sl2" in the list (the file is saved as "…_NR0000.sl2").',
+    'Come back here and pick the downloaded file with "Select downloaded file" (on iPhone: Files app > Downloads).',
+  ];
+  document.getElementById('steam-guide-steps').innerHTML = steps.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+  document.getElementById('steam-guide-note').textContent = ja
+    ? 'ダウンロードは Steam の公式ページで直接行うため、ログイン情報やファイルがこのアプリに送られることはありません。読み込んだ遺物データはこの端末に保存され、次回からはページを開くだけで表示されます。'
+    : 'The download happens on Steam\'s official page; your login and files are never sent to this app. The relics you load are kept on this device and shown next time you open the page.';
+  document.querySelector('#steam-guide-open .btn-label').textContent = ja ? 'Steam のページを開く' : 'Open Steam page';
+  document.querySelector('#steam-guide-pick .btn-label').textContent = ja ? 'ダウンロードしたファイルを選択' : 'Select downloaded file';
+  document.getElementById('btn-steam-header-label').textContent = ja ? 'Steam クラウド' : 'Steam Cloud';
+  document.getElementById('btn-steam-welcome').querySelector('.btn-label').textContent =
+    ja ? 'Steam クラウドから読み込む' : 'Load from Steam Cloud';
+}
+
+function openSteamGuide() {
+  renderSteamGuideText();
+  steamGuide.classList.remove('hidden');
+  steamGuideBackdrop.classList.remove('hidden');
+}
+
+function closeSteamGuide() {
+  steamGuide.classList.add('hidden');
+  steamGuideBackdrop.classList.add('hidden');
+}
+
+document.getElementById('btn-steam-header').addEventListener('click', openSteamGuide);
+document.getElementById('btn-steam-welcome').addEventListener('click', openSteamGuide);
+document.getElementById('steam-guide-close').addEventListener('click', closeSteamGuide);
+steamGuideBackdrop.addEventListener('click', closeSteamGuide);
+document.getElementById('steam-guide-pick').addEventListener('click', () => {
+  closeSteamGuide();
+  openFile();
+});
+renderSteamGuideText();
 searchInput.addEventListener('input', () => {
   searchClear.classList.toggle('hidden', !searchInput.value);
   applyFilters();
@@ -239,6 +292,7 @@ filterLang.addEventListener('change', () => {
   updateLangUI();
   renderTabBar();   // tab labels (catalog etc.) follow the language
   updateCacheInfo(currentCache);
+  renderSteamGuideText();
   renderTable();
   updateHeaderInfo();
   updateResultCount();

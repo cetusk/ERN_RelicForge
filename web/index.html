@@ -22,9 +22,12 @@
       <span class="header-meta-sep">|</span>
       <span class="header-meta-item">by cetusk (<a href="https://github.com/cetusk" class="header-meta-link" target="_blank" rel="noopener noreferrer">GitHub</a>)</span>
     </div>
-    <button id="btn-open" class="btn-primary">
-      <span class="icon" data-icon="folder-open"></span><span id="btn-open-label">ファイルを開く</span>
-    </button>
+    <div class="header-actions">
+      <button id="btn-steam-header" class="btn-secondary btn-steam"><span class="icon" data-icon="cloud-download"></span><span id="btn-steam-header-label">Steam クラウド</span></button>
+      <button id="btn-open" class="btn-primary">
+        <span class="icon" data-icon="folder-open"></span><span id="btn-open-label">ファイルを開く</span>
+      </button>
+    </div>
     <input type="file" id="file-input" accept=".sl2,.bak" style="display:none" />
   </header>
 
@@ -89,6 +92,7 @@
       <div class="welcome-icon"><span class="icon" data-icon="swords" data-size="64"></span></div>
       <p id="welcome-msg">セーブファイル (.sl2 / .bak) を選択して遺物を確認</p>
       <div class="welcome-buttons">
+        <button id="btn-steam-welcome" class="btn-secondary btn-large"><span class="icon" data-icon="cloud-download" data-size="18"></span><span class="btn-label">Steam クラウドから読み込む</span></button>
         <button id="btn-open-welcome" class="btn-primary btn-large"><span class="icon" data-icon="folder-open" data-size="18"></span><span class="btn-label">ファイルを選択して開く</span></button>
       </div>
       <div id="auto-load-path-hint" class="path-hint">
@@ -176,6 +180,24 @@
         <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
       </div>
       <div id="catalog-list" class="catalog-list"></div>
+    </div>
+  </div>
+
+  <!-- Steam Cloud guide -->
+  <div id="steam-guide-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="steam-guide" class="steam-guide hidden" role="dialog" aria-modal="true" aria-labelledby="steam-guide-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="cloud-download" data-size="18"></span><h3 id="steam-guide-title"></h3>
+      <button id="steam-guide-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="steam-guide-body">
+      <p id="steam-guide-intro"></p>
+      <ol id="steam-guide-steps"></ol>
+      <p id="steam-guide-note" class="steam-guide-note"></p>
+    </div>
+    <div class="steam-guide-footer">
+      <a id="steam-guide-open" class="btn-secondary steam-guide-link" href="https://store.steampowered.com/account/remotestorageapp/?appid=2622380" target="_blank" rel="noopener noreferrer"><span class="icon" data-icon="cloud-download" data-size="14"></span><span class="btn-label"></span></a>
+      <button id="steam-guide-pick" class="btn-primary"><span class="icon" data-icon="folder-open" data-size="14"></span><span class="btn-label"></span></button>
     </div>
   </div>
 
