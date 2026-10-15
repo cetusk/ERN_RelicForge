@@ -379,7 +379,12 @@ function renderMobileMenu() {
   document.getElementById('mm-tools').innerHTML = tools.map(([btn, icon, sub]) =>
     `<button type="button" class="mm-tool" data-target="${btn.id}">${iconSvg(icon, 22)}` +
     `<span class="mm-tool-label">${escapeHtml(btn.textContent.trim())}</span>` +
-    `<span class="mm-tool-sub">${escapeHtml(sub)}</span></button>`).join('');
+    `<span class="mm-tool-sub">${escapeHtml(sub)}</span></button>`).join('') +
+    (CAN_SCAN_QR
+      ? `<button type="button" class="mm-tool" data-action="qr-scan">${iconSvg('scan-qr-code', 22)}` +
+        `<span class="mm-tool-label">${ja ? 'QR コードを読み取る' : 'Scan QR codes'}</span>` +
+        `<span class="mm-tool-sub">${ja ? 'PC などに表示した一覧を受け取る' : 'Receive a list shown on a PC'}</span></button>`
+      : '');
 
   // Loaded data + saved-on-device state
   setText('mm-data-title', ja ? '読み込んだデータ' : 'Loaded data');
@@ -452,7 +457,8 @@ document.getElementById('mm-tools').addEventListener('click', async (e) => {
   const tool = e.target.closest('.mm-tool');
   if (!tool) return;
   await setMobileMenu(false);
-  document.getElementById(tool.dataset.target).click();
+  if (tool.dataset.action === 'qr-scan') openQrScanner();
+  else document.getElementById(tool.dataset.target).click();
 });
 document.getElementById('mm-storage').addEventListener('click', (e) => {
   const btn = e.target.closest('.mm-storage-btn');
@@ -770,13 +776,18 @@ function updateCacheInfo(record) {
   renderMobileMenu();
 }
 
-// Save relics opened from a share link (replaces the data saved on this device)
-document.getElementById('header-cache-save').addEventListener('click', async () => {
+// Keep relics opened from a share link / QR code (replaces the list kept on this device)
+document.getElementById('header-cache-save').addEventListener('click', () => {
   const ja = displayLang === 'ja';
   if (!currentCache) return;
   if (!confirm(ja
     ? 'この共有された一覧をこの端末に記録しますか？\n（すでに記録している一覧は置き換わります。ゲームのセーブデータには影響しません）'
     : 'Keep this shared list on this device?\n(It replaces the list kept before. Your game save is not affected.)')) return;
+  keepSharedOnDevice();
+});
+
+async function keepSharedOnDevice() {
+  const ja = displayLang === 'ja';
   const { unsavedShare, ...record } = currentCache;
   try {
     await saveRelicCache(record);
@@ -784,7 +795,7 @@ document.getElementById('header-cache-save').addEventListener('click', async () 
   } catch (err) {
     alert(`${ja ? '記録できませんでした' : 'Could not keep the list'}: ${err}`);
   }
-});
+}
 
 document.getElementById('header-cache-delete').addEventListener('click', async () => {
   const ja = displayLang === 'ja';
@@ -851,6 +862,7 @@ function renderShareDialogText() {
   document.querySelector('#share-copy .btn-label').textContent = ja ? 'リンクをコピー' : 'Copy link';
   document.querySelector('#share-native .btn-label').textContent = ja ? '共有…' : 'Share…';
   document.querySelector('#share-file .btn-label').textContent = ja ? 'ファイルで共有' : 'Share as file';
+  document.querySelector('#share-qr .btn-label').textContent = ja ? 'QR コードで渡す' : 'Show QR codes';
   document.getElementById('btn-share-label').textContent = ja ? '共有' : 'Share';
   if (shareUrl) {
     document.getElementById('share-length').textContent = ja
@@ -945,6 +957,199 @@ document.getElementById('share-file').addEventListener('click', async () => {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
+
+// === QR code transfer ===
+// Sender: the share token split into frames, shown one after another (a link is too long for one QR code)
+const qrShow = document.getElementById('qr-show');
+const qrShowBackdrop = document.getElementById('qr-show-backdrop');
+const QR_SPEEDS = [['slow', 800], ['normal', 450], ['fast', 250]];
+let qrShowFrames = [];
+let qrShowIndex = 0;
+let qrShowTimer = null;
+let qrShowSpeed = 'normal';
+
+function qrShowSize() {
+  return Math.max(200, Math.min(420, window.innerWidth - 64, window.innerHeight - 260));
+}
+
+function renderQrShowText() {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-show-title').textContent = ja ? 'QR コードで渡す' : 'Pass with QR codes';
+  const steps = ja ? [
+    'スマホで ERN RelicForge を開きます（下の小さな QR コードをカメラで読み取ると開けます）。',
+    'スマホの［QR コードを読み取る］（最初の画面、またはメニュー「≡」）を押し、この画面の QR コードを映します。',
+    `QR コードは ${qrShowFrames.length} 枚あり、自動で切り替わります。すべて読み取ると、スマホに一覧が表示されます。`,
+  ] : [
+    'Open ERN RelicForge on the phone (scan the small QR code below with the camera to open it).',
+    'Tap "Scan QR codes" on the phone (welcome screen or the "≡" menu) and point it at this screen.',
+    `There are ${qrShowFrames.length} QR codes, shown in turn. Once all are read, the list appears on the phone.`,
+  ];
+  document.getElementById('qr-show-steps').innerHTML = steps.map(t => `<li>${escapeHtml(t)}</li>`).join('');
+  document.getElementById('qr-app-text').textContent = ja ? 'アプリを開く' : 'Open the app';
+  document.getElementById('qr-speed-label').textContent = ja ? '切り替え速度:' : 'Speed:';
+  const speedLabels = ja ? { slow: '遅い', normal: '普通', fast: '速い' } : { slow: 'Slow', normal: 'Normal', fast: 'Fast' };
+  document.getElementById('qr-speed').innerHTML = QR_SPEEDS.map(([key]) =>
+    `<button type="button" class="qr-speed-option${key === qrShowSpeed ? ' selected' : ''}" data-speed="${key}">${speedLabels[key]}</button>`).join('');
+}
+
+function showNextQrFrame() {
+  if (!qrShowFrames.length) return;
+  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrShowFrames[qrShowIndex], qrShowSize());
+  document.getElementById('qr-show-counter').textContent = `${qrShowIndex + 1} / ${qrShowFrames.length}`;
+  qrShowIndex = (qrShowIndex + 1) % qrShowFrames.length;
+}
+
+function startQrShowTimer() {
+  clearInterval(qrShowTimer);
+  const ms = QR_SPEEDS.find(([key]) => key === qrShowSpeed)[1];
+  qrShowTimer = setInterval(showNextQrFrame, ms);
+}
+
+function openQrShow() {
+  const token = findRelicShareToken(shareUrl);
+  if (!token) return;
+  qrShowFrames = relicShareQrFrames(token);
+  qrShowIndex = 0;
+  renderQrShowText();
+  qrShow.classList.remove('hidden');
+  qrShowBackdrop.classList.remove('hidden');
+  drawRelicShareQr(document.getElementById('qr-app-canvas'), shareBaseUrl(), 96);
+  showNextQrFrame();
+  startQrShowTimer();
+  openBackEntry('qr-show', closeQrShow);
+}
+
+function closeQrShow() {
+  clearInterval(qrShowTimer);
+  qrShowTimer = null;
+  qrShow.classList.add('hidden');
+  qrShowBackdrop.classList.add('hidden');
+  closeBackEntry('qr-show');
+}
+
+document.getElementById('share-qr').addEventListener('click', openQrShow);
+document.getElementById('qr-show-close').addEventListener('click', closeQrShow);
+qrShowBackdrop.addEventListener('click', closeQrShow);
+document.getElementById('qr-speed').addEventListener('click', (e) => {
+  const btn = e.target.closest('.qr-speed-option');
+  if (!btn) return;
+  qrShowSpeed = btn.dataset.speed;
+  renderQrShowText();
+  startQrShowTimer();
+});
+
+// Receiver (phones / tablets): read the frames with the camera. The reader (lib/jsQR.js) loads on first use.
+const qrScan = document.getElementById('qr-scan');
+const qrScanVideo = document.getElementById('qr-scan-video');
+const qrCollector = new RelicShareQrCollector();
+const CAN_SCAN_QR = DEVICE_KIND !== 'pc' && window.isSecureContext &&
+  !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+let qrScanStream = null;
+let qrScanCanvas = null;
+
+function loadQrReader() {
+  if (window.jsQR) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'lib/jsQR.js';
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('lib/jsQR.js'));
+    document.head.appendChild(script);
+  });
+}
+
+function renderQrScanStatus(message) {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-scan-title').textContent = ja ? 'QR コードを読み取る' : 'Scan QR codes';
+  const total = qrCollector.total;
+  document.getElementById('qr-scan-bar').innerHTML = Array.from({ length: total }, (_, i) =>
+    `<span class="${qrCollector.parts.has(i + 1) ? 'got' : ''}"></span>`).join('');
+  document.getElementById('qr-scan-text').textContent = message || (total
+    ? (ja ? `読み取り中… ${qrCollector.received} / ${total}（そのまま映し続けてください）`
+          : `Reading… ${qrCollector.received} / ${total} (keep pointing at the screen)`)
+    : (ja ? 'PC などで［共有］→［QR コードで渡す］を開き、表示された QR コードを映してください。'
+          : 'On the other device, open "Share" > "Show QR codes" and point the camera at it.'));
+}
+
+async function openQrScanner() {
+  const ja = displayLang === 'ja';
+  qrCollector.reset();
+  qrScan.classList.remove('hidden');
+  openBackEntry('qr-scan', closeQrScanner);
+  renderQrScanStatus(ja ? 'カメラを起動しています…' : 'Starting the camera…');
+  try {
+    await loadQrReader();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false,
+    });
+    if (qrScan.classList.contains('hidden')) {   // closed while starting
+      stream.getTracks().forEach(t => t.stop());
+      return;
+    }
+    qrScanStream = stream;
+    qrScanVideo.srcObject = stream;
+    await qrScanVideo.play();
+    renderQrScanStatus();
+    requestAnimationFrame(scanQrFrame);
+  } catch (err) {
+    const denied = err && (err.name === 'NotAllowedError' || err.name === 'SecurityError');
+    renderQrScanStatus(denied
+      ? (ja ? 'カメラを使えません。ブラウザの設定でこのページのカメラを許可してください。' : 'Camera access was denied. Allow the camera for this page in the browser settings.')
+      : `${ja ? 'カメラを起動できませんでした' : 'Could not start the camera'}: ${err.message || err}`);
+  }
+}
+
+function scanQrFrame() {
+  if (!qrScanStream) return;
+  const w = qrScanVideo.videoWidth;
+  const h = qrScanVideo.videoHeight;
+  if (w && h) {
+    if (!qrScanCanvas) qrScanCanvas = document.createElement('canvas');
+    qrScanCanvas.width = w;
+    qrScanCanvas.height = h;
+    const ctx = qrScanCanvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(qrScanVideo, 0, 0, w, h);
+    const code = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' });
+    if (code) {
+      const before = qrCollector.received;
+      const result = qrCollector.add(code.data);
+      if (result.state === 'done') {
+        finishQrScan(result.token);
+        return;
+      }
+      if (result.state === 'progress' && qrCollector.received !== before) renderQrScanStatus();
+    }
+  }
+  requestAnimationFrame(scanQrFrame);
+}
+
+function stopQrCamera() {
+  if (qrScanStream) qrScanStream.getTracks().forEach(t => t.stop());
+  qrScanStream = null;
+  qrScanVideo.srcObject = null;
+}
+
+function closeQrScanner() {
+  stopQrCamera();
+  qrScan.classList.add('hidden');
+  return closeBackEntry('qr-scan');
+}
+
+async function finishQrScan(token) {
+  const ja = displayLang === 'ja';
+  await closeQrScanner();
+  if (!(await openSharedRelics(token))) return;
+  if (KEEP_ON_DEVICE && confirm(ja
+    ? `${relicData.relics.length} 件の遺物を読み込みました。\nこの一覧をこの端末に記録しますか？（次回からはページを開くだけで表示されます）`
+    : `Loaded ${relicData.relics.length} relics.\nKeep this list on this device? (It opens automatically next time.)`)) {
+    keepSharedOnDevice();
+  }
+}
+
+document.getElementById('qr-scan-close').addEventListener('click', closeQrScanner);
+document.getElementById('btn-qr-welcome').addEventListener('click', openQrScanner);
+document.getElementById('btn-qr-welcome').hidden = !CAN_SCAN_QR;
 
 // Open the relics stored on this device (on page load)
 async function tryRestoreRelicCache() {
@@ -1171,6 +1376,7 @@ function updateLangUI() {
     ? 'セーブファイル (.sl2 / .bak) を選択して遺物を確認'
     : 'Open a save file (.sl2 / .bak) to view relics';
   document.getElementById('btn-open-welcome').querySelector('.btn-label').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  document.getElementById('btn-qr-welcome').querySelector('.btn-label').textContent = ja ? 'QR コードを読み取る' : 'Scan QR codes';
   const pathHintLabel = document.getElementById('path-hint-label');
   if (pathHintLabel) pathHintLabel.textContent = ja
     ? 'セーブファイルの場所 — エクスプローラーのアドレスバーに貼り付けて開けます:'

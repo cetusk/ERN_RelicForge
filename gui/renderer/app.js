@@ -311,6 +311,7 @@ function renderShareDialogText() {
     : 'The data is in the part after "#" and is never sent to the web server. Relic IDs and acquisition numbers are not included (the order is kept). Some messaging apps cut long links; in that case send the file saved with "Share as file" and open it with "Open File" in the Web version.';
   document.querySelector('#share-copy .btn-label').textContent = ja ? 'リンクをコピー' : 'Copy link';
   document.querySelector('#share-file .btn-label').textContent = ja ? 'ファイルで共有' : 'Share as file';
+  document.querySelector('#share-qr .btn-label').textContent = ja ? 'QR コードで渡す' : 'Show QR codes';
   document.getElementById('btn-share-label').textContent = ja ? '共有' : 'Share';
   if (shareUrl) {
     document.getElementById('share-length').textContent = ja
@@ -378,6 +379,85 @@ document.getElementById('share-file').addEventListener('click', () => {
   a.download = `ERN_RelicForge_share_${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.txt`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+// === QR code transfer ===
+// The share token split into frames, shown one after another (a link is too long for one QR code);
+// the phone reads them with the Web version's scanner
+const qrShow = document.getElementById('qr-show');
+const qrShowBackdrop = document.getElementById('qr-show-backdrop');
+const QR_SPEEDS = [['slow', 800], ['normal', 450], ['fast', 250]];
+let qrShowFrames = [];
+let qrShowIndex = 0;
+let qrShowTimer = null;
+let qrShowSpeed = 'normal';
+
+function qrShowSize() {
+  return Math.max(200, Math.min(420, window.innerWidth - 64, window.innerHeight - 260));
+}
+
+function renderQrShowText() {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-show-title').textContent = ja ? 'QR コードで渡す' : 'Pass with QR codes';
+  const steps = ja ? [
+    'スマホで Web 版の ERN RelicForge を開きます（下の小さな QR コードをカメラで読み取ると開けます）。',
+    'スマホの［QR コードを読み取る］（最初の画面、またはメニュー「≡」）を押し、この画面の QR コードを映します。',
+    `QR コードは ${qrShowFrames.length} 枚あり、自動で切り替わります。すべて読み取ると、スマホに一覧が表示されます。`,
+  ] : [
+    'Open the Web version of ERN RelicForge on the phone (scan the small QR code below with the camera to open it).',
+    'Tap "Scan QR codes" on the phone (welcome screen or the "≡" menu) and point it at this screen.',
+    `There are ${qrShowFrames.length} QR codes, shown in turn. Once all are read, the list appears on the phone.`,
+  ];
+  document.getElementById('qr-show-steps').innerHTML = steps.map(t => `<li>${escapeHtml(t)}</li>`).join('');
+  document.getElementById('qr-app-text').textContent = ja ? 'アプリを開く' : 'Open the app';
+  document.getElementById('qr-speed-label').textContent = ja ? '切り替え速度:' : 'Speed:';
+  const speedLabels = ja ? { slow: '遅い', normal: '普通', fast: '速い' } : { slow: 'Slow', normal: 'Normal', fast: 'Fast' };
+  document.getElementById('qr-speed').innerHTML = QR_SPEEDS.map(([key]) =>
+    `<button type="button" class="qr-speed-option${key === qrShowSpeed ? ' selected' : ''}" data-speed="${key}">${speedLabels[key]}</button>`).join('');
+}
+
+function showNextQrFrame() {
+  if (!qrShowFrames.length) return;
+  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrShowFrames[qrShowIndex], qrShowSize());
+  document.getElementById('qr-show-counter').textContent = `${qrShowIndex + 1} / ${qrShowFrames.length}`;
+  qrShowIndex = (qrShowIndex + 1) % qrShowFrames.length;
+}
+
+function startQrShowTimer() {
+  clearInterval(qrShowTimer);
+  const ms = QR_SPEEDS.find(([key]) => key === qrShowSpeed)[1];
+  qrShowTimer = setInterval(showNextQrFrame, ms);
+}
+
+function openQrShow() {
+  const token = findRelicShareToken(shareUrl);
+  if (!token) return;
+  qrShowFrames = relicShareQrFrames(token);
+  qrShowIndex = 0;
+  renderQrShowText();
+  qrShow.classList.remove('hidden');
+  qrShowBackdrop.classList.remove('hidden');
+  drawRelicShareQr(document.getElementById('qr-app-canvas'), SHARE_PUBLIC_URL, 96);
+  showNextQrFrame();
+  startQrShowTimer();
+}
+
+function closeQrShow() {
+  clearInterval(qrShowTimer);
+  qrShowTimer = null;
+  qrShow.classList.add('hidden');
+  qrShowBackdrop.classList.add('hidden');
+}
+
+document.getElementById('share-qr').addEventListener('click', openQrShow);
+document.getElementById('qr-show-close').addEventListener('click', closeQrShow);
+qrShowBackdrop.addEventListener('click', closeQrShow);
+document.getElementById('qr-speed').addEventListener('click', (e) => {
+  const btn = e.target.closest('.qr-speed-option');
+  if (!btn) return;
+  qrShowSpeed = btn.dataset.speed;
+  renderQrShowText();
+  startQrShowTimer();
 });
 
 // === Auto Load ===

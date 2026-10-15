@@ -53,6 +53,8 @@ ICONS = [
     'menu',            # スマホのメニュー
     'chevron-right',   # スマホのメニュー: 画面を開く項目
     'rotate-ccw',      # スマホのメニュー: 絞り込みを解除
+    'qr-code',         # QR コードで渡す
+    'scan-qr-code',    # QR コードを読み取る
 ]
 
 HEADER = '''/**

@@ -2479,3 +2479,88 @@ button:has(> .icon) {
   font-size: 12px;
   font-family: Consolas, monospace;
 }
+
+/* === QR code transfer === */
+.qr-layer.inspector-backdrop {
+  z-index: 61;
+}
+
+.app-dialog.qr-show {
+  width: min(760px, calc(100vw - 32px));
+  z-index: 62;
+}
+
+.qr-show-body {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.qr-show-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-canvas {
+  display: block;
+  border-radius: 6px;
+}
+
+.qr-show-counter {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.qr-speed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.qr-speed-options {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.qr-speed-option {
+  padding: 3px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.qr-speed-option.selected {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.qr-show-side {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.qr-show-steps {
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.qr-app-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}

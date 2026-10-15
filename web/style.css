@@ -2606,6 +2606,173 @@ button:has(> .icon) {
   display: contents;
 }
 
+/* === QR code transfer === */
+#btn-qr-welcome[hidden] {
+  display: none;
+}
+
+.qr-layer.inspector-backdrop {
+  z-index: 61;
+}
+
+.app-dialog.qr-show {
+  width: min(760px, calc(100vw - 32px));
+  z-index: 62;
+}
+
+.qr-show-body {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.qr-show-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-canvas {
+  display: block;
+  border-radius: 6px;
+}
+
+.qr-show-counter {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.qr-speed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.qr-speed-options {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.qr-speed-option {
+  padding: 3px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.qr-speed-option.selected {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.qr-show-side {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.qr-show-steps {
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.qr-app-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.qr-scan {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  z-index: 63;
+}
+
+.qr-scan.hidden {
+  display: none;
+}
+
+.qr-scan .inspector-header {
+  background: var(--bg-secondary);
+}
+
+.qr-scan-view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.qr-scan-view video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qr-scan-guide {
+  position: absolute;
+  width: min(70vw, 70vh);
+  aspect-ratio: 1;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.qr-scan-status {
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  background: var(--bg-secondary);
+}
+
+.qr-scan-bar {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.qr-scan-bar span {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-hover);
+}
+
+.qr-scan-bar span.got {
+  background: var(--accent);
+}
+
+.qr-scan-status p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .qr-show-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 /* ============================================================
    Smartphone layout (narrow screens)
    ============================================================ */

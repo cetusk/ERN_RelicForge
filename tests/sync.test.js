@@ -7,7 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const { ROOT_DIR } = require('./helpers');
 
-const SHARED_FILES = ['relic-parser.js', 'relic-optimizer.js', 'relic-share.js', 'lib/crypto-js.min.js', 'lib/icons.js'];
+const SHARED_FILES = ['relic-parser.js', 'relic-optimizer.js', 'relic-share.js', 'lib/crypto-js.min.js', 'lib/icons.js',
+  'lib/qrcode.js', 'lib/qrcode.LICENSE.txt'];
 
 for (const f of SHARED_FILES) {
   test(`web/${f} and gui/renderer/${f} are identical`, () => {

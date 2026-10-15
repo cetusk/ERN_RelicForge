@@ -198,3 +198,103 @@ function findRelicShareToken(text) {
   const m = String(text || '').match(new RegExp(`[#?&]${SHARE_PARAM}=([A-Za-z0-9_-]+)`));
   return m ? m[1] : null;
 }
+
+/*
+ * QR code transfer — a link is too long for one QR code (max ~2,900 characters), so the token is
+ * split into numbered frames that are shown one after another and read with the app's scanner.
+ *   frame: "ERNRF:<id>:<index>:<total>:<part of the token>"   (index is 1-based, id tells transfers apart)
+ */
+const SHARE_QR_PREFIX = 'ERNRF';
+const SHARE_QR_CHUNK = 500;   // characters per frame (QR version 15: dense codes are hard to read with a phone camera)
+
+function shareTokenId(token) {
+  let h = 0x811c9dc5;   // FNV-1a
+  for (let i = 0; i < token.length; i++) {
+    h ^= token.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(36);
+}
+
+/** Split a share token into QR frame texts */
+function relicShareQrFrames(token, chunkSize = SHARE_QR_CHUNK) {
+  const total = Math.max(1, Math.ceil(token.length / chunkSize));
+  const id = shareTokenId(token);
+  const frames = [];
+  for (let i = 0; i < total; i++) {
+    frames.push(`${SHARE_QR_PREFIX}:${id}:${i + 1}:${total}:${token.slice(i * chunkSize, (i + 1) * chunkSize)}`);
+  }
+  return frames;
+}
+
+/**
+ * Collects scanned QR texts (frames in any order, repeats are fine; a plain share link also works).
+ * add() returns {state: 'ignored' | 'progress' | 'done', received, total, token?}
+ */
+class RelicShareQrCollector {
+  constructor() {
+    this.reset();
+  }
+
+  reset() {
+    this.id = null;
+    this.total = 0;
+    this.parts = new Map();
+  }
+
+  get received() {
+    return this.parts.size;
+  }
+
+  add(text) {
+    const status = (state, token) => ({ state, received: this.parts.size, total: this.total, token });
+    const m = /^ERNRF:([0-9a-z]+):(\d+):(\d+):([A-Za-z0-9_-]*)$/.exec(String(text || '').trim());
+    if (!m) {
+      const linkToken = findRelicShareToken(text);
+      return linkToken ? { state: 'done', received: 1, total: 1, token: linkToken } : status('ignored');
+    }
+    const [, id, index, total, part] = m;
+    const n = Number(total);
+    const i = Number(index);
+    if (!(n >= 1 && n <= 200 && i >= 1 && i <= n)) return status('ignored');
+    if (id !== this.id || n !== this.total) {   // another transfer started
+      this.reset();
+      this.id = id;
+      this.total = n;
+    }
+    this.parts.set(i, part);
+    if (this.parts.size < n) return status('progress');
+    let token = '';
+    for (let k = 1; k <= n; k++) token += this.parts.get(k);
+    if (shareTokenId(token) !== id) {   // should not happen (QR codes carry their own error correction)
+      this.reset();
+      return status('ignored');
+    }
+    return status('done', token);
+  }
+}
+
+/** Draw a QR code on a canvas (dark on white, with the standard quiet zone). Needs lib/qrcode.js. */
+function drawRelicShareQr(canvas, text, maxSize) {
+  const qr = qrcode(0, 'L');
+  qr.addData(text, 'Byte');
+  qr.make();
+  const count = qr.getModuleCount();
+  const quiet = 4;
+  const ratio = window.devicePixelRatio || 1;
+  const cell = Math.max(1, Math.floor(maxSize * ratio / (count + quiet * 2)));
+  const size = cell * (count + quiet * 2);
+  canvas.width = size;
+  canvas.height = size;
+  canvas.style.width = `${size / ratio}px`;
+  canvas.style.height = `${size / ratio}px`;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = '#000';
+  for (let r = 0; r < count; r++) {
+    for (let c = 0; c < count; c++) {
+      if (qr.isDark(r, c)) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+    }
+  }
+}

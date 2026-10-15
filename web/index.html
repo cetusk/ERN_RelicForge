@@ -146,6 +146,7 @@
       <div class="welcome-buttons">
         <button id="btn-steam-welcome" class="btn-secondary btn-large"><span class="icon" data-icon="cloud-download" data-size="18"></span><span class="btn-label">Steam クラウドから読み込む</span></button>
         <button id="btn-open-welcome" class="btn-primary btn-large"><span class="icon" data-icon="folder-open" data-size="18"></span><span class="btn-label">ファイルを選択して開く</span></button>
+        <button id="btn-qr-welcome" class="btn-secondary btn-large" hidden><span class="icon" data-icon="scan-qr-code" data-size="18"></span><span class="btn-label">QR コードを読み取る</span></button>
       </div>
       <p id="download-file-hint" class="download-file-hint" hidden></p>
       <div id="auto-load-path-hint" class="path-hint">
@@ -272,7 +273,47 @@
     <div class="app-dialog-footer">
       <button id="share-copy" class="btn-secondary"><span class="icon" data-icon="link" data-size="14"></span><span class="btn-label"></span></button>
       <button id="share-native" class="btn-secondary" hidden><span class="icon" data-icon="share-2" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-qr" class="btn-secondary"><span class="icon" data-icon="qr-code" data-size="14"></span><span class="btn-label"></span></button>
       <button id="share-file" class="btn-primary"><span class="icon" data-icon="file-text" data-size="14"></span><span class="btn-label"></span></button>
+    </div>
+  </div>
+
+  <!-- QR code transfer: frames shown one after another (texts are set by app.js) -->
+  <div id="qr-show-backdrop" class="inspector-backdrop qr-layer hidden"></div>
+  <div id="qr-show" class="app-dialog qr-show qr-layer hidden" role="dialog" aria-modal="true" aria-labelledby="qr-show-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="qr-code" data-size="18"></span><h3 id="qr-show-title"></h3>
+      <button id="qr-show-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="app-dialog-body qr-show-body">
+      <div class="qr-show-main">
+        <canvas id="qr-show-canvas" class="qr-canvas"></canvas>
+        <div id="qr-show-counter" class="qr-show-counter"></div>
+        <div class="qr-speed"><span id="qr-speed-label"></span><span id="qr-speed" class="qr-speed-options"></span></div>
+      </div>
+      <div class="qr-show-side">
+        <ol id="qr-show-steps" class="qr-show-steps"></ol>
+        <div class="qr-app-link">
+          <canvas id="qr-app-canvas" class="qr-canvas"></canvas>
+          <p id="qr-app-text"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR code scanner (phones) -->
+  <div id="qr-scan" class="qr-scan qr-layer hidden" role="dialog" aria-modal="true" aria-labelledby="qr-scan-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="scan-qr-code" data-size="18"></span><h3 id="qr-scan-title"></h3>
+      <button id="qr-scan-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="qr-scan-view">
+      <video id="qr-scan-video" playsinline muted autoplay></video>
+      <div class="qr-scan-guide"></div>
+    </div>
+    <div class="qr-scan-status">
+      <div id="qr-scan-bar" class="qr-scan-bar"></div>
+      <p id="qr-scan-text"></p>
     </div>
   </div>
 
@@ -399,6 +440,7 @@
   <script src="relic-parser.js"></script>
   <script src="relic-optimizer.js"></script>
   <script src="relic-share.js"></script>
+  <script src="lib/qrcode.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
