@@ -1,0 +1,274 @@
+{
+ "characterName": "Tester",
+ "totalRelics": 7,
+ "unknownRelics": 3,
+ "relics": [
+  {
+   "id": 3229614340,
+   "itemId": 12002,
+   "itemKey": "witchsBrooch",
+   "itemNameEn": "Witchs Brooch",
+   "itemNameJa": "魔女のブローチ",
+   "itemColor": "Blue",
+   "itemType": "UniqueRelic",
+   "effects": [
+    [
+     {
+      "id": 7000100,
+      "key": "mindPlus1",
+      "name_en": "Mind Plus 1",
+      "name_ja": "精神力+1"
+     }
+    ],
+    [
+     {
+      "id": 7000101,
+      "key": "mindPlus2",
+      "name_en": "Mind Plus 2",
+      "name_ja": "精神力+2"
+     }
+    ]
+   ],
+   "coordinates": [
+    0,
+    0
+   ],
+   "coordinatesByColor": [
+    0,
+    0
+   ],
+   "sortKey": 600
+  },
+  {
+   "id": 3229614337,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ],
+    [
+     {
+      "id": 7000001,
+      "key": "vigorPlus2",
+      "name_en": "Vigor Plus 2",
+      "name_ja": "生命力+2"
+     }
+    ],
+    [
+     {
+      "id": 7000002,
+      "key": "vigorPlus3",
+      "name_en": "Vigor Plus 3",
+      "name_ja": "生命力+3"
+     }
+    ]
+   ],
+   "coordinates": [
+    0,
+    1
+   ],
+   "coordinatesByColor": [
+    0,
+    0
+   ],
+   "sortKey": 500
+  },
+  {
+   "id": 3229614342,
+   "itemId": 99001,
+   "itemKey": "unknownItem_99001",
+   "itemNameEn": "Unknown Relic (ID: 99001)",
+   "itemNameJa": "未知の遺物 (ID: 99001)",
+   "itemColor": null,
+   "itemType": null,
+   "effects": [
+    [
+     {
+      "id": 7000001,
+      "key": "vigorPlus2",
+      "name_en": "Vigor Plus 2",
+      "name_ja": "生命力+2"
+     }
+    ],
+    [
+     {
+      "id": 7000002,
+      "key": "vigorPlus3",
+      "name_en": "Vigor Plus 3",
+      "name_ja": "生命力+3"
+     }
+    ]
+   ],
+   "coordinates": null,
+   "coordinatesByColor": null,
+   "sortKey": 450,
+   "unknown": true
+  },
+  {
+   "id": 3229614338,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000090,
+      "key": "increasedMaximumHP",
+      "name_en": "Increased Maximum Hp",
+      "name_ja": "最大HP上昇"
+     },
+     {
+      "id": 6800000,
+      "key": "reducedVigor",
+      "name_en": "Reduced Vigor",
+      "name_ja": "生命力低下"
+     }
+    ]
+   ],
+   "coordinates": [
+    0,
+    2
+   ],
+   "coordinatesByColor": [
+    0,
+    1
+   ],
+   "sortKey": 400
+  },
+  {
+   "id": 3229614339,
+   "itemId": 2000000,
+   "itemKey": "deepDelicateBurningScene",
+   "itemNameEn": "Deep Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色（深層）",
+   "itemColor": "Red",
+   "itemType": "DeepRelic",
+   "effects": [
+    [
+     {
+      "id": 6000800,
+      "key": "characterSkillCooldownReductionPlus4",
+      "name_en": "Character Skill Cooldown Reduction Plus 4",
+      "name_ja": "スキルクールタイム軽減+4"
+     },
+     {
+      "id": 6800000,
+      "key": "reducedVigor",
+      "name_en": "Reduced Vigor",
+      "name_ja": "生命力低下"
+     }
+    ],
+    [
+     {
+      "id": 6000801,
+      "key": "characterSkillCooldownReductionPlus5",
+      "name_en": "Character Skill Cooldown Reduction Plus 5",
+      "name_ja": "スキルクールタイム軽減+5"
+     },
+     {
+      "id": 6800200,
+      "key": "reducedEndurance",
+      "name_en": "Reduced Endurance",
+      "name_ja": "持久力低下"
+     }
+    ]
+   ],
+   "coordinates": [
+    0,
+    0
+   ],
+   "coordinatesByColor": [
+    0,
+    0
+   ],
+   "sortKey": 300
+  },
+  {
+   "id": 3229614341,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000000,
+      "key": "vigorPlus1",
+      "name_en": "Vigor Plus 1",
+      "name_ja": "生命力+1"
+     }
+    ],
+    [
+     {
+      "id": 7999901,
+      "key": "unknownEffect_7999901",
+      "name_en": "Unknown Effect (ID: 7999901)",
+      "name_ja": "未知の効果 (ID: 7999901)",
+      "unknown": true
+     }
+    ]
+   ],
+   "coordinates": [
+    0,
+    3
+   ],
+   "coordinatesByColor": [
+    0,
+    1
+   ],
+   "sortKey": 200,
+   "unknown": true
+  },
+  {
+   "id": 3229614343,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7000002,
+      "key": "vigorPlus3",
+      "name_en": "Vigor Plus 3",
+      "name_ja": "生命力+3"
+     },
+     {
+      "id": 7999901,
+      "key": "unknownEffect_7999901",
+      "name_en": "Unknown Effect (ID: 7999901)",
+      "name_ja": "未知の効果 (ID: 7999901)",
+      "unknown": true
+     }
+    ]
+   ],
+   "coordinates": [
+    0,
+    4
+   ],
+   "coordinatesByColor": [
+    0,
+    2
+   ],
+   "sortKey": 100,
+   "unknown": true
+  }
+ ]
+}

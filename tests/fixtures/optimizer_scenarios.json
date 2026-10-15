@@ -1,0 +1,231 @@
+[
+ {
+  "name": "wylder_combined_all_vessels",
+  "params": {
+   "character": "追跡者",
+   "combined": true,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "gestureCrossedLegsBuildsUpMadness",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "attacksInflictSleepPlus1",
+    "priority": "required",
+    "rank": 1
+   },
+   {
+    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "arcanePlus1",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "attacksInflictPoisonPlus2",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+    "priority": "nice_to_have",
+    "rank": 1
+   }
+  ]
+ },
+ {
+  "name": "executor_combined_with_exclusions",
+  "params": {
+   "character": "執行者",
+   "combined": true,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "starlightShardsInPossessionAtStartOfExpedition",
+    "priority": "required",
+    "rank": 1
+   },
+   {
+    "key": "guardianDamageNegationForAlliesImproved",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "attacksInflictPoisonPlus2",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "allResistancesDown",
+    "priority": "required",
+    "exclude": true,
+    "rank": 0
+   },
+   {
+    "key": "continuousHPLoss",
+    "priority": "preferred",
+    "exclude": true,
+    "rank": 0
+   },
+   {
+    "key": "impairedAffinityDamageNegation",
+    "priority": "preferred",
+    "exclude": true,
+    "rank": 1
+   },
+   {
+    "key": "improvedAttackPowerWith3PlusHalberdsEquipped",
+    "priority": "nice_to_have",
+    "exclude": true,
+    "rank": 0
+   }
+  ]
+ },
+ {
+  "name": "guardian_normal_only",
+  "params": {
+   "character": "守護者",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "attacksInflictSleepPlus1",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "priority": "required",
+    "rank": 1
+   },
+   {
+    "key": "starlightShardsInPossessionAtStartOfExpedition",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "guardianDamageNegationForAlliesImproved",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "hpRestorationUponAxeAttacks",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "hpRestorationUponReaperAttacks",
+    "priority": "nice_to_have",
+    "rank": 1
+   }
+  ]
+ },
+ {
+  "name": "revenant_combined_forced_exclusion",
+  "params": {
+   "character": "復讐者",
+   "combined": true,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "arcaneIncreasedForEachGreatEnemyDefeatedAtARuin",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "gestureCrossedLegsBuildsUpMadness",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "surgeSprintingDrainsMoreStamina",
+    "priority": "preferred",
+    "exclude": true,
+    "rank": 0
+   }
+  ]
+ },
+ {
+  "name": "scholar_combined_single_vessel_small",
+  "params": {
+   "character": "学者",
+   "vessel": "urn",
+   "combined": true,
+   "candidates": 15,
+   "top": 5
+  },
+  "effects": [
+   {
+    "key": "gestureCrossedLegsBuildsUpMadness",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "attacksInflictSleepPlus1",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "arcanePlus1",
+    "priority": "preferred",
+    "rank": 2
+   },
+   {
+    "key": "attacksInflictPoisonPlus2",
+    "priority": "preferred",
+    "rank": 3
+   }
+  ]
+ },
+ {
+  "name": "wylder_normal_stackable_required_tie",
+  "pool": "relic_pool_stack_tie.json",
+  "params": {
+   "character": "追跡者",
+   "vessel": "urn",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "vigorPlus1",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "increasedMaximumHP",
+    "priority": "required",
+    "rank": 1
+   },
+   {
+    "key": "increasedMaximumFP",
+    "priority": "required",
+    "rank": 2
+   }
+  ]
+ }
+]

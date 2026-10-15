@@ -391,16 +391,6 @@ class RelicOptimizer {
     return score;
   }
 
-  _fastSubScore(counts) {
-    let sub = 0;
-    const sr = this._specSubRankValues;
-    const n = this._nSpec;
-    for (let i = 0; i < n; i++) {
-      if (counts[i] > 0) sub += sr[i];
-    }
-    return sub;
-  }
-
   _compactRelic(relic) {
     const rid = relic.id;
     const specKeys = this._getSpecKeys(relic);
@@ -603,7 +593,8 @@ class RelicOptimizer {
           seen.add(key);
 
           const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [lo, mid, hi], cb, ep, her, sub, esr, rm]);
+          // Keep slot order (same as Python); the sorted triple is only the dedup key
+          results.push([sc, [riId, rjId, rkId], cb, ep, her, sub, esr, rm]);
         }
       }
     }
@@ -645,7 +636,8 @@ class RelicOptimizer {
           sub += sr[i];
         }
         score += partialCb - partialEp;
-        results.push([score, sorted.slice(), partialCb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
+        // Keep slot order (same as Python); the sorted IDs are only the dedup key
+        results.push([score, chosenIds.slice(0, nSlots), partialCb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
         return;
       }
 
@@ -825,18 +817,21 @@ class RelicOptimizer {
     const isRequired = this._isRequired;
     const requiredIdxSet = this._requiredIdxSet;
 
-    // Handle single-side cases
-    if (!normalCombos.length) {
-      return this._combosToResultsCompact(deepCombos.slice(0, topN), true);
-    }
-    if (!deepCombos.length) {
-      return this._combosToResultsCompact(normalCombos.slice(0, topN), false);
-    }
+    // Single-side (normal-only / deep-only, or one side without candidates):
+    // pair with one empty combo so both modes share the Phase 3 ranking
+    // (required-met first, sub-score tiebreak, deterministic order)
+    const EMPTY_COMBO = [0, [], 0, 0, false, 0, 0, 0];
+    const singleSide = !normalCombos.length || !deepCombos.length;
+    if (!normalCombos.length) normalCombos = [EMPTY_COMBO];
+    if (!deepCombos.length) deepCombos = [EMPTY_COMBO];
 
     // Phase 3: Cross-pair with bitmask pre-filter + two-tier heap pruning
     // Adaptive maxPairs: with few specs, scores are clustered so score-based pruning
     // is ineffective. Reducing candidate count avoids evaluating millions of ~equal pairs.
-    const maxPairs = Math.min(500, Math.max(150, nSpec * 50));
+    // Single-side pairs every combo with the one empty combo (linear cost), so no cap:
+    // a cap would cut arbitrarily inside large equal-score groups and could drop
+    // combos meeting all required effects.
+    const maxPairs = singleSide ? Infinity : Math.min(500, Math.max(150, nSpec * 50));
     const nTop = Math.min(normalCombos.length, maxPairs);
     const dTop = Math.min(deepCombos.length, maxPairs);
 
@@ -1046,54 +1041,6 @@ class RelicOptimizer {
     if (a[0] !== b[0]) return a[0] - b[0];
     if (a[1] !== b[1]) return a[1] - b[1];
     return a[2] - b[2];
-  }
-
-  // New lightweight format: [score, rids, cb, ep, her, subScore, exclSub]
-  _combosToResultsCompact(combos, isDeepOnly) {
-    const nSpec = this._nSpec;
-    const compactMap = this._compactMap;
-    const results = [];
-    for (const combo of combos) {
-      const score = combo[0], rids = combo[1], her = combo[4], comboSubScore = combo[5], exclSubSum = combo[6] || 0;
-      // Rebuild counts from rids
-      const counts = new Int32Array(nSpec);
-      for (const rid of rids) {
-        const si = compactMap[rid];
-        if (si) for (const idx of si) counts[idx]++;
-      }
-
-      const matchedKeys = new Set();
-      for (let i = 0; i < nSpec; i++) {
-        if (counts[i] > 0) matchedKeys.add(this._specKeyList[i]);
-      }
-      const missing = [];
-      for (const i of this._requiredIdxSet) {
-        if (counts[i] === 0) missing.push(this._specKeyList[i]);
-      }
-      missing.sort();
-
-      const excludedPresent = new Set();
-      for (const rid of rids) {
-        for (const k of this._getExcludeKeys(this._relicById[rid])) {
-          excludedPresent.add(k);
-        }
-      }
-
-      const relics = rids.map(rid => this._relicById[rid]);
-      const subScore = (comboSubScore !== undefined ? comboSubScore : 0) - exclSubSum;
-      results.push({
-        required_met: missing.length === 0 && !her,
-        score,
-        sub_score: subScore,
-        matched_keys: matchedKeys,
-        missing_required: missing,
-        excluded_present: excludedPresent,
-        relics: relics,
-        normal_relics: isDeepOnly ? [] : relics,
-        deep_relics: isDeepOnly ? relics : [],
-      });
-    }
-    return results;
   }
 
   _formatRelic(relic, matchedKeys, excludedKeys) {

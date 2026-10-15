@@ -9,6 +9,7 @@ function buildStackingLookup(effectsData) {
     lookup[id] = {
       stackable: entry.stackable,
       stackNotes: entry.stackNotes || '',
+      stackNotesFull: entry.stackNotesFull || '',
       key: entry.key || '',
       name_ja: entry.name_ja || '',
       name_en: entry.name_en || '',
@@ -62,8 +63,9 @@ const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
 const CONCENTRATION_BONUS = 5;
 
 // App metadata
-const APP_NIGHTREIGN_VERSION = 'v1.03.4';
-const APP_LAST_UPDATED = '2026-02-14';
+const APP_VERSION = '1.1.0';                        // same as gui/package.json (checked by tests)
+const APP_NIGHTREIGN_VERSION = 'Regulation 1.03.5';  // game data the relic data is checked against
+const APP_LAST_UPDATED = '2026-10-15';
 
 // === Type Display Names ===
 const TYPE_LABELS = {
@@ -79,6 +81,7 @@ const btnAutoLoad = document.getElementById('btn-auto-load');
 const autoLoadNote = document.getElementById('auto-load-note');
 const autoLoadStatus = document.getElementById('auto-load-status');
 const headerInfo = document.getElementById('header-info');
+const headerWarning = document.getElementById('header-warning');
 const toolbar = document.getElementById('toolbar');
 const welcome = document.getElementById('welcome');
 const loading = document.getElementById('loading');
@@ -212,6 +215,8 @@ detailClose.addEventListener('click', closeDetail);
 filterLang.addEventListener('change', () => {
   displayLang = filterLang.value;
   updateLangUI();
+  renderTabBar();   // tab labels (catalog etc.) follow the language
+  renderShareDialogText();
   renderTable();
   updateHeaderInfo();
   updateResultCount();
@@ -253,7 +258,9 @@ async function loadAndDisplay(filePath) {
       ]);
     }
     const fileBuffer = await window.api.readFileBuffer(filePath);
-    relicData = parseSaveFile(fileBuffer.buffer, itemsData, effectsData);
+    const { characterName, relics } = extractRelics(fileBuffer.buffer, itemsData, effectsData);
+    shownRecord = { characterName, relics: compactRelics(relics) };
+    relicData = buildRelicData(characterName, relics, itemsData, effectsData);
     stackingLookup = buildStackingLookup(effectsData);
     loadedFileName = filePath.split(/[/\\]/).pop();
     buildSearchTerms();
@@ -265,6 +272,7 @@ async function loadAndDisplay(filePath) {
     btnOptimizer.classList.remove('hidden');
     btnCatalog.classList.remove('hidden');
     btnExportTable.classList.remove('hidden');
+    document.getElementById('btn-share').classList.remove('hidden');
     tabBar.classList.remove('hidden');
     updateInspectorButton();
     updateOptimizerButton();
@@ -283,6 +291,175 @@ async function loadAndDisplay(filePath) {
     resetAutoLoadUI();
   }
 }
+
+// === Share links (open on another device, e.g. a phone, via the public Web version) ===
+let shownRecord = null;   // compact relics of the data shown now
+const shareDialog = document.getElementById('share-dialog');
+const shareBackdrop = document.getElementById('share-backdrop');
+const shareUrlInput = document.getElementById('share-url');
+let shareUrl = '';
+
+function renderShareDialogText() {
+  const ja = displayLang === 'ja';
+  const count = relicData ? relicData.relics.length : 0;
+  document.getElementById('share-title').textContent = ja ? '共有リンク' : 'Share link';
+  document.getElementById('share-intro').textContent = ja
+    ? `表示中の遺物データ（${count}件）を、Web 版で開けるリンクやファイルにします。スマホなどゲームの入っていない端末でも、セーブファイルなしで同じ一覧を表示できます。`
+    : `Turn the relics shown now (${count}) into a link or file for the Web version, so you can view them on another device (e.g. a phone) without the save file.`;
+  document.getElementById('share-include-name-label').textContent = ja ? 'キャラクター名を含める' : 'Include character name';
+  document.getElementById('share-note').textContent = ja
+    ? 'データはリンクの「#」以降に含まれ、Web サーバーには送信されません。遺物の固有 ID と取得順の番号は含まれません（並び順は保持されます）。メッセージアプリによっては長いリンクが途中で切れることがあります（例: LINE は 1 万文字まで）。その場合は「ファイルで共有」で保存したファイルを送り、受け取った側は Web 版の「ファイルを開く」でそのファイルを選んでください。'
+    : 'The data is in the part after "#" and is never sent to the web server. Relic IDs and acquisition numbers are not included (the order is kept). Some messaging apps cut long links; in that case send the file saved with "Share as file" and open it with "Open File" in the Web version.';
+  document.querySelector('#share-copy .btn-label').textContent = ja ? 'リンクをコピー' : 'Copy link';
+  document.querySelector('#share-file .btn-label').textContent = ja ? 'ファイルで共有' : 'Share as file';
+  document.querySelector('#share-qr .btn-label').textContent = ja ? 'QR コードで渡す' : 'Show QR codes';
+  document.getElementById('btn-share-label').textContent = ja ? '共有' : 'Share';
+  if (shareUrl) {
+    document.getElementById('share-length').textContent = ja
+      ? `リンクの長さ: ${shareUrl.length.toLocaleString()} 文字`
+      : `Link length: ${shareUrl.length.toLocaleString()} characters`;
+  }
+}
+
+async function buildShareUrl() {
+  const token = await encodeRelicShare(shownRecord,
+    { includeName: document.getElementById('share-include-name').checked });
+  shareUrl = relicShareUrl(SHARE_PUBLIC_URL, token);
+  shareUrlInput.value = shareUrl;
+  renderShareDialogText();
+}
+
+async function openShareDialog() {
+  if (!relicData || !shownRecord) return;
+  shareUrl = '';
+  shareUrlInput.value = '';
+  renderShareDialogText();
+  shareDialog.classList.remove('hidden');
+  shareBackdrop.classList.remove('hidden');
+  try {
+    await buildShareUrl();
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? '共有リンクを作成できませんでした' : 'Could not create the share link'}: ${err.message || err}`);
+    closeShareDialog();
+  }
+}
+
+function closeShareDialog() {
+  shareDialog.classList.add('hidden');
+  shareBackdrop.classList.add('hidden');
+}
+
+document.getElementById('btn-share').addEventListener('click', openShareDialog);
+document.getElementById('share-close').addEventListener('click', closeShareDialog);
+shareBackdrop.addEventListener('click', closeShareDialog);
+document.getElementById('share-include-name').addEventListener('change', () => {
+  buildShareUrl().catch(err => alert(err.message || err));
+});
+shareUrlInput.addEventListener('focus', () => shareUrlInput.select());
+document.getElementById('share-copy').addEventListener('click', async () => {
+  const ja = displayLang === 'ja';
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    alert(ja ? 'リンクをコピーしました' : 'Link copied');
+  } catch (_) {
+    shareUrlInput.focus();
+    shareUrlInput.select();
+    alert(ja ? 'コピーできませんでした。選択されたリンクを手動でコピーしてください。' : 'Could not copy. Please copy the selected link manually.');
+  }
+});
+document.getElementById('share-file').addEventListener('click', () => {
+  const ja = displayLang === 'ja';
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  const text = (ja
+    ? 'ERN RelicForge 共有データ\nこのファイルを ERN RelicForge の「ファイルを開く」で選ぶか、下のリンクを開いてください。\n\n'
+    : 'ERN RelicForge share data\nOpen this file with "Open File" in ERN RelicForge, or open the link below.\n\n') + shareUrl + '\n';
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ERN_RelicForge_share_${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.txt`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+// === QR code transfer ===
+// The share token split into frames, shown one after another (a link is too long for one QR code);
+// the phone reads them with the Web version's scanner
+const qrShow = document.getElementById('qr-show');
+const qrShowBackdrop = document.getElementById('qr-show-backdrop');
+const QR_SPEEDS = [['slow', 800], ['normal', 400], ['fast', 250]];
+let qrSender = null;   // endless stream of frames (fountain code: any frames will do)
+let qrShowSeq = 1;
+let qrShowTimer = null;
+let qrShowSpeed = 'normal';
+
+// Large codes let the phone stay farther from the screen, where it focuses more easily
+function qrShowSize() {
+  return Math.max(200, Math.min(560, window.innerWidth - 64, window.innerHeight - 200));
+}
+
+function renderQrShowText() {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-show-title').textContent = ja ? 'QR コードで渡す' : 'Pass with QR codes';
+  const steps = ja ? [
+    'スマホで Web 版の ERN RelicForge を開きます（下の小さな QR コードをカメラで読み取ると開けます）。',
+    'スマホの［QR コードを読み取る］（最初の画面、またはメニュー「≡」）を押し、この画面の QR コードを映します。',
+    `QR コードは自動で切り替わります。どの QR コードから読み取っても構いません。約 ${qrSender.blocks} 枚分を読み取ると、スマホに一覧が表示されます。`,
+  ] : [
+    'Open the Web version of ERN RelicForge on the phone (scan the small QR code below with the camera to open it).',
+    'Tap "Scan QR codes" on the phone (welcome screen or the "≡" menu) and point it at this screen.',
+    `The QR codes change automatically; any of them will do. After about ${qrSender.blocks} have been read, the list appears on the phone.`,
+  ];
+  document.getElementById('qr-show-steps').innerHTML = steps.map(t => `<li>${escapeHtml(t)}</li>`).join('');
+  document.getElementById('qr-app-text').textContent = ja ? 'アプリを開く' : 'Open the app';
+  document.getElementById('qr-speed-label').textContent = ja ? '切り替え速度:' : 'Speed:';
+  const speedLabels = ja ? { slow: '遅い', normal: '普通', fast: '速い' } : { slow: 'Slow', normal: 'Normal', fast: 'Fast' };
+  document.getElementById('qr-speed').innerHTML = QR_SPEEDS.map(([key]) =>
+    `<button type="button" class="qr-speed-option${key === qrShowSpeed ? ' selected' : ''}" data-speed="${key}">${speedLabels[key]}</button>`).join('');
+}
+
+function showNextQrFrame() {
+  if (!qrSender) return;
+  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrSender.frame(qrShowSeq), qrShowSize());
+  qrShowSeq++;
+}
+
+function startQrShowTimer() {
+  clearInterval(qrShowTimer);
+  const ms = QR_SPEEDS.find(([key]) => key === qrShowSpeed)[1];
+  qrShowTimer = setInterval(showNextQrFrame, ms);
+}
+
+function openQrShow() {
+  const token = findRelicShareToken(shareUrl);
+  if (!token) return;
+  qrSender = createRelicShareQrSender(token);
+  qrShowSeq = 1;
+  renderQrShowText();
+  qrShow.classList.remove('hidden');
+  qrShowBackdrop.classList.remove('hidden');
+  drawRelicShareQr(document.getElementById('qr-app-canvas'), SHARE_PUBLIC_URL, 96);
+  showNextQrFrame();
+  startQrShowTimer();
+}
+
+function closeQrShow() {
+  clearInterval(qrShowTimer);
+  qrShowTimer = null;
+  qrShow.classList.add('hidden');
+  qrShowBackdrop.classList.add('hidden');
+}
+
+document.getElementById('share-qr').addEventListener('click', openQrShow);
+document.getElementById('qr-show-close').addEventListener('click', closeQrShow);
+qrShowBackdrop.addEventListener('click', closeQrShow);
+document.getElementById('qr-speed').addEventListener('click', (e) => {
+  const btn = e.target.closest('.qr-speed-option');
+  if (!btn) return;
+  qrShowSpeed = btn.dataset.speed;
+  renderQrShowText();
+  startQrShowTimer();
+});
 
 // === Auto Load ===
 function resetAutoLoadUI() {
@@ -386,22 +563,23 @@ function updateLangUI() {
   document.getElementById('welcome-msg').textContent = ja
     ? 'セーブファイル (.sl2) を開いて遺物を確認'
     : 'Open a save file (.sl2) to view relics';
-  btnAutoLoad.textContent = ja ? '自動で読み込む' : 'Auto Load';
-  btnOpenWelcome.textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  btnAutoLoad.querySelector('.btn-label').textContent = ja ? '自動で読み込む' : 'Auto Load';
+  btnOpenWelcome.querySelector('.btn-label').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';
   autoLoadNote.textContent = ja
     ? '\u203b セーブデータ (.bak) を一時フォルダにコピーしてから読み込みます'
     : '* The save data (.bak) will be copied to a temp folder before loading';
   // Header meta
   document.getElementById('header-meta-version').textContent = ja
-    ? `Nightreign ${APP_NIGHTREIGN_VERSION} 対応`
-    : `Nightreign ${APP_NIGHTREIGN_VERSION}`;
+    ? `${APP_NIGHTREIGN_VERSION} 対応`
+    : `${APP_NIGHTREIGN_VERSION}`;
   document.getElementById('header-meta-updated').textContent = ja
     ? `最終更新: ${APP_LAST_UPDATED}`
     : `Updated: ${APP_LAST_UPDATED}`;
   // Toolbar labels
   document.getElementById('label-color').textContent = ja ? '色:' : 'Color:';
   document.getElementById('label-type').textContent = ja ? 'タイプ:' : 'Type:';
-  document.getElementById('label-lang').textContent = ja ? '言語:' : 'Lang:';
+  document.getElementById('label-lang').textContent = ja ? '言語 / Language:' : 'Language:';
   // Search placeholder
   searchInput.placeholder = ja
     ? '効果名で検索 (日本語 / English)...'
@@ -427,8 +605,8 @@ function updateLangUI() {
   document.getElementById('inspector-title').textContent = ja ? '高度な検索' : 'Advanced Search';
   document.getElementById('inspector-effect-label').textContent = ja ? '効果フィルター' : 'Effect Filter';
   inspectorSearch.placeholder = ja ? '効果名で絞り込み...' : 'Filter effects...';
-  inspectorClear.textContent = ja ? 'クリア' : 'Clear';
-  inspectorApply.textContent = ja ? '適用' : 'Apply';
+  inspectorClear.querySelector('.btn-label').textContent = ja ? 'クリア' : 'Clear';
+  inspectorApply.querySelector('.btn-label').textContent = ja ? '適用' : 'Apply';
   updateInspectorButton();
   updateInspectorCount();
   if (inspector.classList.contains('open')) renderInspectorEffects();
@@ -450,11 +628,31 @@ function updateHeaderInfo() {
   const fileLabel = ja ? 'ファイル' : 'File';
   headerInfo.textContent =
     `${playerLabel}: ${relicData.characterName} | ${totalLabel}: ${total}  (${normalLabel}: ${normal} / ${deepLabel}: ${deep} / ${uniqueLabel}: ${unique}) | ${fileLabel}: ${loadedFileName}`;
+
+  // Warn when relics contain items/effects missing from the data files
+  const unknown = relicData.unknownRelics || 0;
+  headerWarning.hidden = unknown === 0;
+  if (unknown > 0) {
+    headerWarning.innerHTML = iconSvg('triangle-alert', 13) + (ja
+      ? ` 未知の遺物: ${unknown}件`
+      : ` Unknown relics: ${unknown}`);
+    headerWarning.title = ja
+      ? 'データに無いアイテム・効果を含む遺物があります（「未知の効果 (ID: …)」等と表示）。ゲームのアップデートにツールが未対応の可能性があります。'
+      : 'Some relics contain items/effects missing from the data files (shown as "Unknown Effect (ID: …)" etc.). The tool may not support the latest game update yet.';
+  }
+}
+
+// Warning mark for relics containing items/effects missing from the data files
+function unknownMarkHtml() {
+  const tip = displayLang === 'ja'
+    ? 'データに無いアイテム・効果を含む遺物'
+    : 'Contains items/effects missing from the data files';
+  return `<span class="unknown-mark" title="${tip}">${iconSvg('triangle-alert', 13)}</span>`;
 }
 
 function typeLabel(itemType) {
   const entry = TYPE_LABELS[itemType];
-  return entry ? entry[displayLang] : itemType;
+  return entry ? entry[displayLang] : (itemType || '-');
 }
 
 // === Result Count ===
@@ -648,6 +846,7 @@ function renderTable() {
     tdItem.textContent = displayLang === 'ja'
       ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
       : (relic.itemNameEn || relic.itemKey);
+    if (relic.unknown) tdItem.insertAdjacentHTML('afterbegin', unknownMarkHtml());
     tdItem.style.fontSize = '12px';
     tr.appendChild(tdItem);
 
@@ -659,14 +858,14 @@ function renderTable() {
         ? (main.name_ja || main.name_en || main.key)
         : (main.name_en || main.key);
       let html = `<div class="effect-item">`;
-      html += `<div class="effect-main">${mainName}</div>`;
+      html += `<div class="effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
       // Debuffs linked to main effect
       for (let i = 1; i < group.length; i++) {
         const d = group[i];
         const debuffName = displayLang === 'ja'
           ? (d.name_ja || d.name_en || d.key)
           : (d.name_en || d.key);
-        html += `<div class="effect-debuff">${debuffName}</div>`;
+        html += `<div class="effect-debuff${d.unknown ? ' unknown' : ''}">${debuffName}</div>`;
       }
       html += `</div>`;
       return html;
@@ -687,7 +886,7 @@ function showDetail(relic) {
   const itemName = displayLang === 'ja'
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
-  detailTitle.textContent = itemName;
+  detailTitle.innerHTML = (relic.unknown ? `<span class="unknown-mark">${iconSvg('triangle-alert', 16)}</span>` : '') + escapeHtml(itemName);
 
   let html = '';
 
@@ -698,11 +897,11 @@ function showDetail(relic) {
   html += field('ID', relic.id);
   html += field(ja ? 'アイテムID' : 'Item ID', relic.itemId);
   html += field(ja ? 'アイテムKey' : 'Item Key', relic.itemKey);
-  html += field(ja ? '色' : 'Color', `<span class="color-badge ${relic.itemColor}"></span> ${relic.itemColor}`);
+  html += field(ja ? '色' : 'Color', `<span class="color-badge ${relic.itemColor}"></span> ${relic.itemColor || '-'}`);
   html += field(displayLang === 'ja' ? 'タイプ' : 'Type',
     `<span class="type-badge ${relic.itemType}">${typeLabel(relic.itemType)}</span>`);
-  html += field(ja ? '座標' : 'Coordinates', `[${relic.coordinates.join(', ')}]`);
-  html += field(ja ? '色別座標' : 'Color Coords', `[${relic.coordinatesByColor.join(', ')}]`);
+  html += field(ja ? '座標' : 'Coordinates', relic.coordinates ? `[${relic.coordinates.join(', ')}]` : '-');
+  html += field(ja ? '色別座標' : 'Color Coords', relic.coordinatesByColor ? `[${relic.coordinatesByColor.join(', ')}]` : '-');
   html += field(ja ? 'ソートキー' : 'Sort Key', relic.sortKey);
   html += `</div>`;
 
@@ -715,7 +914,7 @@ function showDetail(relic) {
       ? (main.name_ja || main.name_en || '-')
       : (main.name_en || '-');
     html += `<div class="detail-effect">`;
-    html += `<div class="detail-effect-main">${mainName}</div>`;
+    html += `<div class="detail-effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
     html += formatStackingInfo(main.id, ja);
     for (let i = 1; i < group.length; i++) {
       const d = group[i];
@@ -723,7 +922,7 @@ function showDetail(relic) {
         ? (d.name_ja || d.name_en || '-')
         : (d.name_en || '-');
       html += `<div class="detail-effect-sub">`;
-      html += `<div class="detail-effect-debuff-name">${debuffName}</div>`;
+      html += `<div class="detail-effect-debuff-name${d.unknown ? ' unknown' : ''}">${debuffName}</div>`;
       html += formatStackingInfo(d.id, ja);
       html += `</div>`;
     }
@@ -762,9 +961,13 @@ function formatStackingInfo(effectId, ja) {
     stackLabel = ja ? '重複: ×' : 'Stacking: No';
   }
   const notes = info.stackNotes
-    ? `<span class="stacking-notes">${info.stackNotes}</span>`
+    ? `<span class="stacking-notes">${escapeHtml(info.stackNotes)}</span>`
     : '';
-  return `<div class="detail-effect-stacking">${stackLabel}${notes}</div>`;
+  // Full notes (wiki remarks, ' / '-separated) shown under the summary
+  const full = info.stackNotesFull && info.stackNotesFull !== info.stackNotes
+    ? `<div class="stacking-notes-full">${info.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`
+    : '';
+  return `<div class="detail-effect-stacking">${stackLabel}${notes}${full}</div>`;
 }
 
 // === Minimap ===
@@ -1072,12 +1275,13 @@ function buildCatalogEffects() {
     const meta = metaByKey.get(k);
     effectsByKey.set(k, {
       key: k,
-      name_ja: meta ? (meta.name_ja || meta.name_en || k) : k,
-      name_en: meta ? (meta.name_en || k) : k,
+      name_ja: meta ? (meta.name_ja || meta.name_en || k) : (ue.name_ja || k),
+      name_en: meta ? (meta.name_en || k) : (ue.name_en || k),
       category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
       deepOnly: meta ? !!meta.deepOnly : false,
       stackable: meta ? meta.stackable : undefined,
       stackNotes: meta ? (meta.stackNotes || '') : '',
+      stackNotesFull: meta ? (meta.stackNotesFull || '') : '',
       count: ue.count || 0,
     });
   }
@@ -1170,8 +1374,15 @@ function renderCatalog() {
 
       html += `</div>`;
 
+      // Stack notes (summary); full remarks open on hover (title) or tap / click
+      const hasFull = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
       if (e.stackNotes) {
-        html += `<div class="catalog-card-notes">${escapeHtml(e.stackNotes)}</div>`;
+        const title = hasFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
+        html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
+      }
+      if (hasFull) {
+        html += `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`;
+        html += `<div class="catalog-card-more">${ja ? '詳細' : 'Details'}</div>`;
       }
 
       if (hasSaveData) {
@@ -1185,6 +1396,18 @@ function renderCatalog() {
   });
 
   catalogList.innerHTML = html;
+
+  // Tap / click a card to show or hide its full remarks
+  catalogList.querySelectorAll('.catalog-card-notes-full').forEach(full => {
+    const card = full.closest('.catalog-card');
+    card.classList.add('has-full');
+    card.addEventListener('click', () => {
+      full.hidden = !full.hidden;
+      card.classList.toggle('expanded', !full.hidden);
+      const tiles = card.closest('.catalog-group-tiles');
+      if (tiles && !tiles.classList.contains('collapsed')) tiles.style.maxHeight = tiles.scrollHeight + 'px';
+    });
+  });
 
   catalogList.querySelectorAll('.catalog-group-header').forEach(header => {
     header.addEventListener('click', () => {
@@ -1562,6 +1785,10 @@ function renderTabBar() {
       tab.appendChild(errIcon);
     }
 
+    if (!info._loading && !info._error) {
+      tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('wand-sparkles', 14)}</span>`);
+    }
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = info.label;
@@ -1569,7 +1796,7 @@ function renderTabBar() {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'tab-close';
-    closeBtn.innerHTML = '&times;';
+    closeBtn.innerHTML = iconSvg('x', 12);
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeTab(tabId);
@@ -1587,6 +1814,8 @@ function renderTabBar() {
     tab.className = 'tab' + (activeTab === 'catalog' ? ' active' : '');
     tab.dataset.tab = 'catalog';
 
+    tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('book-open', 14)}</span>`);
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = ja ? '効果カタログ' : 'Effect Catalog';
@@ -1594,7 +1823,7 @@ function renderTabBar() {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'tab-close';
-    closeBtn.innerHTML = '&times;';
+    closeBtn.innerHTML = iconSvg('x', 12);
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeTab('catalog');
@@ -1668,7 +1897,7 @@ function addOptimizerTab(label, data, params) {
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
@@ -1712,7 +1941,7 @@ function addOptimizerTabLoading(label, params) {
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
@@ -1881,7 +2110,7 @@ function renderOptEffectsTags() {
       const eff = allUniqueEffects.find(e => e.key === key);
       const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
       const rankHtml = `<span class="opt-effect-rank">${idx + 1}</span>`;
-      const dragHandle = '<span class="opt-effect-drag-handle">&#x2630;</span>';
+      const dragHandle = `<span class="opt-effect-drag-handle">${iconSvg('grip-vertical', 14)}</span>`;
       html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="true">
         ${rankHtml}
         <span class="opt-effect-tag-name" title="${key}">${name}</span>
@@ -1969,6 +2198,47 @@ function attachEffectDragHandlers() {
       // Rebuild Map from DOM order and re-render
       rebuildEffectsMapFromDOM();
       renderOptEffectsTags();
+    });
+  });
+
+  // Touch / pen: drag by the handle (native drag-and-drop does not work with fingers on phones)
+  optEffectsList.querySelectorAll('.opt-effect-drag-handle').forEach(handle => {
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;   // mouse uses the native drag-and-drop above
+      e.preventDefault();
+      const tag = handle.closest('.opt-effect-tag');
+      const group = tag.closest('.opt-effect-group');
+      const cards = group.querySelector('.opt-effect-group-cards');
+      const clearMarks = () => group.querySelectorAll('.drag-over-above, .drag-over-below')
+        .forEach(el => el.classList.remove('drag-over-above', 'drag-over-below'));
+      const listeners = new AbortController();
+      let dropTarget = null;
+      let above = false;
+      tag.classList.add('dragging');
+      handle.setPointerCapture(e.pointerId);
+      handle.addEventListener('pointermove', (ev) => {
+        const el = document.elementFromPoint(ev.clientX, ev.clientY);
+        const target = el && el.closest('.opt-effect-tag');
+        clearMarks();
+        dropTarget = null;
+        if (!target || target === tag || target.closest('.opt-effect-group') !== group) return;
+        const rect = target.getBoundingClientRect();
+        above = ev.clientY < rect.top + rect.height / 2;
+        target.classList.add(above ? 'drag-over-above' : 'drag-over-below');
+        dropTarget = target;
+      }, { signal: listeners.signal });
+      const finish = () => {
+        listeners.abort();
+        tag.classList.remove('dragging');
+        clearMarks();
+        if (dropTarget) {
+          cards.insertBefore(tag, above ? dropTarget : dropTarget.nextSibling);
+          rebuildEffectsMapFromDOM();
+          renderOptEffectsTags();
+        }
+      };
+      handle.addEventListener('pointerup', finish, { signal: listeners.signal });
+      handle.addEventListener('pointercancel', finish, { signal: listeners.signal });
     });
   });
 }
@@ -2395,12 +2665,23 @@ effectSelectList.addEventListener('change', (e) => {
       select.style.visibility = 'hidden';
       item.classList.remove('checked');
     }
+    updateEffectSelectGroupCheckbox(item.closest('.inspector-group-items').dataset.cat);
   } else if (e.target.tagName === 'SELECT') {
     if (optSelectedEffects.has(key)) {
       optSelectedEffects.set(key, e.target.value);
     }
   }
 });
+
+// Category checkbox: checked when all of its effects are, "－" (indeterminate) when only some are
+function updateEffectSelectGroupCheckbox(catId) {
+  const groupCheckbox = effectSelectList.querySelector(`.inspector-group-checkbox[data-cat="${catId}"]`);
+  if (!groupCheckbox) return;
+  const items = [...effectSelectList.querySelectorAll(`.inspector-group-items[data-cat="${catId}"] .effect-select-item`)];
+  const checkedCount = items.filter(item => optSelectedEffects.has(item.dataset.key)).length;
+  groupCheckbox.checked = checkedCount > 0 && checkedCount === items.length;
+  groupCheckbox.indeterminate = checkedCount > 0 && checkedCount < items.length;
+}
 
 // Click on item text toggles checkbox; select clicks are excluded
 effectSelectList.addEventListener('click', (e) => {
@@ -2494,9 +2775,9 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     html += `<div class="opt-results-summary-info">`;
     html += `<span>${ja ? '最高スコア' : 'Best Score'}: ${best.score}</span>`;
     html += `<span>${ja ? '献器' : 'Vessel'}: ${vesselName}</span>`;
-    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? '✓' : '✗'}</span>`;
+    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14)}</span>`;
     html += `<span>${ja ? '総件数' : 'Total'}: ${flatResults.length}</span>`;
-    html += `<button class="btn-export-optimizer" data-tab="${tabId}">&#128190; ${ja ? 'エクスポート' : 'Export'}</button>`;
+    html += `<button class="btn-export-optimizer" data-tab="${tabId}">${iconSvg('file-down', 14)} ${ja ? 'エクスポート' : 'Export'}</button>`;
     html += `</div></div>`;
   }
 
@@ -2616,7 +2897,7 @@ function renderResultCard(res, ja, isBest, params, idx) {
   html += `<span class="opt-score">${ja ? 'スコア' : 'Score'}: ${res.score}</span>`;
   if (res.subScore) html += `<span class="opt-sub-score">(sub: ${res.subScore})</span>`;
   html += `<span class="opt-required-badge ${res.requiredMet ? 'met' : 'not-met'}">`;
-  html += `${res.requiredMet ? '✓' : '✗'}</span>`;
+  html += `${res.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14)}</span>`;
   html += `<span class="opt-vessel-name">${vesselName}</span>`;
   html += `</div>`;
 
@@ -2778,7 +3059,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   html += `<h3>${ja ? 'スコア情報' : 'Score Info'}</h3>`;
   html += field(ja ? 'スコア' : 'Score', res.score);
   if (res.subScore) html += field(ja ? 'サブスコア' : 'Sub Score', res.subScore);
-  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? '✓' : '✗');
+  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14));
   html += field(ja ? '献器' : 'Vessel', vesselName);
   html += `</div>`;
 
@@ -2899,7 +3180,7 @@ function renderOptDetailRelic(relic, ja) {
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
   const typeBadge = TYPE_LABELS[relic.itemType];
-  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : relic.itemType;
+  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : (relic.itemType || '-');
 
   let html = `<div class="detail-effect">`;
   html += `<div class="detail-effect-main">`;
@@ -3012,6 +3293,9 @@ tbody tr:hover { background: var(--bg-hover); }
 .effect-main { line-height: 1.6; font-size: 12px; }
 .effect-debuff { color: #e07070; font-size: 11px; line-height: 1.5; padding-left: 10px; position: relative; }
 .effect-debuff::before { content: '└'; position: absolute; left: -2px; top: -1px; color: #e07070; font-size: 11px; }
+.unknown-mark { color: #f0a830; font-weight: 600; margin-right: 4px; }
+.unknown-mark svg, .opt-required-badge svg { display: inline-block; vertical-align: -2px; }
+.effect-main.unknown, .effect-debuff.unknown { color: #f0a830; }
 /* Optimizer cards */
 .opt-results-summary {
   margin-bottom: 16px; padding: 12px 16px; background: var(--bg-secondary);
@@ -3116,7 +3400,7 @@ function buildExportHTML(title, bodyHTML, metaItems) {
 </div>
 <div class="export-meta">${metaHTML}</div>
 ${bodyHTML}
-<div class="export-footer">ERN RelicForge ${APP_NIGHTREIGN_VERSION} — Exported ${new Date().toLocaleString()}</div>
+<div class="export-footer">ERN RelicForge v${APP_VERSION} (${APP_NIGHTREIGN_VERSION}) — Exported ${new Date().toLocaleString()}</div>
 </body>
 </html>`;
 }
@@ -3151,16 +3435,16 @@ function exportRelicTableToHTML() {
     const itemName = ja
       ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
       : (relic.itemNameEn || relic.itemKey);
-    html += `<td style="font-size:12px">${itemName}</td>`;
+    html += `<td style="font-size:12px">${relic.unknown ? unknownMarkHtml() : ''}${itemName}</td>`;
     html += `<td>`;
     relic.effects.forEach(group => {
       const main = group[0];
       const mainName = ja ? (main.name_ja || main.name_en || main.key) : (main.name_en || main.key);
-      html += `<div class="effect-item"><div class="effect-main">${mainName}</div>`;
+      html += `<div class="effect-item"><div class="effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
       for (let i = 1; i < group.length; i++) {
         const d = group[i];
         const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
-        html += `<div class="effect-debuff">${dName}</div>`;
+        html += `<div class="effect-debuff${d.unknown ? ' unknown' : ''}">${dName}</div>`;
       }
       html += `</div>`;
     });

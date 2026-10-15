@@ -53,8 +53,9 @@ const PRIORITY_LABELS = {
 // PRIORITY_WEIGHTS and CONCENTRATION_BONUS are defined in relic-optimizer.js (loaded before app.js)
 
 // App metadata
-const APP_NIGHTREIGN_VERSION = 'v1.03.4';
-const APP_LAST_UPDATED = '2026-02-14';
+const APP_VERSION = '1.1.0';                        // same as gui/package.json (checked by tests)
+const APP_NIGHTREIGN_VERSION = 'Regulation 1.03.5';  // game data the relic data is checked against
+const APP_LAST_UPDATED = '2026-10-15';
 
 // === Type Display Names ===
 const TYPE_LABELS = {
@@ -67,7 +68,36 @@ const TYPE_LABELS = {
 const btnOpen = document.getElementById('btn-open');
 const btnOpenWelcome = document.getElementById('btn-open-welcome');
 const fileInput = document.getElementById('file-input');
+// Touch devices (iPhone etc.): mobile pickers map the filter to file types they know, so the
+// extension filter would hide save files (.sl2 is not a known type), and no filter makes iOS ask
+// for photos / camera first. Accept any data file (+ text for share files) instead, which opens
+// the file browser directly and lists both.
+if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+  fileInput.setAttribute('accept', 'application/octet-stream,text/plain');
+}
+// Where the downloaded save file is, per platform (the file picker cannot be told where to open).
+// iPadOS reports itself as a Mac.
+const DEVICE_KIND = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ? 'ios'
+  : /Android/.test(navigator.userAgent) ? 'android' : 'pc';
+
+// Phones / tablets keep the last loaded relics so the next visit opens without the save file
+// (re-downloading it from Steam each time is tedious). PCs read the save file directly.
+const KEEP_ON_DEVICE = DEVICE_KIND !== 'pc';
+
+function downloadedFileHint(ja) {
+  if (DEVICE_KIND === 'ios') return ja
+    ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使った項目」に表示されます。見つからないときは「ブラウズ」→「iCloud Drive」（または「このiPhone内」）→「ダウンロード」を開いてください。「↑エラー」と表示されていても（iCloud の容量不足など）、選べば読み込めます。'
+    : 'Downloaded files are listed under "Recents" in the file picker. If not, open "Browse" > "iCloud Drive" (or "On My iPhone") > "Downloads". Files marked "↑ Error" (e.g. iCloud storage full) can still be opened.';
+  if (DEVICE_KIND === 'android') return ja
+    ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使用したファイル」か「ダウンロード」にあります（画面の表示は機種によって異なります）。'
+    : 'Downloaded files are under "Recent" or "Downloads" in the file picker (names vary by device).';
+  return ja
+    ? 'ダウンロードしたファイルは、ブラウザの保存先（通常は「ダウンロード」フォルダ）にあります。'
+    : 'Downloaded files are in your browser\'s download folder (usually "Downloads").';
+}
 const headerInfo = document.getElementById('header-info');
+const headerWarning = document.getElementById('header-warning');
 const toolbar = document.getElementById('toolbar');
 const welcome = document.getElementById('welcome');
 const loading = document.getElementById('loading');
@@ -183,6 +213,7 @@ function buildStackingLookup(effectsData) {
     lookup[id] = {
       stackable: entry.stackable,
       stackNotes: entry.stackNotes || '',
+      stackNotesFull: entry.stackNotesFull || '',
       key: entry.key || '',
       name_ja: entry.name_ja || '',
       name_en: entry.name_en || '',
@@ -195,6 +226,335 @@ function buildStackingLookup(effectsData) {
 // === Init ===
 btnOpen.addEventListener('click', openFile);
 btnOpenWelcome.addEventListener('click', openFile);
+
+// === Smartphone: back gesture / swipe closes sheets and panels ===
+const mobileQuery = window.matchMedia('(max-width: 768px)');
+
+// Each open sheet / panel gets a history entry, so the back gesture (iOS edge swipe,
+// Android back button) closes it instead of leaving the page
+const backEntries = [];   // {key, close}
+const backSkips = [];     // resolvers for history entries dropped by the app itself
+function openBackEntry(key, close) {
+  if (!mobileQuery.matches || backEntries.some(e => e.key === key)) return;
+  backEntries.push({ key, close });
+  history.pushState({ relicForgePanel: key }, '');
+}
+// Closed by the app (× / backdrop): drop its history entry. Resolves once the entry is gone.
+function closeBackEntry(key) {
+  const i = backEntries.findIndex(e => e.key === key);
+  if (i < 0) return Promise.resolve();
+  backEntries.splice(i, 1);
+  return new Promise(resolve => {
+    backSkips.push(resolve);
+    history.back();
+  });
+}
+window.addEventListener('popstate', () => {
+  if (backSkips.length) {
+    backSkips.shift()();
+    return;
+  }
+  const entry = backEntries.pop();
+  if (entry) entry.close();   // its closeBackEntry() finds nothing left to drop
+});
+
+// Drag a sheet down by its header to close it
+function enableSwipeDown(sheet, handle, close) {
+  let startY = null;
+  let dy = 0;
+  const end = () => {
+    if (startY === null) return;
+    startY = null;
+    sheet.style.transition = '';
+    sheet.style.transform = '';
+    if (dy > 80) close();
+  };
+  handle.addEventListener('touchstart', (e) => {
+    if (!mobileQuery.matches || e.target.closest('button')) return;
+    startY = e.touches[0].clientY;
+    dy = 0;
+    sheet.style.transition = 'none';
+  }, { passive: true });
+  handle.addEventListener('touchmove', (e) => {
+    if (startY === null) return;
+    dy = Math.max(0, e.touches[0].clientY - startY);
+    sheet.style.transform = `translateY(${dy}px)`;
+  }, { passive: true });
+  handle.addEventListener('touchend', end);
+  handle.addEventListener('touchcancel', () => { dy = 0; end(); });
+}
+
+// Relic / build details open as a sheet over the list (tap outside, swipe down or go back to close)
+const detailBackdrop = document.getElementById('detail-backdrop');
+let closeDetailSheet = null;
+function openDetailSheet(key, close) {
+  if (!mobileQuery.matches) return;
+  detailBackdrop.classList.remove('hidden');
+  closeDetailSheet = close;
+  openBackEntry(key, close);
+}
+function hideDetailSheet(key) {
+  detailBackdrop.classList.add('hidden');
+  closeDetailSheet = null;
+  closeBackEntry(key);
+}
+detailBackdrop.addEventListener('click', () => { if (closeDetailSheet) closeDetailSheet(); });
+
+// === Smartphone menu (bottom sheet): filters, tools, loaded data, language ===
+const mobileMenu = document.getElementById('mobile-menu');
+const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+const MENU_COLOR_LABELS = {
+  Red: { ja: '赤', en: 'Red' },
+  Blue: { ja: '青', en: 'Blue' },
+  Yellow: { ja: '黄', en: 'Yellow' },
+  Green: { ja: '緑', en: 'Green' },
+};
+
+function isMobileMenuOpen() {
+  return !mobileMenu.classList.contains('hidden');
+}
+
+// A panel opened from the menu goes back to the menu when closed (× / back gesture),
+// but not when it has done its job (filter applied, search run, QR codes read)
+let menuReturnKey = null;
+function returnToMenuAfter(key, closing) {
+  if (menuReturnKey !== key) return;
+  menuReturnKey = null;
+  closing.then(() => setMobileMenu(true));
+}
+function panelDone(key) {
+  if (menuReturnKey === key) menuReturnKey = null;
+}
+
+function setMobileMenu(open) {
+  if (open === isMobileMenuOpen()) return Promise.resolve();
+  mobileMenu.classList.toggle('hidden', !open);
+  mobileMenuBackdrop.classList.toggle('hidden', !open);
+  if (!open) return closeBackEntry('menu');
+  renderMobileMenu();
+  mobileMenu.querySelector('.mm-body').scrollTop = 0;
+  openBackEntry('menu', () => setMobileMenu(false));
+  return Promise.resolve();
+}
+
+// Dot on the menu button while color / type / advanced filters are active
+function hasMenuFilters() {
+  return !!colorFilterValue || !!filterType.value || andGroups.some(g => g.size > 0);
+}
+function updateMenuBadge() {
+  document.getElementById('menu-badge').hidden = !hasMenuFilters();
+}
+
+function menuChip(value, label, selected, prefix = '') {
+  return `<button type="button" class="mm-chip${selected ? ' selected' : ''}" data-value="${value}">${prefix}${escapeHtml(label)}</button>`;
+}
+
+function renderMobileMenu() {
+  if (!isMobileMenuOpen()) return;
+  const ja = displayLang === 'ja';
+  const lang = ja ? 'ja' : 'en';
+  const setText = (id, text) => { document.getElementById(id).textContent = text; };
+  setText('mm-title', ja ? 'メニュー' : 'Menu');
+
+  // Filters (relic list only)
+  document.getElementById('mm-filter').hidden = !relicData || activeTab !== 'main';
+  setText('mm-filter-title', ja ? '絞り込み' : 'Filter');
+  setText('mm-color-label', ja ? '色' : 'Color');
+  setText('mm-type-label', ja ? 'タイプ' : 'Type');
+  setText('mm-reset-label', ja ? '解除' : 'Reset');
+  document.getElementById('mm-reset').hidden = !hasMenuFilters();
+  if (relicData) {
+    setText('mm-count', ja
+      ? `${filteredRelics.length} / ${relicData.relics.length} 件`
+      : `${filteredRelics.length} / ${relicData.relics.length}`);
+  }
+  const all = ja ? 'すべて' : 'All';
+  document.getElementById('mm-color').innerHTML = menuChip('', all, !colorFilterValue) +
+    Object.entries(MENU_COLOR_LABELS).map(([c, label]) =>
+      menuChip(c, label[lang], colorFilterValue === c, `<span class="color-badge ${c}"></span>`)).join('');
+  document.getElementById('mm-type').innerHTML = menuChip('', all, !filterType.value) +
+    Object.keys(TYPE_LABELS).map(t => menuChip(t, typeLabel(t), filterType.value === t)).join('');
+  setText('mm-advanced-label', ja ? '効果で絞り込む（高度な検索）' : 'Filter by effects (Advanced)');
+  const effectCount = andGroups.reduce((sum, g) => sum + g.size, 0);
+  const groupCount = andGroups.filter(g => g.size > 0).length;
+  setText('mm-advanced-sub', !effectCount ? '' : ja
+    ? `指定中: 効果 ${effectCount} 件${groupCount > 1 ? `（AND ${groupCount} 条件）` : ''}`
+    : `Active: ${effectCount} effects${groupCount > 1 ? ` (AND: ${groupCount} groups)` : ''}`);
+
+  // Tools (same buttons as the wide-screen toolbar)
+  setText('mm-tools-title', ja ? '機能' : 'Tools');
+  const tools = [
+    [btnOptimizer, 'wand-sparkles', ja ? '献器と遺物の組み合わせを探す' : 'Find vessel & relic sets'],
+    [btnCatalog, 'book-open', ja ? '効果の一覧と重複の可否' : 'All effects & stacking'],
+    [document.getElementById('btn-share'), 'share-2', ja ? '別の端末で開くリンク' : 'Open on another device'],
+    [btnExportTable, 'file-down', ja ? '一覧を HTML で保存' : 'Save the list as HTML'],
+  ].filter(([btn]) => !btn.classList.contains('hidden') && btn.style.display !== 'none');
+  document.getElementById('mm-tools').innerHTML = tools.map(([btn, icon, sub]) =>
+    `<button type="button" class="mm-tool" data-target="${btn.id}">${iconSvg(icon, 22)}` +
+    `<span class="mm-tool-label">${escapeHtml(btn.textContent.trim())}</span>` +
+    `<span class="mm-tool-sub">${escapeHtml(sub)}</span></button>`).join('') +
+    (CAN_SCAN_QR
+      ? `<button type="button" class="mm-tool" data-action="qr-scan">${iconSvg('scan-qr-code', 22)}` +
+        `<span class="mm-tool-label">${ja ? 'QR コードを読み取る' : 'Scan QR codes'}</span>` +
+        `<span class="mm-tool-sub">${ja ? 'PC などに表示した一覧を受け取る' : 'Receive a list shown on a PC'}</span></button>`
+      : '');
+  document.getElementById('mm-tools-section').hidden = !document.getElementById('mm-tools').children.length;
+
+  // Loaded data + saved-on-device state
+  setText('mm-data-title', ja ? '読み込んだデータ' : 'Loaded data');
+  let rows = '';
+  if (relicData) {
+    const relics = relicData.relics;
+    const count = t => relics.filter(r => r.itemType === t).length;
+    const row = (label, value, cls = '') => `<dt>${label}</dt><dd class="${cls}">${value}</dd>`;
+    rows += row(ja ? 'プレイヤー' : 'Player', escapeHtml(relicData.characterName || '-'));
+    rows += row(ja ? '遺物' : 'Relics', ja
+      ? `${relics.length} 件（通常 ${count('Relic')}・深層 ${count('DeepRelic')}・固有 ${count('UniqueRelic')}）`
+      : `${relics.length} (Relic ${count('Relic')} / Deep ${count('DeepRelic')} / Unique ${count('UniqueRelic')})`);
+    rows += row(ja ? 'ファイル' : 'File', escapeHtml(loadedFileName || '-'));
+    const unknown = relicData.unknownRelics || 0;
+    if (unknown) {
+      rows += row(ja ? '未知の遺物' : 'Unknown', iconSvg('triangle-alert', 13) +
+        (ja ? ` ${unknown} 件（ツールが未対応のデータ）` : ` ${unknown} (not supported by the tool yet)`), 'warn');
+    }
+  }
+  document.getElementById('mm-data').innerHTML = rows;
+  document.getElementById('mm-data-section').hidden = !relicData;
+  const storage = document.getElementById('mm-storage');
+  storage.hidden = !currentCache;
+  if (currentCache) {
+    const shared = !!currentCache.unsavedShare;
+    storage.innerHTML = `<span class="mm-storage-text">${iconSvg('smartphone', 14)}` +
+      `${escapeHtml(document.querySelector('#header-cache .header-cache-text').textContent)}</span>` +
+      (shared
+        ? (KEEP_ON_DEVICE ? `<button type="button" class="mm-storage-btn" data-target="header-cache-save">${iconSvg('save', 14)}${ja ? 'この端末に記録' : 'Keep'}</button>` : '')
+        : `<button type="button" class="mm-storage-btn" data-target="header-cache-delete">${ja ? '記録を消す' : 'Forget'}</button>`);
+  }
+
+  // Language
+  document.getElementById('mm-lang').innerHTML =
+    menuChip('ja', '日本語', displayLang === 'ja') + menuChip('en', 'English', displayLang === 'en');
+
+  document.getElementById('mm-footer').innerHTML =
+    `${escapeHtml(document.getElementById('header-meta-version').textContent)} · ` +
+    `${escapeHtml(document.getElementById('header-meta-updated').textContent)} · ` +
+    `by cetusk (<a href="https://github.com/cetusk/ERN_RelicForge" target="_blank" rel="noopener noreferrer">GitHub</a>)`;
+}
+
+function onMenuChip(id, handler) {
+  document.getElementById(id).addEventListener('click', (e) => {
+    const chip = e.target.closest('.mm-chip');
+    if (chip) handler(chip.dataset.value);
+  });
+}
+onMenuChip('mm-color', (value) => setColorFilter(value));
+onMenuChip('mm-type', (value) => {
+  filterType.value = value;
+  applyFilters();
+});
+onMenuChip('mm-lang', (value) => {
+  if (value === displayLang) return;
+  filterLang.value = value;
+  filterLang.dispatchEvent(new Event('change'));
+});
+document.getElementById('mm-reset').addEventListener('click', () => {
+  andGroups.forEach(g => g.clear());
+  updateInspectorButton();
+  filterType.value = '';
+  setColorFilter('');   // re-filters
+});
+// Panels opened from the menu replace it (after its history entry is gone)
+document.getElementById('mm-advanced').addEventListener('click', async () => {
+  await setMobileMenu(false);
+  menuReturnKey = 'inspector';
+  btnInspector.click();
+});
+document.getElementById('mm-tools').addEventListener('click', async (e) => {
+  const tool = e.target.closest('.mm-tool');
+  if (!tool) return;
+  await setMobileMenu(false);
+  const panels = { 'qr-scan': 'qr-scan', 'btn-optimizer': 'optimizer', 'btn-share': 'share' };
+  menuReturnKey = panels[tool.dataset.action || tool.dataset.target] || null;
+  if (tool.dataset.action === 'qr-scan') openQrScanner();
+  else document.getElementById(tool.dataset.target).click();
+});
+document.getElementById('mm-storage').addEventListener('click', (e) => {
+  const btn = e.target.closest('.mm-storage-btn');
+  if (btn) document.getElementById(btn.dataset.target).click();
+});
+
+document.getElementById('btn-mobile-menu').addEventListener('click', () => setMobileMenu(!isMobileMenuOpen()));
+document.getElementById('mm-close').addEventListener('click', () => setMobileMenu(false));
+mobileMenuBackdrop.addEventListener('click', () => setMobileMenu(false));
+enableSwipeDown(mobileMenu, mobileMenu.querySelector('.mm-head'), () => setMobileMenu(false));
+enableSwipeDown(detailPanel, detailPanel.querySelector('.detail-header'), () => closeDetail());
+mobileQuery.addEventListener('change', () => {
+  if (!mobileQuery.matches) {
+    setMobileMenu(false);
+    detailBackdrop.classList.add('hidden');
+  }
+});
+
+// === Steam Cloud guide ===
+// The save cannot be fetched from Steam directly (cross-origin + login), so the user downloads it
+// on Steam's own page and opens the downloaded file here.
+const steamGuide = document.getElementById('steam-guide');
+const steamGuideBackdrop = document.getElementById('steam-guide-backdrop');
+
+function renderSteamGuideText() {
+  const ja = displayLang === 'ja';
+  document.getElementById('steam-guide-title').textContent = ja ? 'Steam クラウドから読み込む' : 'Load from Steam Cloud';
+  document.getElementById('steam-guide-intro').textContent = ja
+    ? 'ゲームが入っていない端末（スマホなど）でも、Steam クラウドに保存されたセーブデータで遺物を確認できます。'
+    : 'View your relics on any device (e.g. a phone) using the save data stored in Steam Cloud.';
+  const steps = ja ? [
+    '「Steam のページを開く」から Steam のクラウド保存ページを開きます（初回は Steam へのログインが必要です）。',
+    '一覧の「NR0000.sl2」の「ダウンロード」を押して保存します（ファイル名は「…_NR0000.sl2」のようになります）。',
+    'このページに戻り、「ダウンロードしたファイルを選択」から保存したファイルを選びます。' + downloadedFileHint(true),
+  ] : [
+    'Open Steam\'s cloud storage page with "Open Steam page" (sign in to Steam the first time).',
+    'Tap "Download" for "NR0000.sl2" in the list (the file is saved as "…_NR0000.sl2").',
+    'Come back here and pick the downloaded file with "Select downloaded file". ' + downloadedFileHint(false),
+  ];
+  document.getElementById('steam-guide-steps').innerHTML = steps.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+  document.getElementById('steam-guide-note').textContent = ja
+    ? 'ダウンロードは Steam の公式ページで直接行うため、ログイン情報やファイルがこのアプリに送られることはありません。' +
+      (KEEP_ON_DEVICE ? '読み込んだ遺物の一覧はこの端末に記録され、次回からはページを開くだけで表示されます。' : '')
+    : 'The download happens on Steam\'s official page; your login and files are never sent to this app.' +
+      (KEEP_ON_DEVICE ? ' The relic list you load is kept on this device and shown next time you open the page.' : '');
+  document.querySelector('#steam-guide-open .btn-label').textContent = ja ? 'Steam のページを開く' : 'Open Steam page';
+  document.querySelector('#steam-guide-pick .btn-label').textContent = ja ? 'ダウンロードしたファイルを選択' : 'Select downloaded file';
+  document.getElementById('btn-steam-header-label').textContent = ja ? 'Steam クラウド' : 'Steam Cloud';
+  // Welcome screen: phones / tablets (PCs get the save-folder hint instead)
+  const hint = document.getElementById('download-file-hint');
+  hint.hidden = DEVICE_KIND === 'pc';
+  hint.textContent = downloadedFileHint(ja);
+  document.getElementById('btn-steam-welcome').querySelector('.btn-label').textContent =
+    ja ? 'Steam クラウドから読み込む' : 'Load from Steam Cloud';
+}
+
+function openSteamGuide() {
+  renderSteamGuideText();
+  steamGuide.classList.remove('hidden');
+  steamGuideBackdrop.classList.remove('hidden');
+  openBackEntry('steam-guide', closeSteamGuide);
+}
+
+function closeSteamGuide() {
+  steamGuide.classList.add('hidden');
+  steamGuideBackdrop.classList.add('hidden');
+  closeBackEntry('steam-guide');
+}
+
+document.getElementById('btn-steam-header').addEventListener('click', openSteamGuide);
+document.getElementById('btn-steam-welcome').addEventListener('click', openSteamGuide);
+document.getElementById('steam-guide-close').addEventListener('click', closeSteamGuide);
+steamGuideBackdrop.addEventListener('click', closeSteamGuide);
+document.getElementById('steam-guide-pick').addEventListener('click', () => {
+  closeSteamGuide();
+  openFile();
+});
+renderSteamGuideText();
 searchInput.addEventListener('input', () => {
   searchClear.classList.toggle('hidden', !searchInput.value);
   applyFilters();
@@ -214,8 +574,11 @@ colorSelectBtn.addEventListener('click', (e) => {
 });
 colorSelectDropdown.addEventListener('mousedown', (e) => {
   const opt = e.target.closest('.custom-select-option');
-  if (!opt) return;
-  colorFilterValue = opt.dataset.value;
+  if (opt) setColorFilter(opt.dataset.value);
+});
+
+function setColorFilter(value) {
+  colorFilterValue = value;
   // Update button label with badge
   if (colorFilterValue) {
     colorSelectLabel.innerHTML =
@@ -228,16 +591,20 @@ colorSelectDropdown.addEventListener('mousedown', (e) => {
     o.classList.toggle('selected', o.dataset.value === colorFilterValue));
   colorSelectDropdown.classList.add('hidden');
   applyFilters();
-});
+}
 document.addEventListener('click', () => colorSelectDropdown.classList.add('hidden'));
 filterType.addEventListener('change', applyFilters);
 detailClose.addEventListener('click', closeDetail);
 filterLang.addEventListener('change', () => {
   displayLang = filterLang.value;
   updateLangUI();
+  renderTabBar();   // tab labels (catalog etc.) follow the language
+  updateCacheInfo(currentCache);
+  renderSteamGuideText();
+  renderShareDialogText();
   renderTable();
   updateHeaderInfo();
-  updateResultCount();
+  updateResultCount();   // also re-renders the phone menu
   // Re-render detail if open
   if (selectedRelicId) {
     const relic = filteredRelics.find(r => r.id === selectedRelicId);
@@ -269,6 +636,14 @@ fileInput.addEventListener('change', async (e) => {
   if (!file) return;
   loadedFileName = file.name;
   try {
+    // Share file (text containing a share link) instead of a save file
+    if (file.size < 1024 * 1024 && /\.txt$/i.test(file.name)) {
+      const token = findRelicShareToken(await file.text());
+      if (!token) throw new Error(displayLang === 'ja' ? '共有データが見つかりません' : 'No share data found');
+      await openSharedRelics(token);
+      fileInput.value = '';
+      return;
+    }
     const arrayBuffer = await file.arrayBuffer();
     await loadAndDisplay(arrayBuffer);
   } catch (err) {
@@ -284,46 +659,617 @@ async function loadAndDisplay(arrayBuffer) {
     if (!itemsData || !effectsData) {
       await loadResources();
     }
-    relicData = parseSaveFile(arrayBuffer, itemsData, effectsData);
-    stackingLookup = buildStackingLookup(effectsData);
-    buildSearchTerms();
-    buildUniqueEffects();
-    andGroups.forEach(g => g.clear());
-    updateHeaderInfo();
-    toolbar.classList.remove('hidden');
-    btnInspector.classList.remove('hidden');
-    btnOptimizer.classList.remove('hidden');
-    btnCatalog.classList.remove('hidden');
-    btnExportTable.classList.remove('hidden');
-    tabBar.classList.remove('hidden');
-    updateInspectorButton();
-    updateOptimizerButton();
-    sortColumn = 'sortKey';
-    sortDirection = 'desc';
-    updateSortIndicators();
-    applyFilters();
-    // Update catalog if open
-    if (catalogTabOpen && activeTab === 'catalog') {
-      renderCatalog();
+    const { characterName, relics } = extractRelics(arrayBuffer, itemsData, effectsData);
+    const cache = {
+      fileName: loadedFileName,
+      characterName,
+      relics: compactRelics(relics),
+      loadedAt: new Date().toISOString(),
+    };
+    updateCacheInfo(null);   // until this file is kept on the device
+    displayRelicData(cache);
+    // Phones: keep the relics on this device so the next visit opens instantly
+    if (KEEP_ON_DEVICE) {
+      saveRelicCache(cache).then(() => updateCacheInfo(cache)).catch(err => {
+        console.warn('Could not keep relic data on this device:', err);
+      });
     }
-    showView('content');
   } catch (err) {
     alert(`解析エラー:\n${err}`);
     showView('welcome');
   }
 }
 
+// Show relics from a stored / freshly parsed compact record
+function displayRelicData(record) {
+  shownRecord = record;
+  loadedFileName = record.fileName || loadedFileName;
+  relicData = buildRelicData(record.characterName, expandRelics(record.relics), itemsData, effectsData);
+  stackingLookup = buildStackingLookup(effectsData);
+  buildSearchTerms();
+  buildUniqueEffects();
+  andGroups.forEach(g => g.clear());
+  updateHeaderInfo();
+  toolbar.classList.remove('hidden');
+  btnInspector.classList.remove('hidden');
+  btnOptimizer.classList.remove('hidden');
+  btnCatalog.classList.remove('hidden');
+  btnExportTable.classList.remove('hidden');
+  document.getElementById('btn-share').classList.remove('hidden');
+  tabBar.classList.remove('hidden');
+  updateInspectorButton();
+  updateOptimizerButton();
+  sortColumn = 'sortKey';
+  sortDirection = 'desc';
+  updateSortIndicators();
+  applyFilters();
+  // Update catalog if open
+  if (catalogTabOpen && activeTab === 'catalog') {
+    renderCatalog();
+  }
+  showView('content');
+}
+
 // === Folder Auto-Load (File System Access API — Chrome / Edge only) ===
+// Browser storage for this app only (IndexedDB database "ERNRelicForge"):
+//   settings   - folder handle for auto-load (Chrome / Edge)
+//   relicCache - last loaded relics (IDs only; no save file, no Steam ID)
 const DB_NAME = 'ERNRelicForge';
+const DB_VERSION = 2;
 const STORE_NAME = 'settings';
+const CACHE_STORE = 'relicCache';
+const CACHE_KEY = 'lastLoaded';
+const CACHE_FORMAT = 1;
 
 function openDB() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(STORE_NAME);
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+      if (!db.objectStoreNames.contains(CACHE_STORE)) db.createObjectStore(CACHE_STORE);
+    };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
+}
+
+async function cacheStoreRequest(mode, fn) {
+  const db = await openDB();
+  const tx = db.transaction(CACHE_STORE, mode);
+  const req = fn(tx.objectStore(CACHE_STORE));
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve(req.result);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function saveRelicCache(record) {
+  return cacheStoreRequest('readwrite', store => store.put({ format: CACHE_FORMAT, ...record }, CACHE_KEY));
+}
+
+async function loadRelicCache() {
+  const record = await cacheStoreRequest('readonly', store => store.get(CACHE_KEY));
+  return record && record.format === CACHE_FORMAT && Array.isArray(record.relics) ? record : null;
+}
+
+function deleteRelicCache() {
+  return cacheStoreRequest('readwrite', store => store.delete(CACHE_KEY));
+}
+
+let currentCache = null;   // record in the header note (saved on this device, or opened from a share link)
+let shownRecord = null;    // record of the relics shown now (source for share links)
+
+function formatLoadedAt(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+// Header note: "Saved on this device (loaded at ...)" + delete button
+function updateCacheInfo(record) {
+  currentCache = record;
+  const el = document.getElementById('header-cache');
+  if (!el) return;
+  if (!record) {
+    el.hidden = true;
+    renderMobileMenu();
+    return;
+  }
+  const ja = displayLang === 'ja';
+  const when = formatLoadedAt(record.loadedAt);
+  const shared = !!record.unsavedShare;
+  el.querySelector('.header-cache-text').textContent = shared
+    ? (ja ? '共有リンクで開いた一覧' : 'Opened from a share link')
+    : (ja ? `${when} に読み込んだ一覧をこの端末に記録中` : `List loaded ${when}, kept on this device`);
+  document.getElementById('header-cache-save').hidden = !shared || !KEEP_ON_DEVICE;
+  document.getElementById('header-cache-save-label').textContent = ja ? 'この端末に記録' : 'Keep on this device';
+  document.getElementById('header-cache-delete').hidden = shared;
+  document.getElementById('header-cache-delete-label').textContent = ja ? '記録を消す' : 'Forget';
+  el.querySelector('.header-cache-delete').title = ja
+    ? 'このアプリが記録した遺物の一覧を消します（ゲームのセーブデータには影響しません）'
+    : 'Forget the relic list this app keeps (your game save is not affected)';
+  el.hidden = false;
+  renderMobileMenu();
+}
+
+// Keep relics opened from a share link / QR code (replaces the list kept on this device)
+document.getElementById('header-cache-save').addEventListener('click', () => {
+  const ja = displayLang === 'ja';
+  if (!currentCache) return;
+  if (!confirm(ja
+    ? 'この共有された一覧をこの端末に記録しますか？\n（すでに記録している一覧は置き換わります。ゲームのセーブデータには影響しません）'
+    : 'Keep this shared list on this device?\n(It replaces the list kept before. Your game save is not affected.)')) return;
+  keepSharedOnDevice();
+});
+
+async function keepSharedOnDevice() {
+  const ja = displayLang === 'ja';
+  const { unsavedShare, ...record } = currentCache;
+  try {
+    await saveRelicCache(record);
+    updateCacheInfo(record);
+  } catch (err) {
+    alert(`${ja ? '記録できませんでした' : 'Could not keep the list'}: ${err}`);
+  }
+}
+
+document.getElementById('header-cache-delete').addEventListener('click', async () => {
+  const ja = displayLang === 'ja';
+  if (!confirm(ja
+    ? 'このアプリがこの端末に記録した遺物の一覧を消しますか？\n\n・ゲームのセーブデータ（.sl2）や Steam クラウドのデータは消えません\n・次回は、セーブファイルを選び直すと表示されます\n・表示中の一覧は、ページを閉じるまでそのまま表示されます'
+    : 'Forget the relic list this app keeps on this device?\n\n- Your game save (.sl2) and Steam Cloud data are NOT deleted\n- Next time, open the save file again to see your relics\n- The list shown now stays until you close the page')) return;
+  try {
+    await deleteRelicCache();
+    updateCacheInfo(null);
+  } catch (err) {
+    alert(`${ja ? '記録を消せませんでした' : 'Could not forget the list'}: ${err}`);
+  }
+});
+
+// === Share links ===
+// Open relics from a share token (URL "#r=..." or a share file). Not saved automatically.
+async function openSharedRelics(token) {
+  const ja = displayLang === 'ja';
+  try {
+    if (!itemsData || !effectsData) await loadResources();
+    const { characterName, relics } = await decodeRelicShare(token);
+    const record = {
+      fileName: ja ? '共有リンク' : 'Shared link',
+      characterName: characterName || (ja ? '（非表示）' : '(hidden)'),
+      relics,
+      loadedAt: new Date().toISOString(),
+      unsavedShare: true,
+    };
+    displayRelicData(record);
+    updateCacheInfo(record);
+    return true;
+  } catch (err) {
+    alert(ja ? `共有リンクを読み込めませんでした。\nリンクが途中で切れている可能性があります。\n(${err.message || err})`
+             : `Could not open the share link.\nThe link may have been cut off.\n(${err.message || err})`);
+    return false;
+  }
+}
+
+window.addEventListener('hashchange', () => {
+  const token = findRelicShareToken(location.hash);
+  if (token) openSharedRelics(token);
+});
+
+const shareDialog = document.getElementById('share-dialog');
+const shareBackdrop = document.getElementById('share-backdrop');
+const shareUrlInput = document.getElementById('share-url');
+let shareUrl = '';
+
+function shareBaseUrl() {
+  return location.protocol.startsWith('http') ? location.origin + location.pathname : SHARE_PUBLIC_URL;
+}
+
+function renderShareDialogText() {
+  const ja = displayLang === 'ja';
+  const count = relicData ? relicData.relics.length : 0;
+  document.getElementById('share-title').textContent = ja ? '共有リンク' : 'Share link';
+  document.getElementById('share-intro').textContent = ja
+    ? `表示中の遺物データ（${count}件）を、リンクやファイルで別の端末に渡せます。リンクを開くと、セーブファイルなしで同じ一覧を表示できます。`
+    : `Pass the relics shown now (${count}) to another device as a link or a file. Opening the link shows the same list without the save file.`;
+  document.getElementById('share-include-name-label').textContent = ja ? 'キャラクター名を含める' : 'Include character name';
+  document.getElementById('share-note').textContent = ja
+    ? 'データはリンクの「#」以降に含まれ、Web サーバーには送信されません。遺物の固有 ID と取得順の番号は含まれません（並び順は保持されます）。メッセージアプリによっては長いリンクが途中で切れることがあります（例: LINE は 1 万文字まで）。その場合は「ファイルで共有」を使い、受け取った側は「ファイルを開く」でそのファイルを選んでください。'
+    : 'The data is in the part after "#" and is never sent to the web server. Relic IDs and acquisition numbers are not included (the order is kept). Some messaging apps cut long links; in that case use "Share as file" and open the file with "Open File" on the other device.';
+  document.querySelector('#share-copy .btn-label').textContent = ja ? 'リンクをコピー' : 'Copy link';
+  document.querySelector('#share-native .btn-label').textContent = ja ? '共有…' : 'Share…';
+  document.querySelector('#share-file .btn-label').textContent = ja ? 'ファイルで共有' : 'Share as file';
+  document.querySelector('#share-qr .btn-label').textContent = ja ? 'QR コードで渡す' : 'Show QR codes';
+  document.getElementById('btn-share-label').textContent = ja ? '共有' : 'Share';
+  if (shareUrl) {
+    document.getElementById('share-length').textContent = ja
+      ? `リンクの長さ: ${shareUrl.length.toLocaleString()} 文字`
+      : `Link length: ${shareUrl.length.toLocaleString()} characters`;
+  }
+}
+
+async function buildShareUrl() {
+  const record = shownRecord;
+  const token = await encodeRelicShare(
+    { characterName: record.characterName, relics: record.relics },
+    { includeName: document.getElementById('share-include-name').checked });
+  shareUrl = relicShareUrl(shareBaseUrl(), token);
+  shareUrlInput.value = shareUrl;
+  renderShareDialogText();
+}
+
+async function openShareDialog() {
+  if (!relicData || !shownRecord) return;
+  shareUrl = '';
+  shareUrlInput.value = '';
+  document.getElementById('share-native').hidden = !navigator.share;
+  renderShareDialogText();
+  shareDialog.classList.remove('hidden');
+  shareBackdrop.classList.remove('hidden');
+  openBackEntry('share', closeShareDialog);
+  try {
+    await buildShareUrl();
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? '共有リンクを作成できませんでした' : 'Could not create the share link'}: ${err.message || err}`);
+    closeShareDialog();
+  }
+}
+
+function closeShareDialog() {
+  shareDialog.classList.add('hidden');
+  shareBackdrop.classList.add('hidden');
+  returnToMenuAfter('share', closeBackEntry('share'));
+}
+
+function shareFileName() {
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  return `ERN_RelicForge_share_${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.txt`;
+}
+
+function shareFileText() {
+  const ja = displayLang === 'ja';
+  return (ja
+    ? 'ERN RelicForge 共有データ\nこのファイルを ERN RelicForge の「ファイルを開く」で選ぶか、下のリンクを開いてください。\n\n'
+    : 'ERN RelicForge share data\nOpen this file with "Open File" in ERN RelicForge, or open the link below.\n\n') + shareUrl + '\n';
+}
+
+document.getElementById('btn-share').addEventListener('click', openShareDialog);
+document.getElementById('share-close').addEventListener('click', closeShareDialog);
+shareBackdrop.addEventListener('click', closeShareDialog);
+document.getElementById('share-include-name').addEventListener('change', () => {
+  buildShareUrl().catch(err => alert(err.message || err));
+});
+shareUrlInput.addEventListener('focus', () => shareUrlInput.select());
+document.getElementById('share-copy').addEventListener('click', async () => {
+  const ja = displayLang === 'ja';
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    alert(ja ? 'リンクをコピーしました' : 'Link copied');
+  } catch (_) {
+    shareUrlInput.focus();
+    shareUrlInput.select();
+    alert(ja ? 'コピーできませんでした。選択されたリンクを手動でコピーしてください。' : 'Could not copy. Please copy the selected link manually.');
+  }
+});
+document.getElementById('share-native').addEventListener('click', async () => {
+  try {
+    await navigator.share({ title: 'ERN RelicForge', url: shareUrl });
+  } catch (_) { /* cancelled */ }
+});
+document.getElementById('share-file').addEventListener('click', async () => {
+  const file = new File([shareFileText()], shareFileName(), { type: 'text/plain' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'ERN RelicForge' });
+      return;
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+    }
+  }
+  const url = URL.createObjectURL(file);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = file.name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+// === QR code transfer ===
+// Sender: the share token split into frames, shown one after another (a link is too long for one QR code)
+const qrShow = document.getElementById('qr-show');
+const qrShowBackdrop = document.getElementById('qr-show-backdrop');
+const QR_SPEEDS = [['slow', 800], ['normal', 400], ['fast', 250]];
+let qrSender = null;   // endless stream of frames (fountain code: any frames will do)
+let qrShowSeq = 1;
+let qrShowTimer = null;
+let qrShowSpeed = 'normal';
+
+// Large codes let the phone stay farther from the screen, where it focuses more easily
+function qrShowSize() {
+  return Math.max(200, Math.min(560, window.innerWidth - 64, window.innerHeight - 200));
+}
+
+function renderQrShowText() {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-show-title').textContent = ja ? 'QR コードで渡す' : 'Pass with QR codes';
+  const steps = ja ? [
+    'スマホで ERN RelicForge を開きます（下の小さな QR コードをカメラで読み取ると開けます）。',
+    'スマホの［QR コードを読み取る］（最初の画面、またはメニュー「≡」）を押し、この画面の QR コードを映します。',
+    `QR コードは自動で切り替わります。どの QR コードから読み取っても構いません。約 ${qrSender.blocks} 枚分を読み取ると、スマホに一覧が表示されます。`,
+  ] : [
+    'Open ERN RelicForge on the phone (scan the small QR code below with the camera to open it).',
+    'Tap "Scan QR codes" on the phone (welcome screen or the "≡" menu) and point it at this screen.',
+    `The QR codes change automatically; any of them will do. After about ${qrSender.blocks} have been read, the list appears on the phone.`,
+  ];
+  document.getElementById('qr-show-steps').innerHTML = steps.map(t => `<li>${escapeHtml(t)}</li>`).join('');
+  document.getElementById('qr-app-text').textContent = ja ? 'アプリを開く' : 'Open the app';
+  document.getElementById('qr-speed-label').textContent = ja ? '切り替え速度:' : 'Speed:';
+  const speedLabels = ja ? { slow: '遅い', normal: '普通', fast: '速い' } : { slow: 'Slow', normal: 'Normal', fast: 'Fast' };
+  document.getElementById('qr-speed').innerHTML = QR_SPEEDS.map(([key]) =>
+    `<button type="button" class="qr-speed-option${key === qrShowSpeed ? ' selected' : ''}" data-speed="${key}">${speedLabels[key]}</button>`).join('');
+}
+
+function showNextQrFrame() {
+  if (!qrSender) return;
+  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrSender.frame(qrShowSeq), qrShowSize());
+  qrShowSeq++;
+}
+
+function startQrShowTimer() {
+  clearInterval(qrShowTimer);
+  const ms = QR_SPEEDS.find(([key]) => key === qrShowSpeed)[1];
+  qrShowTimer = setInterval(showNextQrFrame, ms);
+}
+
+function openQrShow() {
+  const token = findRelicShareToken(shareUrl);
+  if (!token) return;
+  qrSender = createRelicShareQrSender(token);
+  qrShowSeq = 1;
+  renderQrShowText();
+  qrShow.classList.remove('hidden');
+  qrShowBackdrop.classList.remove('hidden');
+  drawRelicShareQr(document.getElementById('qr-app-canvas'), shareBaseUrl(), 96);
+  showNextQrFrame();
+  startQrShowTimer();
+  openBackEntry('qr-show', closeQrShow);
+}
+
+function closeQrShow() {
+  clearInterval(qrShowTimer);
+  qrShowTimer = null;
+  qrShow.classList.add('hidden');
+  qrShowBackdrop.classList.add('hidden');
+  closeBackEntry('qr-show');
+}
+
+document.getElementById('share-qr').addEventListener('click', openQrShow);
+document.getElementById('qr-show-close').addEventListener('click', closeQrShow);
+qrShowBackdrop.addEventListener('click', closeQrShow);
+document.getElementById('qr-speed').addEventListener('click', (e) => {
+  const btn = e.target.closest('.qr-speed-option');
+  if (!btn) return;
+  qrShowSpeed = btn.dataset.speed;
+  renderQrShowText();
+  startQrShowTimer();
+});
+
+// Receiver (phones / tablets): read the frames with the camera. The reader (ZXing, WebAssembly) loads on first use.
+const qrScan = document.getElementById('qr-scan');
+const qrScanVideo = document.getElementById('qr-scan-video');
+const qrCollector = new RelicShareQrCollector();
+const CAN_SCAN_QR = DEVICE_KIND !== 'pc' && window.isSecureContext &&
+  !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+let qrScanStream = null;
+let qrScanCanvas = null;
+// Keep the phone cool: frames change every 0.25 s at the fastest, so a few decodes per frame are enough,
+// and the camera stops when nothing is found for a while or the page is hidden
+const QR_SCAN_INTERVAL_MS = 80;     // at most ~12 decodes per second
+const QR_SCAN_IDLE_MS = 60000;      // pause after a minute without any QR code
+let qrScanLastFound = 0;
+// "?qrdebug" in the URL: show camera size / decode rate under the scanner (for checking on real phones)
+const QR_DEBUG = /[?&]qrdebug\b/.test(location.search);
+let qrScanStats = null;
+
+let qrReaderReady = null;
+function loadQrReader() {
+  if (!qrReaderReady) {
+    qrReaderReady = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'lib/zxing/zxing-reader.js';
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('lib/zxing/zxing-reader.js'));
+      document.head.appendChild(script);
+    }).then(() => ZXingWASM.prepareZXingModule({
+      overrides: {
+        locateFile: (file, prefix) => (file.endsWith('.wasm') ? new URL(`lib/zxing/${file}`, location.href).href : prefix + file),
+      },
+      fireImmediately: true,
+    }));
+    qrReaderReady.catch(() => { qrReaderReady = null; });
+  }
+  return qrReaderReady;
+}
+
+function renderQrScanStatus(message) {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-scan-title').textContent = ja ? 'QR コードを読み取る' : 'Scan QR codes';
+  const total = qrCollector.total;
+  document.getElementById('qr-scan-bar-fill').style.width = total ? `${Math.round(qrCollector.received * 100 / total)}%` : '0';
+  document.getElementById('qr-scan-text').textContent = message || (total
+    ? (ja ? `読み取り中… ${qrCollector.received} / ${total}（そのまま映し続けてください）`
+          : `Reading… ${qrCollector.received} / ${total} (keep pointing at the screen)`)
+    : (ja ? 'PC などで［共有］→［QR コードで渡す］を開き、表示された QR コードを映してください。'
+          : 'On the other device, open "Share" > "Show QR codes" and point the camera at it.'));
+}
+
+function openQrScanner() {
+  qrCollector.reset();
+  qrScan.classList.remove('hidden');
+  openBackEntry('qr-scan', closeQrScanner);
+  startQrCamera();
+}
+
+// Start (or resume) the camera; what was read so far is kept
+async function startQrCamera() {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-scan-resume').hidden = true;
+  renderQrScanStatus(ja ? 'カメラを起動しています…' : 'Starting the camera…');
+  try {
+    await loadQrReader();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false,
+    });
+    if (qrScan.classList.contains('hidden')) {   // closed while starting
+      stream.getTracks().forEach(t => t.stop());
+      return;
+    }
+    qrScanStream = stream;
+    qrScanVideo.srcObject = stream;
+    await qrScanVideo.play();
+    qrScanLastFound = performance.now();
+    renderQrScanStatus();
+    scanQrFrames();
+  } catch (err) {
+    const denied = err && (err.name === 'NotAllowedError' || err.name === 'SecurityError');
+    renderQrScanStatus(denied
+      ? (ja ? 'カメラを使えません。ブラウザの設定でこのページのカメラを許可してください。' : 'Camera access was denied. Allow the camera for this page in the browser settings.')
+      : `${ja ? 'カメラを起動できませんでした' : 'Could not start the camera'}: ${err.message || err}`);
+  }
+}
+
+// Decode the camera picture over and over (one at a time) until the transfer is complete
+async function scanQrFrames() {
+  const stream = qrScanStream;
+  while (qrScanStream === stream) {
+    const started = performance.now();
+    if (started - qrScanLastFound > QR_SCAN_IDLE_MS) {
+      pauseQrScanner();
+      return;
+    }
+    const w = qrScanVideo.videoWidth;
+    const h = qrScanVideo.videoHeight;
+    if (w && h) {
+      // Only the middle of the picture (where the guide square is): less to decode, no background clutter
+      const side = Math.round(Math.min(w, h) * 0.9);
+      if (!qrScanCanvas) qrScanCanvas = document.createElement('canvas');
+      qrScanCanvas.width = side;
+      qrScanCanvas.height = side;
+      const ctx = qrScanCanvas.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(qrScanVideo, (w - side) / 2, (h - side) / 2, side, side, 0, 0, side, side);
+      const t0 = performance.now();
+      let text = null;
+      try {
+        const results = await ZXingWASM.readBarcodes(ctx.getImageData(0, 0, side, side),
+          { formats: ['QRCode'], maxNumberOfSymbols: 1 });
+        if (results.length && results[0].isValid) text = results[0].text;
+      } catch (err) {
+        console.warn('QR decode failed:', err);
+      }
+      if (qrScanStream !== stream) return;
+      if (QR_DEBUG) updateQrScanStats(w, h, side, performance.now() - t0, !!text);
+      if (text) {
+        qrScanLastFound = performance.now();
+        const before = qrCollector.received;
+        const result = qrCollector.add(text);
+        if (result.state === 'done') {
+          finishQrScan(result.token);
+          return;
+        }
+        if (qrCollector.received !== before || result.total !== qrCollector.total) renderQrScanStatus();
+      }
+    }
+    const wait = QR_SCAN_INTERVAL_MS - (performance.now() - started);
+    await new Promise(resolve => setTimeout(resolve, Math.max(0, wait)));
+  }
+}
+
+// Stop the camera but keep the scanner (and what was read) open, with a resume button
+function pauseQrScanner() {
+  if (!qrScanStream) return;
+  const ja = displayLang === 'ja';
+  stopQrCamera();
+  renderQrScanStatus(ja
+    ? '電池の消耗を防ぐため、カメラを一時停止しました。読み取り済みの分は残っています。'
+    : 'The camera was paused to save battery. What was read so far is kept.');
+  const resume = document.getElementById('qr-scan-resume');
+  resume.querySelector('.btn-label').textContent = ja ? '再開' : 'Resume';
+  resume.hidden = false;
+}
+
+function updateQrScanStats(w, h, side, ms, found) {
+  const now = performance.now();
+  if (!qrScanStats) qrScanStats = { since: now, tries: 0, found: 0, ms: 0 };
+  const s = qrScanStats;
+  s.tries++;
+  s.ms += ms;
+  if (found) s.found++;
+  if (now - s.since < 1000) return;
+  let el = document.getElementById('qr-scan-debug');
+  if (!el) {
+    el = document.createElement('p');
+    el.id = 'qr-scan-debug';
+    el.className = 'qr-scan-debug';
+    document.querySelector('.qr-scan-status').appendChild(el);
+  }
+  el.textContent = `camera ${w}x${h} / decode ${side}px: ${(s.tries * 1000 / (now - s.since)).toFixed(1)} tries/s, ` +
+    `${(s.ms / s.tries).toFixed(0)} ms each, found ${s.found}/${s.tries}`;
+  qrScanStats = { since: now, tries: 0, found: 0, ms: 0 };
+}
+
+function stopQrCamera() {
+  if (qrScanStream) qrScanStream.getTracks().forEach(t => t.stop());
+  qrScanStream = null;
+  qrScanVideo.srcObject = null;
+}
+
+function closeQrScanner() {
+  stopQrCamera();
+  qrScan.classList.add('hidden');
+  const closing = closeBackEntry('qr-scan');
+  returnToMenuAfter('qr-scan', closing);
+  return closing;
+}
+
+async function finishQrScan(token) {
+  const ja = displayLang === 'ja';
+  panelDone('qr-scan');
+  await closeQrScanner();
+  if (!(await openSharedRelics(token))) return;
+  if (KEEP_ON_DEVICE && confirm(ja
+    ? `${relicData.relics.length} 件の遺物を読み込みました。\nこの一覧をこの端末に記録しますか？（次回からはページを開くだけで表示されます）`
+    : `Loaded ${relicData.relics.length} relics.\nKeep this list on this device? (It opens automatically next time.)`)) {
+    keepSharedOnDevice();
+  }
+}
+
+document.getElementById('qr-scan-close').addEventListener('click', closeQrScanner);
+document.getElementById('qr-scan-resume').addEventListener('click', startQrCamera);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseQrScanner();   // another app / screen off
+});
+document.getElementById('btn-qr-welcome').addEventListener('click', openQrScanner);
+document.getElementById('btn-qr-welcome').hidden = !CAN_SCAN_QR;
+
+// Open the relics stored on this device (on page load)
+async function tryRestoreRelicCache() {
+  try {
+    if (!KEEP_ON_DEVICE) {
+      await deleteRelicCache();   // PCs keep nothing (drops a record left by an earlier version)
+      return;
+    }
+    const record = await loadRelicCache();
+    if (!record || relicData) return;
+    if (!itemsData || !effectsData) await loadResources();
+    if (relicData) return;   // a file was opened meanwhile
+    displayRelicData(record);
+    updateCacheInfo(record);
+  } catch (err) {
+    console.warn('Could not restore relic data saved on this device:', err);
+  }
 }
 
 async function saveDirHandle(handle) {
@@ -532,7 +1478,8 @@ function updateLangUI() {
   document.getElementById('welcome-msg').textContent = ja
     ? 'セーブファイル (.sl2 / .bak) を選択して遺物を確認'
     : 'Open a save file (.sl2 / .bak) to view relics';
-  document.getElementById('btn-open-welcome').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  document.getElementById('btn-open-welcome').querySelector('.btn-label').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  document.getElementById('btn-qr-welcome').querySelector('.btn-label').textContent = ja ? 'QR コードを読み取る' : 'Scan QR codes';
   const pathHintLabel = document.getElementById('path-hint-label');
   if (pathHintLabel) pathHintLabel.textContent = ja
     ? 'セーブファイルの場所 — エクスプローラーのアドレスバーに貼り付けて開けます:'
@@ -544,8 +1491,8 @@ function updateLangUI() {
   document.getElementById('drop-zone-msg').textContent = ja ? '.sl2 / .bak ファイルをここにドロップ' : 'Drop .sl2 / .bak file here';
   // Header meta
   document.getElementById('header-meta-version').textContent = ja
-    ? `Nightreign ${APP_NIGHTREIGN_VERSION} 対応`
-    : `Nightreign ${APP_NIGHTREIGN_VERSION}`;
+    ? `${APP_NIGHTREIGN_VERSION} 対応`
+    : `${APP_NIGHTREIGN_VERSION}`;
   document.getElementById('header-meta-updated').textContent = ja
     ? `最終更新: ${APP_LAST_UPDATED}`
     : `Updated: ${APP_LAST_UPDATED}`;
@@ -554,7 +1501,7 @@ function updateLangUI() {
   // Toolbar labels
   document.getElementById('label-color').textContent = ja ? '色:' : 'Color:';
   document.getElementById('label-type').textContent = ja ? 'タイプ:' : 'Type:';
-  document.getElementById('label-lang').textContent = ja ? '言語:' : 'Lang:';
+  document.getElementById('label-lang').textContent = ja ? '言語 / Language:' : 'Language:';
   // Search placeholder
   searchInput.placeholder = ja
     ? '効果名で検索 (日本語 / English)...'
@@ -580,8 +1527,8 @@ function updateLangUI() {
   document.getElementById('inspector-title').textContent = ja ? '高度な検索' : 'Advanced Search';
   document.getElementById('inspector-effect-label').textContent = ja ? '効果フィルター' : 'Effect Filter';
   inspectorSearch.placeholder = ja ? '効果名で絞り込み...' : 'Filter effects...';
-  inspectorClear.textContent = ja ? 'クリア' : 'Clear';
-  inspectorApply.textContent = ja ? '適用' : 'Apply';
+  inspectorClear.querySelector('.btn-label').textContent = ja ? 'クリア' : 'Clear';
+  inspectorApply.querySelector('.btn-label').textContent = ja ? '適用' : 'Apply';
   updateInspectorButton();
   updateInspectorCount();
   if (inspector.classList.contains('open')) renderInspectorEffects();
@@ -603,11 +1550,31 @@ function updateHeaderInfo() {
   const fileLabel = ja ? 'ファイル' : 'File';
   headerInfo.textContent =
     `${playerLabel}: ${relicData.characterName} | ${totalLabel}: ${total}  (${normalLabel}: ${normal} / ${deepLabel}: ${deep} / ${uniqueLabel}: ${unique}) | ${fileLabel}: ${loadedFileName}`;
+
+  // Warn when relics contain items/effects missing from the data files
+  const unknown = relicData.unknownRelics || 0;
+  headerWarning.hidden = unknown === 0;
+  if (unknown > 0) {
+    headerWarning.innerHTML = iconSvg('triangle-alert', 13) + (ja
+      ? ` 未知の遺物: ${unknown}件`
+      : ` Unknown relics: ${unknown}`);
+    headerWarning.title = ja
+      ? 'データに無いアイテム・効果を含む遺物があります（「未知の効果 (ID: …)」等と表示）。ゲームのアップデートにツールが未対応の可能性があります。'
+      : 'Some relics contain items/effects missing from the data files (shown as "Unknown Effect (ID: …)" etc.). The tool may not support the latest game update yet.';
+  }
+}
+
+// Warning mark for relics containing items/effects missing from the data files
+function unknownMarkHtml() {
+  const tip = displayLang === 'ja'
+    ? 'データに無いアイテム・効果を含む遺物'
+    : 'Contains items/effects missing from the data files';
+  return `<span class="unknown-mark" title="${tip}">${iconSvg('triangle-alert', 13)}</span>`;
 }
 
 function typeLabel(itemType) {
   const entry = TYPE_LABELS[itemType];
-  return entry ? entry[displayLang] : itemType;
+  return entry ? entry[displayLang] : (itemType || '-');
 }
 
 // === Result Count ===
@@ -625,6 +1592,7 @@ function updateResultCount() {
   const uniqueLabel = ja ? '固有' : 'Unique';
   resultCount.textContent =
     `${hit} ${hitLabel}(${normalLabel}: ${nR} / ${deepLabel}: ${nD} / ${uniqueLabel}: ${nU})`;
+  renderMobileMenu();
 }
 
 // === Search Suggestions ===
@@ -716,6 +1684,7 @@ searchInput.addEventListener('focus', () => {
 // === Filter & Sort ===
 function applyFilters() {
   if (!relicData) return;
+  updateMenuBadge();
 
   const query = searchInput.value.toLowerCase().trim();
   const colorFilter = colorFilterValue;
@@ -801,6 +1770,7 @@ function renderTable() {
     tdItem.textContent = displayLang === 'ja'
       ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
       : (relic.itemNameEn || relic.itemKey);
+    if (relic.unknown) tdItem.insertAdjacentHTML('afterbegin', unknownMarkHtml());
     tdItem.style.fontSize = '12px';
     tr.appendChild(tdItem);
 
@@ -812,14 +1782,14 @@ function renderTable() {
         ? (main.name_ja || main.name_en || main.key)
         : (main.name_en || main.key);
       let html = `<div class="effect-item">`;
-      html += `<div class="effect-main">${mainName}</div>`;
+      html += `<div class="effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
       // Debuffs linked to main effect
       for (let i = 1; i < group.length; i++) {
         const d = group[i];
         const debuffName = displayLang === 'ja'
           ? (d.name_ja || d.name_en || d.key)
           : (d.name_en || d.key);
-        html += `<div class="effect-debuff">${debuffName}</div>`;
+        html += `<div class="effect-debuff${d.unknown ? ' unknown' : ''}">${debuffName}</div>`;
       }
       html += `</div>`;
       return html;
@@ -836,26 +1806,27 @@ function renderTable() {
 function showDetail(relic) {
   selectedRelicId = relic.id;
   detailPanel.classList.remove('hidden');
+  openDetailSheet('detail', closeDetail);
 
   const itemName = displayLang === 'ja'
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
-  detailTitle.textContent = itemName;
+  detailTitle.innerHTML = (relic.unknown ? `<span class="unknown-mark">${iconSvg('triangle-alert', 16)}</span>` : '') + escapeHtml(itemName);
 
   let html = '';
 
   // Basic info
   const ja = displayLang === 'ja';
-  html += `<div class="detail-section">`;
+  html += `<div class="detail-section detail-section-basic">`;
   html += `<h3>${ja ? '基本情報' : 'Basic Info'}</h3>`;
   html += field('ID', relic.id);
   html += field(ja ? 'アイテムID' : 'Item ID', relic.itemId);
   html += field(ja ? 'アイテムKey' : 'Item Key', relic.itemKey);
-  html += field(ja ? '色' : 'Color', `<span class="color-badge ${relic.itemColor}"></span> ${relic.itemColor}`);
+  html += field(ja ? '色' : 'Color', `<span class="color-badge ${relic.itemColor}"></span> ${relic.itemColor || '-'}`);
   html += field(displayLang === 'ja' ? 'タイプ' : 'Type',
     `<span class="type-badge ${relic.itemType}">${typeLabel(relic.itemType)}</span>`);
-  html += field(ja ? '座標' : 'Coordinates', `[${relic.coordinates.join(', ')}]`);
-  html += field(ja ? '色別座標' : 'Color Coords', `[${relic.coordinatesByColor.join(', ')}]`);
+  html += field(ja ? '座標' : 'Coordinates', relic.coordinates ? `[${relic.coordinates.join(', ')}]` : '-');
+  html += field(ja ? '色別座標' : 'Color Coords', relic.coordinatesByColor ? `[${relic.coordinatesByColor.join(', ')}]` : '-');
   html += field(ja ? 'ソートキー' : 'Sort Key', relic.sortKey);
   html += `</div>`;
 
@@ -868,7 +1839,7 @@ function showDetail(relic) {
       ? (main.name_ja || main.name_en || '-')
       : (main.name_en || '-');
     html += `<div class="detail-effect">`;
-    html += `<div class="detail-effect-main">${mainName}</div>`;
+    html += `<div class="detail-effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
     html += formatStackingInfo(main.id, ja);
     for (let i = 1; i < group.length; i++) {
       const d = group[i];
@@ -876,7 +1847,7 @@ function showDetail(relic) {
         ? (d.name_ja || d.name_en || '-')
         : (d.name_en || '-');
       html += `<div class="detail-effect-sub">`;
-      html += `<div class="detail-effect-debuff-name">${debuffName}</div>`;
+      html += `<div class="detail-effect-debuff-name${d.unknown ? ' unknown' : ''}">${debuffName}</div>`;
       html += formatStackingInfo(d.id, ja);
       html += `</div>`;
     }
@@ -894,6 +1865,7 @@ function showDetail(relic) {
 }
 
 function closeDetail() {
+  if (!detailPanel.classList.contains('hidden')) hideDetailSheet('detail');
   detailPanel.classList.add('hidden');
   selectedRelicId = null;
   document.querySelectorAll('#relic-tbody tr').forEach(tr => tr.classList.remove('selected'));
@@ -915,9 +1887,13 @@ function formatStackingInfo(effectId, ja) {
     stackLabel = ja ? '重複: ×' : 'Stacking: No';
   }
   const notes = info.stackNotes
-    ? `<span class="stacking-notes">${info.stackNotes}</span>`
+    ? `<span class="stacking-notes">${escapeHtml(info.stackNotes)}</span>`
     : '';
-  return `<div class="detail-effect-stacking">${stackLabel}${notes}</div>`;
+  // Full notes (wiki remarks, ' / '-separated) shown under the summary
+  const full = info.stackNotesFull && info.stackNotesFull !== info.stackNotes
+    ? `<div class="stacking-notes-full">${info.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`
+    : '';
+  return `<div class="detail-effect-stacking">${stackLabel}${notes}${full}</div>`;
 }
 
 // === Minimap ===
@@ -1224,12 +2200,13 @@ function buildCatalogEffects() {
     const meta = metaByKey.get(k);
     effectsByKey.set(k, {
       key: k,
-      name_ja: meta ? (meta.name_ja || meta.name_en || k) : k,
-      name_en: meta ? (meta.name_en || k) : k,
+      name_ja: meta ? (meta.name_ja || meta.name_en || k) : (ue.name_ja || k),
+      name_en: meta ? (meta.name_en || k) : (ue.name_en || k),
       category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
       deepOnly: meta ? !!meta.deepOnly : false,
       stackable: meta ? meta.stackable : undefined,
       stackNotes: meta ? (meta.stackNotes || '') : '',
+      stackNotesFull: meta ? (meta.stackNotesFull || '') : '',
       count: ue.count || 0,
     });
   }
@@ -1251,6 +2228,9 @@ function populateCatalogCategoryFilter() {
 }
 
 function renderCatalog() {
+  // Phones: mark the folded filter button while a filter is set
+  document.getElementById('catalog-filter-badge').hidden =
+    !catalogFilterCategory.value && !catalogFilterDeep.value && !catalogFilterStack.value;
   const effects = buildCatalogEffects();
   const ja = displayLang === 'ja';
   const hasSaveData = allUniqueEffects && allUniqueEffects.length > 0;
@@ -1330,9 +2310,15 @@ function renderCatalog() {
 
       html += `</div>`; // .catalog-card-meta
 
-      // Stack notes
+      // Stack notes (summary); full remarks open on hover (title) or tap / click
+      const hasFull = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
       if (e.stackNotes) {
-        html += `<div class="catalog-card-notes">${escapeHtml(e.stackNotes)}</div>`;
+        const title = hasFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
+        html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
+      }
+      if (hasFull) {
+        html += `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`;
+        html += `<div class="catalog-card-more">${ja ? '詳細' : 'Details'}</div>`;
       }
 
       // Count (only when save file loaded)
@@ -1347,6 +2333,18 @@ function renderCatalog() {
   });
 
   catalogList.innerHTML = html;
+
+  // Tap / click a card to show or hide its full remarks
+  catalogList.querySelectorAll('.catalog-card-notes-full').forEach(full => {
+    const card = full.closest('.catalog-card');
+    card.classList.add('has-full');
+    card.addEventListener('click', () => {
+      full.hidden = !full.hidden;
+      card.classList.toggle('expanded', !full.hidden);
+      const tiles = card.closest('.catalog-group-tiles');
+      if (tiles && !tiles.classList.contains('collapsed')) tiles.style.maxHeight = tiles.scrollHeight + 'px';
+    });
+  });
 
   // Collapse toggle handlers
   catalogList.querySelectorAll('.catalog-group-header').forEach(header => {
@@ -1387,6 +2385,7 @@ function closeCatalogTab() {
 function openInspector() {
   inspectorBackdrop.classList.remove('hidden');
   inspector.classList.add('open');
+  openBackEntry('inspector', closeInspector);
   inspectorSearch.value = '';
   // Default all categories to collapsed
   EFFECT_CATEGORIES.forEach(c => collapsedCategories.add(c.id));
@@ -1398,6 +2397,7 @@ function openInspector() {
 function closeInspector() {
   inspectorBackdrop.classList.add('hidden');
   inspector.classList.remove('open');
+  returnToMenuAfter('inspector', closeBackEntry('inspector'));
 }
 
 // --- Inspector resize ---
@@ -1617,6 +2617,10 @@ catalogSearchClear.addEventListener('click', () => {
   catalogSearch.focus();
 });
 catalogFilterCategory.addEventListener('change', renderCatalog);
+document.getElementById('catalog-filter-toggle').addEventListener('click', (e) => {
+  const open = document.querySelector('.catalog-toolbar').classList.toggle('filters-open');
+  e.currentTarget.setAttribute('aria-expanded', String(open));
+});
 catalogFilterDeep.addEventListener('change', renderCatalog);
 catalogFilterStack.addEventListener('change', renderCatalog);
 
@@ -1687,6 +2691,7 @@ inspectorEffectList.addEventListener('change', (e) => {
 });
 
 inspectorApply.addEventListener('click', () => {
+  panelDone('inspector');
   closeInspector();
   updateInspectorButton();
   applyFilters();
@@ -1725,6 +2730,10 @@ function renderTabBar() {
       tab.appendChild(errIcon);
     }
 
+    if (!info._loading && !info._error) {
+      tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('wand-sparkles', 14)}</span>`);
+    }
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = info.label;
@@ -1732,7 +2741,7 @@ function renderTabBar() {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'tab-close';
-    closeBtn.innerHTML = '&times;';
+    closeBtn.innerHTML = iconSvg('x', 12);
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeTab(tabId);
@@ -1750,6 +2759,8 @@ function renderTabBar() {
     tab.className = 'tab' + (activeTab === 'catalog' ? ' active' : '');
     tab.dataset.tab = 'catalog';
 
+    tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('book-open', 14)}</span>`);
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = ja ? '効果カタログ' : 'Effect Catalog';
@@ -1757,7 +2768,7 @@ function renderTabBar() {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'tab-close';
-    closeBtn.innerHTML = '&times;';
+    closeBtn.innerHTML = iconSvg('x', 12);
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeTab('catalog');
@@ -1788,6 +2799,9 @@ function switchTab(tabId) {
     const wrapper = document.getElementById(`opt-wrapper-${tid}`);
     if (wrapper) wrapper.classList.toggle('hidden', tid !== tabId);
   });
+
+  toolbar.classList.toggle('on-other-tab', tabId !== 'main');
+  renderMobileMenu();
 
   // Update toolbar visibility: show filters only on main tab
   const filterElements = toolbar.querySelectorAll('.search-wrapper, .filter-group, #result-count, #btn-inspector, #btn-export-table');
@@ -1830,11 +2844,13 @@ function addOptimizerTab(label, data, params) {
   detail.innerHTML = `
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
+      <div class="sheet-grip"></div>
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
+  enableSwipeDown(detail, detail.querySelector('.detail-header'), () => detail.querySelector('.opt-detail-close').click());
   wrapper.appendChild(detail);
 
   document.getElementById('main-content').appendChild(wrapper);
@@ -1874,11 +2890,13 @@ function addOptimizerTabLoading(label, params) {
   detail.innerHTML = `
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
+      <div class="sheet-grip"></div>
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
+  enableSwipeDown(detail, detail.querySelector('.detail-header'), () => detail.querySelector('.opt-detail-close').click());
   wrapper.appendChild(detail);
 
   document.getElementById('main-content').appendChild(wrapper);
@@ -1928,6 +2946,7 @@ function updateOptimizerButton() {
 async function openOptimizerInspector() {
   optimizerBackdrop.classList.remove('hidden');
   optimizerInspector.classList.add('open');
+  openBackEntry('optimizer', closeOptimizerInspector);
 
   // Load vessels data if not cached
   if (!vesselsData) {
@@ -1949,6 +2968,7 @@ async function openOptimizerInspector() {
 function closeOptimizerInspector() {
   optimizerBackdrop.classList.add('hidden');
   optimizerInspector.classList.remove('open');
+  returnToMenuAfter('optimizer', closeBackEntry('optimizer'));
 }
 
 function renderOptimizerCharacterSelect() {
@@ -2051,7 +3071,7 @@ function renderOptEffectsTags() {
       const eff = allUniqueEffects.find(e => e.key === key);
       const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
       const rankHtml = `<span class="opt-effect-rank">${idx + 1}</span>`;
-      const dragHandle = '<span class="opt-effect-drag-handle">&#x2630;</span>';
+      const dragHandle = `<span class="opt-effect-drag-handle">${iconSvg('grip-vertical', 14)}</span>`;
       html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="true">
         ${rankHtml}
         <span class="opt-effect-tag-name" title="${key}">${name}</span>
@@ -2141,6 +3161,47 @@ function attachEffectDragHandlers() {
       renderOptEffectsTags();
     });
   });
+
+  // Touch / pen: drag by the handle (native drag-and-drop does not work with fingers on phones)
+  optEffectsList.querySelectorAll('.opt-effect-drag-handle').forEach(handle => {
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;   // mouse uses the native drag-and-drop above
+      e.preventDefault();
+      const tag = handle.closest('.opt-effect-tag');
+      const group = tag.closest('.opt-effect-group');
+      const cards = group.querySelector('.opt-effect-group-cards');
+      const clearMarks = () => group.querySelectorAll('.drag-over-above, .drag-over-below')
+        .forEach(el => el.classList.remove('drag-over-above', 'drag-over-below'));
+      const listeners = new AbortController();
+      let dropTarget = null;
+      let above = false;
+      tag.classList.add('dragging');
+      handle.setPointerCapture(e.pointerId);
+      handle.addEventListener('pointermove', (ev) => {
+        const el = document.elementFromPoint(ev.clientX, ev.clientY);
+        const target = el && el.closest('.opt-effect-tag');
+        clearMarks();
+        dropTarget = null;
+        if (!target || target === tag || target.closest('.opt-effect-group') !== group) return;
+        const rect = target.getBoundingClientRect();
+        above = ev.clientY < rect.top + rect.height / 2;
+        target.classList.add(above ? 'drag-over-above' : 'drag-over-below');
+        dropTarget = target;
+      }, { signal: listeners.signal });
+      const finish = () => {
+        listeners.abort();
+        tag.classList.remove('dragging');
+        clearMarks();
+        if (dropTarget) {
+          cards.insertBefore(tag, above ? dropTarget : dropTarget.nextSibling);
+          rebuildEffectsMapFromDOM();
+          renderOptEffectsTags();
+        }
+      };
+      handle.addEventListener('pointerup', finish, { signal: listeners.signal });
+      handle.addEventListener('pointercancel', finish, { signal: listeners.signal });
+    });
+  });
 }
 
 function rebuildEffectsMapFromDOM() {
@@ -2217,6 +3278,7 @@ async function runOptimization() {
   // Create tab immediately with loading state
   const tabId = addOptimizerTabLoading(label, params);
 
+  panelDone('optimizer');
   closeOptimizerInspector();
 
   // Build stacking data for the optimizer (key -> stackable value)
@@ -2444,6 +3506,7 @@ function applyPreset(preset) {
 function openEffectSelectInspector() {
   effectSelectBackdrop.classList.remove('hidden');
   effectSelectInspector.classList.add('open');
+  openBackEntry('effect-select', closeEffectSelectInspector);
   effectSelectSearch.value = '';
   effectSelectSearchClear.classList.add('hidden');
   // Default all categories to collapsed
@@ -2455,6 +3518,7 @@ function openEffectSelectInspector() {
 function closeEffectSelectInspector() {
   effectSelectBackdrop.classList.add('hidden');
   effectSelectInspector.classList.remove('open');
+  closeBackEntry('effect-select');
 }
 
 function renderEffectSelectList() {
@@ -2589,12 +3653,23 @@ effectSelectList.addEventListener('change', (e) => {
       select.style.visibility = 'hidden';
       item.classList.remove('checked');
     }
+    updateEffectSelectGroupCheckbox(item.closest('.inspector-group-items').dataset.cat);
   } else if (e.target.tagName === 'SELECT') {
     if (optSelectedEffects.has(key)) {
       optSelectedEffects.set(key, e.target.value);
     }
   }
 });
+
+// Category checkbox: checked when all of its effects are, "－" (indeterminate) when only some are
+function updateEffectSelectGroupCheckbox(catId) {
+  const groupCheckbox = effectSelectList.querySelector(`.inspector-group-checkbox[data-cat="${catId}"]`);
+  if (!groupCheckbox) return;
+  const items = [...effectSelectList.querySelectorAll(`.inspector-group-items[data-cat="${catId}"] .effect-select-item`)];
+  const checkedCount = items.filter(item => optSelectedEffects.has(item.dataset.key)).length;
+  groupCheckbox.checked = checkedCount > 0 && checkedCount === items.length;
+  groupCheckbox.indeterminate = checkedCount > 0 && checkedCount < items.length;
+}
 
 // Click on item text toggles checkbox; select clicks are excluded
 effectSelectList.addEventListener('click', (e) => {
@@ -2688,9 +3763,9 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     html += `<div class="opt-results-summary-info">`;
     html += `<span>${ja ? '最高スコア' : 'Best Score'}: ${best.score}</span>`;
     html += `<span>${ja ? '献器' : 'Vessel'}: ${vesselName}</span>`;
-    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? '\u2713' : '\u2717'}</span>`;
+    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14)}</span>`;
     html += `<span>${ja ? '総件数' : 'Total'}: ${flatResults.length}</span>`;
-    html += `<button class="btn-export-optimizer" data-tab="${tabId}">&#128190; ${ja ? 'エクスポート' : 'Export'}</button>`;
+    html += `<button class="btn-export-optimizer" data-tab="${tabId}">${iconSvg('file-down', 14)} ${ja ? 'エクスポート' : 'Export'}</button>`;
     html += `</div></div>`;
   }
 
@@ -2810,7 +3885,7 @@ function renderResultCard(res, ja, isBest, params, idx) {
   html += `<span class="opt-score">${ja ? 'スコア' : 'Score'}: ${res.score}</span>`;
   if (res.subScore) html += `<span class="opt-sub-score">(sub: ${res.subScore})</span>`;
   html += `<span class="opt-required-badge ${res.requiredMet ? 'met' : 'not-met'}">`;
-  html += `${res.requiredMet ? '\u2713' : '\u2717'}</span>`;
+  html += `${res.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14)}</span>`;
   html += `<span class="opt-vessel-name">${vesselName}</span>`;
   html += `</div>`;
 
@@ -2974,7 +4049,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   html += `<h3>${ja ? 'スコア情報' : 'Score Info'}</h3>`;
   html += field(ja ? 'スコア' : 'Score', res.score);
   if (res.subScore) html += field(ja ? 'サブスコア' : 'Sub Score', res.subScore);
-  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? '\u2713' : '\u2717');
+  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14));
   html += field(ja ? '献器' : 'Vessel', vesselName);
   html += `</div>`;
 
@@ -3083,11 +4158,15 @@ function showOptResultDetail(tabId, res, params, idx) {
   body.innerHTML = html;
 
   // Close button
-  panel.querySelector('.opt-detail-close').onclick = () => {
+  const close = () => {
+    if (panel.classList.contains('hidden')) return;
     panel.classList.add('hidden');
+    hideDetailSheet('opt-detail');
     const container = document.getElementById(`opt-result-${tabId}`);
     if (container) container.querySelectorAll('.opt-result-card').forEach(c => c.classList.remove('selected'));
   };
+  panel.querySelector('.opt-detail-close').onclick = close;
+  openDetailSheet('opt-detail', close);
 }
 
 function renderOptDetailRelic(relic, ja) {
@@ -3095,7 +4174,7 @@ function renderOptDetailRelic(relic, ja) {
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
   const typeBadge = TYPE_LABELS[relic.itemType];
-  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : relic.itemType;
+  const typeStr = typeBadge ? typeBadge[ja ? 'ja' : 'en'] : (relic.itemType || '-');
 
   let html = `<div class="detail-effect">`;
   html += `<div class="detail-effect-main">`;
@@ -3208,6 +4287,9 @@ tbody tr:hover { background: var(--bg-hover); }
 .effect-main { line-height: 1.6; font-size: 12px; }
 .effect-debuff { color: #e07070; font-size: 11px; line-height: 1.5; padding-left: 10px; position: relative; }
 .effect-debuff::before { content: '└'; position: absolute; left: -2px; top: -1px; color: #e07070; font-size: 11px; }
+.unknown-mark { color: #f0a830; font-weight: 600; margin-right: 4px; }
+.unknown-mark svg, .opt-required-badge svg { display: inline-block; vertical-align: -2px; }
+.effect-main.unknown, .effect-debuff.unknown { color: #f0a830; }
 /* Optimizer cards */
 .opt-results-summary {
   margin-bottom: 16px; padding: 12px 16px; background: var(--bg-secondary);
@@ -3312,7 +4394,7 @@ function buildExportHTML(title, bodyHTML, metaItems) {
 </div>
 <div class="export-meta">${metaHTML}</div>
 ${bodyHTML}
-<div class="export-footer">ERN RelicForge ${APP_NIGHTREIGN_VERSION} — Exported ${new Date().toLocaleString()}</div>
+<div class="export-footer">ERN RelicForge v${APP_VERSION} (${APP_NIGHTREIGN_VERSION}) — Exported ${new Date().toLocaleString()}</div>
 </body>
 </html>`;
 }
@@ -3349,16 +4431,16 @@ function exportRelicTableToHTML() {
     const itemName = ja
       ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
       : (relic.itemNameEn || relic.itemKey);
-    html += `<td style="font-size:12px">${itemName}</td>`;
+    html += `<td style="font-size:12px">${relic.unknown ? unknownMarkHtml() : ''}${itemName}</td>`;
     html += `<td>`;
     relic.effects.forEach(group => {
       const main = group[0];
       const mainName = ja ? (main.name_ja || main.name_en || main.key) : (main.name_en || main.key);
-      html += `<div class="effect-item"><div class="effect-main">${mainName}</div>`;
+      html += `<div class="effect-item"><div class="effect-main${main.unknown ? ' unknown' : ''}">${mainName}</div>`;
       for (let i = 1; i < group.length; i++) {
         const d = group[i];
         const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
-        html += `<div class="effect-debuff">${dName}</div>`;
+        html += `<div class="effect-debuff${d.unknown ? ' unknown' : ''}">${dName}</div>`;
       }
       html += `</div>`;
     });
@@ -3575,6 +4657,7 @@ updateLangUI = function() {
   document.getElementById('catalog-label-deep').textContent = ja ? '通常/深層:' : 'Normal/Deep:';
   document.getElementById('catalog-label-stack').textContent = ja ? '重複:' : 'Stack:';
   document.getElementById('catalog-owned-note').textContent = ja ? '※ 所持効果のみ表示' : '* Owned effects only';
+  document.getElementById('catalog-filter-toggle-label').textContent = ja ? '絞り込み' : 'Filter';
   // Catalog filter options
   const deepOpts = catalogFilterDeep.options;
   deepOpts[0].textContent = ja ? 'すべて' : 'All';
@@ -3639,7 +4722,11 @@ updateLangUI = function() {
   }
 };
 
-// === Pre-load resources on page load ===
+// === Pre-load resources on page load, then reopen the relics stored on this device ===
 loadResources().catch(err => {
   console.warn('Resource pre-loading failed (will retry on file open):', err);
+}).then(async () => {
+  const token = findRelicShareToken(location.hash);
+  if (token && await openSharedRelics(token)) return;
+  await tryRestoreRelicCache();
 });

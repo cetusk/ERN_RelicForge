@@ -3,6 +3,10 @@
 Elden Ring: Nightreign のセーブファイル (.sl2) から遺物情報を抽出・閲覧・最適化するツール。
 CLI パーサー、遺物組み合わせ最適化ツール、Electron ベースの GUI ビューアー、および GitHub Pages 対応の Web 版を提供。
 
+- 最新版: v1.1.0（ゲームデータは Regulation 1.03.5 に対応）
+- Web 版: https://cetusk.github.io/ERN_RelicForge/web/index.html （スマートフォンでも利用可能）
+- Electron 版: [Releases](https://github.com/cetusk/ERN_RelicForge/releases) から各 OS 用をダウンロード
+
 ## Folder Structure
 
 ```
@@ -30,8 +34,11 @@ ERN_RelicForge/
 │       ├── app.js               # UI ロジック
 │       ├── relic-parser.js      # JS 版パーサー (web/ と共通)
 │       ├── relic-optimizer.js   # JS 版最適化 (web/ と共通)
+│       ├── relic-share.js       # 共有リンク・QR コードの作成・読み込み (web/ と共通)
 │       ├── lib/
-│       │   └── crypto-js.min.js # AES-CBC 復号化用
+│       │   ├── crypto-js.min.js # AES-CBC 復号化用
+│       │   ├── icons.js         # 画面のアイコン (Lucide)
+│       │   └── qrcode.js        # QR コード生成 (qrcode-generator)
 │       └── style.css            # ダークテーマスタイル
 │
 ├── web/                         # Web 版 (GitHub Pages 対応)
@@ -39,14 +46,28 @@ ERN_RelicForge/
 │   ├── app.js                   # UI ロジック (ブラウザ専用)
 │   ├── relic-parser.js          # JS 版パーサー (CryptoJS 使用)
 │   ├── relic-optimizer.js       # JS 版最適化 (Web Worker 対応)
+│   ├── relic-share.js           # 共有リンク・QR コードの作成・読み込み
 │   ├── style.css                # ダークテーマスタイル
 │   └── lib/
-│       └── crypto-js.min.js     # AES-CBC 復号化用
+│       ├── crypto-js.min.js     # AES-CBC 復号化用
+│       ├── icons.js             # 画面のアイコン (Lucide)
+│       ├── qrcode.js            # QR コード生成 (qrcode-generator)
+│       └── zxing/               # QR コード読み取り (ZXing の WebAssembly 版、読み取り画面を開いたときだけ読み込む)
 │
-└── examples/
-    ├── sample_output.json       # パーサーサンプル出力
-    ├── sample_effects_config.json  # 効果指定サンプル
-    └── test_wylder_effects.json    # 追跡者テスト用効果指定
+├── examples/
+│   ├── sample_output.json       # パーサーサンプル出力
+│   ├── sample_effects_config.json  # 効果指定サンプル
+│   └── test_wylder_effects.json    # 追跡者テスト用効果指定
+│
+├── tools/
+│   ├── wiki_effects/            # 効果データ (重ね掛け・備考) の攻略 Wiki 照合ツール
+│   └── icons/                   # 画面アイコン (lib/icons.js) の生成
+│
+└── tests/                       # 回帰テスト (GitHub Actions で自動実行)
+    ├── test_*.py                # Python 版パーサー・オプティマイザ・データ整合性
+    ├── *.test.js                # JS 版 (web / gui) パーサー・オプティマイザ・共通ファイル一致
+    ├── check_real_saves.py      # 実セーブファイルでの確認 (ローカル専用)
+    └── fixtures/                # 合成セーブファイル・遺物プール・期待値 (generate.py で生成)
 ```
 
 ## Features
@@ -58,6 +79,7 @@ ERN_RelicForge/
 - パターン検索時の負オフセット境界チェック
 - ソートキーインデックスの O(N) 構築・O(1) ルックアップ
 - 座標計算の O(N) シングルパス処理
+- データ未収録のアイテム・効果（ゲームアップデートでの追加分など）を含む遺物も除外せず、「未知の遺物 (ID: …)」「未知の効果 (ID: …)」として出力し件数を警告
 
 ### 遺物組み合わせ最適化
 - 献器スロット色制約に基づく 6 スロット（通常 3 ＋ 深層 3）一括最適化
@@ -68,6 +90,7 @@ ERN_RelicForge/
 - ビットマスク事前フィルタによる必須効果充足の O(1) 判定
 - 適応的候補数制御（スペック数に応じた maxPairs 動的調整）
 - 2 層ヒープ分離（required_met の True/False を独立管理し枝刈り安定化）
+- 「通常のみ」モードも「通常＋深層」と同じ選抜処理で探索（必須充足を優先し、同点は補助スコアで比較。通常のみでは全組み合わせを評価）
 - JS 版ビットマスク演算の 32bit 溢れ防止ガード（nSpec >= 32 時は自動無効化）
 - 同スコア時の決定的タイブレーカー（ソート済み遺物 ID による Python/JS 間の結果一致保証）
 
@@ -77,6 +100,15 @@ ERN_RelicForge/
 - ファイル選択 / フォルダ自動読み込み (Chrome/Edge) / ドラッグ＆ドロップ対応
 - Web Worker による非同期最適化（UI ブロック防止）
 - Electron 版と同等の全機能を提供
+- スマートフォン対応（画面幅に応じたレイアウト）
+  - 一覧はカード表示。絞り込み・機能・読み込んだデータ・言語は「≡」メニューにまとめ、メニューから開いた画面を閉じるとメニューに戻る
+  - 遺物・ビルド探索結果の詳細は一覧の上に重ねて表示し、外側のタップ・下へのスワイプ・戻る操作（iPhone の端からのスワイプ）で閉じる
+  - 効果カタログの絞り込みは開閉式。ビルド探索の優先順位は指でも並べ替え可能
+  - ダウンロードしたセーブファイルの場所を端末（iPhone / Android / PC）に合わせて案内
+- スマホ・タブレットでは、読み込んだ遺物の一覧を端末（ブラウザの IndexedDB、データベース名 `ERNRelicForge`）に記録し、次回は開くだけで表示。記録するのは遺物の ID・効果・並び順とキャラクター名・ファイル名のみで、セーブファイル本体や Steam ID は記録しない（メニューの「記録を消す」で消去可能。ゲームのセーブデータには影響しない）。PC ではセーブファイルを直接読めるため記録しない
+- Steam クラウドからの読み込み案内: ゲームの入っていない端末でも、Steam のクラウド保存ページ（公式）からダウンロードしたセーブファイルで確認可能（ログイン情報やファイルはアプリに送信されない）
+- 共有リンク: 表示中の遺物データをリンク（約 1 万文字 / 1200 件）またはテキストファイルにして別の端末へ渡せる（Web 版・Electron 版）。データは URL の `#` 以降に含まれ Web サーバーには送信されない。遺物の固有 ID と取得順の番号は含まず（並び順は保持）、キャラクター名は任意。受け取った側では自動で記録せず、スマホ・タブレットでは「この端末に記録」で記録
+- QR コードで渡す: 共有リンクは QR コード 1 つには収まらない（最大約 2,900 文字）ため、約 500 文字の QR コードを PC などの画面に自動で切り替えて表示し、スマホの「QR コードを読み取る」（カメラ）で読み取る。ファウンテン符号を使うので、どの QR コードから読み取ってもよく、データの分割数（1200 件で約 20）より数枚多く読み取れば完了する（読み逃した QR コードが再び表示されるのを待つ必要がない）（表示は Web 版・Electron 版、読み取りは Web 版のスマホ・タブレット。カメラを使うため https のページでのみ利用可能）
 
 ### GUI ビューアー (Electron / Web 共通)
 - Electron 版は Python 不要のスタンドアロンアプリ（JS 版パーサー・オプティマイザを内蔵）
@@ -87,6 +119,7 @@ ERN_RelicForge/
 - テーブルのカラムヘッダークリックによるソート
 - 行クリックで詳細パネル表示（効果一覧・備考情報を含む）
 - VS Code 風ミニマップ（色反映・ドラッグスクロール対応）
+- 未知の遺物（データ未収録のアイテム・効果を含む遺物）がある場合、ヘッダーに件数を警告表示
 
 ### 高度な検索（インスペクター）
 - 効果がカテゴリー別にグループ化（全 19 カテゴリー: キャラクター固有, 能力値, 攻撃力, スキル／アーツ, 魔術／祈祷, カット率, 状態異常耐性, 回復, アクション, 出撃時の武器（戦技）, 出撃時の武器（付加）, 出撃時の武器（魔術／祈祷）, 出撃時のアイテム, 出撃時のアイテム（結晶の雫）, マップ環境, チームメンバー, 夜の力, デメリット, その他）
@@ -121,6 +154,11 @@ ERN_RelicForge/
 - Wiki 準拠のカテゴリー自動分類（`classifyEffect`）
 - 結晶雫・芳香類を含む全出撃時アイテム名の Wiki 準拠修正
 - 備考欄（倍率、個数、発動条件、持続時間等）を収録
+- 重複可否・備考を攻略 Wiki の「遺物効果」ページ（2026-10-10 更新版）と全件照合して更新
+  - 備考は要約（`stackNotes`：一覧・カタログ・詳細の1行表示）と全文（`stackNotesFull`：詳細パネルに表示、カタログはマウスオーバー）の2段構成
+  - 「+値が違えば重ね掛け可」等の条件付き効果は、同じ効果どうしは重ならないため「×」として扱う
+  - Wiki で重ね掛けが未検証の効果は、その旨を備考に記載
+  - ゲームや Wiki の更新時は `python tools/wiki_effects/sync.py` で再照合できる（[使い方](tools/wiki_effects/README.md)）
 
 ## Requirements
 
@@ -186,7 +224,7 @@ python src/relic_optimizer.py --input <parser_output.json> --effects <effects_co
 | `--combined` | 通常3＋深層3の6スロット一括最適化 | off |
 | `--deep` | 深層遺物スロットを使用 (非combined時) | off |
 | `--color COLOR` | 遺物の色 (献器未使用時) | なし (全色) |
-| `--types TYPES` | 遺物タイプ, カンマ区切り | `Relic` |
+| `--types TYPES` | 遺物タイプ, カンマ区切り | 献器指定時 `Relic,UniqueRelic` (`--deep` 時 `DeepRelic`) / 献器未使用時 `Relic` |
 | `--top N` | 献器あたりの出力候補数 | `10` |
 | `--candidates N` | スロットあたりの候補数 | `30` |
 
@@ -231,6 +269,7 @@ python src/relic_optimizer.py --input output.json \
 - **スタック不可な効果**: 重み × 1（重複しても1回のみ）
 - **集中ボーナス**: 1 つの遺物に望ましい効果が複数含まれる場合、追加スコアを加算
 - required 充足の組み合わせがスコアに関わらず優先される
+- 献器指定時の探索アルゴリズムは GUI / Web 版と共通（非 combined モードも GUI の「通常のみ」と同じ探索を行い、同じ結果を返す）
 
 #### 出力構造
 
@@ -261,11 +300,14 @@ GitHub Pages にデプロイする場合は、リポジトリの Settings > Page
 
 #### ファイルの読み込み方法
 
-Web 版では 3 つの方法でセーブファイルを読み込める:
+Web 版では次の方法で遺物を読み込める:
 
 1. **ファイルを選択して開く** — ファイル選択ダイアログから `.sl2` / `.bak` を選択
 2. **フォルダから自動読み込み** (Chrome / Edge のみ) — フォルダを選択すると `.sl2` / `.sl2.bak` を再帰検索。見つかったファイルが 1 件なら自動ロード、複数件なら一覧から選択。選択したフォルダは IndexedDB に保存され、次回アクセス時に自動復元を試行
 3. **ドラッグ＆ドロップ** — Welcome 画面に `.sl2` / `.bak` ファイルをドラッグ＆ドロップ
+4. **Steam クラウドから読み込む** — ゲームの入っていない端末（スマホなど）向け。案内に従って Steam の公式ページでセーブファイルをダウンロードし、そのファイルを選択
+5. **共有リンク / 共有ファイル** — 別の端末の「共有」で作ったリンクを開く、または共有ファイル (`.txt`) を「ファイルを開く」で選択
+6. **QR コードを読み取る** (スマホ・タブレット、https のページのみ) — 別の端末の「共有」→「QR コードで渡す」の画面をカメラで読み取る
 
 #### ブラウザ対応
 
@@ -274,6 +316,7 @@ Web 版では 3 つの方法でセーブファイルを読み込める:
 | ファイル選択 | o | o |
 | フォルダ自動読み込み | o | x (非対応) |
 | ドラッグ＆ドロップ | o | o |
+| QR コードの読み取り（スマホ・タブレット） | o | o |
 
 #### 技術的な違い (Electron 版 vs Web 版)
 
@@ -333,6 +376,22 @@ npm start
 
 テーブルの行をクリックすると右側に詳細パネルが開き、基本情報と効果一覧（備考情報を含む）を確認できる
 
+## Tests
+
+push / PR 時に GitHub Actions (Python 3.12 / Node.js 24) で自動実行される。ローカルでは以下で実行:
+
+```bash
+pip install -r requirements.txt
+python -m unittest discover -s tests -v   # Python 版
+node --test tests/*.test.js               # JS 版 (web / gui)
+```
+
+- 実際のセーブファイルは個人情報を含むためリポジトリに含めず、遺物スロットの構造を再現した合成セーブファイル (`tests/fixtures/synthetic_save.sl2`) と、ゲームデータから決定的に生成した遺物プールでテストする
+- 期待値は Python 版で生成し、Python 版・JS 版 (web / gui) がすべて同じ結果を返すことを確認する
+- `web/` と `gui/renderer/` の共通ファイル (パーサー・オプティマイザ・CryptoJS) が一致していることも確認する
+- 挙動を意図的に変更した場合は `python tests/fixtures/generate.py` で期待値を再生成し、差分を確認してからコミットする
+- 手元の実セーブファイルでの確認: `python tests/check_real_saves.py` (`debugs/*.sl2` を対象に Python/JS の一致と未知の遺物の有無を確認)
+
 ## Output Example
 
 ```json
@@ -340,6 +399,7 @@ npm start
   "file": "NR0000.sl2",
   "characterName": "cetusk",
   "totalRelics": 1633,
+  "unknownRelics": 0,
   "relics": [
     {
       "id": 3229615531,
@@ -382,10 +442,17 @@ npm start
 | `coordinates` | 全体での座標 [row, column] |
 | `coordinatesByColor` | 色別での座標 [row, column] |
 | `sortKey` | ソートキー (取得順序) |
+| `unknown` | データ未収録のアイテム・効果を含む場合のみ `true`（該当する効果にも `unknown: true` が付き、名前は「未知の効果 (ID: …)」になる。アイテムが未収録の場合は `itemColor` / `itemType` / 座標が `null`） |
+
+`unknownRelics` (トップレベル) は `unknown: true` の遺物の件数。0 以外の場合はデータファイルがゲームの最新バージョンに未対応の可能性がある。
 
 ## License
 
 MIT License
+
+画面のアイコンは [Lucide](https://lucide.dev)（ISC License）を使用（`web/lib/icons.js` / `gui/renderer/lib/icons.js`、`tools/icons/build_icons.py` で生成）。
+
+QR コードの生成に [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator)（MIT License、`lib/qrcode.LICENSE.txt`）、読み取りに [zxing-wasm](https://github.com/Sec-ant/zxing-wasm)（MIT License）と、その中の [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp)（Apache License 2.0）を使用（`web/lib/zxing/LICENSE.txt`）。QR コードは株式会社デンソーウェーブの登録商標です。
 
 ## Reference
 

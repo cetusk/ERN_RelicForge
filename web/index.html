@@ -12,29 +12,39 @@
     <div class="header-left">
       <h1>ERN RelicForge</h1>
       <span id="header-info" class="header-info"></span>
+      <span id="header-warning" class="header-warning" hidden></span>
+      <span id="header-cache" class="header-cache" hidden><span class="icon" data-icon="smartphone" data-size="13"></span><span class="header-cache-text"></span><button id="header-cache-save" class="header-cache-save" type="button" hidden><span class="icon" data-icon="save" data-size="13"></span><span id="header-cache-save-label">この端末に記録</span></button><button id="header-cache-delete" class="header-cache-delete" type="button"><span id="header-cache-delete-label">記録を消す</span></button></span>
     </div>
     <div class="header-meta">
-      <span id="header-meta-version" class="header-meta-item">Nightreign v1.03.4 対応</span>
+      <span id="header-meta-version" class="header-meta-item">Regulation 1.03.5 対応</span>
       <span class="header-meta-sep">|</span>
-      <span id="header-meta-updated" class="header-meta-item">最終更新: 2026-02-14</span>
+      <span id="header-meta-updated" class="header-meta-item">最終更新: 2026-10-15</span>
       <span class="header-meta-sep">|</span>
       <span class="header-meta-item">by cetusk (<a href="https://github.com/cetusk" class="header-meta-link" target="_blank" rel="noopener noreferrer">GitHub</a>)</span>
     </div>
-    <button id="btn-open" class="btn-primary">
-      <span class="btn-icon">&#128194;</span> <span id="btn-open-label">ファイルを開く</span>
-    </button>
-    <input type="file" id="file-input" accept=".sl2,.bak" style="display:none" />
+    <div class="header-actions">
+      <button id="btn-steam-header" class="btn-secondary btn-steam"><span class="icon" data-icon="cloud-download"></span><span id="btn-steam-header-label">Steam クラウド</span></button>
+      <button id="btn-open" class="btn-primary">
+        <span class="icon" data-icon="folder-open"></span><span id="btn-open-label">ファイルを開く</span>
+      </button>
+      <!-- Phones: filters, tools and settings are in the menu sheet -->
+      <button id="btn-mobile-menu" class="btn-mobile-menu" type="button" aria-label="menu"><span class="icon" data-icon="menu" data-size="20"></span><span id="menu-badge" class="menu-badge" hidden></span></button>
+    </div>
+    <input type="file" id="file-input" accept=".sl2,.bak,.txt" style="display:none" />
   </header>
 
   <!-- Toolbar -->
   <div id="toolbar" class="toolbar hidden">
     <div class="search-wrapper">
+      <span class="search-icon"><span class="icon" data-icon="search" data-size="14"></span></span>
       <input type="text" id="search-input" placeholder="効果名で検索 (日本語 / English)..." autocomplete="off" />
-      <button id="search-clear" class="search-clear hidden" type="button">&times;</button>
+      <button id="search-clear" class="search-clear hidden" type="button" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
       <div id="search-suggestions" class="search-suggestions hidden"></div>
     </div>
+    <!-- Filters / actions: wide screens only (phones use the menu below) -->
+    <div id="toolbar-sheet" class="toolbar-sheet">
     <div class="filter-group">
-      <label id="label-color">色:</label>
+      <span class="icon" data-icon="palette"></span><label id="label-color">色:</label>
       <div class="custom-select" id="color-select">
         <button class="custom-select-btn" id="color-select-btn">
           <span id="color-select-label">すべて</span>
@@ -50,7 +60,7 @@
       </div>
     </div>
     <div class="filter-group">
-      <label id="label-type">タイプ:</label>
+      <span class="icon" data-icon="layers"></span><label id="label-type">タイプ:</label>
       <select id="filter-type">
         <option value="">すべて</option>
         <option value="Relic">通常</option>
@@ -59,23 +69,72 @@
       </select>
     </div>
     <div class="filter-group">
-      <label id="label-lang">言語:</label>
+      <span class="icon" data-icon="languages"></span><label id="label-lang">言語 / Language:</label>
       <select id="filter-lang">
         <option value="ja">日本語</option>
         <option value="en">English</option>
       </select>
     </div>
-    <button id="btn-inspector" class="btn-inspector hidden">&#9881; <span id="btn-inspector-label">高度な検索</span></button>
-    <button id="btn-optimizer" class="btn-inspector hidden">&#9881; <span id="btn-optimizer-label">ビルド探索</span></button>
-    <button id="btn-catalog" class="btn-inspector hidden">&#128218; <span id="btn-catalog-label">効果カタログ</span></button>
-    <button id="btn-export-table" class="btn-inspector hidden">&#128190; <span id="btn-export-table-label">エクスポート</span></button>
+    <div class="toolbar-actions">
+    <button id="btn-inspector" class="btn-inspector hidden"><span class="icon" data-icon="list-filter"></span><span id="btn-inspector-label">高度な検索</span></button>
+    <button id="btn-optimizer" class="btn-inspector hidden"><span class="icon" data-icon="wand-sparkles"></span><span id="btn-optimizer-label">ビルド探索</span></button>
+    <button id="btn-catalog" class="btn-inspector hidden"><span class="icon" data-icon="book-open"></span><span id="btn-catalog-label">効果カタログ</span></button>
+    <button id="btn-export-table" class="btn-inspector hidden"><span class="icon" data-icon="file-down"></span><span id="btn-export-table-label">エクスポート</span></button>
+    <button id="btn-share" class="btn-inspector hidden"><span class="icon" data-icon="share-2"></span><span id="btn-share-label">共有</span></button>
+    </div>
     <span id="result-count" class="result-count"></span>
+    </div>
   </div>
+
+  <!-- Smartphone menu (bottom sheet; texts are set by app.js) -->
+  <div id="mobile-menu-backdrop" class="sheet-backdrop hidden"></div>
+  <div id="mobile-menu" class="mobile-menu hidden" role="dialog" aria-modal="true" aria-labelledby="mm-title">
+    <div class="mm-head">
+      <div class="sheet-grip"></div>
+      <h2 id="mm-title"></h2>
+      <button id="mm-close" class="btn-close" type="button" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="mm-body">
+      <section id="mm-filter" class="mm-section">
+        <div class="mm-section-head">
+          <h3 id="mm-filter-title"></h3>
+          <span id="mm-count" class="mm-count"></span>
+          <button id="mm-reset" class="mm-reset" type="button"><span class="icon" data-icon="rotate-ccw" data-size="13"></span><span id="mm-reset-label"></span></button>
+        </div>
+        <div class="mm-field-label"><span class="icon" data-icon="palette" data-size="14"></span><span id="mm-color-label"></span></div>
+        <div id="mm-color" class="mm-chips"></div>
+        <div class="mm-field-label"><span class="icon" data-icon="layers" data-size="14"></span><span id="mm-type-label"></span></div>
+        <div id="mm-type" class="mm-chips"></div>
+        <button id="mm-advanced" class="mm-row" type="button">
+          <span class="icon" data-icon="list-filter" data-size="18"></span>
+          <span class="mm-row-text"><span id="mm-advanced-label"></span><span id="mm-advanced-sub" class="mm-row-sub"></span></span>
+          <span class="icon mm-row-arrow" data-icon="chevron-right" data-size="18"></span>
+        </button>
+      </section>
+      <section id="mm-tools-section" class="mm-section">
+        <h3 id="mm-tools-title"></h3>
+        <div id="mm-tools" class="mm-tools"></div>
+      </section>
+      <section id="mm-data-section" class="mm-section">
+        <h3 id="mm-data-title"></h3>
+        <dl id="mm-data" class="mm-data"></dl>
+        <div id="mm-storage" class="mm-storage"></div>
+      </section>
+      <section class="mm-section">
+        <h3><span class="icon" data-icon="languages" data-size="14"></span>言語 / Language</h3>
+        <div id="mm-lang" class="mm-chips"></div>
+      </section>
+      <div id="mm-footer" class="mm-footer"></div>
+    </div>
+  </div>
+
+  <!-- Phones: backdrop behind the relic / build detail sheets -->
+  <div id="detail-backdrop" class="sheet-backdrop hidden"></div>
 
   <!-- Tab Bar -->
   <div id="tab-bar" class="tab-bar hidden">
     <div class="tab active" data-tab="main">
-      <span class="tab-label" id="main-tab-label">遺物一覧</span>
+      <span class="icon" data-icon="table" data-size="14"></span><span class="tab-label" id="main-tab-label">遺物一覧</span>
     </div>
   </div>
 
@@ -83,11 +142,14 @@
   <div id="main-content" class="main-content">
     <!-- Welcome screen -->
     <div id="welcome" class="welcome">
-      <div class="welcome-icon">&#9876;</div>
+      <div class="welcome-icon"><span class="icon" data-icon="swords" data-size="64"></span></div>
       <p id="welcome-msg">セーブファイル (.sl2 / .bak) を選択して遺物を確認</p>
       <div class="welcome-buttons">
-        <button id="btn-open-welcome" class="btn-primary btn-large">ファイルを選択して開く</button>
+        <button id="btn-steam-welcome" class="btn-secondary btn-large"><span class="icon" data-icon="cloud-download" data-size="18"></span><span class="btn-label">Steam クラウドから読み込む</span></button>
+        <button id="btn-open-welcome" class="btn-primary btn-large"><span class="icon" data-icon="folder-open" data-size="18"></span><span class="btn-label">ファイルを選択して開く</span></button>
+        <button id="btn-qr-welcome" class="btn-secondary btn-large" hidden><span class="icon" data-icon="scan-qr-code" data-size="18"></span><span class="btn-label">QR コードを読み取る</span></button>
       </div>
+      <p id="download-file-hint" class="download-file-hint" hidden></p>
       <div id="auto-load-path-hint" class="path-hint">
         <p id="path-hint-label" class="path-hint-label">セーブファイルの場所 — エクスプローラーのアドレスバーに貼り付けて開けます:</p>
         <code id="path-hint-value" class="path-hint-value" title="クリックでコピー">%AppData%\Nightreign</code>
@@ -132,8 +194,9 @@
       <!-- Detail Panel -->
       <div id="detail-panel" class="detail-panel hidden">
         <div class="detail-header">
+          <div class="sheet-grip"></div>
           <h2 id="detail-title"></h2>
-          <button id="detail-close" class="btn-close">&times;</button>
+          <button id="detail-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
         </div>
         <div id="detail-body" class="detail-body"></div>
       </div>
@@ -144,16 +207,19 @@
         <div class="catalog-search-wrapper">
           <input type="text" id="catalog-search" class="catalog-search-input"
                  placeholder="効果名で検索..." autocomplete="off" />
-          <button id="catalog-search-clear" class="search-clear hidden">&times;</button>
+          <button id="catalog-search-clear" class="search-clear hidden" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
         </div>
+        <!-- Phones: the filters fold away behind this button -->
+        <button id="catalog-filter-toggle" class="catalog-filter-toggle" type="button" aria-expanded="false"><span class="icon" data-icon="list-filter" data-size="16"></span><span id="catalog-filter-toggle-label">絞り込み</span><span id="catalog-filter-badge" class="menu-badge" hidden></span></button>
+        <div id="catalog-filters" class="catalog-filters">
         <div class="catalog-filter-group">
-          <label id="catalog-label-category">カテゴリ:</label>
+          <span class="icon" data-icon="tag"></span><label id="catalog-label-category">カテゴリ:</label>
           <select id="catalog-filter-category">
             <option value="">すべて</option>
           </select>
         </div>
         <div class="catalog-filter-group">
-          <label id="catalog-label-deep">通常/深層:</label>
+          <span class="icon" data-icon="layers"></span><label id="catalog-label-deep">通常/深層:</label>
           <select id="catalog-filter-deep">
             <option value="">すべて</option>
             <option value="yes">深層</option>
@@ -161,13 +227,14 @@
           </select>
         </div>
         <div class="catalog-filter-group">
-          <label id="catalog-label-stack">重複:</label>
+          <span class="icon" data-icon="copy"></span><label id="catalog-label-stack">重複:</label>
           <select id="catalog-filter-stack">
             <option value="">すべて</option>
             <option value="yes">○ 重複可</option>
             <option value="no">× 重複不可</option>
             <option value="conditional">△ 条件付き</option>
           </select>
+        </div>
         </div>
         <span id="catalog-result-count" class="result-count"></span>
         <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
@@ -176,13 +243,92 @@
     </div>
   </div>
 
+  <!-- Steam Cloud guide -->
+  <div id="steam-guide-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="steam-guide" class="app-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="steam-guide-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="cloud-download" data-size="18"></span><h3 id="steam-guide-title"></h3>
+      <button id="steam-guide-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="app-dialog-body">
+      <p id="steam-guide-intro"></p>
+      <ol id="steam-guide-steps"></ol>
+      <p id="steam-guide-note" class="app-dialog-note"></p>
+    </div>
+    <div class="app-dialog-footer">
+      <a id="steam-guide-open" class="btn-secondary dialog-link-btn" href="https://store.steampowered.com/account/remotestorageapp/?appid=2622380" target="_blank" rel="noopener noreferrer"><span class="icon" data-icon="cloud-download" data-size="14"></span><span class="btn-label"></span></a>
+      <button id="steam-guide-pick" class="btn-primary"><span class="icon" data-icon="folder-open" data-size="14"></span><span class="btn-label"></span></button>
+    </div>
+  </div>
+
+  <!-- Share link dialog -->
+  <div id="share-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="share-dialog" class="app-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="share-2" data-size="18"></span><h3 id="share-title"></h3>
+      <button id="share-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="app-dialog-body">
+      <p id="share-intro"></p>
+      <label class="share-option"><input type="checkbox" id="share-include-name" checked> <span id="share-include-name-label"></span></label>
+      <input type="text" id="share-url" class="share-url" readonly>
+      <p id="share-length" class="app-dialog-note"></p>
+      <p id="share-note" class="app-dialog-note"></p>
+    </div>
+    <div class="app-dialog-footer">
+      <button id="share-copy" class="btn-secondary"><span class="icon" data-icon="link" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-native" class="btn-secondary" hidden><span class="icon" data-icon="share-2" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-qr" class="btn-secondary"><span class="icon" data-icon="qr-code" data-size="14"></span><span class="btn-label"></span></button>
+      <button id="share-file" class="btn-primary"><span class="icon" data-icon="file-text" data-size="14"></span><span class="btn-label"></span></button>
+    </div>
+  </div>
+
+  <!-- QR code transfer: frames shown one after another (texts are set by app.js) -->
+  <div id="qr-show-backdrop" class="inspector-backdrop qr-layer hidden"></div>
+  <div id="qr-show" class="app-dialog qr-show qr-layer hidden" role="dialog" aria-modal="true" aria-labelledby="qr-show-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="qr-code" data-size="18"></span><h3 id="qr-show-title"></h3>
+      <button id="qr-show-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="app-dialog-body qr-show-body">
+      <div class="qr-show-main">
+        <canvas id="qr-show-canvas" class="qr-canvas"></canvas>
+        <div class="qr-speed"><span id="qr-speed-label"></span><span id="qr-speed" class="qr-speed-options"></span></div>
+      </div>
+      <div class="qr-show-side">
+        <ol id="qr-show-steps" class="qr-show-steps"></ol>
+        <div class="qr-app-link">
+          <canvas id="qr-app-canvas" class="qr-canvas"></canvas>
+          <p id="qr-app-text"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR code scanner (phones) -->
+  <div id="qr-scan" class="qr-scan qr-layer hidden" role="dialog" aria-modal="true" aria-labelledby="qr-scan-title">
+    <div class="inspector-header">
+      <span class="icon" data-icon="scan-qr-code" data-size="18"></span><h3 id="qr-scan-title"></h3>
+      <button id="qr-scan-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="qr-scan-view">
+      <video id="qr-scan-video" playsinline muted autoplay></video>
+      <div class="qr-scan-guide"></div>
+    </div>
+    <div class="qr-scan-status">
+      <div class="qr-scan-bar"><div id="qr-scan-bar-fill" class="qr-scan-bar-fill"></div></div>
+      <p id="qr-scan-text"></p>
+      <button id="qr-scan-resume" class="btn-primary qr-scan-resume" type="button" hidden><span class="icon" data-icon="scan-qr-code" data-size="14"></span><span class="btn-label"></span></button>
+    </div>
+  </div>
+
   <!-- Inspector Panel -->
   <div id="inspector-backdrop" class="inspector-backdrop hidden"></div>
   <div id="inspector" class="inspector">
     <div class="inspector-resize-handle"></div>
     <div class="inspector-header">
-      <h3 id="inspector-title">高度な検索</h3>
-      <button id="inspector-close" class="btn-close">&times;</button>
+      <span class="icon" data-icon="list-filter" data-size="18"></span><h3 id="inspector-title">高度な検索</h3>
+      <button id="inspector-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
     </div>
     <div class="inspector-body">
       <div class="inspector-section">
@@ -199,14 +345,14 @@
         </div>
         <div class="inspector-search-wrapper">
           <input type="text" id="inspector-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
-          <button id="inspector-search-clear" class="inspector-search-clear hidden" type="button">&times;</button>
+          <button id="inspector-search-clear" class="inspector-search-clear hidden" type="button" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
         </div>
         <div id="inspector-effect-list" class="inspector-effect-list"></div>
       </div>
     </div>
     <div class="inspector-footer">
-      <button id="inspector-clear" class="btn-secondary">クリア</button>
-      <button id="inspector-apply" class="btn-primary">適用</button>
+      <button id="inspector-clear" class="btn-secondary"><span class="icon" data-icon="eraser" data-size="14"></span><span class="btn-label">クリア</span></button>
+      <button id="inspector-apply" class="btn-primary"><span class="icon" data-icon="check" data-size="14"></span><span class="btn-label">適用</span></button>
     </div>
   </div>
 
@@ -215,8 +361,8 @@
   <div id="optimizer-inspector" class="inspector">
     <div class="inspector-resize-handle"></div>
     <div class="inspector-header">
-      <h3 id="optimizer-title">ビルド探索</h3>
-      <button id="optimizer-close" class="btn-close">&times;</button>
+      <span class="icon" data-icon="wand-sparkles" data-size="18"></span><h3 id="optimizer-title">ビルド探索</h3>
+      <button id="optimizer-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
     </div>
     <div class="inspector-body">
       <div class="inspector-section">
@@ -244,7 +390,7 @@
           <span id="opt-effects-count" class="inspector-count">0件</span>
         </div>
         <div id="opt-effects-list" class="opt-effects-list"></div>
-        <button id="opt-add-effect" class="btn-secondary opt-add-effect-btn">+ <span id="opt-add-effect-label">効果を追加</span></button>
+        <button id="opt-add-effect" class="btn-secondary opt-add-effect-btn"><span class="icon" data-icon="plus" data-size="14"></span><span id="opt-add-effect-label">効果を追加</span></button>
       </div>
       <div class="inspector-section">
         <h4 id="opt-settings-label">設定</h4>
@@ -261,12 +407,12 @@
     <div class="inspector-footer">
       <div class="opt-preset-row">
         <span id="opt-preset-label" class="opt-preset-label">検索条件プリセット:</span>
-        <button id="opt-preset-save" class="btn-preset" title="検索条件プリセット保存">&#128190; <span id="opt-preset-save-label">保存</span></button>
-        <button id="opt-preset-load" class="btn-preset" title="検索条件プリセット読込">&#128194; <span id="opt-preset-load-label">読込</span></button>
+        <button id="opt-preset-save" class="btn-preset" title="検索条件プリセット保存"><span class="icon" data-icon="save" data-size="14"></span><span id="opt-preset-save-label">保存</span></button>
+        <button id="opt-preset-load" class="btn-preset" title="検索条件プリセット読込"><span class="icon" data-icon="folder-open" data-size="14"></span><span id="opt-preset-load-label">読込</span></button>
       </div>
       <div class="opt-footer-actions">
-        <button id="optimizer-clear" class="btn-secondary"><span id="optimizer-clear-label">クリア</span></button>
-        <button id="optimizer-run" class="btn-primary"><span id="optimizer-run-label">実行</span></button>
+        <button id="optimizer-clear" class="btn-secondary"><span class="icon" data-icon="eraser" data-size="14"></span><span id="optimizer-clear-label">クリア</span></button>
+        <button id="optimizer-run" class="btn-primary"><span class="icon" data-icon="play" data-size="14"></span><span id="optimizer-run-label">実行</span></button>
       </div>
     </div>
   </div>
@@ -277,26 +423,29 @@
     <div class="inspector-resize-handle"></div>
     <div class="inspector-header">
       <h3 id="effect-select-title">効果を選択</h3>
-      <button id="effect-select-close" class="btn-close">&times;</button>
+      <button id="effect-select-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
     </div>
     <div class="inspector-body">
       <div class="inspector-section">
         <div class="inspector-search-wrapper">
           <input type="text" id="effect-select-search" class="inspector-search" placeholder="効果名で絞り込み..." autocomplete="off" />
-          <button id="effect-select-search-clear" class="inspector-search-clear hidden" type="button">&times;</button>
+          <button id="effect-select-search-clear" class="inspector-search-clear hidden" type="button" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
         </div>
         <div id="effect-select-list" class="inspector-effect-list"></div>
       </div>
     </div>
     <div class="inspector-footer effect-select-footer">
-      <button id="effect-select-clear" class="btn-secondary"><span id="effect-select-clear-label">クリア</span></button>
-      <button id="effect-select-apply" class="btn-primary"><span id="effect-select-apply-label">適用</span></button>
+      <button id="effect-select-clear" class="btn-secondary"><span class="icon" data-icon="eraser" data-size="14"></span><span id="effect-select-clear-label">クリア</span></button>
+      <button id="effect-select-apply" class="btn-primary"><span class="icon" data-icon="check" data-size="14"></span><span id="effect-select-apply-label">適用</span></button>
     </div>
   </div>
 
   <script src="lib/crypto-js.min.js"></script>
+  <script src="lib/icons.js"></script>
   <script src="relic-parser.js"></script>
   <script src="relic-optimizer.js"></script>
+  <script src="relic-share.js"></script>
+  <script src="lib/qrcode.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
