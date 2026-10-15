@@ -184,6 +184,7 @@ function buildStackingLookup(effectsData) {
     lookup[id] = {
       stackable: entry.stackable,
       stackNotes: entry.stackNotes || '',
+      stackNotesFull: entry.stackNotesFull || '',
       key: entry.key || '',
       name_ja: entry.name_ja || '',
       name_en: entry.name_en || '',
@@ -937,9 +938,13 @@ function formatStackingInfo(effectId, ja) {
     stackLabel = ja ? '重複: ×' : 'Stacking: No';
   }
   const notes = info.stackNotes
-    ? `<span class="stacking-notes">${info.stackNotes}</span>`
+    ? `<span class="stacking-notes">${escapeHtml(info.stackNotes)}</span>`
     : '';
-  return `<div class="detail-effect-stacking">${stackLabel}${notes}</div>`;
+  // Full notes (wiki remarks, ' / '-separated) shown under the summary
+  const full = info.stackNotesFull && info.stackNotesFull !== info.stackNotes
+    ? `<div class="stacking-notes-full">${info.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`
+    : '';
+  return `<div class="detail-effect-stacking">${stackLabel}${notes}${full}</div>`;
 }
 
 // === Minimap ===
@@ -1252,6 +1257,7 @@ function buildCatalogEffects() {
       deepOnly: meta ? !!meta.deepOnly : false,
       stackable: meta ? meta.stackable : undefined,
       stackNotes: meta ? (meta.stackNotes || '') : '',
+      stackNotesFull: meta ? (meta.stackNotesFull || '') : '',
       count: ue.count || 0,
     });
   }
@@ -1354,7 +1360,8 @@ function renderCatalog() {
 
       // Stack notes
       if (e.stackNotes) {
-        html += `<div class="catalog-card-notes">${escapeHtml(e.stackNotes)}</div>`;
+        const title = e.stackNotesFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
+        html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
       }
 
       // Count (only when save file loaded)

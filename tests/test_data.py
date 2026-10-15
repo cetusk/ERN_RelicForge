@@ -52,6 +52,11 @@ class TestEffectsData(unittest.TestCase):
                     self.assertIsInstance(eff.get(field), str)
                     self.assertTrue(eff[field])
                 self.assertIn(eff.get('stackable'), STACKABLE_VALUES)
+                # stackNotes: short summary shown inline; stackNotesFull: full remarks (optional)
+                self.assertIsInstance(eff.get('stackNotes'), str)
+                if 'stackNotesFull' in eff:
+                    self.assertIsInstance(eff['stackNotesFull'], str)
+                    self.assertTrue(eff['stackNotesFull'])
                 if 'deepOnly' in eff:
                     self.assertIsInstance(eff['deepOnly'], bool)
 

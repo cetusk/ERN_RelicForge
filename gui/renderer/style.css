@@ -779,6 +779,14 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   color: var(--text-muted);
 }
 
+.stacking-notes-full {
+  margin-top: 3px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 /* === Inspector Panel === */
 .btn-inspector {
   background: var(--bg-tertiary);

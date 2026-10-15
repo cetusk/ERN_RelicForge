@@ -222,7 +222,7 @@
     "rank": 1
    },
    {
-    "key": "attacksInflictPoison",
+    "key": "increasedMaximumFP",
     "priority": "required",
     "rank": 2
    }

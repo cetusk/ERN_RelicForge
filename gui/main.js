@@ -145,6 +145,7 @@ ipcMain.handle('load-stacking-data', async () => {
       lookup[id] = {
         stackable: entry.stackable,
         stackNotes: entry.stackNotes || '',
+        stackNotesFull: entry.stackNotesFull || '',
         key: entry.key || '',
         name_ja: entry.name_ja || '',
         name_en: entry.name_en || '',

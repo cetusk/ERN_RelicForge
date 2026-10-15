@@ -45,42 +45,48 @@
    "name_en": "Vigor Plus 1",
    "name_ja": "生命力+1",
    "stackable": true,
-   "stackNotes": ""
+   "stackNotes": "+1あたり最大HP+20",
+   "stackNotesFull": "+1あたり最大HP+20 / 増加量はキャラクターやレベルを問わず固定値"
   },
   "7000001": {
    "key": "vigorPlus2",
    "name_en": "Vigor Plus 2",
    "name_ja": "生命力+2",
    "stackable": true,
-   "stackNotes": ""
+   "stackNotes": "+1あたり最大HP+20",
+   "stackNotesFull": "+1あたり最大HP+20 / 増加量はキャラクターやレベルを問わず固定値"
   },
   "7000002": {
    "key": "vigorPlus3",
    "name_en": "Vigor Plus 3",
    "name_ja": "生命力+3",
    "stackable": true,
-   "stackNotes": ""
+   "stackNotes": "+1あたり最大HP+20",
+   "stackNotesFull": "+1あたり最大HP+20 / 増加量はキャラクターやレベルを問わず固定値"
   },
   "7000090": {
    "key": "increasedMaximumHP",
    "name_en": "Increased Maximum Hp",
    "name_ja": "最大HP上昇",
    "stackable": false,
-   "stackNotes": "深層版は重複可"
+   "stackNotes": "最大HP+100、生命力+との重複可",
+   "stackNotesFull": "最大HP+100　生命力+との重複可 / 深層の遺物の同名効果とは別物"
   },
   "7000100": {
    "key": "mindPlus1",
    "name_en": "Mind Plus 1",
    "name_ja": "精神力+1",
    "stackable": true,
-   "stackNotes": ""
+   "stackNotes": "+1あたり最大FP+5",
+   "stackNotesFull": "+1あたり最大FP+5 / 増加量はキャラクターやレベルを問わず固定値"
   },
   "7000101": {
    "key": "mindPlus2",
    "name_en": "Mind Plus 2",
    "name_ja": "精神力+2",
    "stackable": true,
-   "stackNotes": ""
+   "stackNotes": "+1あたり最大FP+5",
+   "stackNotesFull": "+1あたり最大FP+5 / 増加量はキャラクターやレベルを問わず固定値"
   }
  }
 }

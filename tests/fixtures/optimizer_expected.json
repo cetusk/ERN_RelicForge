@@ -9000,9 +9000,9 @@
      "itemType": "Relic",
      "effects": [
       {
-       "key": "attacksInflictPoison",
-       "name_ja": "攻撃に毒の状態異常を付加",
-       "name_en": "Attacks Inflict Poison",
+       "key": "increasedMaximumFP",
+       "name_ja": "最大FP上昇",
+       "name_en": "Increased Maximum Fp",
        "matched": true,
        "priority": "required"
       }
@@ -9010,7 +9010,7 @@
     }
    ],
    "matchedEffects": [
-    "attacksInflictPoison",
+    "increasedMaximumFP",
     "increasedMaximumHP",
     "vigorPlus1"
    ],
@@ -9068,9 +9068,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9078,7 +9078,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9135,9 +9135,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9145,7 +9145,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9202,9 +9202,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9212,7 +9212,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9269,9 +9269,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9279,7 +9279,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9336,9 +9336,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9346,7 +9346,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9403,9 +9403,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9413,7 +9413,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9470,9 +9470,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9480,7 +9480,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9537,9 +9537,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9547,7 +9547,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9604,9 +9604,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9614,7 +9614,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],
@@ -9671,9 +9671,9 @@
       "itemType": "Relic",
       "effects": [
        {
-        "key": "attacksInflictPoison",
-        "name_ja": "攻撃に毒の状態異常を付加",
-        "name_en": "Attacks Inflict Poison",
+        "key": "increasedMaximumFP",
+        "name_ja": "最大FP上昇",
+        "name_en": "Increased Maximum Fp",
         "matched": true,
         "priority": "required"
        }
@@ -9681,7 +9681,7 @@
      }
     ],
     "matchedEffects": [
-     "attacksInflictPoison",
+     "increasedMaximumFP",
      "increasedMaximumHP",
      "vigorPlus1"
     ],

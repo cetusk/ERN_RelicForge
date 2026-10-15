@@ -373,10 +373,10 @@
    "effects": [
     [
      {
-      "id": 7001900,
-      "key": "attacksInflictPoison",
-      "name_en": "Attacks Inflict Poison",
-      "name_ja": "攻撃に毒の状態異常を付加"
+      "id": 7000190,
+      "key": "increasedMaximumFP",
+      "name_en": "Increased Maximum Fp",
+      "name_ja": "最大FP上昇"
      }
     ]
    ],
