@@ -2655,12 +2655,6 @@ button:has(> .icon) {
   border-radius: 6px;
 }
 
-.qr-show-counter {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--accent);
-}
-
 .qr-speed {
   display: flex;
   align-items: center;

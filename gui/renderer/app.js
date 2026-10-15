@@ -420,7 +420,6 @@ function renderQrShowText() {
 function showNextQrFrame() {
   if (!qrSender) return;
   drawRelicShareQr(document.getElementById('qr-show-canvas'), qrSender.frame(qrShowSeq), qrShowSize());
-  document.getElementById('qr-show-counter').textContent = `#${qrShowSeq}`;
   qrShowSeq++;
 }
 
