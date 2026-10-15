@@ -63,8 +63,9 @@ const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
 const CONCENTRATION_BONUS = 5;
 
 // App metadata
-const APP_NIGHTREIGN_VERSION = 'v1.03.4';
-const APP_LAST_UPDATED = '2026-02-14';
+const APP_VERSION = '1.1.0';                        // same as gui/package.json (checked by tests)
+const APP_NIGHTREIGN_VERSION = 'Regulation 1.03.5';  // game data the relic data is checked against
+const APP_LAST_UPDATED = '2026-10-15';
 
 // === Type Display Names ===
 const TYPE_LABELS = {
@@ -570,8 +571,8 @@ function updateLangUI() {
     : '* The save data (.bak) will be copied to a temp folder before loading';
   // Header meta
   document.getElementById('header-meta-version').textContent = ja
-    ? `Nightreign ${APP_NIGHTREIGN_VERSION} 対応`
-    : `Nightreign ${APP_NIGHTREIGN_VERSION}`;
+    ? `${APP_NIGHTREIGN_VERSION} 対応`
+    : `${APP_NIGHTREIGN_VERSION}`;
   document.getElementById('header-meta-updated').textContent = ja
     ? `最終更新: ${APP_LAST_UPDATED}`
     : `Updated: ${APP_LAST_UPDATED}`;
@@ -3399,7 +3400,7 @@ function buildExportHTML(title, bodyHTML, metaItems) {
 </div>
 <div class="export-meta">${metaHTML}</div>
 ${bodyHTML}
-<div class="export-footer">ERN RelicForge ${APP_NIGHTREIGN_VERSION} — Exported ${new Date().toLocaleString()}</div>
+<div class="export-footer">ERN RelicForge v${APP_VERSION} (${APP_NIGHTREIGN_VERSION}) — Exported ${new Date().toLocaleString()}</div>
 </body>
 </html>`;
 }

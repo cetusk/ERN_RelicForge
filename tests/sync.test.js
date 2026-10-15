@@ -17,3 +17,23 @@ for (const f of SHARED_FILES) {
     assert.ok(web === gui, `web/${f} differs from gui/renderer/${f} — copy the change to both`);
   });
 }
+
+test('app version / game version / last updated are the same in web, gui and gui/package.json', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'gui', 'package.json'), 'utf8'));
+  const constant = (dir, name) => {
+    const src = fs.readFileSync(path.join(ROOT_DIR, dir, 'app.js'), 'utf8');
+    const m = src.match(new RegExp(`const ${name} = '([^']*)'`));
+    assert.ok(m, `${dir}/app.js has no ${name}`);
+    return m[1];
+  };
+  for (const dir of ['web', 'gui/renderer']) {
+    assert.equal(constant(dir, 'APP_VERSION'), pkg.version, `${dir}/app.js APP_VERSION`);
+    for (const name of ['APP_NIGHTREIGN_VERSION', 'APP_LAST_UPDATED']) {
+      assert.equal(constant(dir, name), constant('web', name), `${dir}/app.js ${name}`);
+    }
+    // the header text before app.js runs
+    const html = fs.readFileSync(path.join(ROOT_DIR, dir, 'index.html'), 'utf8');
+    assert.ok(html.includes(`>${constant(dir, 'APP_NIGHTREIGN_VERSION')} 対応<`), `${dir}/index.html version label`);
+    assert.ok(html.includes(`>最終更新: ${constant(dir, 'APP_LAST_UPDATED')}<`), `${dir}/index.html last updated`);
+  }
+});
