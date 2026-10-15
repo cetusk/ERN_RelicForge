@@ -162,8 +162,9 @@ body {
 /* === Toolbar === */
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  gap: 10px 14px;
   padding: 10px 20px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
@@ -173,6 +174,7 @@ body {
 .search-wrapper {
   position: relative;
   flex: 1;
+  min-width: 220px;
   max-width: 320px;
 }
 
@@ -2286,3 +2288,82 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
 
 /* === Utilities === */
 .hidden { display: none !important; }
+
+/* === Icons (inline SVG from lib/icons.js) === */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.icon-svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Buttons with an icon: icon + label side by side */
+button:has(> .icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.btn-large:has(> .icon) {
+  gap: 8px;
+}
+
+.btn-close,
+.search-clear,
+.inspector-search-clear,
+.tab-close,
+.opt-effect-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Search box: magnifier on the left */
+.search-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.toolbar input#search-input {
+  padding-left: 30px;
+}
+
+/* Label icons (toolbar / catalog filters) */
+.filter-group > .icon,
+.catalog-filter-group > .icon {
+  color: var(--text-muted);
+}
+
+/* Panel headers: icon + title on the left, close button on the right */
+.inspector-header > .icon {
+  margin-right: 8px;
+  color: var(--accent);
+}
+
+.inspector-header > .icon + h3 {
+  margin-right: auto;
+}
+
+.welcome-icon .icon {
+  justify-content: center;
+}
+
+/* Icons inside text */
+.header-warning .icon-svg,
+.unknown-mark .icon-svg,
+.opt-required-badge .icon-svg,
+.btn-export-optimizer .icon-svg {
+  display: inline-block;
+  vertical-align: -2px;
+}

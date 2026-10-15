@@ -49,7 +49,8 @@ ERN_RelicForge/
 │   └── test_wylder_effects.json    # 追跡者テスト用効果指定
 │
 ├── tools/
-│   └── wiki_effects/            # 効果データ (重ね掛け・備考) の攻略 Wiki 照合ツール
+│   ├── wiki_effects/            # 効果データ (重ね掛け・備考) の攻略 Wiki 照合ツール
+│   └── icons/                   # 画面アイコン (lib/icons.js) の生成
 │
 └── tests/                       # 回帰テスト (GitHub Actions で自動実行)
     ├── test_*.py                # Python 版パーサー・オプティマイザ・データ整合性
@@ -424,6 +425,8 @@ node --test tests/*.test.js               # JS 版 (web / gui)
 ## License
 
 MIT License
+
+画面のアイコンは [Lucide](https://lucide.dev)（ISC License）を使用（`web/lib/icons.js` / `gui/renderer/lib/icons.js`、`tools/icons/build_icons.py` で生成）。
 
 ## Reference
 

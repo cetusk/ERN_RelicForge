@@ -214,6 +214,7 @@ detailClose.addEventListener('click', closeDetail);
 filterLang.addEventListener('change', () => {
   displayLang = filterLang.value;
   updateLangUI();
+  renderTabBar();   // tab labels (catalog etc.) follow the language
   renderTable();
   updateHeaderInfo();
   updateResultCount();
@@ -388,8 +389,9 @@ function updateLangUI() {
   document.getElementById('welcome-msg').textContent = ja
     ? 'セーブファイル (.sl2) を開いて遺物を確認'
     : 'Open a save file (.sl2) to view relics';
-  btnAutoLoad.textContent = ja ? '自動で読み込む' : 'Auto Load';
-  btnOpenWelcome.textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  btnAutoLoad.querySelector('.btn-label').textContent = ja ? '自動で読み込む' : 'Auto Load';
+  btnOpenWelcome.querySelector('.btn-label').textContent = ja ? 'ファイルを選択して開く' : 'Select File';
+  document.getElementById('btn-open-label').textContent = ja ? 'ファイルを開く' : 'Open File';
   autoLoadNote.textContent = ja
     ? '\u203b セーブデータ (.bak) を一時フォルダにコピーしてから読み込みます'
     : '* The save data (.bak) will be copied to a temp folder before loading';
@@ -403,7 +405,7 @@ function updateLangUI() {
   // Toolbar labels
   document.getElementById('label-color').textContent = ja ? '色:' : 'Color:';
   document.getElementById('label-type').textContent = ja ? 'タイプ:' : 'Type:';
-  document.getElementById('label-lang').textContent = ja ? '言語:' : 'Lang:';
+  document.getElementById('label-lang').textContent = ja ? '言語 / Language:' : 'Language:';
   // Search placeholder
   searchInput.placeholder = ja
     ? '効果名で検索 (日本語 / English)...'
@@ -429,8 +431,8 @@ function updateLangUI() {
   document.getElementById('inspector-title').textContent = ja ? '高度な検索' : 'Advanced Search';
   document.getElementById('inspector-effect-label').textContent = ja ? '効果フィルター' : 'Effect Filter';
   inspectorSearch.placeholder = ja ? '効果名で絞り込み...' : 'Filter effects...';
-  inspectorClear.textContent = ja ? 'クリア' : 'Clear';
-  inspectorApply.textContent = ja ? '適用' : 'Apply';
+  inspectorClear.querySelector('.btn-label').textContent = ja ? 'クリア' : 'Clear';
+  inspectorApply.querySelector('.btn-label').textContent = ja ? '適用' : 'Apply';
   updateInspectorButton();
   updateInspectorCount();
   if (inspector.classList.contains('open')) renderInspectorEffects();
@@ -457,9 +459,9 @@ function updateHeaderInfo() {
   const unknown = relicData.unknownRelics || 0;
   headerWarning.hidden = unknown === 0;
   if (unknown > 0) {
-    headerWarning.textContent = ja
-      ? `⚠ 未知の遺物: ${unknown}件`
-      : `⚠ Unknown relics: ${unknown}`;
+    headerWarning.innerHTML = iconSvg('triangle-alert', 13) + (ja
+      ? ` 未知の遺物: ${unknown}件`
+      : ` Unknown relics: ${unknown}`);
     headerWarning.title = ja
       ? 'データに無いアイテム・効果を含む遺物があります（「未知の効果 (ID: …)」等と表示）。ゲームのアップデートにツールが未対応の可能性があります。'
       : 'Some relics contain items/effects missing from the data files (shown as "Unknown Effect (ID: …)" etc.). The tool may not support the latest game update yet.';
@@ -471,7 +473,7 @@ function unknownMarkHtml() {
   const tip = displayLang === 'ja'
     ? 'データに無いアイテム・効果を含む遺物'
     : 'Contains items/effects missing from the data files';
-  return `<span class="unknown-mark" title="${tip}">\u26a0</span>`;
+  return `<span class="unknown-mark" title="${tip}">${iconSvg('triangle-alert', 13)}</span>`;
 }
 
 function typeLabel(itemType) {
@@ -710,7 +712,7 @@ function showDetail(relic) {
   const itemName = displayLang === 'ja'
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
     : (relic.itemNameEn || relic.itemKey);
-  detailTitle.textContent = relic.unknown ? `\u26a0 ${itemName}` : itemName;
+  detailTitle.innerHTML = (relic.unknown ? `<span class="unknown-mark">${iconSvg('triangle-alert', 16)}</span>` : '') + escapeHtml(itemName);
 
   let html = '';
 
@@ -1591,6 +1593,10 @@ function renderTabBar() {
       tab.appendChild(errIcon);
     }
 
+    if (!info._loading && !info._error) {
+      tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('wand-sparkles', 14)}</span>`);
+    }
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = info.label;
@@ -1598,7 +1604,7 @@ function renderTabBar() {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'tab-close';
-    closeBtn.innerHTML = '&times;';
+    closeBtn.innerHTML = iconSvg('x', 12);
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeTab(tabId);
@@ -1616,6 +1622,8 @@ function renderTabBar() {
     tab.className = 'tab' + (activeTab === 'catalog' ? ' active' : '');
     tab.dataset.tab = 'catalog';
 
+    tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('book-open', 14)}</span>`);
+
     const label = document.createElement('span');
     label.className = 'tab-label';
     label.textContent = ja ? '効果カタログ' : 'Effect Catalog';
@@ -1623,7 +1631,7 @@ function renderTabBar() {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'tab-close';
-    closeBtn.innerHTML = '&times;';
+    closeBtn.innerHTML = iconSvg('x', 12);
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeTab('catalog');
@@ -1910,7 +1918,7 @@ function renderOptEffectsTags() {
       const eff = allUniqueEffects.find(e => e.key === key);
       const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
       const rankHtml = `<span class="opt-effect-rank">${idx + 1}</span>`;
-      const dragHandle = '<span class="opt-effect-drag-handle">&#x2630;</span>';
+      const dragHandle = `<span class="opt-effect-drag-handle">${iconSvg('grip-vertical', 14)}</span>`;
       html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="true">
         ${rankHtml}
         <span class="opt-effect-tag-name" title="${key}">${name}</span>
@@ -2523,9 +2531,9 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     html += `<div class="opt-results-summary-info">`;
     html += `<span>${ja ? '最高スコア' : 'Best Score'}: ${best.score}</span>`;
     html += `<span>${ja ? '献器' : 'Vessel'}: ${vesselName}</span>`;
-    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? '✓' : '✗'}</span>`;
+    html += `<span>${ja ? '必須充足' : 'Required'}: ${best.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14)}</span>`;
     html += `<span>${ja ? '総件数' : 'Total'}: ${flatResults.length}</span>`;
-    html += `<button class="btn-export-optimizer" data-tab="${tabId}">&#128190; ${ja ? 'エクスポート' : 'Export'}</button>`;
+    html += `<button class="btn-export-optimizer" data-tab="${tabId}">${iconSvg('file-down', 14)} ${ja ? 'エクスポート' : 'Export'}</button>`;
     html += `</div></div>`;
   }
 
@@ -2645,7 +2653,7 @@ function renderResultCard(res, ja, isBest, params, idx) {
   html += `<span class="opt-score">${ja ? 'スコア' : 'Score'}: ${res.score}</span>`;
   if (res.subScore) html += `<span class="opt-sub-score">(sub: ${res.subScore})</span>`;
   html += `<span class="opt-required-badge ${res.requiredMet ? 'met' : 'not-met'}">`;
-  html += `${res.requiredMet ? '✓' : '✗'}</span>`;
+  html += `${res.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14)}</span>`;
   html += `<span class="opt-vessel-name">${vesselName}</span>`;
   html += `</div>`;
 
@@ -2807,7 +2815,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   html += `<h3>${ja ? 'スコア情報' : 'Score Info'}</h3>`;
   html += field(ja ? 'スコア' : 'Score', res.score);
   if (res.subScore) html += field(ja ? 'サブスコア' : 'Sub Score', res.subScore);
-  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? '✓' : '✗');
+  html += field(ja ? '必須充足' : 'Required Met', res.requiredMet ? iconSvg('circle-check', 14) : iconSvg('circle-x', 14));
   html += field(ja ? '献器' : 'Vessel', vesselName);
   html += `</div>`;
 
@@ -3042,6 +3050,7 @@ tbody tr:hover { background: var(--bg-hover); }
 .effect-debuff { color: #e07070; font-size: 11px; line-height: 1.5; padding-left: 10px; position: relative; }
 .effect-debuff::before { content: '└'; position: absolute; left: -2px; top: -1px; color: #e07070; font-size: 11px; }
 .unknown-mark { color: #f0a830; font-weight: 600; margin-right: 4px; }
+.unknown-mark svg, .opt-required-badge svg { display: inline-block; vertical-align: -2px; }
 .effect-main.unknown, .effect-debuff.unknown { color: #f0a830; }
 /* Optimizer cards */
 .opt-results-summary {
