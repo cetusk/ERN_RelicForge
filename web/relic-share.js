@@ -200,12 +200,18 @@ function findRelicShareToken(text) {
 }
 
 /*
- * QR code transfer — a link is too long for one QR code (max ~2,900 characters), so the token is
- * split into numbered frames that are shown one after another and read with the app's scanner.
- *   frame: "ERNRF:<id>:<index>:<total>:<part of the token>"   (index is 1-based, id tells transfers apart)
+ * QR code transfer — a link is too long for one QR code (max ~2,900 characters), so the data is sent
+ * as a stream of QR codes using a fountain code: the receiver can read ANY frames, in any order,
+ * and is done after about (number of blocks + 2) useful frames, without waiting for a missed one.
+ *
+ *   data  = the share token's bytes, split into K blocks of SHARE_QR_BLOCK bytes (last one zero-padded)
+ *   frame = "ERNRF2:<id>:<data bytes>:<K>:<seq>:<base64url of the frame's block>"
+ *           seq 1..K: block seq itself; seq > K: XOR of a pseudo-random set of blocks chosen by seq
+ *   The receiver solves the XOR equations (Gaussian elimination over GF(2)).
  */
-const SHARE_QR_PREFIX = 'ERNRF';
-const SHARE_QR_CHUNK = 500;   // characters per frame (QR version 15: dense codes are hard to read with a phone camera)
+const SHARE_QR_PREFIX = 'ERNRF2';
+const SHARE_QR_BLOCK = 360;        // bytes per frame (~500 characters: QR version 15, easy to read)
+const SHARE_QR_MAX_BLOCKS = 1000;
 
 function shareTokenId(token) {
   let h = 0x811c9dc5;   // FNV-1a
@@ -216,20 +222,58 @@ function shareTokenId(token) {
   return h.toString(36);
 }
 
-/** Split a share token into QR frame texts */
-function relicShareQrFrames(token, chunkSize = SHARE_QR_CHUNK) {
-  const total = Math.max(1, Math.ceil(token.length / chunkSize));
-  const id = shareTokenId(token);
-  const frames = [];
-  for (let i = 0; i < total; i++) {
-    frames.push(`${SHARE_QR_PREFIX}:${id}:${i + 1}:${total}:${token.slice(i * chunkSize, (i + 1) * chunkSize)}`);
+/** Blocks mixed into frame `seq` (0-based block indices; the same on both sides) */
+function shareQrMix(seq, blockCount) {
+  if (seq <= blockCount) return [seq - 1];
+  const fmix = (h) => {   // MurmurHash3 finalizer: neighbouring seq values get unrelated seeds
+    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b);
+    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+    return (h ^ (h >>> 16)) >>> 0;
+  };
+  let state = fmix(seq ^ fmix(blockCount + 0x9e3779b9));
+  const random = () => {   // mulberry32
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const picked = [];
+  for (let i = 0; i < blockCount; i++) if (random() < 0.5) picked.push(i);
+  while (picked.length < Math.min(2, blockCount)) {
+    const i = Math.floor(random() * blockCount);
+    if (!picked.includes(i)) picked.push(i);
   }
-  return frames;
+  return picked.sort((a, b) => a - b);
+}
+
+/** Frame source for a share token: {blocks, frame(seq)} (seq = 1, 2, 3, ... without end) */
+function createRelicShareQrSender(token) {
+  const bytes = shareBase64UrlToBytes(token);
+  const blockCount = Math.max(1, Math.ceil(bytes.length / SHARE_QR_BLOCK));
+  const id = shareTokenId(token);
+  const blocks = [];
+  for (let i = 0; i < blockCount; i++) {
+    const block = new Uint8Array(SHARE_QR_BLOCK);
+    block.set(bytes.subarray(i * SHARE_QR_BLOCK, (i + 1) * SHARE_QR_BLOCK));
+    blocks.push(block);
+  }
+  return {
+    blocks: blockCount,
+    frame(seq) {
+      const out = new Uint8Array(SHARE_QR_BLOCK);
+      for (const i of shareQrMix(seq, blockCount)) {
+        for (let k = 0; k < SHARE_QR_BLOCK; k++) out[k] ^= blocks[i][k];
+      }
+      return `${SHARE_QR_PREFIX}:${id}:${bytes.length}:${blockCount}:${seq}:${shareBytesToBase64Url(out)}`;
+    },
+  };
 }
 
 /**
- * Collects scanned QR texts (frames in any order, repeats are fine; a plain share link also works).
+ * Rebuilds the token from scanned QR texts (a plain share link in one QR code also works).
  * add() returns {state: 'ignored' | 'progress' | 'done', received, total, token?}
+ *   received = independent frames so far (the transfer is done when it reaches total)
  */
 class RelicShareQrCollector {
   constructor() {
@@ -237,41 +281,87 @@ class RelicShareQrCollector {
   }
 
   reset() {
-    this.id = null;
+    this.key = null;
     this.total = 0;
-    this.parts = new Map();
-  }
-
-  get received() {
-    return this.parts.size;
+    this.received = 0;
+    this.pivots = [];   // pivots[p]: {mask, data} whose lowest set bit is p
+    this.seen = new Set();
   }
 
   add(text) {
-    const status = (state, token) => ({ state, received: this.parts.size, total: this.total, token });
-    const m = /^ERNRF:([0-9a-z]+):(\d+):(\d+):([A-Za-z0-9_-]*)$/.exec(String(text || '').trim());
+    const status = (state, token) => ({ state, received: this.received, total: this.total, token });
+    const m = /^ERNRF2:([0-9a-z]+):(\d+):(\d+):(\d+):([A-Za-z0-9_-]+)$/.exec(String(text || '').trim());
     if (!m) {
       const linkToken = findRelicShareToken(text);
       return linkToken ? { state: 'done', received: 1, total: 1, token: linkToken } : status('ignored');
     }
-    const [, id, index, total, part] = m;
-    const n = Number(total);
-    const i = Number(index);
-    if (!(n >= 1 && n <= 200 && i >= 1 && i <= n)) return status('ignored');
-    if (id !== this.id || n !== this.total) {   // another transfer started
-      this.reset();
-      this.id = id;
-      this.total = n;
+    const [, id, size, count, seqText, payload] = m;
+    const byteCount = Number(size);
+    const blockCount = Number(count);
+    const seq = Number(seqText);
+    if (!(blockCount >= 1 && blockCount <= SHARE_QR_MAX_BLOCKS && seq >= 1 && byteCount >= 1)) return status('ignored');
+    let data;
+    try {
+      data = shareBase64UrlToBytes(payload);
+    } catch (_) {
+      return status('ignored');
     }
-    this.parts.set(i, part);
-    if (this.parts.size < n) return status('progress');
-    let token = '';
-    for (let k = 1; k <= n; k++) token += this.parts.get(k);
-    if (shareTokenId(token) !== id) {   // should not happen (QR codes carry their own error correction)
+    if (byteCount > blockCount * data.length || byteCount <= (blockCount - 1) * data.length) return status('ignored');
+    const key = `${id}:${byteCount}:${blockCount}:${data.length}`;
+    if (key !== this.key) {   // another transfer started
+      this.reset();
+      this.key = key;
+      this.id = id;
+      this.byteCount = byteCount;
+      this.total = blockCount;
+      this.blockSize = data.length;
+    }
+    if (this.seen.has(seq)) return status('progress');
+    this.seen.add(seq);
+
+    // Reduce the new equation by the known pivots; keep it if something is left
+    const mask = new Uint32Array(Math.ceil(blockCount / 32));
+    for (const i of shareQrMix(seq, blockCount)) mask[i >>> 5] |= 1 << (i & 31);
+    for (;;) {
+      const p = shareLowestBit(mask);
+      if (p < 0) return status('progress');   // nothing new in this frame
+      const pivot = this.pivots[p];
+      if (!pivot) {
+        this.pivots[p] = { mask, data };
+        this.received++;
+        break;
+      }
+      for (let w = 0; w < mask.length; w++) mask[w] ^= pivot.mask[w];
+      for (let k = 0; k < data.length; k++) data[k] ^= pivot.data[k];
+    }
+    if (this.received < blockCount) return status('progress');
+
+    // All blocks known: back-substitute from the last pivot
+    for (let p = blockCount - 1; p >= 0; p--) {
+      const row = this.pivots[p];
+      for (let q = p + 1; q < blockCount; q++) {
+        if (row.mask[q >>> 5] & (1 << (q & 31))) {
+          const other = this.pivots[q].data;
+          for (let k = 0; k < row.data.length; k++) row.data[k] ^= other[k];
+        }
+      }
+    }
+    const bytes = new Uint8Array(blockCount * this.blockSize);
+    for (let p = 0; p < blockCount; p++) bytes.set(this.pivots[p].data, p * this.blockSize);
+    const token = shareBytesToBase64Url(bytes.subarray(0, this.byteCount));
+    if (shareTokenId(token) !== this.id) {   // should not happen (QR codes carry their own error correction)
       this.reset();
       return status('ignored');
     }
     return status('done', token);
   }
+}
+
+function shareLowestBit(mask) {
+  for (let w = 0; w < mask.length; w++) {
+    if (mask[w]) return w * 32 + (31 - Math.clz32(mask[w] & -mask[w]));
+  }
+  return -1;
 }
 
 /** Draw a QR code on a canvas (dark on white, with the standard quiet zone). Needs lib/qrcode.js. */

@@ -962,9 +962,9 @@ document.getElementById('share-file').addEventListener('click', async () => {
 // Sender: the share token split into frames, shown one after another (a link is too long for one QR code)
 const qrShow = document.getElementById('qr-show');
 const qrShowBackdrop = document.getElementById('qr-show-backdrop');
-const QR_SPEEDS = [['slow', 1500], ['normal', 800], ['fast', 450]];
-let qrShowFrames = [];
-let qrShowIndex = 0;
+const QR_SPEEDS = [['slow', 800], ['normal', 400], ['fast', 250]];
+let qrSender = null;   // endless stream of frames (fountain code: any frames will do)
+let qrShowSeq = 1;
 let qrShowTimer = null;
 let qrShowSpeed = 'normal';
 
@@ -979,11 +979,11 @@ function renderQrShowText() {
   const steps = ja ? [
     'スマホで ERN RelicForge を開きます（下の小さな QR コードをカメラで読み取ると開けます）。',
     'スマホの［QR コードを読み取る］（最初の画面、またはメニュー「≡」）を押し、この画面の QR コードを映します。',
-    `QR コードは ${qrShowFrames.length} 枚あり、自動で切り替わります。すべて読み取ると、スマホに一覧が表示されます。`,
+    `QR コードは自動で切り替わります。どの QR コードから読み取っても構いません。約 ${qrSender.blocks} 枚分を読み取ると、スマホに一覧が表示されます。`,
   ] : [
     'Open ERN RelicForge on the phone (scan the small QR code below with the camera to open it).',
     'Tap "Scan QR codes" on the phone (welcome screen or the "≡" menu) and point it at this screen.',
-    `There are ${qrShowFrames.length} QR codes, shown in turn. Once all are read, the list appears on the phone.`,
+    `The QR codes change automatically; any of them will do. After about ${qrSender.blocks} have been read, the list appears on the phone.`,
   ];
   document.getElementById('qr-show-steps').innerHTML = steps.map(t => `<li>${escapeHtml(t)}</li>`).join('');
   document.getElementById('qr-app-text').textContent = ja ? 'アプリを開く' : 'Open the app';
@@ -994,10 +994,10 @@ function renderQrShowText() {
 }
 
 function showNextQrFrame() {
-  if (!qrShowFrames.length) return;
-  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrShowFrames[qrShowIndex], qrShowSize());
-  document.getElementById('qr-show-counter').textContent = `${qrShowIndex + 1} / ${qrShowFrames.length}`;
-  qrShowIndex = (qrShowIndex + 1) % qrShowFrames.length;
+  if (!qrSender) return;
+  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrSender.frame(qrShowSeq), qrShowSize());
+  document.getElementById('qr-show-counter').textContent = `#${qrShowSeq}`;
+  qrShowSeq++;
 }
 
 function startQrShowTimer() {
@@ -1009,8 +1009,8 @@ function startQrShowTimer() {
 function openQrShow() {
   const token = findRelicShareToken(shareUrl);
   if (!token) return;
-  qrShowFrames = relicShareQrFrames(token);
-  qrShowIndex = 0;
+  qrSender = createRelicShareQrSender(token);
+  qrShowSeq = 1;
   renderQrShowText();
   qrShow.classList.remove('hidden');
   qrShowBackdrop.classList.remove('hidden');
@@ -1039,7 +1039,7 @@ document.getElementById('qr-speed').addEventListener('click', (e) => {
   startQrShowTimer();
 });
 
-// Receiver (phones / tablets): read the frames with the camera. The reader (lib/jsQR.js) loads on first use.
+// Receiver (phones / tablets): read the frames with the camera. The reader (ZXing, WebAssembly) loads on first use.
 const qrScan = document.getElementById('qr-scan');
 const qrScanVideo = document.getElementById('qr-scan-video');
 const qrCollector = new RelicShareQrCollector();
@@ -1051,23 +1051,31 @@ let qrScanCanvas = null;
 const QR_DEBUG = /[?&]qrdebug\b/.test(location.search);
 let qrScanStats = null;
 
+let qrReaderReady = null;
 function loadQrReader() {
-  if (window.jsQR) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = 'lib/jsQR.js';
-    script.onload = resolve;
-    script.onerror = () => reject(new Error('lib/jsQR.js'));
-    document.head.appendChild(script);
-  });
+  if (!qrReaderReady) {
+    qrReaderReady = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'lib/zxing/zxing-reader.js';
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('lib/zxing/zxing-reader.js'));
+      document.head.appendChild(script);
+    }).then(() => ZXingWASM.prepareZXingModule({
+      overrides: {
+        locateFile: (file, prefix) => (file.endsWith('.wasm') ? new URL(`lib/zxing/${file}`, location.href).href : prefix + file),
+      },
+      fireImmediately: true,
+    }));
+    qrReaderReady.catch(() => { qrReaderReady = null; });
+  }
+  return qrReaderReady;
 }
 
 function renderQrScanStatus(message) {
   const ja = displayLang === 'ja';
   document.getElementById('qr-scan-title').textContent = ja ? 'QR コードを読み取る' : 'Scan QR codes';
   const total = qrCollector.total;
-  document.getElementById('qr-scan-bar').innerHTML = Array.from({ length: total }, (_, i) =>
-    `<span class="${qrCollector.parts.has(i + 1) ? 'got' : ''}"></span>`).join('');
+  document.getElementById('qr-scan-bar-fill').style.width = total ? `${Math.round(qrCollector.received * 100 / total)}%` : '0';
   document.getElementById('qr-scan-text').textContent = message || (total
     ? (ja ? `読み取り中… ${qrCollector.received} / ${total}（そのまま映し続けてください）`
           : `Reading… ${qrCollector.received} / ${total} (keep pointing at the screen)`)
@@ -1095,7 +1103,7 @@ async function openQrScanner() {
     qrScanVideo.srcObject = stream;
     await qrScanVideo.play();
     renderQrScanStatus();
-    requestAnimationFrame(scanQrFrame);
+    scanQrFrames();
   } catch (err) {
     const denied = err && (err.name === 'NotAllowedError' || err.name === 'SecurityError');
     renderQrScanStatus(denied
@@ -1104,32 +1112,43 @@ async function openQrScanner() {
   }
 }
 
-function scanQrFrame() {
-  if (!qrScanStream) return;
-  const w = qrScanVideo.videoWidth;
-  const h = qrScanVideo.videoHeight;
-  if (w && h) {
-    // Only the middle of the picture (where the guide square is): less to decode, no background clutter
-    const side = Math.round(Math.min(w, h) * 0.9);
-    if (!qrScanCanvas) qrScanCanvas = document.createElement('canvas');
-    qrScanCanvas.width = side;
-    qrScanCanvas.height = side;
-    const ctx = qrScanCanvas.getContext('2d', { willReadFrequently: true });
-    ctx.drawImage(qrScanVideo, (w - side) / 2, (h - side) / 2, side, side, 0, 0, side, side);
-    const t0 = performance.now();
-    const code = jsQR(ctx.getImageData(0, 0, side, side).data, side, side, { inversionAttempts: 'dontInvert' });
-    if (QR_DEBUG) updateQrScanStats(w, h, side, performance.now() - t0, !!code);
-    if (code) {
-      const before = qrCollector.received;
-      const result = qrCollector.add(code.data);
-      if (result.state === 'done') {
-        finishQrScan(result.token);
-        return;
+// Decode the camera picture over and over (one at a time) until the transfer is complete
+async function scanQrFrames() {
+  const stream = qrScanStream;
+  while (qrScanStream === stream) {
+    const w = qrScanVideo.videoWidth;
+    const h = qrScanVideo.videoHeight;
+    if (w && h) {
+      // Only the middle of the picture (where the guide square is): less to decode, no background clutter
+      const side = Math.round(Math.min(w, h) * 0.9);
+      if (!qrScanCanvas) qrScanCanvas = document.createElement('canvas');
+      qrScanCanvas.width = side;
+      qrScanCanvas.height = side;
+      const ctx = qrScanCanvas.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(qrScanVideo, (w - side) / 2, (h - side) / 2, side, side, 0, 0, side, side);
+      const t0 = performance.now();
+      let text = null;
+      try {
+        const results = await ZXingWASM.readBarcodes(ctx.getImageData(0, 0, side, side),
+          { formats: ['QRCode'], maxNumberOfSymbols: 1 });
+        if (results.length && results[0].isValid) text = results[0].text;
+      } catch (err) {
+        console.warn('QR decode failed:', err);
       }
-      if (result.state === 'progress' && qrCollector.received !== before) renderQrScanStatus();
+      if (qrScanStream !== stream) return;
+      if (QR_DEBUG) updateQrScanStats(w, h, side, performance.now() - t0, !!text);
+      if (text) {
+        const before = qrCollector.received;
+        const result = qrCollector.add(text);
+        if (result.state === 'done') {
+          finishQrScan(result.token);
+          return;
+        }
+        if (qrCollector.received !== before || result.total !== qrCollector.total) renderQrScanStatus();
+      }
     }
+    await new Promise(resolve => requestAnimationFrame(resolve));
   }
-  requestAnimationFrame(scanQrFrame);
 }
 
 function updateQrScanStats(w, h, side, ms, found) {

@@ -48,7 +48,7 @@ ERN_RelicForge/
 │       ├── crypto-js.min.js     # AES-CBC 復号化用
 │       ├── icons.js             # 画面のアイコン (Lucide)
 │       ├── qrcode.js            # QR コード生成 (qrcode-generator)
-│       └── jsQR.js              # QR コード読み取り (jsQR、読み取り画面を開いたときだけ読み込む)
+│       └── zxing/               # QR コード読み取り (ZXing の WebAssembly 版、読み取り画面を開いたときだけ読み込む)
 │
 ├── examples/
 │   ├── sample_output.json       # パーサーサンプル出力
@@ -100,7 +100,7 @@ ERN_RelicForge/
 - スマホ・タブレットでは、読み込んだ遺物の一覧を端末（ブラウザの IndexedDB、データベース名 `ERNRelicForge`）に記録し、次回は開くだけで表示。記録するのは遺物の ID・効果・並び順とキャラクター名・ファイル名のみで、セーブファイル本体や Steam ID は記録しない（メニューの「記録を消す」で消去可能。ゲームのセーブデータには影響しない）。PC ではセーブファイルを直接読めるため記録しない
 - Steam クラウドからの読み込み案内: ゲームの入っていない端末でも、Steam のクラウド保存ページ（公式）からダウンロードしたセーブファイルで確認可能（ログイン情報やファイルはアプリに送信されない）
 - 共有リンク: 表示中の遺物データをリンク（約 1 万文字 / 1200 件）またはテキストファイルにして別の端末へ渡せる（Web 版・Electron 版）。データは URL の `#` 以降に含まれ Web サーバーには送信されない。遺物の固有 ID と取得順の番号は含まず（並び順は保持）、キャラクター名は任意。受け取った側では自動で記録せず、スマホ・タブレットでは「この端末に記録」で記録
-- QR コードで渡す: 共有リンクは QR コード 1 つには収まらない（最大約 2,900 文字）ため、500 文字ずつ分けた QR コード（1200 件で約 19 枚）を PC などの画面に自動で切り替えて表示し、スマホの「QR コードを読み取る」（カメラ）ですべて読み取る（表示は Web 版・Electron 版、読み取りは Web 版のスマホ・タブレット。カメラを使うため https のページでのみ利用可能）
+- QR コードで渡す: 共有リンクは QR コード 1 つには収まらない（最大約 2,900 文字）ため、約 500 文字の QR コードを PC などの画面に自動で切り替えて表示し、スマホの「QR コードを読み取る」（カメラ）で読み取る。ファウンテン符号を使うので、どの QR コードから読み取ってもよく、データの分割数（1200 件で約 20）より数枚多く読み取れば完了する（読み逃した QR コードが再び表示されるのを待つ必要がない）（表示は Web 版・Electron 版、読み取りは Web 版のスマホ・タブレット。カメラを使うため https のページでのみ利用可能）
 
 ### GUI ビューアー (Electron / Web 共通)
 - Electron 版は Python 不要のスタンドアロンアプリ（JS 版パーサー・オプティマイザを内蔵）
@@ -440,7 +440,7 @@ MIT License
 
 画面のアイコンは [Lucide](https://lucide.dev)（ISC License）を使用（`web/lib/icons.js` / `gui/renderer/lib/icons.js`、`tools/icons/build_icons.py` で生成）。
 
-QR コードの生成に [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator)（MIT License、`lib/qrcode.LICENSE.txt`）、読み取りに [jsQR](https://github.com/cozmo/jsQR)（Apache License 2.0、`web/lib/jsQR.LICENSE.txt`）を使用。QR コードは株式会社デンソーウェーブの登録商標です。
+QR コードの生成に [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator)（MIT License、`lib/qrcode.LICENSE.txt`）、読み取りに [zxing-wasm](https://github.com/Sec-ant/zxing-wasm)（MIT License）と、その中の [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp)（Apache License 2.0）を使用（`web/lib/zxing/LICENSE.txt`）。QR コードは株式会社デンソーウェーブの登録商標です。
 
 ## Reference
 

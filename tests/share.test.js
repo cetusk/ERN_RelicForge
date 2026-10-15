@@ -53,33 +53,50 @@ for (const dir of APP_DIRS) {
     assert.equal(vm.runInContext("findRelicShareToken('https://example.com/page')", ctx), null);
   });
 
-  test(`${dir}: QR frames are reassembled in any order, and fit a screen-readable QR code`, () => {
+  test(`${dir}: QR fountain frames rebuild the link from any frames, despite missed ones`, () => {
     const ctx = shareContext(dir);
     const qrFile = path.join(ROOT_DIR, dir, 'lib', 'qrcode.js');
     vm.runInContext(fs.readFileSync(qrFile, 'utf8'), ctx, { filename: qrFile });
     const result = JSON.parse(vm.runInContext(`JSON.stringify((() => {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-      let token = '';
-      for (let i = 0; i < 12345; i++) token += chars[(i * 7919 + (i >> 3)) % 64];   // ~ a 1600-relic link
-      const frames = relicShareQrFrames(token);
-      const versions = frames.map(f => { const q = qrcode(0, 'L'); q.addData(f, 'Byte'); q.make(); return (q.getModuleCount() - 17) / 4; });
-      const order = frames.map((_, i) => i).reverse();
-      const c = new RelicShareQrCollector();
-      const states = [];
-      states.push(c.add('ERNRF:other:1:3:xyz').state);       // another transfer: replaced below
-      states.push(c.add('hello').state);                      // not ours
-      for (const i of [order[0], order[0], ...order.slice(1)]) states.push(c.add(frames[i]).state);
-      const done = states[states.length - 1];
+      let seed = 12345;
+      const random = () => (seed = (Math.imul(seed, 1103515245) + 12345) >>> 0) / 4294967296;
+      const bytes = new Uint8Array(9221);   // ~ a 1600-relic link
+      for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(random() * 256);
+      const token = shareBytesToBase64Url(bytes);
+      const sender = createRelicShareQrSender(token);
+      const versions = [1, 5, sender.blocks + 3].map(seq => {
+        const q = qrcode(0, 'L'); q.addData(sender.frame(seq), 'Byte'); q.make(); return (q.getModuleCount() - 17) / 4;
+      });
+      // 200 transfers: start anywhere, miss 40% of the frames, see each frame 1-2 times
+      const used = [];
+      let wrong = 0;
+      for (let run = 0; run < 200; run++) {
+        const c = new RelicShareQrCollector();
+        let seq = 1 + Math.floor(random() * 3 * sender.blocks);
+        let scanned = 0;
+        for (;;) {
+          if (random() < 0.4) { seq++; continue; }
+          const r = c.add(sender.frame(seq));
+          scanned++;
+          if (random() < 0.3) c.add(sender.frame(seq));   // same frame again: no harm
+          if (r.state === 'done') { if (r.token !== token) wrong++; break; }
+          seq++;
+        }
+        used.push(scanned);
+      }
+      used.sort((a, b) => a - b);
+      const other = new RelicShareQrCollector();
+      const states = [other.add('hello').state, other.add('ERNRF2:zz:5:2:1:AAAA').state, other.add('ERNRF2:zz:10:1:1:AAAA').state];
       const link = new RelicShareQrCollector().add('https://x.example/web/index.html#r=' + token.slice(0, 40));
-      return { count: frames.length, maxVersion: Math.max(...versions), states, done, same: c.add(frames[0]).token === token,
-               link: [link.state, link.token.length] };
+      return { blocks: sender.blocks, maxVersion: Math.max(...versions), wrong, median: used[100], worst: used[199],
+               states, link: [link.state, link.token.length] };
     })())`, ctx));
-    assert.equal(result.count, 25);
+    assert.equal(result.blocks, 26);
     assert.ok(result.maxVersion <= 15, `QR version ${result.maxVersion}`);
-    assert.deepEqual(result.states.slice(0, 2), ['progress', 'ignored']);
-    assert.ok(result.states.slice(2, -1).every(s => s === 'progress'));
-    assert.equal(result.done, 'done');
-    assert.ok(result.same);
+    assert.equal(result.wrong, 0);
+    assert.ok(result.median <= result.blocks + 3, `median frames ${result.median}`);
+    assert.ok(result.worst <= result.blocks + 12, `worst frames ${result.worst}`);
+    assert.deepEqual(result.states, ['ignored', 'progress', 'ignored']);   // last: size does not match the block
     assert.deepEqual(result.link, ['done', 40]);
   });
 }

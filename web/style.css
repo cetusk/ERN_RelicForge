@@ -2744,20 +2744,18 @@ button:has(> .icon) {
 }
 
 .qr-scan-bar {
-  display: flex;
-  gap: 3px;
-  margin-bottom: 8px;
-}
-
-.qr-scan-bar span {
-  flex: 1;
   height: 6px;
+  margin-bottom: 8px;
   border-radius: 3px;
   background: var(--bg-hover);
+  overflow: hidden;
 }
 
-.qr-scan-bar span.got {
+.qr-scan-bar-fill {
+  width: 0;
+  height: 100%;
   background: var(--accent);
+  transition: width 0.2s ease-out;
 }
 
 .qr-scan-status p {

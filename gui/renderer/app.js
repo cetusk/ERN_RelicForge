@@ -386,9 +386,9 @@ document.getElementById('share-file').addEventListener('click', () => {
 // the phone reads them with the Web version's scanner
 const qrShow = document.getElementById('qr-show');
 const qrShowBackdrop = document.getElementById('qr-show-backdrop');
-const QR_SPEEDS = [['slow', 1500], ['normal', 800], ['fast', 450]];
-let qrShowFrames = [];
-let qrShowIndex = 0;
+const QR_SPEEDS = [['slow', 800], ['normal', 400], ['fast', 250]];
+let qrSender = null;   // endless stream of frames (fountain code: any frames will do)
+let qrShowSeq = 1;
 let qrShowTimer = null;
 let qrShowSpeed = 'normal';
 
@@ -403,11 +403,11 @@ function renderQrShowText() {
   const steps = ja ? [
     'スマホで Web 版の ERN RelicForge を開きます（下の小さな QR コードをカメラで読み取ると開けます）。',
     'スマホの［QR コードを読み取る］（最初の画面、またはメニュー「≡」）を押し、この画面の QR コードを映します。',
-    `QR コードは ${qrShowFrames.length} 枚あり、自動で切り替わります。すべて読み取ると、スマホに一覧が表示されます。`,
+    `QR コードは自動で切り替わります。どの QR コードから読み取っても構いません。約 ${qrSender.blocks} 枚分を読み取ると、スマホに一覧が表示されます。`,
   ] : [
     'Open the Web version of ERN RelicForge on the phone (scan the small QR code below with the camera to open it).',
     'Tap "Scan QR codes" on the phone (welcome screen or the "≡" menu) and point it at this screen.',
-    `There are ${qrShowFrames.length} QR codes, shown in turn. Once all are read, the list appears on the phone.`,
+    `The QR codes change automatically; any of them will do. After about ${qrSender.blocks} have been read, the list appears on the phone.`,
   ];
   document.getElementById('qr-show-steps').innerHTML = steps.map(t => `<li>${escapeHtml(t)}</li>`).join('');
   document.getElementById('qr-app-text').textContent = ja ? 'アプリを開く' : 'Open the app';
@@ -418,10 +418,10 @@ function renderQrShowText() {
 }
 
 function showNextQrFrame() {
-  if (!qrShowFrames.length) return;
-  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrShowFrames[qrShowIndex], qrShowSize());
-  document.getElementById('qr-show-counter').textContent = `${qrShowIndex + 1} / ${qrShowFrames.length}`;
-  qrShowIndex = (qrShowIndex + 1) % qrShowFrames.length;
+  if (!qrSender) return;
+  drawRelicShareQr(document.getElementById('qr-show-canvas'), qrSender.frame(qrShowSeq), qrShowSize());
+  document.getElementById('qr-show-counter').textContent = `#${qrShowSeq}`;
+  qrShowSeq++;
 }
 
 function startQrShowTimer() {
@@ -433,8 +433,8 @@ function startQrShowTimer() {
 function openQrShow() {
   const token = findRelicShareToken(shareUrl);
   if (!token) return;
-  qrShowFrames = relicShareQrFrames(token);
-  qrShowIndex = 0;
+  qrSender = createRelicShareQrSender(token);
+  qrShowSeq = 1;
   renderQrShowText();
   qrShow.classList.remove('hidden');
   qrShowBackdrop.classList.remove('hidden');
