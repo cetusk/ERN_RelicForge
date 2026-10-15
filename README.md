@@ -48,6 +48,9 @@ ERN_RelicForge/
 │   ├── sample_effects_config.json  # 効果指定サンプル
 │   └── test_wylder_effects.json    # 追跡者テスト用効果指定
 │
+├── tools/
+│   └── wiki_effects/            # 効果データ (重ね掛け・備考) の攻略 Wiki 照合ツール
+│
 └── tests/                       # 回帰テスト (GitHub Actions で自動実行)
     ├── test_*.py                # Python 版パーサー・オプティマイザ・データ整合性
     ├── *.test.js                # JS 版 (web / gui) パーサー・オプティマイザ・共通ファイル一致
@@ -134,6 +137,7 @@ ERN_RelicForge/
   - 備考は要約（`stackNotes`：一覧・カタログ・詳細の1行表示）と全文（`stackNotesFull`：詳細パネルに表示、カタログはマウスオーバー）の2段構成
   - 「+値が違えば重ね掛け可」等の条件付き効果は、同じ効果どうしは重ならないため「×」として扱う
   - Wiki で重ね掛けが未検証の効果は、その旨を備考に記載
+  - ゲームや Wiki の更新時は `python tools/wiki_effects/sync.py` で再照合できる（[使い方](tools/wiki_effects/README.md)）
 
 ## Requirements
 
