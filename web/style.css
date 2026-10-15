@@ -2764,6 +2764,14 @@ button:has(> .icon) {
   color: var(--text-secondary);
 }
 
+.qr-scan-resume {
+  margin-top: 8px;
+}
+
+.qr-scan-resume[hidden] {
+  display: none;
+}
+
 .qr-scan-status .qr-scan-debug {
   font-size: 11px;
   font-family: Consolas, monospace;

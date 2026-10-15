@@ -1047,6 +1047,11 @@ const CAN_SCAN_QR = DEVICE_KIND !== 'pc' && window.isSecureContext &&
   !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 let qrScanStream = null;
 let qrScanCanvas = null;
+// Keep the phone cool: frames change every 0.25 s at the fastest, so a few decodes per frame are enough,
+// and the camera stops when nothing is found for a while or the page is hidden
+const QR_SCAN_INTERVAL_MS = 80;     // at most ~12 decodes per second
+const QR_SCAN_IDLE_MS = 60000;      // pause after a minute without any QR code
+let qrScanLastFound = 0;
 // "?qrdebug" in the URL: show camera size / decode rate under the scanner (for checking on real phones)
 const QR_DEBUG = /[?&]qrdebug\b/.test(location.search);
 let qrScanStats = null;
@@ -1083,11 +1088,17 @@ function renderQrScanStatus(message) {
           : 'On the other device, open "Share" > "Show QR codes" and point the camera at it.'));
 }
 
-async function openQrScanner() {
-  const ja = displayLang === 'ja';
+function openQrScanner() {
   qrCollector.reset();
   qrScan.classList.remove('hidden');
   openBackEntry('qr-scan', closeQrScanner);
+  startQrCamera();
+}
+
+// Start (or resume) the camera; what was read so far is kept
+async function startQrCamera() {
+  const ja = displayLang === 'ja';
+  document.getElementById('qr-scan-resume').hidden = true;
   renderQrScanStatus(ja ? 'カメラを起動しています…' : 'Starting the camera…');
   try {
     await loadQrReader();
@@ -1102,6 +1113,7 @@ async function openQrScanner() {
     qrScanStream = stream;
     qrScanVideo.srcObject = stream;
     await qrScanVideo.play();
+    qrScanLastFound = performance.now();
     renderQrScanStatus();
     scanQrFrames();
   } catch (err) {
@@ -1116,6 +1128,11 @@ async function openQrScanner() {
 async function scanQrFrames() {
   const stream = qrScanStream;
   while (qrScanStream === stream) {
+    const started = performance.now();
+    if (started - qrScanLastFound > QR_SCAN_IDLE_MS) {
+      pauseQrScanner();
+      return;
+    }
     const w = qrScanVideo.videoWidth;
     const h = qrScanVideo.videoHeight;
     if (w && h) {
@@ -1138,6 +1155,7 @@ async function scanQrFrames() {
       if (qrScanStream !== stream) return;
       if (QR_DEBUG) updateQrScanStats(w, h, side, performance.now() - t0, !!text);
       if (text) {
+        qrScanLastFound = performance.now();
         const before = qrCollector.received;
         const result = qrCollector.add(text);
         if (result.state === 'done') {
@@ -1147,8 +1165,22 @@ async function scanQrFrames() {
         if (qrCollector.received !== before || result.total !== qrCollector.total) renderQrScanStatus();
       }
     }
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    const wait = QR_SCAN_INTERVAL_MS - (performance.now() - started);
+    await new Promise(resolve => setTimeout(resolve, Math.max(0, wait)));
   }
+}
+
+// Stop the camera but keep the scanner (and what was read) open, with a resume button
+function pauseQrScanner() {
+  if (!qrScanStream) return;
+  const ja = displayLang === 'ja';
+  stopQrCamera();
+  renderQrScanStatus(ja
+    ? '電池の消耗を防ぐため、カメラを一時停止しました。読み取り済みの分は残っています。'
+    : 'The camera was paused to save battery. What was read so far is kept.');
+  const resume = document.getElementById('qr-scan-resume');
+  resume.querySelector('.btn-label').textContent = ja ? '再開' : 'Resume';
+  resume.hidden = false;
 }
 
 function updateQrScanStats(w, h, side, ms, found) {
@@ -1195,6 +1227,10 @@ async function finishQrScan(token) {
 }
 
 document.getElementById('qr-scan-close').addEventListener('click', closeQrScanner);
+document.getElementById('qr-scan-resume').addEventListener('click', startQrCamera);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseQrScanner();   // another app / screen off
+});
 document.getElementById('btn-qr-welcome').addEventListener('click', openQrScanner);
 document.getElementById('btn-qr-welcome').hidden = !CAN_SCAN_QR;
 
