@@ -2664,12 +2664,23 @@ effectSelectList.addEventListener('change', (e) => {
       select.style.visibility = 'hidden';
       item.classList.remove('checked');
     }
+    updateEffectSelectGroupCheckbox(item.closest('.inspector-group-items').dataset.cat);
   } else if (e.target.tagName === 'SELECT') {
     if (optSelectedEffects.has(key)) {
       optSelectedEffects.set(key, e.target.value);
     }
   }
 });
+
+// Category checkbox: checked when all of its effects are, "－" (indeterminate) when only some are
+function updateEffectSelectGroupCheckbox(catId) {
+  const groupCheckbox = effectSelectList.querySelector(`.inspector-group-checkbox[data-cat="${catId}"]`);
+  if (!groupCheckbox) return;
+  const items = [...effectSelectList.querySelectorAll(`.inspector-group-items[data-cat="${catId}"] .effect-select-item`)];
+  const checkedCount = items.filter(item => optSelectedEffects.has(item.dataset.key)).length;
+  groupCheckbox.checked = checkedCount > 0 && checkedCount === items.length;
+  groupCheckbox.indeterminate = checkedCount > 0 && checkedCount < items.length;
+}
 
 // Click on item text toggles checkbox; select clicks are excluded
 effectSelectList.addEventListener('click', (e) => {
