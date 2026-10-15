@@ -50,6 +50,7 @@ ICONS = [
     'smartphone',      # 端末に保存済み
     'link',            # リンクをコピー
     'file-text',       # ファイルで共有
+    'menu',            # スマホのメニュー
 ]
 
 HEADER = '''/**

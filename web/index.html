@@ -39,6 +39,10 @@
       <button id="search-clear" class="search-clear hidden" type="button" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
       <div id="search-suggestions" class="search-suggestions hidden"></div>
     </div>
+    <button id="btn-mobile-menu" class="btn-mobile-menu" type="button" aria-label="menu"><span class="icon" data-icon="menu" data-size="20"></span><span id="menu-badge" class="menu-badge" hidden></span></button>
+    <!-- Filters / actions: inline on wide screens, a bottom-sheet menu on phones -->
+    <div id="toolbar-sheet" class="toolbar-sheet">
+    <div id="toolbar-sheet-info" class="toolbar-sheet-info"></div>
     <div class="filter-group">
       <span class="icon" data-icon="palette"></span><label id="label-color">色:</label>
       <div class="custom-select" id="color-select">
@@ -79,7 +83,9 @@
     <button id="btn-share" class="btn-inspector hidden"><span class="icon" data-icon="share-2"></span><span id="btn-share-label">共有</span></button>
     </div>
     <span id="result-count" class="result-count"></span>
+    </div>
   </div>
+  <div id="toolbar-sheet-backdrop" class="toolbar-sheet-backdrop"></div>
 
   <!-- Tab Bar -->
   <div id="tab-bar" class="tab-bar hidden">

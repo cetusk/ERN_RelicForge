@@ -2587,6 +2587,17 @@ button:has(> .icon) {
   font-family: Consolas, monospace;
 }
 
+/* Phone-only menu parts (hidden on wide screens; toolbar-sheet is transparent to layout) */
+.toolbar .btn-mobile-menu,
+.toolbar-sheet-info,
+.toolbar-sheet-backdrop {
+  display: none;
+}
+
+.toolbar-sheet {
+  display: contents;
+}
+
 /* ============================================================
    Smartphone layout (narrow screens)
    ============================================================ */
@@ -2646,12 +2657,82 @@ button:has(> .icon) {
     flex-direction: column;
   }
 
-  /* --- Toolbar: search / 3 filters / 4 action buttons / hit count --- */
+  /* --- Toolbar: search + menu button; filters / actions / info in a bottom sheet --- */
   .toolbar {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     padding: 8px 12px;
     gap: 8px;
+  }
+  .search-wrapper {
+    flex: 1;
+  }
+  .toolbar .btn-mobile-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .menu-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .menu-badge[hidden] {
+    display: none;
+  }
+  .toolbar-sheet {
+    display: none;
+  }
+  .toolbar.menu-open .toolbar-sheet {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-content: start;
+    gap: 12px 8px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 46;
+  }
+  .toolbar.menu-open + .toolbar-sheet-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 45;
+  }
+  .toolbar-sheet-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    grid-column: span 12;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toolbar-sheet-info .header-info {
+    font-size: 12px;
+  }
+  /* Bottom sheet: color choices open upward (the sheet sits at the screen bottom) */
+  .toolbar-sheet .custom-select-dropdown {
+    top: auto;
+    bottom: calc(100% + 4px);
   }
   .toolbar.hidden {
     display: none;

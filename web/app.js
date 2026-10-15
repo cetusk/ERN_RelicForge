@@ -67,6 +67,13 @@ const TYPE_LABELS = {
 const btnOpen = document.getElementById('btn-open');
 const btnOpenWelcome = document.getElementById('btn-open-welcome');
 const fileInput = document.getElementById('file-input');
+// Touch devices (iPhone etc.): mobile pickers map the filter to file types they know, so the
+// extension filter would hide save files (.sl2 is not a known type), and no filter makes iOS ask
+// for photos / camera first. Accept any data file (+ text for share files) instead, which opens
+// the file browser directly and lists both.
+if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+  fileInput.setAttribute('accept', 'application/octet-stream,text/plain');
+}
 const headerInfo = document.getElementById('header-info');
 const headerWarning = document.getElementById('header-warning');
 const toolbar = document.getElementById('toolbar');
@@ -197,6 +204,45 @@ function buildStackingLookup(effectsData) {
 // === Init ===
 btnOpen.addEventListener('click', openFile);
 btnOpenWelcome.addEventListener('click', openFile);
+
+// === Smartphone menu: filters / actions / file info in a bottom sheet ===
+const mobileQuery = window.matchMedia('(max-width: 768px)');
+const btnMobileMenu = document.getElementById('btn-mobile-menu');
+const toolbarSheetInfo = document.getElementById('toolbar-sheet-info');
+
+// Phones: header file info / saved-data note live at the top of the menu (moved, so buttons keep working)
+function placeHeaderInfo() {
+  const info = document.getElementById('header-info');
+  const cache = document.getElementById('header-cache');
+  const headerLeft = document.querySelector('.header-left');
+  if (mobileQuery.matches) {
+    if (info.parentElement !== toolbarSheetInfo) toolbarSheetInfo.append(info, cache);
+  } else if (info.parentElement !== headerLeft) {
+    headerLeft.insertBefore(info, document.getElementById('header-warning'));
+    headerLeft.appendChild(cache);
+  }
+}
+
+function setMobileMenu(open) {
+  toolbar.classList.toggle('menu-open', open);
+}
+
+// Dot on the menu button while color / type / advanced filters are active
+function updateMenuBadge() {
+  const active = !!colorFilterValue || !!filterType.value || andGroups.some(g => g.size > 0);
+  document.getElementById('menu-badge').hidden = !active;
+}
+
+btnMobileMenu.addEventListener('click', () => setMobileMenu(!toolbar.classList.contains('menu-open')));
+document.getElementById('toolbar-sheet-backdrop').addEventListener('click', () => setMobileMenu(false));
+document.querySelector('.toolbar-actions').addEventListener('click', (e) => {
+  if (e.target.closest('button')) setMobileMenu(false);   // the chosen panel opens full screen
+});
+mobileQuery.addEventListener('change', () => {
+  placeHeaderInfo();
+  if (!mobileQuery.matches) setMobileMenu(false);
+});
+placeHeaderInfo();
 
 // === Steam Cloud guide ===
 // The save cannot be fetched from Steam directly (cross-origin + login), so the user downloads it
@@ -1077,6 +1123,7 @@ searchInput.addEventListener('focus', () => {
 // === Filter & Sort ===
 function applyFilters() {
   if (!relicData) return;
+  updateMenuBadge();
 
   const query = searchInput.value.toLowerCase().trim();
   const colorFilter = colorFilterValue;
