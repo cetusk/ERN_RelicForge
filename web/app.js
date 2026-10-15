@@ -80,6 +80,10 @@ const DEVICE_KIND = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ? 'ios'
   : /Android/.test(navigator.userAgent) ? 'android' : 'pc';
 
+// Phones / tablets keep the last loaded relics so the next visit opens without the save file
+// (re-downloading it from Steam each time is tedious). PCs read the save file directly.
+const KEEP_ON_DEVICE = DEVICE_KIND !== 'pc';
+
 function downloadedFileHint(ja) {
   if (DEVICE_KIND === 'ios') return ja
     ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使った項目」に表示されます。見つからないときは「ブラウズ」→「iCloud Drive」（または「このiPhone内」）→「ダウンロード」を開いてください。「↑エラー」と表示されていても（iCloud の容量不足など）、選べば読み込めます。'
@@ -403,8 +407,8 @@ function renderMobileMenu() {
     storage.innerHTML = `<span class="mm-storage-text">${iconSvg('smartphone', 14)}` +
       `${escapeHtml(document.querySelector('#header-cache .header-cache-text').textContent)}</span>` +
       (shared
-        ? `<button type="button" class="mm-storage-btn" data-target="header-cache-save">${iconSvg('save', 14)}${ja ? 'この端末に保存' : 'Save'}</button>`
-        : `<button type="button" class="mm-storage-btn danger" data-target="header-cache-delete">${iconSvg('trash-2', 14)}${ja ? '削除' : 'Delete'}</button>`);
+        ? (KEEP_ON_DEVICE ? `<button type="button" class="mm-storage-btn" data-target="header-cache-save">${iconSvg('save', 14)}${ja ? 'この端末に記録' : 'Keep'}</button>` : '')
+        : `<button type="button" class="mm-storage-btn" data-target="header-cache-delete">${ja ? '記録を消す' : 'Forget'}</button>`);
   }
 
   // Language
@@ -490,8 +494,10 @@ function renderSteamGuideText() {
   ];
   document.getElementById('steam-guide-steps').innerHTML = steps.map(s => `<li>${escapeHtml(s)}</li>`).join('');
   document.getElementById('steam-guide-note').textContent = ja
-    ? 'ダウンロードは Steam の公式ページで直接行うため、ログイン情報やファイルがこのアプリに送られることはありません。読み込んだ遺物データはこの端末に保存され、次回からはページを開くだけで表示されます。'
-    : 'The download happens on Steam\'s official page; your login and files are never sent to this app. The relics you load are kept on this device and shown next time you open the page.';
+    ? 'ダウンロードは Steam の公式ページで直接行うため、ログイン情報やファイルがこのアプリに送られることはありません。' +
+      (KEEP_ON_DEVICE ? '読み込んだ遺物の一覧はこの端末に記録され、次回からはページを開くだけで表示されます。' : '')
+    : 'The download happens on Steam\'s official page; your login and files are never sent to this app.' +
+      (KEEP_ON_DEVICE ? ' The relic list you load is kept on this device and shown next time you open the page.' : '');
   document.querySelector('#steam-guide-open .btn-label').textContent = ja ? 'Steam のページを開く' : 'Open Steam page';
   document.querySelector('#steam-guide-pick .btn-label').textContent = ja ? 'ダウンロードしたファイルを選択' : 'Select downloaded file';
   document.getElementById('btn-steam-header-label').textContent = ja ? 'Steam クラウド' : 'Steam Cloud';
@@ -636,12 +642,14 @@ async function loadAndDisplay(arrayBuffer) {
       relics: compactRelics(relics),
       loadedAt: new Date().toISOString(),
     };
-    updateCacheInfo(null);   // until this file is saved on the device
+    updateCacheInfo(null);   // until this file is kept on the device
     displayRelicData(cache);
-    // Keep the relics on this device so the next visit opens instantly
-    saveRelicCache(cache).then(() => updateCacheInfo(cache)).catch(err => {
-      console.warn('Could not save relic data on this device:', err);
-    });
+    // Phones: keep the relics on this device so the next visit opens instantly
+    if (KEEP_ON_DEVICE) {
+      saveRelicCache(cache).then(() => updateCacheInfo(cache)).catch(err => {
+        console.warn('Could not keep relic data on this device:', err);
+      });
+    }
   } catch (err) {
     alert(`解析エラー:\n${err}`);
     showView('welcome');
@@ -749,12 +757,15 @@ function updateCacheInfo(record) {
   const when = formatLoadedAt(record.loadedAt);
   const shared = !!record.unsavedShare;
   el.querySelector('.header-cache-text').textContent = shared
-    ? (ja ? '共有リンクのデータ（この端末には未保存）' : 'Shared data (not saved on this device)')
-    : (ja ? `端末に保存済み（${when} 読み込み）` : `Saved on this device (loaded ${when})`);
-  document.getElementById('header-cache-save').hidden = !shared;
-  document.getElementById('header-cache-save-label').textContent = ja ? 'この端末に保存' : 'Save on this device';
+    ? (ja ? '共有リンクで開いた一覧' : 'Opened from a share link')
+    : (ja ? `${when} に読み込んだ一覧をこの端末に記録中` : `List loaded ${when}, kept on this device`);
+  document.getElementById('header-cache-save').hidden = !shared || !KEEP_ON_DEVICE;
+  document.getElementById('header-cache-save-label').textContent = ja ? 'この端末に記録' : 'Keep on this device';
   document.getElementById('header-cache-delete').hidden = shared;
-  el.querySelector('.header-cache-delete').title = ja ? 'この端末に保存したデータを削除' : 'Delete the data saved on this device';
+  document.getElementById('header-cache-delete-label').textContent = ja ? '記録を消す' : 'Forget';
+  el.querySelector('.header-cache-delete').title = ja
+    ? 'このアプリが記録した遺物の一覧を消します（ゲームのセーブデータには影響しません）'
+    : 'Forget the relic list this app keeps (your game save is not affected)';
   el.hidden = false;
   renderMobileMenu();
 }
@@ -764,27 +775,27 @@ document.getElementById('header-cache-save').addEventListener('click', async () 
   const ja = displayLang === 'ja';
   if (!currentCache) return;
   if (!confirm(ja
-    ? 'この共有データをこの端末に保存しますか？\n（すでに保存しているデータは置き換わります）'
-    : 'Save this shared data on this device?\n(It replaces the data saved before.)')) return;
+    ? 'この共有された一覧をこの端末に記録しますか？\n（すでに記録している一覧は置き換わります。ゲームのセーブデータには影響しません）'
+    : 'Keep this shared list on this device?\n(It replaces the list kept before. Your game save is not affected.)')) return;
   const { unsavedShare, ...record } = currentCache;
   try {
     await saveRelicCache(record);
     updateCacheInfo(record);
   } catch (err) {
-    alert(`${ja ? '保存に失敗しました' : 'Failed to save'}: ${err}`);
+    alert(`${ja ? '記録できませんでした' : 'Could not keep the list'}: ${err}`);
   }
 });
 
 document.getElementById('header-cache-delete').addEventListener('click', async () => {
   const ja = displayLang === 'ja';
   if (!confirm(ja
-    ? 'この端末に保存した遺物データを削除しますか？\n（表示中のデータは、ページを閉じるまでそのまま表示されます）'
-    : 'Delete the relic data saved on this device?\n(The data shown now stays until you close the page.)')) return;
+    ? 'このアプリがこの端末に記録した遺物の一覧を消しますか？\n\n・ゲームのセーブデータ（.sl2）や Steam クラウドのデータは消えません\n・次回は、セーブファイルを選び直すと表示されます\n・表示中の一覧は、ページを閉じるまでそのまま表示されます'
+    : 'Forget the relic list this app keeps on this device?\n\n- Your game save (.sl2) and Steam Cloud data are NOT deleted\n- Next time, open the save file again to see your relics\n- The list shown now stays until you close the page')) return;
   try {
     await deleteRelicCache();
     updateCacheInfo(null);
   } catch (err) {
-    alert(`${ja ? '削除に失敗しました' : 'Failed to delete'}: ${err}`);
+    alert(`${ja ? '記録を消せませんでした' : 'Could not forget the list'}: ${err}`);
   }
 });
 
@@ -938,6 +949,10 @@ document.getElementById('share-file').addEventListener('click', async () => {
 // Open the relics stored on this device (on page load)
 async function tryRestoreRelicCache() {
   try {
+    if (!KEEP_ON_DEVICE) {
+      await deleteRelicCache();   // PCs keep nothing (drops a record left by an earlier version)
+      return;
+    }
     const record = await loadRelicCache();
     if (!record || relicData) return;
     if (!itemsData || !effectsData) await loadResources();

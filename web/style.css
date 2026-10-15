@@ -2466,8 +2466,8 @@ button:has(> .icon) {
 }
 
 .header-cache-delete:hover {
-  color: #e07070;
-  border-color: #e07070;
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
 }
 
 /* === Dialogs (Steam Cloud guide / share link) === */
@@ -2950,9 +2950,6 @@ button:has(> .icon) {
     border-radius: 6px;
     color: var(--accent);
     font-size: 12px;
-  }
-  .mm-storage-btn.danger {
-    color: var(--color-red);
   }
   .mm-footer {
     padding-top: 14px;
