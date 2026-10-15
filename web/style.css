@@ -2223,6 +2223,23 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
 }
 .catalog-filter-group select:focus { border-color: var(--accent); }
 
+/* Phone-only buttons (other button rules must not show them on wide screens) */
+@media (min-width: 769px) {
+  .btn-mobile-menu,
+  .catalog-filter-toggle {
+    display: none !important;
+  }
+}
+
+/* Phones only: filters folded behind a button (on wide screens the wrapper is transparent to layout) */
+.catalog-filters {
+  display: contents;
+}
+
+.catalog-filter-toggle {
+  display: none;
+}
+
 .catalog-owned-note {
   font-size: 11px;
   color: var(--text-muted);
@@ -2595,7 +2612,7 @@ button:has(> .icon) {
 }
 
 /* Phone-only parts (hidden on wide screens; toolbar-sheet is transparent to layout) */
-.toolbar .btn-mobile-menu,
+.btn-mobile-menu,
 .mobile-menu,
 .sheet-backdrop,
 .sheet-grip {
@@ -2853,13 +2870,12 @@ button:has(> .icon) {
   .search-wrapper {
     flex: 1;
   }
-  .toolbar .btn-mobile-menu {
+  .btn-mobile-menu {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     position: relative;
     flex-shrink: 0;
-    margin-left: auto;   /* stays right when the search box is hidden (other tabs) */
     padding: 8px 12px;
     background: var(--bg-tertiary);
     border: 1px solid var(--border);
@@ -2881,6 +2897,9 @@ button:has(> .icon) {
   }
   .toolbar-sheet {
     display: none;   /* filters / actions live in the menu sheet */
+  }
+  .toolbar.on-other-tab {
+    display: none;   /* only the search box is left, and it belongs to the relic list */
   }
 
   /* --- Bottom sheets: menu, relic / build details --- */
@@ -3295,15 +3314,54 @@ button:has(> .icon) {
 
   /* --- Effect catalog --- */
   .catalog-toolbar {
-    padding: 8px 12px;
-    gap: 8px;
+    padding: 8px 12px 6px;
+    gap: 4px 8px;
   }
   .catalog-search-wrapper {
-    flex: 1 1 100%;
+    flex: 1 1 200px;   /* leaves no room for the count, which moves to the next line */
+    min-width: 0;
     max-width: none;
   }
-  .catalog-filter-group label {
+  .catalog-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    flex-shrink: 0;
+    padding: 8px 10px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+  .catalog-toolbar.filters-open .catalog-filter-toggle {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .catalog-filters {
     display: none;
+  }
+  .catalog-toolbar.filters-open .catalog-filters {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 6px 8px;
+    flex: 1 1 100%;
+    padding: 6px 0 4px;
+  }
+  .catalog-filters .catalog-filter-group {
+    display: contents;   /* label | select on one grid row */
+  }
+  .catalog-filters .catalog-filter-group > .icon {
+    display: none;
+  }
+  .catalog-filters .catalog-filter-group select {
+    width: 100%;
+  }
+  #catalog-result-count,
+  .catalog-owned-note {
+    font-size: 11px;
   }
   .catalog-owned-note {
     margin-left: 0;

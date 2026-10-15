@@ -313,6 +313,18 @@ function isMobileMenuOpen() {
   return !mobileMenu.classList.contains('hidden');
 }
 
+// A panel opened from the menu goes back to the menu when closed (× / back gesture),
+// but not when it has done its job (filter applied, search run, QR codes read)
+let menuReturnKey = null;
+function returnToMenuAfter(key, closing) {
+  if (menuReturnKey !== key) return;
+  menuReturnKey = null;
+  closing.then(() => setMobileMenu(true));
+}
+function panelDone(key) {
+  if (menuReturnKey === key) menuReturnKey = null;
+}
+
 function setMobileMenu(open) {
   if (open === isMobileMenuOpen()) return Promise.resolve();
   mobileMenu.classList.toggle('hidden', !open);
@@ -385,6 +397,7 @@ function renderMobileMenu() {
         `<span class="mm-tool-label">${ja ? 'QR コードを読み取る' : 'Scan QR codes'}</span>` +
         `<span class="mm-tool-sub">${ja ? 'PC などに表示した一覧を受け取る' : 'Receive a list shown on a PC'}</span></button>`
       : '');
+  document.getElementById('mm-tools-section').hidden = !document.getElementById('mm-tools').children.length;
 
   // Loaded data + saved-on-device state
   setText('mm-data-title', ja ? '読み込んだデータ' : 'Loaded data');
@@ -405,6 +418,7 @@ function renderMobileMenu() {
     }
   }
   document.getElementById('mm-data').innerHTML = rows;
+  document.getElementById('mm-data-section').hidden = !relicData;
   const storage = document.getElementById('mm-storage');
   storage.hidden = !currentCache;
   if (currentCache) {
@@ -451,12 +465,15 @@ document.getElementById('mm-reset').addEventListener('click', () => {
 // Panels opened from the menu replace it (after its history entry is gone)
 document.getElementById('mm-advanced').addEventListener('click', async () => {
   await setMobileMenu(false);
+  menuReturnKey = 'inspector';
   btnInspector.click();
 });
 document.getElementById('mm-tools').addEventListener('click', async (e) => {
   const tool = e.target.closest('.mm-tool');
   if (!tool) return;
   await setMobileMenu(false);
+  const panels = { 'qr-scan': 'qr-scan', 'btn-optimizer': 'optimizer', 'btn-share': 'share' };
+  menuReturnKey = panels[tool.dataset.action || tool.dataset.target] || null;
   if (tool.dataset.action === 'qr-scan') openQrScanner();
   else document.getElementById(tool.dataset.target).click();
 });
@@ -901,7 +918,7 @@ async function openShareDialog() {
 function closeShareDialog() {
   shareDialog.classList.add('hidden');
   shareBackdrop.classList.add('hidden');
-  closeBackEntry('share');
+  returnToMenuAfter('share', closeBackEntry('share'));
 }
 
 function shareFileName() {
@@ -1212,11 +1229,14 @@ function stopQrCamera() {
 function closeQrScanner() {
   stopQrCamera();
   qrScan.classList.add('hidden');
-  return closeBackEntry('qr-scan');
+  const closing = closeBackEntry('qr-scan');
+  returnToMenuAfter('qr-scan', closing);
+  return closing;
 }
 
 async function finishQrScan(token) {
   const ja = displayLang === 'ja';
+  panelDone('qr-scan');
   await closeQrScanner();
   if (!(await openSharedRelics(token))) return;
   if (KEEP_ON_DEVICE && confirm(ja
@@ -2208,6 +2228,9 @@ function populateCatalogCategoryFilter() {
 }
 
 function renderCatalog() {
+  // Phones: mark the folded filter button while a filter is set
+  document.getElementById('catalog-filter-badge').hidden =
+    !catalogFilterCategory.value && !catalogFilterDeep.value && !catalogFilterStack.value;
   const effects = buildCatalogEffects();
   const ja = displayLang === 'ja';
   const hasSaveData = allUniqueEffects && allUniqueEffects.length > 0;
@@ -2374,7 +2397,7 @@ function openInspector() {
 function closeInspector() {
   inspectorBackdrop.classList.add('hidden');
   inspector.classList.remove('open');
-  closeBackEntry('inspector');
+  returnToMenuAfter('inspector', closeBackEntry('inspector'));
 }
 
 // --- Inspector resize ---
@@ -2594,6 +2617,10 @@ catalogSearchClear.addEventListener('click', () => {
   catalogSearch.focus();
 });
 catalogFilterCategory.addEventListener('change', renderCatalog);
+document.getElementById('catalog-filter-toggle').addEventListener('click', (e) => {
+  const open = document.querySelector('.catalog-toolbar').classList.toggle('filters-open');
+  e.currentTarget.setAttribute('aria-expanded', String(open));
+});
 catalogFilterDeep.addEventListener('change', renderCatalog);
 catalogFilterStack.addEventListener('change', renderCatalog);
 
@@ -2664,6 +2691,7 @@ inspectorEffectList.addEventListener('change', (e) => {
 });
 
 inspectorApply.addEventListener('click', () => {
+  panelDone('inspector');
   closeInspector();
   updateInspectorButton();
   applyFilters();
@@ -2771,6 +2799,9 @@ function switchTab(tabId) {
     const wrapper = document.getElementById(`opt-wrapper-${tid}`);
     if (wrapper) wrapper.classList.toggle('hidden', tid !== tabId);
   });
+
+  toolbar.classList.toggle('on-other-tab', tabId !== 'main');
+  renderMobileMenu();
 
   // Update toolbar visibility: show filters only on main tab
   const filterElements = toolbar.querySelectorAll('.search-wrapper, .filter-group, #result-count, #btn-inspector, #btn-export-table');
@@ -2937,7 +2968,7 @@ async function openOptimizerInspector() {
 function closeOptimizerInspector() {
   optimizerBackdrop.classList.add('hidden');
   optimizerInspector.classList.remove('open');
-  closeBackEntry('optimizer');
+  returnToMenuAfter('optimizer', closeBackEntry('optimizer'));
 }
 
 function renderOptimizerCharacterSelect() {
@@ -3247,6 +3278,7 @@ async function runOptimization() {
   // Create tab immediately with loading state
   const tabId = addOptimizerTabLoading(label, params);
 
+  panelDone('optimizer');
   closeOptimizerInspector();
 
   // Build stacking data for the optimizer (key -> stackable value)
@@ -4614,6 +4646,7 @@ updateLangUI = function() {
   document.getElementById('catalog-label-deep').textContent = ja ? '通常/深層:' : 'Normal/Deep:';
   document.getElementById('catalog-label-stack').textContent = ja ? '重複:' : 'Stack:';
   document.getElementById('catalog-owned-note').textContent = ja ? '※ 所持効果のみ表示' : '* Owned effects only';
+  document.getElementById('catalog-filter-toggle-label').textContent = ja ? '絞り込み' : 'Filter';
   // Catalog filter options
   const deepOpts = catalogFilterDeep.options;
   deepOpts[0].textContent = ja ? 'すべて' : 'All';

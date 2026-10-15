@@ -27,6 +27,8 @@
       <button id="btn-open" class="btn-primary">
         <span class="icon" data-icon="folder-open"></span><span id="btn-open-label">ファイルを開く</span>
       </button>
+      <!-- Phones: filters, tools and settings are in the menu sheet -->
+      <button id="btn-mobile-menu" class="btn-mobile-menu" type="button" aria-label="menu"><span class="icon" data-icon="menu" data-size="20"></span><span id="menu-badge" class="menu-badge" hidden></span></button>
     </div>
     <input type="file" id="file-input" accept=".sl2,.bak,.txt" style="display:none" />
   </header>
@@ -39,7 +41,6 @@
       <button id="search-clear" class="search-clear hidden" type="button" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
       <div id="search-suggestions" class="search-suggestions hidden"></div>
     </div>
-    <button id="btn-mobile-menu" class="btn-mobile-menu" type="button" aria-label="menu"><span class="icon" data-icon="menu" data-size="20"></span><span id="menu-badge" class="menu-badge" hidden></span></button>
     <!-- Filters / actions: wide screens only (phones use the menu below) -->
     <div id="toolbar-sheet" class="toolbar-sheet">
     <div class="filter-group">
@@ -110,11 +111,11 @@
           <span class="icon mm-row-arrow" data-icon="chevron-right" data-size="18"></span>
         </button>
       </section>
-      <section class="mm-section">
+      <section id="mm-tools-section" class="mm-section">
         <h3 id="mm-tools-title"></h3>
         <div id="mm-tools" class="mm-tools"></div>
       </section>
-      <section class="mm-section">
+      <section id="mm-data-section" class="mm-section">
         <h3 id="mm-data-title"></h3>
         <dl id="mm-data" class="mm-data"></dl>
         <div id="mm-storage" class="mm-storage"></div>
@@ -208,6 +209,9 @@
                  placeholder="効果名で検索..." autocomplete="off" />
           <button id="catalog-search-clear" class="search-clear hidden" aria-label="clear"><span class="icon" data-icon="x" data-size="14"></span></button>
         </div>
+        <!-- Phones: the filters fold away behind this button -->
+        <button id="catalog-filter-toggle" class="catalog-filter-toggle" type="button" aria-expanded="false"><span class="icon" data-icon="list-filter" data-size="16"></span><span id="catalog-filter-toggle-label">絞り込み</span><span id="catalog-filter-badge" class="menu-badge" hidden></span></button>
+        <div id="catalog-filters" class="catalog-filters">
         <div class="catalog-filter-group">
           <span class="icon" data-icon="tag"></span><label id="catalog-label-category">カテゴリ:</label>
           <select id="catalog-filter-category">
@@ -230,6 +234,7 @@
             <option value="no">× 重複不可</option>
             <option value="conditional">△ 条件付き</option>
           </select>
+        </div>
         </div>
         <span id="catalog-result-count" class="result-count"></span>
         <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
