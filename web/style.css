@@ -2616,7 +2616,7 @@ button:has(> .icon) {
 }
 
 .app-dialog.qr-show {
-  width: min(760px, calc(100vw - 32px));
+  width: min(980px, calc(100vw - 32px));
   z-index: 62;
 }
 
@@ -2764,6 +2764,12 @@ button:has(> .icon) {
   font-size: 13px;
   line-height: 1.6;
   color: var(--text-secondary);
+}
+
+.qr-scan-status .qr-scan-debug {
+  font-size: 11px;
+  font-family: Consolas, monospace;
+  color: var(--text-muted);
 }
 
 @media (max-width: 768px) {

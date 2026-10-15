@@ -2486,7 +2486,7 @@ button:has(> .icon) {
 }
 
 .app-dialog.qr-show {
-  width: min(760px, calc(100vw - 32px));
+  width: min(980px, calc(100vw - 32px));
   z-index: 62;
 }
 

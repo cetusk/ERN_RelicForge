@@ -962,14 +962,15 @@ document.getElementById('share-file').addEventListener('click', async () => {
 // Sender: the share token split into frames, shown one after another (a link is too long for one QR code)
 const qrShow = document.getElementById('qr-show');
 const qrShowBackdrop = document.getElementById('qr-show-backdrop');
-const QR_SPEEDS = [['slow', 800], ['normal', 450], ['fast', 250]];
+const QR_SPEEDS = [['slow', 1500], ['normal', 800], ['fast', 450]];
 let qrShowFrames = [];
 let qrShowIndex = 0;
 let qrShowTimer = null;
 let qrShowSpeed = 'normal';
 
+// Large codes let the phone stay farther from the screen, where it focuses more easily
 function qrShowSize() {
-  return Math.max(200, Math.min(420, window.innerWidth - 64, window.innerHeight - 260));
+  return Math.max(200, Math.min(560, window.innerWidth - 64, window.innerHeight - 200));
 }
 
 function renderQrShowText() {
@@ -1046,6 +1047,9 @@ const CAN_SCAN_QR = DEVICE_KIND !== 'pc' && window.isSecureContext &&
   !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 let qrScanStream = null;
 let qrScanCanvas = null;
+// "?qrdebug" in the URL: show camera size / decode rate under the scanner (for checking on real phones)
+const QR_DEBUG = /[?&]qrdebug\b/.test(location.search);
+let qrScanStats = null;
 
 function loadQrReader() {
   if (window.jsQR) return Promise.resolve();
@@ -1105,12 +1109,16 @@ function scanQrFrame() {
   const w = qrScanVideo.videoWidth;
   const h = qrScanVideo.videoHeight;
   if (w && h) {
+    // Only the middle of the picture (where the guide square is): less to decode, no background clutter
+    const side = Math.round(Math.min(w, h) * 0.9);
     if (!qrScanCanvas) qrScanCanvas = document.createElement('canvas');
-    qrScanCanvas.width = w;
-    qrScanCanvas.height = h;
+    qrScanCanvas.width = side;
+    qrScanCanvas.height = side;
     const ctx = qrScanCanvas.getContext('2d', { willReadFrequently: true });
-    ctx.drawImage(qrScanVideo, 0, 0, w, h);
-    const code = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' });
+    ctx.drawImage(qrScanVideo, (w - side) / 2, (h - side) / 2, side, side, 0, 0, side, side);
+    const t0 = performance.now();
+    const code = jsQR(ctx.getImageData(0, 0, side, side).data, side, side, { inversionAttempts: 'dontInvert' });
+    if (QR_DEBUG) updateQrScanStats(w, h, side, performance.now() - t0, !!code);
     if (code) {
       const before = qrCollector.received;
       const result = qrCollector.add(code.data);
@@ -1122,6 +1130,26 @@ function scanQrFrame() {
     }
   }
   requestAnimationFrame(scanQrFrame);
+}
+
+function updateQrScanStats(w, h, side, ms, found) {
+  const now = performance.now();
+  if (!qrScanStats) qrScanStats = { since: now, tries: 0, found: 0, ms: 0 };
+  const s = qrScanStats;
+  s.tries++;
+  s.ms += ms;
+  if (found) s.found++;
+  if (now - s.since < 1000) return;
+  let el = document.getElementById('qr-scan-debug');
+  if (!el) {
+    el = document.createElement('p');
+    el.id = 'qr-scan-debug';
+    el.className = 'qr-scan-debug';
+    document.querySelector('.qr-scan-status').appendChild(el);
+  }
+  el.textContent = `camera ${w}x${h} / decode ${side}px: ${(s.tries * 1000 / (now - s.since)).toFixed(1)} tries/s, ` +
+    `${(s.ms / s.tries).toFixed(0)} ms each, found ${s.found}/${s.tries}`;
+  qrScanStats = { since: now, tries: 0, found: 0, ms: 0 };
 }
 
 function stopQrCamera() {

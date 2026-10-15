@@ -386,14 +386,15 @@ document.getElementById('share-file').addEventListener('click', () => {
 // the phone reads them with the Web version's scanner
 const qrShow = document.getElementById('qr-show');
 const qrShowBackdrop = document.getElementById('qr-show-backdrop');
-const QR_SPEEDS = [['slow', 800], ['normal', 450], ['fast', 250]];
+const QR_SPEEDS = [['slow', 1500], ['normal', 800], ['fast', 450]];
 let qrShowFrames = [];
 let qrShowIndex = 0;
 let qrShowTimer = null;
 let qrShowSpeed = 'normal';
 
+// Large codes let the phone stay farther from the screen, where it focuses more easily
 function qrShowSize() {
-  return Math.max(200, Math.min(420, window.innerWidth - 64, window.innerHeight - 260));
+  return Math.max(200, Math.min(560, window.innerWidth - 64, window.innerHeight - 200));
 }
 
 function renderQrShowText() {
