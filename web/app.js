@@ -81,8 +81,8 @@ const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
 
 function iosFileHint(ja) {
   return ja
-    ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使った項目」に表示されます。見つからないときは「ブラウズ」→「iCloud Drive」（または「このiPhone内」）→「ダウンロード」を開いてください。'
-    : 'Downloaded files are listed under "Recents" in the file picker. If not, open "Browse" > "iCloud Drive" (or "On My iPhone") > "Downloads".';
+    ? 'ダウンロードしたファイルは、ファイル選択の画面の「最近使った項目」に表示されます。見つからないときは「ブラウズ」→「iCloud Drive」（または「このiPhone内」）→「ダウンロード」を開いてください。「↑エラー」と表示されていても（iCloud の容量不足など）、選べば読み込めます。'
+    : 'Downloaded files are listed under "Recents" in the file picker. If not, open "Browse" > "iCloud Drive" (or "On My iPhone") > "Downloads". Files marked "↑ Error" (e.g. iCloud storage full) can still be opened.';
 }
 const headerInfo = document.getElementById('header-info');
 const headerWarning = document.getElementById('header-warning');
