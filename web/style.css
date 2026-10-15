@@ -1436,6 +1436,7 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   flex-shrink: 0;
 }
 .opt-effect-drag-handle {
+  touch-action: none;   /* finger drag reorders instead of scrolling */
   color: var(--text-muted);
   cursor: grab;
   font-size: 12px;
@@ -2434,3 +2435,325 @@ button:has(> .icon) {
   display: inline-block;
   vertical-align: -2px;
 }
+
+/* === Data saved on this device (header note) === */
+.header-cache {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.header-cache[hidden] {
+  display: none;
+}
+
+.header-cache-delete {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-muted);
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.header-cache-delete:hover {
+  color: #e07070;
+  border-color: #e07070;
+}
+
+/* ============================================================
+   Smartphone layout (narrow screens)
+   ============================================================ */
+@supports (height: 100dvh) {
+  body { height: 100dvh; min-height: 100dvh; }   /* mobile browser toolbars */
+}
+
+/* Touch devices: PC-only save-file guidance */
+@media (pointer: coarse) {
+  #auto-load-path-hint,
+  #drop-zone {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  /* iOS zooms into inputs smaller than 16px on focus */
+  input[type="text"],
+  input[type="number"],
+  select {
+    font-size: 16px !important;
+  }
+
+  /* --- Header: title + open button, info on the next line --- */
+  #app-header {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .header-left {
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+  }
+  #app-header h1 {
+    font-size: 16px;
+    width: 100%;
+  }
+  .header-info {
+    font-size: 11px;
+  }
+  .header-meta {
+    display: none;
+  }
+  #btn-open {
+    padding: 8px 12px;
+    flex-shrink: 0;
+  }
+  #btn-open-label {
+    display: none;
+  }
+
+  /* --- Toolbar: search / 3 filters / 4 action buttons / hit count --- */
+  .toolbar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .toolbar.hidden {
+    display: none;
+  }
+  .search-wrapper {
+    grid-column: span 12;
+    max-width: none;
+    min-width: 0;
+  }
+  .toolbar .filter-group {
+    grid-column: span 4;
+    min-width: 0;
+  }
+  .toolbar .filter-group select,
+  .toolbar .custom-select,
+  .toolbar .custom-select-btn {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+  }
+  .toolbar .btn-inspector {
+    grid-column: span 3;
+  }
+  .filter-group label {
+    display: none;   /* icons stay as labels */
+  }
+  .filter-group {
+    gap: 4px;
+  }
+  .filter-group select {
+    padding: 6px 6px;
+  }
+  /* Action buttons: icon above a short label, 4 per row */
+  .toolbar .btn-inspector {
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 2px;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .toolbar .btn-inspector .icon-svg {
+    width: 18px;
+    height: 18px;
+  }
+  .result-count {
+    grid-column: span 12;
+    margin-left: 0;
+    font-size: 11px;
+  }
+
+  /* --- Relic list: one card per relic --- */
+  .minimap {
+    display: none;
+  }
+  #relic-table,
+  #relic-table tbody {
+    display: block;
+    width: 100%;
+  }
+  #relic-table thead {
+    display: block;
+  }
+  #relic-table thead tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px 8px;
+    background: var(--bg-tertiary);
+  }
+  #relic-table th {
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 11px;
+  }
+  #relic-table th#th-effects {
+    display: none;   /* not sortable */
+  }
+  #relic-table tbody tr {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "num color item type"
+      "effects effects effects effects";
+    align-items: center;
+    column-gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  #relic-table td {
+    padding: 0;
+    border: none;
+  }
+  #relic-table td:nth-child(1) { grid-area: num; font-size: 11px; }
+  #relic-table td:nth-child(2) { grid-area: color; }
+  #relic-table td:nth-child(2) .color-label { display: none; }
+  #relic-table td:nth-child(3) { grid-area: type; }
+  #relic-table td:nth-child(4) { grid-area: item; font-weight: 600; }
+  #relic-table td:nth-child(5) { grid-area: effects; padding-top: 4px; }
+
+  /* --- Panels: full screen --- */
+  .detail-panel,
+  .opt-detail-panel {
+    position: fixed;
+    inset: 0;
+    width: 100% !important;
+    min-width: 0;
+    z-index: 40;
+    border-left: none;
+  }
+  .detail-panel.hidden,
+  .opt-detail-panel.hidden {
+    display: none;
+  }
+  .inspector,
+  .effect-select-inspector {
+    width: 100% !important;
+    left: 0 !important;
+    border-right: none;
+  }
+  .inspector-resize-handle,
+  .opt-detail-resize-handle {
+    display: none;
+  }
+  .inspector-footer,
+  .opt-preset-row {
+    flex-wrap: wrap;
+  }
+
+  /* --- Build search results --- */
+  .optimizer-results-container {
+    padding: 10px 12px;
+  }
+  .opt-hl-req,
+  .opt-hl-vessel {
+    display: none;   /* shown inside each card instead */
+  }
+  .opt-result-header {
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    padding: 8px 12px;
+  }
+  .opt-rank,
+  .opt-score,
+  .opt-required-badge {
+    width: auto;
+  }
+  .opt-vessel-name {
+    flex: 1 1 100%;
+  }
+  .opt-card-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 2px 0;
+  }
+  .opt-card-relic {
+    width: auto;
+  }
+  .opt-card-effect {
+    max-width: 100%;
+  }
+  .opt-results-summary-info {
+    flex-wrap: wrap;
+  }
+
+  /* --- Effect catalog --- */
+  .catalog-toolbar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .catalog-search-wrapper {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+  .catalog-filter-group label {
+    display: none;
+  }
+  .catalog-owned-note {
+    margin-left: 0;
+  }
+  .catalog-list {
+    padding: 10px 12px;
+  }
+  .catalog-card {
+    width: 100%;
+    min-width: 0;
+  }
+  .catalog-group-tiles:not(.collapsed) {
+    max-height: none !important;   /* one column is taller than the desktop estimate */
+  }
+
+  /* --- Welcome --- */
+  .welcome {
+    padding: 16px;
+    text-align: center;
+  }
+  .welcome-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .welcome-buttons .btn-large {
+    width: 100%;
+  }
+}
+
+/* Effect catalog: full remarks toggled by tap / click */
+.catalog-card.has-full {
+  cursor: pointer;
+}
+
+.catalog-card-notes-full {
+  margin-top: 6px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.catalog-card-more {
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.catalog-card-more::before {
+  content: '\25B8  ';
+}
+
+.catalog-card.expanded .catalog-card-more::before {
+  content: '\25BE  ';
+}
+

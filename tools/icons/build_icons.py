@@ -44,6 +44,10 @@ ICONS = [
     'tag',             # カテゴリ
     'copy',            # 重複
     'swords',          # ようこそ画面
+    'trash-2',         # 端末の保存データを削除
+    'cloud-download',  # Steam クラウドから読み込む
+    'share-2',         # 共有リンク
+    'smartphone',      # 端末に保存済み
 ]
 
 HEADER = '''/**

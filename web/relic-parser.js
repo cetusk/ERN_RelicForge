@@ -438,14 +438,9 @@ function setCoordinates(relics, itemsData) {
 // === Main Parse Function ===
 
 /**
- * Parse an SL2 save file and return structured relic data
- * @param {ArrayBuffer} arrayBuffer - raw file data
- * @param {Object} itemsData - items data { items: { id: { key, color, type, ... } } }
- * @param {Object} effectsData - effects data { effects: { id: { key, name_en, name_ja, ... } } }
- * @returns {Object} parsed relic data
+ * Build lookup maps / validation sets from items and effects data
  */
-function parseSaveFile(arrayBuffer, itemsData, effectsData) {
-  // Build lookup maps and validation sets in single pass
+function buildDataMaps(itemsData, effectsData) {
   const itemsMap = {};
   const validItems = new Set();
   for (const [id, item] of Object.entries(itemsData.items || {})) {
@@ -461,6 +456,16 @@ function parseSaveFile(arrayBuffer, itemsData, effectsData) {
     effectsMap[numId] = effect;
     validEffects.add(numId);
   }
+  return { itemsMap, validItems, effectsMap, validEffects };
+}
+
+/**
+ * Extract raw relics from an SL2 save file (IDs only; names are added by buildRelicData)
+ * @param {ArrayBuffer} arrayBuffer - raw file data
+ * @returns {{characterName: string, relics: Array<{id, itemId, effects, sortKey}>}}
+ */
+function extractRelics(arrayBuffer, itemsData, effectsData) {
+  const { validItems, validEffects } = buildDataMaps(itemsData, effectsData);
 
   // Decrypt save file
   const entries = decryptSaveFile(arrayBuffer);
@@ -472,8 +477,43 @@ function parseSaveFile(arrayBuffer, itemsData, effectsData) {
   const characterName = getCharacterName(entries);
 
   // Parse relics from Entry 0 only
-  const entry0 = entries[0];
-  const relics = parseRelicsFromEntry(entry0.cleanData, validItems, validEffects);
+  const relics = parseRelicsFromEntry(entries[0].cleanData, validItems, validEffects);
+  return { characterName, relics };
+}
+
+/**
+ * Compact form of raw relics for device storage / share links: [id, itemId, sortKey, effects]
+ */
+function compactRelics(rawRelics) {
+  return rawRelics.map(r => [r.id, r.itemId, r.sortKey, r.effects]);
+}
+
+function expandRelics(compact) {
+  return compact.map(([id, itemId, sortKey, effects]) => ({ id, itemId, sortKey, effects }));
+}
+
+/**
+ * Parse an SL2 save file and return structured relic data
+ * @param {ArrayBuffer} arrayBuffer - raw file data
+ * @param {Object} itemsData - items data { items: { id: { key, color, type, ... } } }
+ * @param {Object} effectsData - effects data { effects: { id: { key, name_en, name_ja, ... } } }
+ * @returns {Object} parsed relic data
+ */
+function parseSaveFile(arrayBuffer, itemsData, effectsData) {
+  const { characterName, relics } = extractRelics(arrayBuffer, itemsData, effectsData);
+  return buildRelicData(characterName, relics, itemsData, effectsData);
+}
+
+/**
+ * Build display data (names, coordinates, unknown flags) from raw relics.
+ * Raw relics come from extractRelics() or from stored / shared compact data.
+ */
+function buildRelicData(characterName, rawRelics, itemsData, effectsData) {
+  const { itemsMap, effectsMap } = buildDataMaps(itemsData, effectsData);
+
+  // Copy (coordinates are written onto the objects) and keep sort-key order (descending)
+  const relics = rawRelics.map(r => ({ id: r.id, itemId: r.itemId, effects: r.effects, sortKey: r.sortKey }));
+  relics.sort((a, b) => b.sortKey - a.sortKey);
 
   // Set coordinates
   setCoordinates(relics, itemsMap);

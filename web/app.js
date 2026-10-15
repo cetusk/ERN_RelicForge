@@ -238,6 +238,7 @@ filterLang.addEventListener('change', () => {
   displayLang = filterLang.value;
   updateLangUI();
   renderTabBar();   // tab labels (catalog etc.) follow the language
+  updateCacheInfo(currentCache);
   renderTable();
   updateHeaderInfo();
   updateResultCount();
@@ -287,46 +288,151 @@ async function loadAndDisplay(arrayBuffer) {
     if (!itemsData || !effectsData) {
       await loadResources();
     }
-    relicData = parseSaveFile(arrayBuffer, itemsData, effectsData);
-    stackingLookup = buildStackingLookup(effectsData);
-    buildSearchTerms();
-    buildUniqueEffects();
-    andGroups.forEach(g => g.clear());
-    updateHeaderInfo();
-    toolbar.classList.remove('hidden');
-    btnInspector.classList.remove('hidden');
-    btnOptimizer.classList.remove('hidden');
-    btnCatalog.classList.remove('hidden');
-    btnExportTable.classList.remove('hidden');
-    tabBar.classList.remove('hidden');
-    updateInspectorButton();
-    updateOptimizerButton();
-    sortColumn = 'sortKey';
-    sortDirection = 'desc';
-    updateSortIndicators();
-    applyFilters();
-    // Update catalog if open
-    if (catalogTabOpen && activeTab === 'catalog') {
-      renderCatalog();
-    }
-    showView('content');
+    const { characterName, relics } = extractRelics(arrayBuffer, itemsData, effectsData);
+    const cache = {
+      fileName: loadedFileName,
+      characterName,
+      relics: compactRelics(relics),
+      loadedAt: new Date().toISOString(),
+    };
+    displayRelicData(cache);
+    // Keep the relics on this device so the next visit opens instantly
+    saveRelicCache(cache).then(() => updateCacheInfo(cache)).catch(err => {
+      console.warn('Could not save relic data on this device:', err);
+    });
   } catch (err) {
     alert(`解析エラー:\n${err}`);
     showView('welcome');
   }
 }
 
+// Show relics from a stored / freshly parsed compact record
+function displayRelicData(record) {
+  loadedFileName = record.fileName || loadedFileName;
+  relicData = buildRelicData(record.characterName, expandRelics(record.relics), itemsData, effectsData);
+  stackingLookup = buildStackingLookup(effectsData);
+  buildSearchTerms();
+  buildUniqueEffects();
+  andGroups.forEach(g => g.clear());
+  updateHeaderInfo();
+  toolbar.classList.remove('hidden');
+  btnInspector.classList.remove('hidden');
+  btnOptimizer.classList.remove('hidden');
+  btnCatalog.classList.remove('hidden');
+  btnExportTable.classList.remove('hidden');
+  tabBar.classList.remove('hidden');
+  updateInspectorButton();
+  updateOptimizerButton();
+  sortColumn = 'sortKey';
+  sortDirection = 'desc';
+  updateSortIndicators();
+  applyFilters();
+  // Update catalog if open
+  if (catalogTabOpen && activeTab === 'catalog') {
+    renderCatalog();
+  }
+  showView('content');
+}
+
 // === Folder Auto-Load (File System Access API — Chrome / Edge only) ===
+// Browser storage for this app only (IndexedDB database "ERNRelicForge"):
+//   settings   - folder handle for auto-load (Chrome / Edge)
+//   relicCache - last loaded relics (IDs only; no save file, no Steam ID)
 const DB_NAME = 'ERNRelicForge';
+const DB_VERSION = 2;
 const STORE_NAME = 'settings';
+const CACHE_STORE = 'relicCache';
+const CACHE_KEY = 'lastLoaded';
+const CACHE_FORMAT = 1;
 
 function openDB() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(STORE_NAME);
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+      if (!db.objectStoreNames.contains(CACHE_STORE)) db.createObjectStore(CACHE_STORE);
+    };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
+}
+
+async function cacheStoreRequest(mode, fn) {
+  const db = await openDB();
+  const tx = db.transaction(CACHE_STORE, mode);
+  const req = fn(tx.objectStore(CACHE_STORE));
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve(req.result);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function saveRelicCache(record) {
+  return cacheStoreRequest('readwrite', store => store.put({ format: CACHE_FORMAT, ...record }, CACHE_KEY));
+}
+
+async function loadRelicCache() {
+  const record = await cacheStoreRequest('readonly', store => store.get(CACHE_KEY));
+  return record && record.format === CACHE_FORMAT && Array.isArray(record.relics) ? record : null;
+}
+
+function deleteRelicCache() {
+  return cacheStoreRequest('readwrite', store => store.delete(CACHE_KEY));
+}
+
+let currentCache = null;   // record shown now (if it is stored on this device)
+
+function formatLoadedAt(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+// Header note: "Saved on this device (loaded at ...)" + delete button
+function updateCacheInfo(record) {
+  currentCache = record;
+  const el = document.getElementById('header-cache');
+  if (!el) return;
+  if (!record) {
+    el.hidden = true;
+    return;
+  }
+  const ja = displayLang === 'ja';
+  const when = formatLoadedAt(record.loadedAt);
+  el.querySelector('.header-cache-text').textContent = ja
+    ? `端末に保存済み（${when} 読み込み）`
+    : `Saved on this device (loaded ${when})`;
+  el.querySelector('.header-cache-delete').title = ja ? 'この端末に保存したデータを削除' : 'Delete the data saved on this device';
+  el.hidden = false;
+}
+
+document.getElementById('header-cache-delete').addEventListener('click', async () => {
+  const ja = displayLang === 'ja';
+  if (!confirm(ja
+    ? 'この端末に保存した遺物データを削除しますか？\n（表示中のデータは、ページを閉じるまでそのまま表示されます）'
+    : 'Delete the relic data saved on this device?\n(The data shown now stays until you close the page.)')) return;
+  try {
+    await deleteRelicCache();
+    updateCacheInfo(null);
+  } catch (err) {
+    alert(`${ja ? '削除に失敗しました' : 'Failed to delete'}: ${err}`);
+  }
+});
+
+// Open the relics stored on this device (on page load)
+async function tryRestoreRelicCache() {
+  try {
+    const record = await loadRelicCache();
+    if (!record || relicData) return;
+    if (!itemsData || !effectsData) await loadResources();
+    if (relicData) return;   // a file was opened meanwhile
+    displayRelicData(record);
+    updateCacheInfo(record);
+  } catch (err) {
+    console.warn('Could not restore relic data saved on this device:', err);
+  }
 }
 
 async function saveDirHandle(handle) {
@@ -1359,10 +1465,15 @@ function renderCatalog() {
 
       html += `</div>`; // .catalog-card-meta
 
-      // Stack notes
+      // Stack notes (summary); full remarks open on hover (title) or tap / click
+      const hasFull = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
       if (e.stackNotes) {
-        const title = e.stackNotesFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
+        const title = hasFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
         html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
+      }
+      if (hasFull) {
+        html += `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`;
+        html += `<div class="catalog-card-more">${ja ? '詳細' : 'Details'}</div>`;
       }
 
       // Count (only when save file loaded)
@@ -1377,6 +1488,18 @@ function renderCatalog() {
   });
 
   catalogList.innerHTML = html;
+
+  // Tap / click a card to show or hide its full remarks
+  catalogList.querySelectorAll('.catalog-card-notes-full').forEach(full => {
+    const card = full.closest('.catalog-card');
+    card.classList.add('has-full');
+    card.addEventListener('click', () => {
+      full.hidden = !full.hidden;
+      card.classList.toggle('expanded', !full.hidden);
+      const tiles = card.closest('.catalog-group-tiles');
+      if (tiles && !tiles.classList.contains('collapsed')) tiles.style.maxHeight = tiles.scrollHeight + 'px';
+    });
+  });
 
   // Collapse toggle handlers
   catalogList.querySelectorAll('.catalog-group-header').forEach(header => {
@@ -1867,7 +1990,7 @@ function addOptimizerTab(label, data, params) {
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
@@ -1911,7 +2034,7 @@ function addOptimizerTabLoading(label, params) {
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
@@ -2175,6 +2298,47 @@ function attachEffectDragHandlers() {
       // Rebuild Map from DOM order and re-render
       rebuildEffectsMapFromDOM();
       renderOptEffectsTags();
+    });
+  });
+
+  // Touch / pen: drag by the handle (native drag-and-drop does not work with fingers on phones)
+  optEffectsList.querySelectorAll('.opt-effect-drag-handle').forEach(handle => {
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;   // mouse uses the native drag-and-drop above
+      e.preventDefault();
+      const tag = handle.closest('.opt-effect-tag');
+      const group = tag.closest('.opt-effect-group');
+      const cards = group.querySelector('.opt-effect-group-cards');
+      const clearMarks = () => group.querySelectorAll('.drag-over-above, .drag-over-below')
+        .forEach(el => el.classList.remove('drag-over-above', 'drag-over-below'));
+      const listeners = new AbortController();
+      let dropTarget = null;
+      let above = false;
+      tag.classList.add('dragging');
+      handle.setPointerCapture(e.pointerId);
+      handle.addEventListener('pointermove', (ev) => {
+        const el = document.elementFromPoint(ev.clientX, ev.clientY);
+        const target = el && el.closest('.opt-effect-tag');
+        clearMarks();
+        dropTarget = null;
+        if (!target || target === tag || target.closest('.opt-effect-group') !== group) return;
+        const rect = target.getBoundingClientRect();
+        above = ev.clientY < rect.top + rect.height / 2;
+        target.classList.add(above ? 'drag-over-above' : 'drag-over-below');
+        dropTarget = target;
+      }, { signal: listeners.signal });
+      const finish = () => {
+        listeners.abort();
+        tag.classList.remove('dragging');
+        clearMarks();
+        if (dropTarget) {
+          cards.insertBefore(tag, above ? dropTarget : dropTarget.nextSibling);
+          rebuildEffectsMapFromDOM();
+          renderOptEffectsTags();
+        }
+      };
+      handle.addEventListener('pointerup', finish, { signal: listeners.signal });
+      handle.addEventListener('pointercancel', finish, { signal: listeners.signal });
     });
   });
 }
@@ -3678,7 +3842,7 @@ updateLangUI = function() {
   }
 };
 
-// === Pre-load resources on page load ===
+// === Pre-load resources on page load, then reopen the relics stored on this device ===
 loadResources().catch(err => {
   console.warn('Resource pre-loading failed (will retry on file open):', err);
-});
+}).then(() => tryRestoreRelicCache());

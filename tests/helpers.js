@@ -32,6 +32,11 @@ function runScripts(ctx, appDir, files) {
   return ctx;
 }
 
+/** vm context with crypto-js + relic-parser.js from appDir loaded */
+function parserContext(appDir) {
+  return runScripts({ console, TextDecoder }, appDir, ['lib/crypto-js.min.js', 'relic-parser.js']);
+}
+
 /** Parse a save file with relic-parser.js from appDir. Returns output without `file`. */
 function parseSave(appDir, savePath, itemsData, effectsData) {
   const ctx = runScripts({ console, TextDecoder }, appDir, ['lib/crypto-js.min.js', 'relic-parser.js']);
@@ -85,5 +90,5 @@ function normalizeOptimizerOutput(output) {
 
 module.exports = {
   ROOT_DIR, FIXTURES_DIR, APP_DIRS,
-  loadFixture, loadResource, parseSave, runOptimizer, normalizeOptimizerOutput,
+  loadFixture, loadResource, parseSave, parserContext, runOptimizer, normalizeOptimizerOutput,
 };

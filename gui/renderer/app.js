@@ -1200,9 +1200,15 @@ function renderCatalog() {
 
       html += `</div>`;
 
+      // Stack notes (summary); full remarks open on hover (title) or tap / click
+      const hasFull = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
       if (e.stackNotes) {
-        const title = e.stackNotesFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
+        const title = hasFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
         html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
+      }
+      if (hasFull) {
+        html += `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`;
+        html += `<div class="catalog-card-more">${ja ? '詳細' : 'Details'}</div>`;
       }
 
       if (hasSaveData) {
@@ -1216,6 +1222,18 @@ function renderCatalog() {
   });
 
   catalogList.innerHTML = html;
+
+  // Tap / click a card to show or hide its full remarks
+  catalogList.querySelectorAll('.catalog-card-notes-full').forEach(full => {
+    const card = full.closest('.catalog-card');
+    card.classList.add('has-full');
+    card.addEventListener('click', () => {
+      full.hidden = !full.hidden;
+      card.classList.toggle('expanded', !full.hidden);
+      const tiles = card.closest('.catalog-group-tiles');
+      if (tiles && !tiles.classList.contains('collapsed')) tiles.style.maxHeight = tiles.scrollHeight + 'px';
+    });
+  });
 
   catalogList.querySelectorAll('.catalog-group-header').forEach(header => {
     header.addEventListener('click', () => {
@@ -1705,7 +1723,7 @@ function addOptimizerTab(label, data, params) {
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
@@ -1749,7 +1767,7 @@ function addOptimizerTabLoading(label, params) {
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
       <h2 class="opt-detail-title"></h2>
-      <button class="btn-close opt-detail-close">&times;</button>
+      <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
@@ -2006,6 +2024,47 @@ function attachEffectDragHandlers() {
       // Rebuild Map from DOM order and re-render
       rebuildEffectsMapFromDOM();
       renderOptEffectsTags();
+    });
+  });
+
+  // Touch / pen: drag by the handle (native drag-and-drop does not work with fingers on phones)
+  optEffectsList.querySelectorAll('.opt-effect-drag-handle').forEach(handle => {
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;   // mouse uses the native drag-and-drop above
+      e.preventDefault();
+      const tag = handle.closest('.opt-effect-tag');
+      const group = tag.closest('.opt-effect-group');
+      const cards = group.querySelector('.opt-effect-group-cards');
+      const clearMarks = () => group.querySelectorAll('.drag-over-above, .drag-over-below')
+        .forEach(el => el.classList.remove('drag-over-above', 'drag-over-below'));
+      const listeners = new AbortController();
+      let dropTarget = null;
+      let above = false;
+      tag.classList.add('dragging');
+      handle.setPointerCapture(e.pointerId);
+      handle.addEventListener('pointermove', (ev) => {
+        const el = document.elementFromPoint(ev.clientX, ev.clientY);
+        const target = el && el.closest('.opt-effect-tag');
+        clearMarks();
+        dropTarget = null;
+        if (!target || target === tag || target.closest('.opt-effect-group') !== group) return;
+        const rect = target.getBoundingClientRect();
+        above = ev.clientY < rect.top + rect.height / 2;
+        target.classList.add(above ? 'drag-over-above' : 'drag-over-below');
+        dropTarget = target;
+      }, { signal: listeners.signal });
+      const finish = () => {
+        listeners.abort();
+        tag.classList.remove('dragging');
+        clearMarks();
+        if (dropTarget) {
+          cards.insertBefore(tag, above ? dropTarget : dropTarget.nextSibling);
+          rebuildEffectsMapFromDOM();
+          renderOptEffectsTags();
+        }
+      };
+      handle.addEventListener('pointerup', finish, { signal: listeners.signal });
+      handle.addEventListener('pointercancel', finish, { signal: listeners.signal });
     });
   });
 }

@@ -1369,6 +1369,7 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   flex-shrink: 0;
 }
 .opt-effect-drag-handle {
+  touch-action: none;   /* finger drag reorders instead of scrolling */
   color: var(--text-muted);
   cursor: grab;
   font-size: 12px;
@@ -2366,4 +2367,32 @@ button:has(> .icon) {
 .btn-export-optimizer .icon-svg {
   display: inline-block;
   vertical-align: -2px;
+}
+
+/* Effect catalog: full remarks toggled by tap / click */
+.catalog-card.has-full {
+  cursor: pointer;
+}
+
+.catalog-card-notes-full {
+  margin-top: 6px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.catalog-card-more {
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.catalog-card-more::before {
+  content: '\25B8  ';
+}
+
+.catalog-card.expanded .catalog-card-more::before {
+  content: '\25BE  ';
 }
