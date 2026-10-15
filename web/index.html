@@ -40,9 +40,8 @@
       <div id="search-suggestions" class="search-suggestions hidden"></div>
     </div>
     <button id="btn-mobile-menu" class="btn-mobile-menu" type="button" aria-label="menu"><span class="icon" data-icon="menu" data-size="20"></span><span id="menu-badge" class="menu-badge" hidden></span></button>
-    <!-- Filters / actions: inline on wide screens, a bottom-sheet menu on phones -->
+    <!-- Filters / actions: wide screens only (phones use the menu below) -->
     <div id="toolbar-sheet" class="toolbar-sheet">
-    <div id="toolbar-sheet-info" class="toolbar-sheet-info"></div>
     <div class="filter-group">
       <span class="icon" data-icon="palette"></span><label id="label-color">色:</label>
       <div class="custom-select" id="color-select">
@@ -85,7 +84,51 @@
     <span id="result-count" class="result-count"></span>
     </div>
   </div>
-  <div id="toolbar-sheet-backdrop" class="toolbar-sheet-backdrop"></div>
+
+  <!-- Smartphone menu (bottom sheet; texts are set by app.js) -->
+  <div id="mobile-menu-backdrop" class="sheet-backdrop hidden"></div>
+  <div id="mobile-menu" class="mobile-menu hidden" role="dialog" aria-modal="true" aria-labelledby="mm-title">
+    <div class="mm-head">
+      <div class="sheet-grip"></div>
+      <h2 id="mm-title"></h2>
+      <button id="mm-close" class="btn-close" type="button" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="mm-body">
+      <section id="mm-filter" class="mm-section">
+        <div class="mm-section-head">
+          <h3 id="mm-filter-title"></h3>
+          <span id="mm-count" class="mm-count"></span>
+          <button id="mm-reset" class="mm-reset" type="button"><span class="icon" data-icon="rotate-ccw" data-size="13"></span><span id="mm-reset-label"></span></button>
+        </div>
+        <div class="mm-field-label"><span class="icon" data-icon="palette" data-size="14"></span><span id="mm-color-label"></span></div>
+        <div id="mm-color" class="mm-chips"></div>
+        <div class="mm-field-label"><span class="icon" data-icon="layers" data-size="14"></span><span id="mm-type-label"></span></div>
+        <div id="mm-type" class="mm-chips"></div>
+        <button id="mm-advanced" class="mm-row" type="button">
+          <span class="icon" data-icon="list-filter" data-size="18"></span>
+          <span class="mm-row-text"><span id="mm-advanced-label"></span><span id="mm-advanced-sub" class="mm-row-sub"></span></span>
+          <span class="icon mm-row-arrow" data-icon="chevron-right" data-size="18"></span>
+        </button>
+      </section>
+      <section class="mm-section">
+        <h3 id="mm-tools-title"></h3>
+        <div id="mm-tools" class="mm-tools"></div>
+      </section>
+      <section class="mm-section">
+        <h3 id="mm-data-title"></h3>
+        <dl id="mm-data" class="mm-data"></dl>
+        <div id="mm-storage" class="mm-storage"></div>
+      </section>
+      <section class="mm-section">
+        <h3><span class="icon" data-icon="languages" data-size="14"></span>言語 / Language</h3>
+        <div id="mm-lang" class="mm-chips"></div>
+      </section>
+      <div id="mm-footer" class="mm-footer"></div>
+    </div>
+  </div>
+
+  <!-- Phones: backdrop behind the relic / build detail sheets -->
+  <div id="detail-backdrop" class="sheet-backdrop hidden"></div>
 
   <!-- Tab Bar -->
   <div id="tab-bar" class="tab-bar hidden">
@@ -148,6 +191,7 @@
       <!-- Detail Panel -->
       <div id="detail-panel" class="detail-panel hidden">
         <div class="detail-header">
+          <div class="sheet-grip"></div>
           <h2 id="detail-title"></h2>
           <button id="detail-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
         </div>

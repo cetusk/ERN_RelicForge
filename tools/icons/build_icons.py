@@ -51,6 +51,8 @@ ICONS = [
     'link',            # リンクをコピー
     'file-text',       # ファイルで共有
     'menu',            # スマホのメニュー
+    'chevron-right',   # スマホのメニュー: 画面を開く項目
+    'rotate-ccw',      # スマホのメニュー: 絞り込みを解除
 ]
 
 HEADER = '''/**

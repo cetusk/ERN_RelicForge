@@ -205,44 +205,250 @@ function buildStackingLookup(effectsData) {
 btnOpen.addEventListener('click', openFile);
 btnOpenWelcome.addEventListener('click', openFile);
 
-// === Smartphone menu: filters / actions / file info in a bottom sheet ===
+// === Smartphone: back gesture / swipe closes sheets and panels ===
 const mobileQuery = window.matchMedia('(max-width: 768px)');
-const btnMobileMenu = document.getElementById('btn-mobile-menu');
-const toolbarSheetInfo = document.getElementById('toolbar-sheet-info');
 
-// Phones: header file info / saved-data note live at the top of the menu (moved, so buttons keep working)
-function placeHeaderInfo() {
-  const info = document.getElementById('header-info');
-  const cache = document.getElementById('header-cache');
-  const headerLeft = document.querySelector('.header-left');
-  if (mobileQuery.matches) {
-    if (info.parentElement !== toolbarSheetInfo) toolbarSheetInfo.append(info, cache);
-  } else if (info.parentElement !== headerLeft) {
-    headerLeft.insertBefore(info, document.getElementById('header-warning'));
-    headerLeft.appendChild(cache);
+// Each open sheet / panel gets a history entry, so the back gesture (iOS edge swipe,
+// Android back button) closes it instead of leaving the page
+const backEntries = [];   // {key, close}
+const backSkips = [];     // resolvers for history entries dropped by the app itself
+function openBackEntry(key, close) {
+  if (!mobileQuery.matches || backEntries.some(e => e.key === key)) return;
+  backEntries.push({ key, close });
+  history.pushState({ relicForgePanel: key }, '');
+}
+// Closed by the app (× / backdrop): drop its history entry. Resolves once the entry is gone.
+function closeBackEntry(key) {
+  const i = backEntries.findIndex(e => e.key === key);
+  if (i < 0) return Promise.resolve();
+  backEntries.splice(i, 1);
+  return new Promise(resolve => {
+    backSkips.push(resolve);
+    history.back();
+  });
+}
+window.addEventListener('popstate', () => {
+  if (backSkips.length) {
+    backSkips.shift()();
+    return;
   }
+  const entry = backEntries.pop();
+  if (entry) entry.close();   // its closeBackEntry() finds nothing left to drop
+});
+
+// Drag a sheet down by its header to close it
+function enableSwipeDown(sheet, handle, close) {
+  let startY = null;
+  let dy = 0;
+  const end = () => {
+    if (startY === null) return;
+    startY = null;
+    sheet.style.transition = '';
+    sheet.style.transform = '';
+    if (dy > 80) close();
+  };
+  handle.addEventListener('touchstart', (e) => {
+    if (!mobileQuery.matches || e.target.closest('button')) return;
+    startY = e.touches[0].clientY;
+    dy = 0;
+    sheet.style.transition = 'none';
+  }, { passive: true });
+  handle.addEventListener('touchmove', (e) => {
+    if (startY === null) return;
+    dy = Math.max(0, e.touches[0].clientY - startY);
+    sheet.style.transform = `translateY(${dy}px)`;
+  }, { passive: true });
+  handle.addEventListener('touchend', end);
+  handle.addEventListener('touchcancel', () => { dy = 0; end(); });
+}
+
+// Relic / build details open as a sheet over the list (tap outside, swipe down or go back to close)
+const detailBackdrop = document.getElementById('detail-backdrop');
+let closeDetailSheet = null;
+function openDetailSheet(key, close) {
+  if (!mobileQuery.matches) return;
+  detailBackdrop.classList.remove('hidden');
+  closeDetailSheet = close;
+  openBackEntry(key, close);
+}
+function hideDetailSheet(key) {
+  detailBackdrop.classList.add('hidden');
+  closeDetailSheet = null;
+  closeBackEntry(key);
+}
+detailBackdrop.addEventListener('click', () => { if (closeDetailSheet) closeDetailSheet(); });
+
+// === Smartphone menu (bottom sheet): filters, tools, loaded data, language ===
+const mobileMenu = document.getElementById('mobile-menu');
+const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+const MENU_COLOR_LABELS = {
+  Red: { ja: '赤', en: 'Red' },
+  Blue: { ja: '青', en: 'Blue' },
+  Yellow: { ja: '黄', en: 'Yellow' },
+  Green: { ja: '緑', en: 'Green' },
+};
+
+function isMobileMenuOpen() {
+  return !mobileMenu.classList.contains('hidden');
 }
 
 function setMobileMenu(open) {
-  toolbar.classList.toggle('menu-open', open);
+  if (open === isMobileMenuOpen()) return Promise.resolve();
+  mobileMenu.classList.toggle('hidden', !open);
+  mobileMenuBackdrop.classList.toggle('hidden', !open);
+  if (!open) return closeBackEntry('menu');
+  renderMobileMenu();
+  mobileMenu.querySelector('.mm-body').scrollTop = 0;
+  openBackEntry('menu', () => setMobileMenu(false));
+  return Promise.resolve();
 }
 
 // Dot on the menu button while color / type / advanced filters are active
+function hasMenuFilters() {
+  return !!colorFilterValue || !!filterType.value || andGroups.some(g => g.size > 0);
+}
 function updateMenuBadge() {
-  const active = !!colorFilterValue || !!filterType.value || andGroups.some(g => g.size > 0);
-  document.getElementById('menu-badge').hidden = !active;
+  document.getElementById('menu-badge').hidden = !hasMenuFilters();
 }
 
-btnMobileMenu.addEventListener('click', () => setMobileMenu(!toolbar.classList.contains('menu-open')));
-document.getElementById('toolbar-sheet-backdrop').addEventListener('click', () => setMobileMenu(false));
-document.querySelector('.toolbar-actions').addEventListener('click', (e) => {
-  if (e.target.closest('button')) setMobileMenu(false);   // the chosen panel opens full screen
+function menuChip(value, label, selected, prefix = '') {
+  return `<button type="button" class="mm-chip${selected ? ' selected' : ''}" data-value="${value}">${prefix}${escapeHtml(label)}</button>`;
+}
+
+function renderMobileMenu() {
+  if (!isMobileMenuOpen()) return;
+  const ja = displayLang === 'ja';
+  const lang = ja ? 'ja' : 'en';
+  const setText = (id, text) => { document.getElementById(id).textContent = text; };
+  setText('mm-title', ja ? 'メニュー' : 'Menu');
+
+  // Filters (relic list only)
+  document.getElementById('mm-filter').hidden = !relicData || activeTab !== 'main';
+  setText('mm-filter-title', ja ? '絞り込み' : 'Filter');
+  setText('mm-color-label', ja ? '色' : 'Color');
+  setText('mm-type-label', ja ? 'タイプ' : 'Type');
+  setText('mm-reset-label', ja ? '解除' : 'Reset');
+  document.getElementById('mm-reset').hidden = !hasMenuFilters();
+  if (relicData) {
+    setText('mm-count', ja
+      ? `${filteredRelics.length} / ${relicData.relics.length} 件`
+      : `${filteredRelics.length} / ${relicData.relics.length}`);
+  }
+  const all = ja ? 'すべて' : 'All';
+  document.getElementById('mm-color').innerHTML = menuChip('', all, !colorFilterValue) +
+    Object.entries(MENU_COLOR_LABELS).map(([c, label]) =>
+      menuChip(c, label[lang], colorFilterValue === c, `<span class="color-badge ${c}"></span>`)).join('');
+  document.getElementById('mm-type').innerHTML = menuChip('', all, !filterType.value) +
+    Object.keys(TYPE_LABELS).map(t => menuChip(t, typeLabel(t), filterType.value === t)).join('');
+  setText('mm-advanced-label', ja ? '効果で絞り込む（高度な検索）' : 'Filter by effects (Advanced)');
+  const effectCount = andGroups.reduce((sum, g) => sum + g.size, 0);
+  const groupCount = andGroups.filter(g => g.size > 0).length;
+  setText('mm-advanced-sub', !effectCount ? '' : ja
+    ? `指定中: 効果 ${effectCount} 件${groupCount > 1 ? `（AND ${groupCount} 条件）` : ''}`
+    : `Active: ${effectCount} effects${groupCount > 1 ? ` (AND: ${groupCount} groups)` : ''}`);
+
+  // Tools (same buttons as the wide-screen toolbar)
+  setText('mm-tools-title', ja ? '機能' : 'Tools');
+  const tools = [
+    [btnOptimizer, 'wand-sparkles', ja ? '献器と遺物の組み合わせを探す' : 'Find vessel & relic sets'],
+    [btnCatalog, 'book-open', ja ? '効果の一覧と重複の可否' : 'All effects & stacking'],
+    [document.getElementById('btn-share'), 'share-2', ja ? '別の端末で開くリンク' : 'Open on another device'],
+    [btnExportTable, 'file-down', ja ? '一覧を HTML で保存' : 'Save the list as HTML'],
+  ].filter(([btn]) => !btn.classList.contains('hidden') && btn.style.display !== 'none');
+  document.getElementById('mm-tools').innerHTML = tools.map(([btn, icon, sub]) =>
+    `<button type="button" class="mm-tool" data-target="${btn.id}">${iconSvg(icon, 22)}` +
+    `<span class="mm-tool-label">${escapeHtml(btn.textContent.trim())}</span>` +
+    `<span class="mm-tool-sub">${escapeHtml(sub)}</span></button>`).join('');
+
+  // Loaded data + saved-on-device state
+  setText('mm-data-title', ja ? '読み込んだデータ' : 'Loaded data');
+  let rows = '';
+  if (relicData) {
+    const relics = relicData.relics;
+    const count = t => relics.filter(r => r.itemType === t).length;
+    const row = (label, value, cls = '') => `<dt>${label}</dt><dd class="${cls}">${value}</dd>`;
+    rows += row(ja ? 'プレイヤー' : 'Player', escapeHtml(relicData.characterName || '-'));
+    rows += row(ja ? '遺物' : 'Relics', ja
+      ? `${relics.length} 件（通常 ${count('Relic')}・深層 ${count('DeepRelic')}・固有 ${count('UniqueRelic')}）`
+      : `${relics.length} (Relic ${count('Relic')} / Deep ${count('DeepRelic')} / Unique ${count('UniqueRelic')})`);
+    rows += row(ja ? 'ファイル' : 'File', escapeHtml(loadedFileName || '-'));
+    const unknown = relicData.unknownRelics || 0;
+    if (unknown) {
+      rows += row(ja ? '未知の遺物' : 'Unknown', iconSvg('triangle-alert', 13) +
+        (ja ? ` ${unknown} 件（ツールが未対応のデータ）` : ` ${unknown} (not supported by the tool yet)`), 'warn');
+    }
+  }
+  document.getElementById('mm-data').innerHTML = rows;
+  const storage = document.getElementById('mm-storage');
+  storage.hidden = !currentCache;
+  if (currentCache) {
+    const shared = !!currentCache.unsavedShare;
+    storage.innerHTML = `<span class="mm-storage-text">${iconSvg('smartphone', 14)}` +
+      `${escapeHtml(document.querySelector('#header-cache .header-cache-text').textContent)}</span>` +
+      (shared
+        ? `<button type="button" class="mm-storage-btn" data-target="header-cache-save">${iconSvg('save', 14)}${ja ? 'この端末に保存' : 'Save'}</button>`
+        : `<button type="button" class="mm-storage-btn danger" data-target="header-cache-delete">${iconSvg('trash-2', 14)}${ja ? '削除' : 'Delete'}</button>`);
+  }
+
+  // Language
+  document.getElementById('mm-lang').innerHTML =
+    menuChip('ja', '日本語', displayLang === 'ja') + menuChip('en', 'English', displayLang === 'en');
+
+  document.getElementById('mm-footer').innerHTML =
+    `${escapeHtml(document.getElementById('header-meta-version').textContent)} · ` +
+    `${escapeHtml(document.getElementById('header-meta-updated').textContent)} · ` +
+    `by cetusk (<a href="https://github.com/cetusk/ERN_RelicForge" target="_blank" rel="noopener noreferrer">GitHub</a>)`;
+}
+
+function onMenuChip(id, handler) {
+  document.getElementById(id).addEventListener('click', (e) => {
+    const chip = e.target.closest('.mm-chip');
+    if (chip) handler(chip.dataset.value);
+  });
+}
+onMenuChip('mm-color', (value) => setColorFilter(value));
+onMenuChip('mm-type', (value) => {
+  filterType.value = value;
+  applyFilters();
 });
+onMenuChip('mm-lang', (value) => {
+  if (value === displayLang) return;
+  filterLang.value = value;
+  filterLang.dispatchEvent(new Event('change'));
+});
+document.getElementById('mm-reset').addEventListener('click', () => {
+  andGroups.forEach(g => g.clear());
+  updateInspectorButton();
+  filterType.value = '';
+  setColorFilter('');   // re-filters
+});
+// Panels opened from the menu replace it (after its history entry is gone)
+document.getElementById('mm-advanced').addEventListener('click', async () => {
+  await setMobileMenu(false);
+  btnInspector.click();
+});
+document.getElementById('mm-tools').addEventListener('click', async (e) => {
+  const tool = e.target.closest('.mm-tool');
+  if (!tool) return;
+  await setMobileMenu(false);
+  document.getElementById(tool.dataset.target).click();
+});
+document.getElementById('mm-storage').addEventListener('click', (e) => {
+  const btn = e.target.closest('.mm-storage-btn');
+  if (btn) document.getElementById(btn.dataset.target).click();
+});
+
+document.getElementById('btn-mobile-menu').addEventListener('click', () => setMobileMenu(!isMobileMenuOpen()));
+document.getElementById('mm-close').addEventListener('click', () => setMobileMenu(false));
+mobileMenuBackdrop.addEventListener('click', () => setMobileMenu(false));
+enableSwipeDown(mobileMenu, mobileMenu.querySelector('.mm-head'), () => setMobileMenu(false));
+enableSwipeDown(detailPanel, detailPanel.querySelector('.detail-header'), () => closeDetail());
 mobileQuery.addEventListener('change', () => {
-  placeHeaderInfo();
-  if (!mobileQuery.matches) setMobileMenu(false);
+  if (!mobileQuery.matches) {
+    setMobileMenu(false);
+    detailBackdrop.classList.add('hidden');
+  }
 });
-placeHeaderInfo();
 
 // === Steam Cloud guide ===
 // The save cannot be fetched from Steam directly (cross-origin + login), so the user downloads it
@@ -280,11 +486,13 @@ function openSteamGuide() {
   renderSteamGuideText();
   steamGuide.classList.remove('hidden');
   steamGuideBackdrop.classList.remove('hidden');
+  openBackEntry('steam-guide', closeSteamGuide);
 }
 
 function closeSteamGuide() {
   steamGuide.classList.add('hidden');
   steamGuideBackdrop.classList.add('hidden');
+  closeBackEntry('steam-guide');
 }
 
 document.getElementById('btn-steam-header').addEventListener('click', openSteamGuide);
@@ -315,8 +523,11 @@ colorSelectBtn.addEventListener('click', (e) => {
 });
 colorSelectDropdown.addEventListener('mousedown', (e) => {
   const opt = e.target.closest('.custom-select-option');
-  if (!opt) return;
-  colorFilterValue = opt.dataset.value;
+  if (opt) setColorFilter(opt.dataset.value);
+});
+
+function setColorFilter(value) {
+  colorFilterValue = value;
   // Update button label with badge
   if (colorFilterValue) {
     colorSelectLabel.innerHTML =
@@ -329,7 +540,7 @@ colorSelectDropdown.addEventListener('mousedown', (e) => {
     o.classList.toggle('selected', o.dataset.value === colorFilterValue));
   colorSelectDropdown.classList.add('hidden');
   applyFilters();
-});
+}
 document.addEventListener('click', () => colorSelectDropdown.classList.add('hidden'));
 filterType.addEventListener('change', applyFilters);
 detailClose.addEventListener('click', closeDetail);
@@ -342,7 +553,7 @@ filterLang.addEventListener('change', () => {
   renderShareDialogText();
   renderTable();
   updateHeaderInfo();
-  updateResultCount();
+  updateResultCount();   // also re-renders the phone menu
   // Re-render detail if open
   if (selectedRelicId) {
     const relic = filteredRelics.find(r => r.id === selectedRelicId);
@@ -510,6 +721,7 @@ function updateCacheInfo(record) {
   if (!el) return;
   if (!record) {
     el.hidden = true;
+    renderMobileMenu();
     return;
   }
   const ja = displayLang === 'ja';
@@ -523,6 +735,7 @@ function updateCacheInfo(record) {
   document.getElementById('header-cache-delete').hidden = shared;
   el.querySelector('.header-cache-delete').title = ja ? 'この端末に保存したデータを削除' : 'Delete the data saved on this device';
   el.hidden = false;
+  renderMobileMenu();
 }
 
 // Save relics opened from a share link (replaces the data saved on this device)
@@ -632,6 +845,7 @@ async function openShareDialog() {
   renderShareDialogText();
   shareDialog.classList.remove('hidden');
   shareBackdrop.classList.remove('hidden');
+  openBackEntry('share', closeShareDialog);
   try {
     await buildShareUrl();
   } catch (err) {
@@ -643,6 +857,7 @@ async function openShareDialog() {
 function closeShareDialog() {
   shareDialog.classList.add('hidden');
   shareBackdrop.classList.add('hidden');
+  closeBackEntry('share');
 }
 
 function shareFileName() {
@@ -1032,6 +1247,7 @@ function updateResultCount() {
   const uniqueLabel = ja ? '固有' : 'Unique';
   resultCount.textContent =
     `${hit} ${hitLabel}(${normalLabel}: ${nR} / ${deepLabel}: ${nD} / ${uniqueLabel}: ${nU})`;
+  renderMobileMenu();
 }
 
 // === Search Suggestions ===
@@ -1245,6 +1461,7 @@ function renderTable() {
 function showDetail(relic) {
   selectedRelicId = relic.id;
   detailPanel.classList.remove('hidden');
+  openDetailSheet('detail', closeDetail);
 
   const itemName = displayLang === 'ja'
     ? (relic.itemNameJa || relic.itemNameEn || relic.itemKey)
@@ -1255,7 +1472,7 @@ function showDetail(relic) {
 
   // Basic info
   const ja = displayLang === 'ja';
-  html += `<div class="detail-section">`;
+  html += `<div class="detail-section detail-section-basic">`;
   html += `<h3>${ja ? '基本情報' : 'Basic Info'}</h3>`;
   html += field('ID', relic.id);
   html += field(ja ? 'アイテムID' : 'Item ID', relic.itemId);
@@ -1303,6 +1520,7 @@ function showDetail(relic) {
 }
 
 function closeDetail() {
+  if (!detailPanel.classList.contains('hidden')) hideDetailSheet('detail');
   detailPanel.classList.add('hidden');
   selectedRelicId = null;
   document.querySelectorAll('#relic-tbody tr').forEach(tr => tr.classList.remove('selected'));
@@ -1819,6 +2037,7 @@ function closeCatalogTab() {
 function openInspector() {
   inspectorBackdrop.classList.remove('hidden');
   inspector.classList.add('open');
+  openBackEntry('inspector', closeInspector);
   inspectorSearch.value = '';
   // Default all categories to collapsed
   EFFECT_CATEGORIES.forEach(c => collapsedCategories.add(c.id));
@@ -1830,6 +2049,7 @@ function openInspector() {
 function closeInspector() {
   inspectorBackdrop.classList.add('hidden');
   inspector.classList.remove('open');
+  closeBackEntry('inspector');
 }
 
 // --- Inspector resize ---
@@ -2268,11 +2488,13 @@ function addOptimizerTab(label, data, params) {
   detail.innerHTML = `
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
+      <div class="sheet-grip"></div>
       <h2 class="opt-detail-title"></h2>
       <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
+  enableSwipeDown(detail, detail.querySelector('.detail-header'), () => detail.querySelector('.opt-detail-close').click());
   wrapper.appendChild(detail);
 
   document.getElementById('main-content').appendChild(wrapper);
@@ -2312,11 +2534,13 @@ function addOptimizerTabLoading(label, params) {
   detail.innerHTML = `
     <div class="opt-detail-resize-handle"></div>
     <div class="detail-header">
+      <div class="sheet-grip"></div>
       <h2 class="opt-detail-title"></h2>
       <button class="btn-close opt-detail-close" aria-label="close">${iconSvg('x', 18)}</button>
     </div>
     <div class="opt-detail-body detail-body"></div>`;
   setupOptDetailResize(detail);
+  enableSwipeDown(detail, detail.querySelector('.detail-header'), () => detail.querySelector('.opt-detail-close').click());
   wrapper.appendChild(detail);
 
   document.getElementById('main-content').appendChild(wrapper);
@@ -2366,6 +2590,7 @@ function updateOptimizerButton() {
 async function openOptimizerInspector() {
   optimizerBackdrop.classList.remove('hidden');
   optimizerInspector.classList.add('open');
+  openBackEntry('optimizer', closeOptimizerInspector);
 
   // Load vessels data if not cached
   if (!vesselsData) {
@@ -2387,6 +2612,7 @@ async function openOptimizerInspector() {
 function closeOptimizerInspector() {
   optimizerBackdrop.classList.add('hidden');
   optimizerInspector.classList.remove('open');
+  closeBackEntry('optimizer');
 }
 
 function renderOptimizerCharacterSelect() {
@@ -2923,6 +3149,7 @@ function applyPreset(preset) {
 function openEffectSelectInspector() {
   effectSelectBackdrop.classList.remove('hidden');
   effectSelectInspector.classList.add('open');
+  openBackEntry('effect-select', closeEffectSelectInspector);
   effectSelectSearch.value = '';
   effectSelectSearchClear.classList.add('hidden');
   // Default all categories to collapsed
@@ -2934,6 +3161,7 @@ function openEffectSelectInspector() {
 function closeEffectSelectInspector() {
   effectSelectBackdrop.classList.add('hidden');
   effectSelectInspector.classList.remove('open');
+  closeBackEntry('effect-select');
 }
 
 function renderEffectSelectList() {
@@ -3562,11 +3790,15 @@ function showOptResultDetail(tabId, res, params, idx) {
   body.innerHTML = html;
 
   // Close button
-  panel.querySelector('.opt-detail-close').onclick = () => {
+  const close = () => {
+    if (panel.classList.contains('hidden')) return;
     panel.classList.add('hidden');
+    hideDetailSheet('opt-detail');
     const container = document.getElementById(`opt-result-${tabId}`);
     if (container) container.querySelectorAll('.opt-result-card').forEach(c => c.classList.remove('selected'));
   };
+  panel.querySelector('.opt-detail-close').onclick = close;
+  openDetailSheet('opt-detail', close);
 }
 
 function renderOptDetailRelic(relic, ja) {
