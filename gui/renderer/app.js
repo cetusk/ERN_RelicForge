@@ -2594,8 +2594,8 @@ function renderSuggestText() {
   t('suggest-title', ja ? 'ビルド提案' : 'Build Suggestion');
   t('suggest-badge', ja ? '試験的' : 'Beta');
   t('suggest-lead', ja
-    ? '型や武器種などを選ぶと、遺物効果の条件に置き換えてビルド探索を実行します。条件はビルド探索の画面に引き継がれるので、あとから細かく調整できます。型や効果の対応は神攻略wikiの情報をもとにしています。'
-    : 'Pick playstyles, weapon types and more; they are turned into relic-effect conditions and the build search runs with them. The conditions stay in the build search panel for fine-tuning. Based on the Japanese Kamikouryaku wiki (names are in Japanese).');
+    ? '型や武器種などを選ぶと、手持ちの遺物から大まかなビルドの方向性を提案します。最適解を出すものではないので、結果をたたき台にして、ビルド探索で詳細を詰めてください（条件はビルド探索の画面に引き継がれます）。型や効果の対応は神攻略wikiの情報をもとにしています。'
+    : 'Pick playstyles, weapon types and more to get a rough direction for a build from your relics. It is not an optimal answer: use the result as a starting point and fine-tune it in the build search (the conditions are carried over). Based on the Japanese Kamikouryaku wiki (names are in Japanese).');
   t('sg-character-label', ja ? 'キャラクター' : 'Character');
   t('sg-vessel-label', ja ? '献器' : 'Vessel');
   t('sg-mode-label', ja ? 'モード' : 'Mode');
@@ -2604,8 +2604,8 @@ function renderSuggestText() {
   t('sg-build-label', ja ? '定番のビルドから始める（任意）' : 'Start from a known build (optional)');
   t('sg-weapons-label', ja ? '武器種' : 'Weapon types');
   t('sg-focus-label', ja ? '重視すること' : 'Focus');
-  t('sg-focus-left', ja ? '火力' : 'Damage');
-  t('sg-focus-right', ja ? '生存' : 'Survival');
+  t('sg-focus-left', ja ? '生存' : 'Survival');
+  t('sg-focus-right', ja ? '火力' : 'Damage');
   t('sg-preview-label', ja ? '探索する条件' : 'Search conditions');
   t('suggest-clear-label', ja ? 'クリア' : 'Clear');
   t('suggest-run-label', ja ? '提案を探す' : 'Find builds');
@@ -2679,7 +2679,8 @@ function collectSuggestInput() {
     buildId: sgBuild.value || null,
     weapons: [...suggestPicks.weapons],
     types: [...suggestPicks.types],
-    focus: Number(sgFocus.value) || 0,
+    // the slider has 生存 on the left and 火力 on the right; suggestConditions takes negative = 火力
+    focus: -(Number(sgFocus.value) || 0) || 0,
   };
 }
 
@@ -2788,6 +2789,7 @@ function renderSuggestionSummary(sug) {
   return `<div class="sg-summary">
     <div class="sg-summary-head">${iconSvg('lightbulb', 16)}<span>${ja ? 'ビルド提案' : 'Build Suggestion'}</span><span class="experimental-badge">${ja ? '試験的' : 'Beta'}</span></div>
     <dl class="sg-choices">${choices.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('')}</dl>
+    <p class="sg-note">${ja ? '大まかな方向性の提案です。結果をたたき台にして、ビルド探索で詳細を詰めてください。' : 'A rough direction, not an optimal answer. Fine-tune it in the build search.'}</p>
     <p class="sg-counts">${ja ? '探索した条件' : 'Searched with'}: ${escapeHtml(suggestionCountsText(cond, ja))}
       <button type="button" class="btn-secondary sg-open-optimizer">${iconSvg('wand-sparkles', 14)}<span>${ja ? 'ビルド探索で細かく調整' : 'Fine-tune in Build Search'}</span></button></p>
     ${cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('')}
