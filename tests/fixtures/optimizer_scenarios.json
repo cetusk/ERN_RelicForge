@@ -227,5 +227,53 @@
     "rank": 2
    }
   ]
+ },
+ {
+  "name": "wylder_normal_nonstack_duplicate",
+  "pool": "relic_pool_nonstack_dup.json",
+  "params": {
+   "character": "追跡者",
+   "vessel": "urn",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "duchessDaggerChainAttackReprises",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "partialHpRestorationUponPostDamageAttacks",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "flaskAlsoHealsAllies",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "wylderArtActivationSpreadsFireInArea",
+    "priority": "preferred",
+    "rank": 2
+   },
+   {
+    "key": "guardianIncreasedDurationForCharacterSkill",
+    "priority": "preferred",
+    "rank": 3
+   },
+   {
+    "key": "raiderCharacterSkillDamageUp",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+    "priority": "nice_to_have",
+    "rank": 1
+   }
+  ]
  }
 ]

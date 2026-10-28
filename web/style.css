@@ -3626,3 +3626,19 @@ button:has(> .icon) {
   content: '\25BE  ';
 }
 
+
+/* Build search results: a non-stackable effect that is on several relics works only once */
+.opt-card-effect.wasted {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.opt-wasted-badge {
+  margin-left: 6px;
+  padding: 0 4px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 400;
+}

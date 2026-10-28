@@ -67,6 +67,16 @@ class TestOptimizerScenarios(unittest.TestCase):
         self.assertTrue(best['requiredMet'])
         self.assertTrue(set(best['excludedPresent']) & excluded)
 
+    def test_wasted_duplicate_earns_no_concentration_bonus(self):
+        # A non-stackable effect on two relics works once; the extra copy must not earn the
+        # concentration bonus (it made A+B+D beat A+C+D before, see generate_nonstack_dup_pool)
+        results = self.expected['wylder_normal_nonstack_duplicate']['results']
+        ids = [sorted(r['id'] - 0xC0820001 for r in res['relics']) for res in results]
+        self.assertEqual(ids[0], [0, 2, 3])          # A + C + D
+        self.assertEqual(results[0]['score'], 161)
+        self.assertEqual(ids[1], [0, 1, 3])          # A + B + D: B's X is a wasted copy
+        self.assertEqual(results[1]['score'], 156)
+
 
 class TestEffectsConfigLoader(unittest.TestCase):
     """README 形式の除外指定 (exclude_required 等) を GUI と同じ形式に変換すること"""

@@ -278,6 +278,7 @@ class RelicOptimizer {
 
     // Compact relic map: rid -> specIndices (populated by _compactRelic)
     this._compactMap = {};
+    this._siBuf = new Array(8);   // reusable list of relics' desired-effect indices (concentration)
   }
 
   _resolveNameMatches(nameJa, nameEn, spec, weight, targetLookup) {
@@ -391,6 +392,31 @@ class RelicOptimizer {
     return score;
   }
 
+  // Concentration bonus of a combination (relics' desired-effect index lists in slot order).
+  // A non-stackable desired effect on several relics works only once: the copy on the relic with the
+  // most desired effects (the earliest on ties) counts, the other copies earn no bonus (same as Python).
+  // No allocations: at most 6 relics with a few desired effects each.
+  _concentration(siLists, n) {
+    const st = this._specStackingInt;
+    let total = 0;
+    for (let r = 0; r < n; r++) {
+      const s = siLists[r];
+      let k = s.length;
+      for (let a = 0; a < s.length; a++) {
+        const idx = s[a];
+        if (st[idx] !== 0) continue;
+        let keep = -1, keepLen = -1;
+        for (let q = 0; q < n; q++) {
+          const sq = siLists[q];
+          if (sq.length > keepLen && sq.includes(idx)) { keep = q; keepLen = sq.length; }
+        }
+        if (keep !== r) k--;
+      }
+      if (k >= 2) total += Math.trunc(CONCENTRATION_BONUS * k * (k - 1) / 2);
+    }
+    return total;
+  }
+
   _compactRelic(relic) {
     const rid = relic.id;
     const specKeys = this._getSpecKeys(relic);
@@ -458,7 +484,7 @@ class RelicOptimizer {
     for (const idx of ri[1]) { if (counts[idx]++ === 0) touched[touchedLen++] = idx; }
     for (const idx of rj[1]) { if (counts[idx]++ === 0) touched[touchedLen++] = idx; }
     for (const idx of rk[1]) { if (counts[idx]++ === 0) touched[touchedLen++] = idx; }
-    let score = 0, sub = 0;
+    let score = 0, sub = 0, dup = false;
     for (let t = 0; t < touchedLen; t++) {
       const i = touched[t];
       const c = counts[i];
@@ -470,14 +496,23 @@ class RelicOptimizer {
         if (c > 1) score -= p30[i] * (c - 1);
       } else {
         score += w[i];
-        if (c > 1) score -= p50[i] * (c - 1);
+        if (c > 1) { score -= p50[i] * (c - 1); dup = true; }
       }
       sub += sr[i];
     }
-    score += ri[4] + rj[4] + rk[4]; // concentration bonus
+    // concentration bonus (duplicates of non-stackable effects earn none)
+    let cb;
+    if (dup) {
+      const buf = this._siBuf;
+      buf[0] = ri[1]; buf[1] = rj[1]; buf[2] = rk[1];
+      cb = this._concentration(buf, 3);
+    } else {
+      cb = ri[4] + rj[4] + rk[4];
+    }
+    score += cb;
     score -= ri[2] + rj[2] + rk[2]; // exclusion penalty
     const exclSub = ri[5] + rj[5] + rk[5]; // exclude sub-rank sum
-    return [score, sub, ri[4] + rj[4] + rk[4], ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3], exclSub, ri[6] | rj[6] | rk[6]];
+    return [score, sub, cb, ri[2] + rj[2] + rk[2], ri[3] || rj[3] || rk[3], exclSub, ri[6] | rj[6] | rk[6]];
   }
 
   // Enum result format (lightweight): [score, rids, cb, ep, her, subScore, exclSub]
@@ -626,18 +661,19 @@ class RelicOptimizer {
         const w = self._specWeights, st = self._specStackingInt;
         const p30 = self._specPenalty30, p50 = self._specPenalty50;
         const sr = self._specSubRankValues;
-        let score = 0, sub = 0;
+        let score = 0, sub = 0, dup = false;
         for (let t = 0; t < touched.length; t++) {
           const i = touched[t], c = counts[i];
           counts[i] = 0;
           if (st[i] === 1) score += w[i] * c;
           else if (st[i] === 2) { score += w[i]; if (c > 1) score -= p30[i] * (c - 1); }
-          else { score += w[i]; if (c > 1) score -= p50[i] * (c - 1); }
+          else { score += w[i]; if (c > 1) { score -= p50[i] * (c - 1); dup = true; } }
           sub += sr[i];
         }
-        score += partialCb - partialEp;
+        const cb = dup ? self._concentration(chosenSi, nSlots) : partialCb;
+        score += cb - partialEp;
         // Keep slot order (same as Python); the sorted IDs are only the dedup key
-        results.push([score, chosenIds.slice(0, nSlots), partialCb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
+        results.push([score, chosenIds.slice(0, nSlots), cb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
         return;
       }
 
@@ -908,6 +944,7 @@ class RelicOptimizer {
         let score = 0;
         let hasAllRequired = true;
         let subScore = 0;
+        let dup = false;
         for (let i = 0; i < nSpec; i++) {
           const c = nCts[i] + dCts[i];
           if (c === 0) {
@@ -922,7 +959,7 @@ class RelicOptimizer {
             if (c > 1) score -= specPenalty30[i] * (c - 1);
           } else {
             score += specWeights[i];
-            if (c > 1) score -= specPenalty50[i] * (c - 1);
+            if (c > 1) { score -= specPenalty50[i] * (c - 1); dup = true; }
           }
           subScore += subRankValues[i];
         }
@@ -931,6 +968,22 @@ class RelicOptimizer {
         score += nConc + dConc - nEp - dEp;
         const hasExclReq = nHer || dHer;
         const reqMet = hasAllRequired && !hasExclReq;
+
+        // Concentration: duplicates across the normal and deep sides earn no bonus either. The bonus
+        // only goes down, so the score above is an upper bound: work out the exact one only when that
+        // bound could still enter its heap (the result is the same, without the cost for every pair)
+        if (dup) {
+          const heap = reqMet ? heapTrue : (trueFull ? null : heapFalse);
+          if (!heap || (heap.size >= topN && this._heapCompare3([-score, -subScore, counter], heap.peek()) >= 0)) {
+            counter++;
+            continue;
+          }
+          const buf = this._siBuf;
+          let m = 0;
+          for (const rid of nRids) buf[m++] = this._compactMap[rid];
+          for (const rid of dRids) buf[m++] = this._compactMap[rid];
+          score += this._concentration(buf, m) - nConc - dConc;
+        }
 
         // Heap key: [-score, -subScore, counter] (no reqMet — heaps are separate)
         const heapKey = [-score, -subScore, counter];

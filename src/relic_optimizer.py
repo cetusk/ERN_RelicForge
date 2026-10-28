@@ -181,6 +181,7 @@ class RelicOptimizer:
                               for k in self._spec_key_list]
         # Stacking codes: 0=non-stackable, 1=stackable, 2=conditional
         self._spec_stacking_int = []
+        self._compact_si: Dict[int, Tuple] = {}  # relic id -> desired-effect indices (for concentration)
         self._spec_penalty30 = []
         self._spec_penalty50 = []
         self._is_required = [False] * n_spec
@@ -367,6 +368,56 @@ class RelicOptimizer:
                     score -= penalty50[i] * (c - 1)
         return score
 
+    def _fast_stacking_score_dup(self, counts):
+        """_fast_stacking_score と同じ。重ね掛け不可の効果が重複しているかも返す: (score, has_dup)"""
+        score = 0
+        has_dup = False
+        weights = self._spec_weights
+        stacking_int = self._spec_stacking_int
+        penalty30 = self._spec_penalty30
+        penalty50 = self._spec_penalty50
+        for i in range(self._n_spec):
+            c = counts[i]
+            if c == 0:
+                continue
+            si = stacking_int[i]
+            if si == 1:  # stackable
+                score += weights[i] * c
+            elif si == 2:  # conditional
+                score += weights[i]
+                if c > 1:
+                    score -= penalty30[i] * (c - 1)
+            else:  # non-stackable
+                score += weights[i]
+                if c > 1:
+                    score -= penalty50[i] * (c - 1)
+                    has_dup = True
+        return score, has_dup
+
+    def _concentration(self, si_lists) -> int:
+        """組み合わせの集中ボーナス（si_lists: 遺物ごとの指定効果のインデックス、組み合わせの順）
+
+        重ね掛け不可の指定効果が複数の遺物にあるときは1つ分しか働かないため、指定効果が
+        最も多い遺物（同数なら先の遺物）のものだけを数え、ほかのコピーは集中ボーナスに
+        数えない（JS 版と同じ）。
+        """
+        stacking_int = self._spec_stacking_int
+        total = 0
+        for r, si in enumerate(si_lists):
+            k = len(si)
+            for idx in si:
+                if stacking_int[idx] != 0:
+                    continue
+                keep, keep_len = -1, -1
+                for q, sq in enumerate(si_lists):
+                    if len(sq) > keep_len and idx in sq:
+                        keep, keep_len = q, len(sq)
+                if keep != r:
+                    k -= 1
+            if k >= 2:
+                total += CONCENTRATION_BONUS * k * (k - 1) // 2
+        return total
+
     def _compact_relic(self, relic: Dict) -> Tuple:
         """レリックをコンパクトなタプルに変換
         Returns: (rid, spec_indices, excl_penalty, has_excl_req,
@@ -375,6 +426,7 @@ class RelicOptimizer:
         rid = relic['id']
         spec_keys = self._get_spec_keys(relic)
         spec_indices = tuple(self._spec_key_to_idx[k] for k in spec_keys)
+        self._compact_si[rid] = spec_indices
 
         excl_keys = self._get_exclude_keys(relic)
         excl_penalty = 0
@@ -439,14 +491,16 @@ class RelicOptimizer:
                         counts[idx] += 1
                     for idx in rk_si:
                         counts[idx] += 1
-                    score = self._fast_stacking_score(counts)
-                    score += ri_cb + rj_cb + rk_cb
+                    score, has_dup = self._fast_stacking_score_dup(counts)
+                    cb = self._concentration((ri_si, rj_si, rk_si)) if has_dup \
+                        else ri_cb + rj_cb + rk_cb
+                    score += cb
                     score -= ri_ep + rj_ep + rk_ep
                     her = ri_her or rj_her or rk_her
                     results.append((
                         score,
                         tuple(counts),
-                        ri_cb + rj_cb + rk_cb,
+                        cb,
                         ri_ep + rj_ep + rk_ep,
                         her,
                         (ri_id, rj_id, rk_id),
@@ -468,14 +522,16 @@ class RelicOptimizer:
                         counts[idx] += 1
                     for idx in rk_si:
                         counts[idx] += 1
-                    score = self._fast_stacking_score(counts)
-                    score += ri_cb + rj_cb + rk_cb
+                    score, has_dup = self._fast_stacking_score_dup(counts)
+                    cb = self._concentration((ri_si, rj_si, rk_si)) if has_dup \
+                        else ri_cb + rj_cb + rk_cb
+                    score += cb
                     score -= ri_ep + rj_ep + rk_ep
                     her = ri_her or rj_her or rk_her
                     results.append((
                         score,
                         tuple(counts),
-                        ri_cb + rj_cb + rk_cb,
+                        cb,
                         ri_ep + rj_ep + rk_ep,
                         her,
                         (ri_id, rj_id, rk_id),
@@ -512,14 +568,16 @@ class RelicOptimizer:
                         counts[idx] += 1
                     for idx in rk_si:
                         counts[idx] += 1
-                    score = self._fast_stacking_score(counts)
-                    score += ri_cb + rj_cb + rk_cb
+                    score, has_dup = self._fast_stacking_score_dup(counts)
+                    cb = self._concentration((ri_si, rj_si, rk_si)) if has_dup \
+                        else ri_cb + rj_cb + rk_cb
+                    score += cb
                     score -= ri_ep + rj_ep + rk_ep
                     her = ri_her or rj_her or rk_her
                     results.append((
                         score,
                         tuple(counts),
-                        ri_cb + rj_cb + rk_cb,
+                        cb,
                         ri_ep + rj_ep + rk_ep,
                         her,
                         (ri_id, rj_id, rk_id),
@@ -543,12 +601,13 @@ class RelicOptimizer:
                 for si_list in partial_si:
                     for idx in si_list:
                         counts[idx] += 1
-                score = self._fast_stacking_score(counts)
-                score += partial_cb - partial_ep
+                score, has_dup = self._fast_stacking_score_dup(counts)
+                cb = self._concentration(partial_si) if has_dup else partial_cb
+                score += cb - partial_ep
                 results.append((
                     score,
                     tuple(counts),
-                    partial_cb, partial_ep, partial_her,
+                    cb, partial_ep, partial_her,
                     tuple(chosen_ids),
                     partial_esr, partial_rm))
                 return
@@ -632,11 +691,11 @@ class RelicOptimizer:
         除外ペナルティ: 除外対象の効果が含まれている場合に減算。
         """
         effect_counts: Dict[str, int] = {}
-        concentration = 0
         exclude_penalty = 0
         has_exclude_required = False
         excluded_present: Set[str] = set()
         seen_ids = set()
+        si_lists = []
         for relic in combo:
             rid = relic['id']
             if rid in seen_ids:
@@ -645,10 +704,7 @@ class RelicOptimizer:
             spec_keys = self._get_spec_keys(relic)
             for key in spec_keys:
                 effect_counts[key] = effect_counts.get(key, 0) + 1
-            # Concentration bonus
-            n_sk = len(spec_keys)
-            if n_sk >= 2:
-                concentration += CONCENTRATION_BONUS * n_sk * (n_sk - 1) // 2
+            si_lists.append(tuple(self._spec_key_to_idx[k] for k in spec_keys))
             # Exclusion penalty
             for key in self._get_exclude_keys(relic):
                 exclude_penalty += self.exclude_lookup[key]['weight']
@@ -656,6 +712,8 @@ class RelicOptimizer:
                 if self.exclude_lookup[key]['priority'] == 'required':
                     has_exclude_required = True
 
+        # Concentration bonus (duplicates of non-stackable effects earn none)
+        concentration = self._concentration(si_lists)
         score = self._stacking_aware_score(effect_counts)
         score += concentration - exclude_penalty
 
@@ -1007,6 +1065,7 @@ class RelicOptimizer:
 
                 # Inline merged scoring (integer stacking codes)
                 score = 0
+                has_dup = False
                 has_all_required = True
                 for i in range(n_spec):
                     c = n_cts[i] + d_cts[i]
@@ -1025,6 +1084,7 @@ class RelicOptimizer:
                         score += spec_weights[i]
                         if c > 1:
                             score -= spec_penalty50[i] * (c - 1)
+                            has_dup = True
 
                 score += n_conc + d_conc - n_ep - d_ep
                 has_excl_req = n_her or d_her
@@ -1038,6 +1098,19 @@ class RelicOptimizer:
                 sub_score -= (n_esr + d_esr)
 
                 evaluated += 1
+
+                # Concentration: duplicates across the normal and deep sides earn no bonus either.
+                # The bonus only goes down, so the score above is an upper bound: work out the exact
+                # one only when that bound could still enter its heap (same result as JS)
+                if has_dup:
+                    heap = heap_true if req_met else (None if true_full else heap_false)
+                    if heap is None or (len(heap) >= top_n
+                                        and (-score, -sub_score, counter) >= heap[0]):
+                        counter += 1
+                        continue
+                    score += self._concentration(
+                        [self._compact_si[rid] for rid in tuple(n_rids) + tuple(d_rids)]) \
+                        - n_conc - d_conc
 
                 heap_key = (-score, -sub_score, counter)
                 if req_met:

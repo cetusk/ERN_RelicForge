@@ -3203,6 +3203,7 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
 }
 
 function renderResultCard(res, ja, isBest, params, idx) {
+  markWastedDuplicates(res);
   const cardClass = `opt-result-card${isBest ? ' best' : ''}`;
   const vesselName = ja ? res._vesselNameJa : res._vesselNameEn;
   const matchedSet = new Set(res.matchedEffects || []);
@@ -3247,7 +3248,8 @@ function renderResultCard(res, ja, isBest, params, idx) {
         } else if (isSpec) {
           cls += ' spec-miss';
         }
-        html += `<span class="${cls}">${effName}</span>`;
+        if (eff._wasted) cls += ' wasted';
+        html += `<span class="${cls}"${eff._wasted ? ` title="${wastedLabel(ja)}"` : ''}>${effName}</span>`;
       });
       html += `</div>`;
       html += `</div>`;
@@ -3260,7 +3262,53 @@ function renderResultCard(res, ja, isBest, params, idx) {
   return html;
 }
 
+// Stackability per effect kind, the way the build search decides it (any stackable id makes the kind stackable)
+let keyStackabilityCache = null;
+function keyStackability() {
+  if (keyStackabilityCache) return keyStackabilityCache;
+  const map = {};
+  for (const info of Object.values(stackingLookup || {})) {
+    if (!info.key) continue;
+    const s = info.stackable;
+    if (!(info.key in map)) map[info.key] = s === true ? true : s === 'conditional' ? 'conditional' : false;
+    else if (s === true) map[info.key] = true;
+    else if (s === 'conditional' && map[info.key] === false) map[info.key] = 'conditional';
+  }
+  keyStackabilityCache = map;
+  return map;
+}
+
+// A non-stackable effect on more than one relic of a result works only once. Marks the other copies
+// `_wasted` (shown as 「重複・効果なし」). Like the build search, the copy that counts is the one on the
+// relic with the most matched effects (the earliest on ties); outside the conditions, the first one.
+function markWastedDuplicates(res) {
+  if (res._wastedMarked) return;
+  res._wastedMarked = true;
+  const relics = [...(res.normalRelics || []), ...(res.deepRelics || []), ...(res.relics || [])];
+  const stack = keyStackability();
+  const matchedCount = relics.map(r => (r.effects || []).filter(e => e.matched).length);
+  const holders = new Map();
+  relics.forEach((r, ri) => (r.effects || []).forEach(eff => {
+    if (eff.isDebuff || stack[eff.key] !== false) return;
+    if (!holders.has(eff.key)) holders.set(eff.key, []);
+    holders.get(eff.key).push({ ri, eff });
+  }));
+  for (const list of holders.values()) {
+    if (list.length < 2) continue;
+    let keep = list[0];
+    if (keep.eff.matched) {
+      for (const h of list) if (matchedCount[h.ri] > matchedCount[keep.ri]) keep = h;
+    }
+    for (const h of list) if (h !== keep) h.eff._wasted = true;
+  }
+}
+
+function wastedLabel(ja) {
+  return ja ? '重複・効果なし' : 'Duplicate (no effect)';
+}
+
 function computeScoreBreakdown(res, params) {
+  markWastedDuplicates(res);
   const allRelics = [...(res.normalRelics || []), ...(res.deepRelics || [])];
   const matchedKeys = new Set(res.matchedEffects || []);
   const excludedKeys = new Set(res.excludedPresent || []);
@@ -3279,11 +3327,7 @@ function computeScoreBreakdown(res, params) {
     }
   }
 
-  // Build key -> stackable lookup
-  const keyToStackable = {};
-  for (const [id, info] of Object.entries(stackingLookup)) {
-    if (info.key) keyToStackable[info.key] = info.stackable;
-  }
+  const keyToStackable = keyStackability();
 
   // Compute per-effect score contribution
   const effects = [];
@@ -3316,7 +3360,7 @@ function computeScoreBreakdown(res, params) {
     let matchedOnRelic = 0;
     const matchedNames = [];
     for (const eff of relic.effects) {
-      if (eff.matched && matchedKeys.has(eff.key)) {
+      if (eff.matched && matchedKeys.has(eff.key) && !eff._wasted) {   // a wasted duplicate earns no bonus
         matchedOnRelic++;
         matchedNames.push(eff.key);
       }
@@ -3363,6 +3407,7 @@ function computeScoreBreakdown(res, params) {
 function showOptResultDetail(tabId, res, params, idx) {
   const panel = document.getElementById(`opt-detail-${tabId}`);
   if (!panel) return;
+  markWastedDuplicates(res);
   panel.classList.remove('hidden');
   const ja = displayLang === 'ja';
 
@@ -3530,7 +3575,7 @@ function renderOptDetailRelic(relic, ja) {
     if (excluded) effCls += ' excluded';
     else if (matched) effCls += ' matched';
     html += `<div class="opt-detail-effect-item">`;
-    html += `<div class="${effCls}">${mainName}</div>`;
+    html += `<div class="${effCls}">${mainName}${group.main._wasted ? `<span class="opt-wasted-badge">${wastedLabel(ja)}</span>` : ''}</div>`;
     group.debuffs.forEach(d => {
       const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
       const isDemerit = classifyEffect(d.name_ja, d.name_en, d.key) === 'demerit';
@@ -3663,6 +3708,8 @@ tbody tr:hover { background: var(--bg-hover); }
 .opt-card-effect.matched.nice_to_have { background: rgba(241,196,15,0.2); color: var(--color-yellow); font-weight: 600; }
 .opt-card-effect.excluded { background: rgba(231,76,60,0.15); color: #e07070; text-decoration: line-through; }
 .opt-card-effect.excluded.exclude_required { background: rgba(231,76,60,0.25); font-weight: 600; }
+.opt-card-effect.wasted { opacity: 0.55; text-decoration: line-through; }
+.opt-wasted-badge { margin-left: 6px; padding: 0 4px; border: 1px solid currentColor; border-radius: 3px; font-size: 10px; color: #a0a0a0; font-weight: 400; }
 /* Detail / Score breakdown */
 .detail-section { margin-bottom: 18px; }
 .detail-section h3 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }

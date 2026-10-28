@@ -9658,7 +9658,7 @@
       "id": 6850700,
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加"
+      "name_ja": "回避直後、カット率低下"
      }
     ]
    ],
@@ -11916,7 +11916,7 @@
       "id": 6850700,
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加"
+      "name_ja": "回避直後、カット率低下"
      }
     ],
     [
@@ -11958,7 +11958,7 @@
       "id": 6850700,
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加"
+      "name_ja": "回避直後、カット率低下"
      }
     ],
     [
@@ -12504,7 +12504,7 @@
       "id": 6850700,
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加"
+      "name_ja": "回避直後、カット率低下"
      }
     ]
    ],
@@ -14018,7 +14018,7 @@
       "id": 6850700,
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加"
+      "name_ja": "回避直後、カット率低下"
      }
     ],
     [
