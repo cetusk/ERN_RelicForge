@@ -77,6 +77,9 @@ def main():
     seen = effects_in_saves(saves, effects)
     print(f'Saves: {len(saves)} file(s), {len(seen)} distinct effects on relics', file=sys.stderr)
 
+    if not saves:
+        print('WARNING: no save files; the released/unreleased flags are left as they are', file=sys.stderr)
+
     matcher = match.Matcher(rows)
     items = []
     for k, entry in sorted(effects.items(), key=lambda x: int(x[0])):
@@ -85,6 +88,11 @@ def main():
             continue
         p = match.propose(eid, entry, matcher)
         p['seen'] = eid in seen
+        p['cur_unreleased'] = bool(entry.get('unreleased'))
+        if saves:
+            p['unreleased'] = (p['how'] == 'none' and not p['seen']) or eid in rules.UNRELEASED_OVERRIDES
+        else:
+            p['unreleased'] = p['cur_unreleased']
         status = []
         if p['prop_stack'] != p['cur_stack']:
             status.append('重複変更')
@@ -92,6 +100,8 @@ def main():
             status.append('要約変更')
         if p['prop_notes'] != p['cur_full']:
             status.append('全文変更')
+        if p['unreleased'] != p['cur_unreleased']:
+            status.append('公開状況変更')
         p['status'] = status or ['変更なし']
         items.append(p)
 
@@ -105,6 +115,8 @@ def main():
     st = collections.Counter('+'.join(p['status']) for p in items)
     print(f'Effects in scope: {len(items)}  match: {dict(sorted(how.items()))}', file=sys.stderr)
     print(f'Changes: {dict(st)}', file=sys.stderr)
+    print(f'Unreleased (not on the wiki, never seen in saves): {sum(p["unreleased"] for p in items)}',
+          file=sys.stderr)
     unmatched_seen = [p for p in items if p['seen'] and p['how'] == 'none']
     if unmatched_seen:
         print(f'WARNING: {len(unmatched_seen)} effects seen in saves have no wiki row '
@@ -114,7 +126,17 @@ def main():
     print(f'Review page: {os.path.join(args.out_dir, "index.html")}', file=sys.stderr)
 
     if args.apply:
-        changed = sum(match.apply_proposal(effects[str(p['id'])], p) for p in items)
+        changed = 0
+        for p in items:
+            entry = effects[str(p['id'])]
+            updated = match.apply_proposal(entry, p)
+            if p['unreleased'] != bool(entry.get('unreleased')):
+                if p['unreleased']:
+                    entry['unreleased'] = True
+                else:
+                    entry.pop('unreleased', None)
+                updated = True
+            changed += updated
         with open(EFFECTS_PATH, 'w', encoding='utf-8', newline='\n') as f:
             f.write(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
         print(f'Applied: {changed} effects updated in {EFFECTS_PATH}', file=sys.stderr)

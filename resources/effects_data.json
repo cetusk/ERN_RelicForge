@@ -626,7 +626,8 @@
       "name_ja": "スキルクールタイム軽減+4",
       "stackable": true,
       "stackNotes": "5%/7.5%/10%ほど軽減",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6000801": {
       "key": "characterSkillCooldownReductionPlus5",
@@ -634,7 +635,8 @@
       "name_ja": "スキルクールタイム軽減+5",
       "stackable": true,
       "stackNotes": "5%/7.5%/10%ほど軽減",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6000900": {
       "key": "ultimateArtAutoChargePlus4",
@@ -642,7 +644,8 @@
       "name_ja": "アーツゲージ自然蓄積+4",
       "stackable": true,
       "stackNotes": "5%/7.5%/10%ほど増加",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6000901": {
       "key": "ultimateArtAutoChargePlus5",
@@ -650,7 +653,8 @@
       "name_ja": "アーツゲージ自然蓄積+5",
       "stackable": true,
       "stackNotes": "5%/7.5%/10%ほど増加",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6001000": {
       "key": "poisePlus4",
@@ -658,7 +662,8 @@
       "name_ja": "強靭度+4",
       "stackable": true,
       "stackNotes": "+5%/+10%/+15%",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6001001": {
       "key": "poisePlus5",
@@ -666,7 +671,8 @@
       "name_ja": "強靭度+5",
       "stackable": true,
       "stackNotes": "+5%/+10%/+15%",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6001400": {
       "key": "physicalAttackUpPlus3",
@@ -844,7 +850,8 @@
       "name_ja": "毒耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6003100": {
       "key": "improvedBloodLossResistancePlus1",
@@ -861,7 +868,8 @@
       "name_ja": "出血耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6003200": {
       "key": "improvedSleepResistancePlus1",
@@ -878,7 +886,8 @@
       "name_ja": "睡眠耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6003300": {
       "key": "improvedDeathBlightResistancePlus1",
@@ -895,7 +904,8 @@
       "name_ja": "抗死耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6003400": {
       "key": "improvedRotResistancePlus1",
@@ -912,7 +922,8 @@
       "name_ja": "腐敗耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6003500": {
       "key": "improvedFrostResistancePlus1",
@@ -929,7 +940,8 @@
       "name_ja": "冷気耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6003600": {
       "key": "improvedMadnessResistancePlus1",
@@ -946,7 +958,8 @@
       "name_ja": "発狂耐性上昇+2",
       "stackable": true,
       "stackNotes": "1つにつき耐性+75（加算）",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6005600": {
       "key": "partialHPRestorationUponPostDamageAttacksPlus1",
@@ -1029,7 +1042,8 @@
       "name_ja": "苔薬などのアイテム使用でHP回復+2",
       "stackable": "conditional",
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6030600": {
       "key": "artGaugeChargedFromSuccessfulGuardingPlus1",
@@ -1046,7 +1060,8 @@
       "name_ja": "ガード成功時、アーツゲージを蓄積+2",
       "stackable": "conditional",
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6030800": {
       "key": "artGaugeFillsModeratelyUponCriticalHitPlus1",
@@ -1063,7 +1078,8 @@
       "name_ja": "致命の一撃で、アーツゲージ増加+2",
       "stackable": "conditional",
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6030900": {
       "key": "physicalAttackPowerIncreasesAfterUsingGreaseItemsPlus1",
@@ -1181,7 +1197,8 @@
       "name_ja": "投擲壺の攻撃力上昇+2",
       "stackable": true,
       "stackNotes": "約1.15倍",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6040400": {
       "key": "improvedThrowingKnifeDamagePlus1",
@@ -1198,7 +1215,8 @@
       "name_ja": "投擲ナイフの攻撃力上昇+2",
       "stackable": true,
       "stackNotes": "約1.14倍",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6040500": {
       "key": "improvedGlintstoneAndGravityStoneDamagePlus1",
@@ -1215,7 +1233,8 @@
       "name_ja": "輝石、重力石アイテムの攻撃力上昇+2",
       "stackable": true,
       "stackNotes": "約1.15倍",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6043000": {
       "key": "improvedRoarAndBreathAttacksPlus1",
@@ -1223,7 +1242,8 @@
       "name_ja": "咆哮とブレス強化+1",
       "stackable": true,
       "stackNotes": "約1.15倍",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6043001": {
       "key": "improvedRoarAndBreathAttacksPlus2",
@@ -1231,7 +1251,8 @@
       "name_ja": "咆哮とブレス強化+2",
       "stackable": true,
       "stackNotes": "約1.15倍",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6043100": {
       "key": "improvedPerfumingArtsPlus1",
@@ -1248,7 +1269,8 @@
       "name_ja": "調香術強化+2",
       "stackable": true,
       "stackNotes": "約1.14倍",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6060300": {
       "key": "maxHPIncreasedForEachGreatEnemyDefeatedAtAGreatChurch",
@@ -1299,7 +1321,8 @@
       "name_ja": "敵を倒した時、アーツゲージ増加+2",
       "stackable": "conditional",
       "stackNotes": "通常版と深層版の異なるレベル同士は重複可",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6160000": {
       "key": "hpRestorationUponThrustingCounterattackPlus1",
@@ -1316,7 +1339,8 @@
       "name_ja": "刺突カウンター発生時、HP回復+2",
       "stackable": "conditional",
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6260000": {
       "key": "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus1",
@@ -1485,7 +1509,8 @@
       "name_ja": "周囲で睡眠状態の発生時、攻撃力上昇+2",
       "stackable": "conditional",
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6600100": {
       "key": "madnessInVicinityImprovesAttackPower",
@@ -1511,7 +1536,8 @@
       "name_ja": "周囲で発狂状態の発生時、攻撃力上昇+2",
       "stackable": "conditional",
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6610400": {
       "key": "increasedMaximumHP",
@@ -1551,7 +1577,8 @@
       "name_ja": "消費FP軽減+1",
       "stackable": true,
       "stackNotes": "-7%、重ね掛け時0.93倍乗算",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6610702": {
       "key": "reducedFPConsumptionPlus2",
@@ -1559,7 +1586,8 @@
       "name_ja": "消費FP軽減+2",
       "stackable": true,
       "stackNotes": "-7%、重ね掛け時0.93倍乗算",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6610800": {
       "key": "improvedAffinityAttackPower",
@@ -2377,7 +2405,8 @@
       "name_ja": "生命力低下",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6800200": {
       "key": "reducedEndurance",
@@ -2385,14 +2414,16 @@
       "name_ja": "持久力低下",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6810100": {
       "key": "impairedDamageNegation",
       "name_en": "Impaired Damage Negation",
       "name_ja": "カット率低下",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "6820000": {
       "key": "takingDamageCausesPoisonBuildup",
@@ -2533,14 +2564,16 @@
       "name_en": "Impaired Physical Damage Negation",
       "name_ja": "物理カット率低下",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "6850100": {
       "key": "impairedAffinityDamageNegation",
       "name_en": "Impaired Affinity Damage Negation",
       "name_ja": "属性カット率低下",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "6850200": {
       "key": "allResistancesDown",
@@ -2564,7 +2597,8 @@
       "name_ja": "波動ダッシュのスタミナ消費増加",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6850500": {
       "key": "continuousHPLoss",
@@ -2580,12 +2614,13 @@
       "name_ja": "回避のスタミナ消費増加",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6850700": {
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加",
+      "name_ja": "回避直後、カット率低下",
       "stackable": true,
       "stackNotes": "カット率-45%",
       "stackNotesFull": "カット率-45% / 回避モーションの全体フレームが該当 / 守護者のハイガード発動時のステップは適用されない"
@@ -2612,7 +2647,8 @@
       "name_ja": "聖杯瓶使用時、睡眠を蓄積",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6851100": {
       "key": "madnessBuildupForFlaskUsages",
@@ -2620,7 +2656,8 @@
       "name_ja": "聖杯瓶使用時、発狂を蓄積",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6851200": {
       "key": "lowerAttackWhenBelowMaxHP",
@@ -2652,7 +2689,8 @@
       "name_ja": "最大HP時、攻撃力低下",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6851600": {
       "key": "nearDeathSpillsFlask",
@@ -2660,7 +2698,8 @@
       "name_ja": "瀕死時、聖杯瓶を失う",
       "stackable": true,
       "stackNotes": "",
-      "deepOnly": true
+      "deepOnly": true,
+      "unreleased": true
     },
     "6851700": {
       "key": "nearDeathReducesMaxHP",
@@ -3092,133 +3131,152 @@
       "name_en": "Attacks Inflict Poison",
       "name_ja": "攻撃に毒の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7001901": {
       "key": "attacksInflictPoisonPlus1",
       "name_en": "Attacks Inflict Poison Plus 1",
       "name_ja": "攻撃に毒の状態異常を付加+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7001902": {
       "key": "attacksInflictPoisonPlus2",
       "name_en": "Attacks Inflict Poison Plus 2",
       "name_ja": "攻撃に毒の状態異常を付加+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002000": {
       "key": "attacksInflictBloodLoss",
       "name_en": "Attacks Inflict Blood Loss",
       "name_ja": "攻撃に出血の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002001": {
       "key": "attacksInflictBloodLossPlus1",
       "name_en": "Attacks Inflict Blood Loss Plus 1",
       "name_ja": "攻撃に出血の状態異常を付加+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002002": {
       "key": "attacksInflictBloodLossPlus2",
       "name_en": "Attacks Inflict Blood Loss Plus 2",
       "name_ja": "攻撃に出血の状態異常を付加+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002100": {
       "key": "attacksInflictSleep",
       "name_en": "Attacks Inflict Sleep",
       "name_ja": "攻撃に睡眠の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002101": {
       "key": "attacksInflictSleepPlus1",
       "name_en": "Attacks Inflict Sleep Plus 1",
       "name_ja": "攻撃に睡眠の状態異常を付加+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002102": {
       "key": "attacksInflictSleepPlus2",
       "name_en": "Attacks Inflict Sleep Plus 2",
       "name_ja": "攻撃に睡眠の状態異常を付加+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002103": {
       "key": "attacksInflictSleepPlus3",
       "name_en": "Attacks Inflict Sleep Plus 3",
       "name_ja": "攻撃に睡眠の状態異常を付加+3",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002200": {
       "key": "attacksInflictDeathBlight",
       "name_en": "Attacks Inflict Death Blight",
       "name_ja": "攻撃に死の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002300": {
       "key": "attacksInflictScarletRot",
       "name_en": "Attacks Inflict Scarlet Rot",
       "name_ja": "攻撃に腐敗の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002301": {
       "key": "attacksInflictScarletRotPlus1",
       "name_en": "Attacks Inflict Scarlet Rot Plus 1",
       "name_ja": "攻撃に腐敗の状態異常を付加+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002302": {
       "key": "attacksInflictScarletRotPlus2",
       "name_en": "Attacks Inflict Scarlet Rot Plus 2",
       "name_ja": "攻撃に腐敗の状態異常を付加+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002400": {
       "key": "attacksInflictFrost",
       "name_en": "Attacks Inflict Frost",
       "name_ja": "攻撃に冷気の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002401": {
       "key": "attacksInflictFrostPlus1",
       "name_en": "Attacks Inflict Frost Plus 1",
       "name_ja": "攻撃に冷気の状態異常を付加+1",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002402": {
       "key": "attacksInflictFrostPlus2",
       "name_en": "Attacks Inflict Frost Plus 2",
       "name_ja": "攻撃に冷気の状態異常を付加+2",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002403": {
       "key": "attacksInflictFrostPlus3",
       "name_en": "Attacks Inflict Frost Plus 3",
       "name_ja": "攻撃に冷気の状態異常を付加+3",
       "stackable": "conditional",
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002500": {
       "key": "attacksInflictMadness",
       "name_en": "Attacks Inflict Madness",
       "name_ja": "攻撃に発狂の状態異常を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7002600": {
       "key": "magicDamageNegationUp",
@@ -3401,7 +3459,8 @@
       "name_en": "Guardian Improved Character Skill Range",
       "name_ja": "【守護者】スキルの効果範囲拡大",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7010200": {
       "key": "flaskAlsoHealsAllies",
@@ -3455,7 +3514,8 @@
       "name_en": "Guardian Damage Negation For Allies Improved",
       "name_ja": "【守護者】味方のカット率上昇効果を強化",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7011200": {
       "key": "revenantTriggerGhostflameExplosionDuringUltimateArtActivation",
@@ -3470,7 +3530,8 @@
       "name_en": "Guardian Restores Allies Hpwhen Character Skill Used",
       "name_ja": "【守護者】スキル使用時、味方のHP回復",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7011500": {
       "key": "wylderCharacterSkillInflictsBloodLoss",
@@ -3500,7 +3561,8 @@
       "name_en": "Guardian Character Skill Inflicts Holy Damage",
       "name_ja": "【守護者】スキルに聖ダメージを付加",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7012000": {
       "key": "guardianSlowlyRestoresNearbyAlliesHP",
@@ -3531,28 +3593,32 @@
       "name_en": "Strong Attack Creates Wide Wave Of Heat",
       "name_ja": "強攻撃が広範囲の熱波を生む",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7012500": {
       "key": "jumpingConjuresMagicProjectiles",
       "name_en": "Jumping Conjures Magic Projectiles",
       "name_ja": "ジャンプ時、魔力弾を発生",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7012600": {
       "key": "attackBoostFromNearbyAllies",
       "name_en": "Attack Boost From Nearby Allies",
       "name_ja": "周囲の味方から攻撃力上昇",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7012700": {
       "key": "guardCountersCastLightPillar",
       "name_en": "Guard Counters Cast Light Pillar",
       "name_ja": "ガードカウンターで光の柱を発生",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7020000": {
       "key": "wylderStandardAttacksEnhancedWithFieryFollowUpsWhenUsingCharacterSkill",
@@ -3583,7 +3649,8 @@
       "name_en": "Wylder Impaired Damage Negation Improved Attack Power Stamina After Art Activation",
       "name_ja": "【追跡者】アーツ発動後、カット率低下＆攻撃力/スタミナ上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7030600": {
       "key": "artGaugeChargedFromSuccessfulGuarding",
@@ -3638,21 +3705,24 @@
       "name_en": "Wylder Reduced Cooldown Time For Character Skill",
       "name_ja": "【追跡者】スキルクールタイム軽減",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7031600": {
       "key": "performingConsecutiveSuccessfulGuardsImprovesGuardAbilityAndDeflectsBigAttacks",
       "name_en": "Performing Consecutive Successful Guards Improves Guard Ability And Deflects Big Attacks",
       "name_ja": "ガード連続成功時、ガード性能上昇＆大攻撃を弾く",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7031700": {
       "key": "shockwaveProducedFromSuccessfulGuarding",
       "name_en": "Shockwave Produced From Successful Guarding",
       "name_ja": "ガード成功時、衝撃波を発生",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7031800": {
       "key": "duchessBecomeStealthyAfterCritFromBehind",
@@ -3683,7 +3753,8 @@
       "name_en": "Wylder Improved Attack Power When Character Skill Activated",
       "name_ja": "【追跡者】スキル発動時、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7032400": {
       "key": "wylderArtGaugeGreatlyFilledWhenAbilityActivated",
@@ -3722,7 +3793,8 @@
       "name_en": "Wylder Improved Attack Power When Ability Activated",
       "name_ja": "【追跡者】アビリティ発動時、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7033200": {
       "key": "wylderAdditionalCharacterSkillUse",
@@ -3737,7 +3809,8 @@
       "name_en": "Guardian Become Target Of Enemy Aggression",
       "name_ja": "【守護者】敵に狙われやすくなる",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7033400": {
       "key": "guardianSuccessfulGuardsSendOutShockwaves",
@@ -3752,35 +3825,40 @@
       "name_en": "Duchess Duration Of Ultimate Art Extended",
       "name_ja": "【レディ】アーツの効果時間延長",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7033700": {
       "key": "colossalArmamentsCoatedInRockWhenPerformingChargedAttacks",
       "name_en": "Colossal Armaments Coated In Rock When Performing Charged Attacks",
       "name_ja": "特大武器タメ攻撃時、岩を纏う",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7033800": {
       "key": "raiderPermanentlyIncreaseAttackPower",
       "name_en": "Raider Permanently Increase Attack Power",
       "name_ja": "【無頼漢】攻撃力が恒久的に上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7033900": {
       "key": "recluseExtendsDurationOfBloodSigils",
       "name_en": "Recluse Extends Duration Of Blood Sigils",
       "name_ja": "【隠者】血の印の持続時間延長",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7034000": {
       "key": "recluseCollecting4AffinityResiduesImprovesAffinityAttackPower",
       "name_en": "Recluse Collecting 4Affinity Residues Improves Affinity Attack Power",
       "name_ja": "【隠者】属性痕を4つ集めた時、属性攻撃力上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7034100": {
       "key": "recluseActivatingUltimateArtRaisesMaxHP",
@@ -3795,14 +3873,16 @@
       "name_en": "Executor Attack Power Up While Ultimate Art Active",
       "name_ja": "【執行者】アーツ発動中、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7034300": {
       "key": "executorImprovesEffectButLowersResistance",
       "name_en": "Executor Improves Effect But Lowers Resistance",
       "name_ja": "【執行者】効果を強化するが耐性が低下",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7034400": {
       "key": "executorSkillBoostsAttackReducesCutRate",
@@ -3841,21 +3921,24 @@
       "name_en": "Fire Critical Hit Grants Max Stamina Boost",
       "name_ja": "炎の致命の一撃で最大スタミナ上昇",
       "stackable": false,
-      "stackNotes": "最大スタミナ+10、持久力+との重複可"
+      "stackNotes": "最大スタミナ+10、持久力+との重複可",
+      "unreleased": true
     },
     "7034900": {
       "key": "criticalHitHPRestoration",
       "name_en": "Critical Hit Hprestoration",
       "name_ja": "致命の一撃でHP回復",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7035000": {
       "key": "criticalHitAddsLightningEffect",
       "name_en": "Critical Hit Adds Lightning Effect",
       "name_ja": "致命の一撃に雷効果を付加",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7035100": {
       "key": "criticalHitBoostsStaminaRecoverySpeed",
@@ -3870,14 +3953,16 @@
       "name_en": "Consecutive Guards Harden Skin",
       "name_ja": "ガード連続成功時、肌を硬化",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7035300": {
       "key": "criticalHitCreatesSleepMist",
       "name_en": "Critical Hit Creates Sleep Mist",
       "name_ja": "致命の一撃で睡眠霧を発生",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7035400": {
       "key": "gestureCrossedLegsBuildsUpMadness",
@@ -3916,7 +4001,8 @@
       "name_en": "Surge Sprint Landings Split Earth",
       "name_ja": "波動ダッシュ着地時、地面を割る",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7035700": {
       "key": "switchingWeaponsAddsAnAffinityAttack",
@@ -4187,7 +4273,8 @@
       "name_ja": "夜の魔術強化",
       "stackable": true,
       "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照",
+      "unreleased": true
     },
     "7044000": {
       "key": "improvedFundamentalistIncantations",
@@ -4554,7 +4641,8 @@
       "name_en": "Critical Hits Deal Huge Damage On Poisoned Enemies",
       "name_ja": "毒状態の敵への致命の一撃が大ダメージ",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7100100": {
       "key": "staminaRecoveryUponLandingAttacks",
@@ -4609,7 +4697,8 @@
       "name_en": "Armament Deals Fire Damage Plus 1At Start Of Expedition",
       "name_ja": "出撃時の武器に炎攻撃力を付加+1",
       "stackable": false,
-      "stackNotes": "左優先、1つのみ有効"
+      "stackNotes": "左優先、1つのみ有効",
+      "unreleased": true
     },
     "7120200": {
       "key": "startingArmamentDealsLightningDamage",
@@ -4656,7 +4745,8 @@
       "name_en": "Starting Armament Inflicts Scarlet Rot",
       "name_ja": "出撃時の武器に腐敗の状態異常を付加",
       "stackable": false,
-      "stackNotes": "左優先、1つのみ有効"
+      "stackNotes": "左優先、1つのみ有効",
+      "unreleased": true
     },
     "7120900": {
       "key": "stoneswordKeyInPossessionAtStartOfExpedition",
@@ -5023,14 +5113,16 @@
       "name_en": "Hp Restoration With Head Shots",
       "name_ja": "ヘッドショットでHP回復",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7200100": {
       "key": "improvedStanceBreakingWithHeadShots",
       "name_en": "Improved Stance Breaking With Head Shots",
       "name_ja": "ヘッドショットの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7220000": {
       "key": "revenantPowerUpWhileFightingAlongsideFamily",
@@ -5077,7 +5169,8 @@
       "name_en": "Attack Power Up When Facing Sleep Afflicted Enemy",
       "name_ja": "睡眠状態の敵に対する攻撃を強化",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7260300": {
       "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -5100,7 +5193,8 @@
       "name_en": "Attacks Create Magic Bursts Versus Sleeping Enemies",
       "name_ja": "睡眠状態の敵への攻撃で魔力爆発",
       "stackable": false,
-      "stackNotes": ""
+      "stackNotes": "",
+      "unreleased": true
     },
     "7260700": {
       "key": "nearbyFrostbiteConcealsSelf",
@@ -5163,7 +5257,8 @@
       "name_en": "Duchess Character Skill Inflicts Sleep",
       "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7310000": {
       "key": "raiderDurationOfUltimateArtExtended",
@@ -5178,7 +5273,8 @@
       "name_en": "Revenant Ability Activation Chance Increased",
       "name_ja": "【復讐者】アビリティ発動確率上昇",
       "stackable": false,
-      "stackNotes": "キャラクター固有効果"
+      "stackNotes": "キャラクター固有効果",
+      "unreleased": true
     },
     "7330000": {
       "key": "improvedDaggerAttackPower",
@@ -7811,7 +7907,7 @@
     "8800100": {
       "key": "moreDamageTakenAfterEvasion",
       "name_en": "More Damage Taken After Evasion",
-      "name_ja": "回避直後の被ダメージ増加",
+      "name_ja": "回避直後、カット率低下",
       "stackable": true,
       "stackNotes": "カット率-45%"
     },
