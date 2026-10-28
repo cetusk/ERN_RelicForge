@@ -59,6 +59,17 @@ for (const dir of APP_DIRS) {
     assert.deepEqual(levels, [...levels].sort((a, b) => a - b));
   });
 
+  test(`${dir}: weapon-type effects of a type are used only for the picked weapon types`, () => {
+    const ctx = suggestContext(dir);
+    const weaponOf = new Map();
+    for (const w of data.weapons) for (const k of [...w.attack, ...w.three, ...w.find]) weaponOf.set(k, w.id);
+    const none = suggest(ctx, { character: '追跡者', mode: 'combined', types: ['バッタ', '大型武器・タメ'], weapons: [], focus: 0 });
+    assert.deepEqual(none.effects.filter((e) => weaponOf.has(e.key)).map((e) => e.key), []);
+    const great = suggest(ctx, { character: '追跡者', mode: 'combined', types: ['バッタ', '大型武器・タメ'], weapons: ['大剣'], focus: 0 });
+    const used = new Set(great.effects.filter((e) => weaponOf.has(e.key)).map((e) => weaponOf.get(e.key)));
+    assert.deepEqual([...used], ['大剣']);
+  });
+
   test(`${dir}: a known build makes its defining effects required; staples stay preferred`, () => {
     const ctx = suggestContext(dir);
     const build = data.builds.find((b) => b.character === 'レディ' && b.must.length);

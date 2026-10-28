@@ -7,7 +7,9 @@
  *   type tiers   core → preferred, good / opt → nice_to_have, avoid → exclude
  *   known build  must → required (effects that define it), rec → preferred, opt → nice_to_have, avoid → exclude
  *   staples      character-wide staples: rec → preferred, opt → nice_to_have, avoid → exclude
- *   weapons      「○○の攻撃力上昇」 → preferred; 3つ以上装備 / 潜在する力 → nice_to_have
+ *   weapons      「○○の攻撃力上昇」 → preferred; 3つ以上装備 / 潜在する力 → nice_to_have.
+ *                Weapon-type effects that come with a type or the staples are used only for the
+ *                weapon types the player picked (a type lists several weapons; the rest is noise)
  *   slider       火力 side: generic offense → preferred; 生存 side: generic survival → preferred
  *   demerits     deep demerits the wiki says to avoid → exclude (normal + deep mode only)
  * An effect wanted by one choice and avoided by another is kept (wanted wins) and reported as a conflict.
@@ -66,6 +68,10 @@ function suggestConditions(data, input, effectInfo) {
   }
   const weaponById = new Map((data.weapons || []).map((w) => [w.id, w]));
   const weapons = (input.weapons || []).map((id) => weaponById.get(id) || (unknown.push(id), null)).filter(Boolean);
+  const weaponOf = new Map();
+  for (const w of data.weapons || []) for (const k of [...w.attack, ...w.three, ...w.find]) weaponOf.set(k, w.id);
+  const picked = new Set(weapons.map((w) => w.id));
+  const onlyPickedWeapons = (keys) => (keys || []).filter((k) => !weaponOf.has(k) || picked.has(weaponOf.get(k)));
   const build = input.buildId ? (data.builds || []).find((b) => b.id === input.buildId) : null;
   if (input.buildId && !build) unknown.push(input.buildId);
   const staples = (data.staples || {})[input.character];
@@ -75,16 +81,16 @@ function suggestConditions(data, input, effectInfo) {
   // Add in importance order so that the rank inside each priority follows it
   if (build) want(build.must, 'required', build.name);
   if (build) want(build.rec, 'preferred', build.name);
-  if (staples) want(staples.rec, 'preferred', `${input.character}の定番`);
-  for (const t of types) want(t.core, 'preferred', t.id);
+  if (staples) want(onlyPickedWeapons(staples.rec), 'preferred', `${input.character}の定番`);
+  for (const t of types) want(onlyPickedWeapons(t.core), 'preferred', t.id);
   for (const w of weapons) want(w.attack, 'preferred', w.id);
   if (focus < 0) want(generic.offense, 'preferred', '火力重視');
   if (focus > 0) want(generic.survival, 'preferred', '生存重視');
   if (build) want(build.opt, 'nice_to_have', build.name);
-  for (const t of types) want(t.good, 'nice_to_have', t.id);
+  for (const t of types) want(onlyPickedWeapons(t.good), 'nice_to_have', t.id);
   for (const w of weapons) want([...w.three, ...w.find], 'nice_to_have', w.id);
-  if (staples) want(staples.opt, 'nice_to_have', `${input.character}の定番`);
-  for (const t of types) want(t.opt, 'nice_to_have', t.id);
+  if (staples) want(onlyPickedWeapons(staples.opt), 'nice_to_have', `${input.character}の定番`);
+  for (const t of types) want(onlyPickedWeapons(t.opt), 'nice_to_have', t.id);
   if (focus === 0) {
     want(generic.offense, 'nice_to_have', '火力');
     want(generic.survival, 'nice_to_have', '生存');
