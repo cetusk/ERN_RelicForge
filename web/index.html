@@ -78,6 +78,7 @@
     <div class="toolbar-actions">
     <button id="btn-inspector" class="btn-inspector hidden"><span class="icon" data-icon="list-filter"></span><span id="btn-inspector-label">高度な検索</span></button>
     <button id="btn-optimizer" class="btn-inspector hidden"><span class="icon" data-icon="wand-sparkles"></span><span id="btn-optimizer-label">ビルド探索</span></button>
+    <button id="btn-suggest" class="btn-inspector hidden"><span class="icon" data-icon="lightbulb"></span><span id="btn-suggest-label">ビルド提案</span><span class="experimental-badge" id="btn-suggest-badge">試験的</span></button>
     <button id="btn-catalog" class="btn-inspector hidden"><span class="icon" data-icon="book-open"></span><span id="btn-catalog-label">効果カタログ</span></button>
     <button id="btn-export-table" class="btn-inspector hidden"><span class="icon" data-icon="file-down"></span><span id="btn-export-table-label">エクスポート</span></button>
     <button id="btn-share" class="btn-inspector hidden"><span class="icon" data-icon="share-2"></span><span id="btn-share-label">共有</span></button>
@@ -417,6 +418,51 @@
     </div>
   </div>
 
+  <!-- Build suggestion (experimental): choose what you want, get build-search conditions -->
+  <div id="suggest-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="suggest-inspector" class="inspector suggest-inspector">
+    <div class="inspector-resize-handle"></div>
+    <div class="inspector-header">
+      <span class="icon" data-icon="lightbulb" data-size="18"></span><h3 id="suggest-title">ビルド提案</h3>
+      <span class="experimental-badge" id="suggest-badge">試験的</span>
+      <button id="suggest-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="inspector-body">
+      <p id="suggest-lead" class="suggest-lead"></p>
+      <div class="inspector-section suggest-basics">
+        <label class="suggest-field"><span id="sg-character-label">キャラクター</span><select id="sg-character" class="opt-select"></select></label>
+        <label class="suggest-field"><span id="sg-vessel-label">献器</span><select id="sg-vessel" class="opt-select"></select></label>
+        <label class="suggest-field"><span id="sg-mode-label">モード</span><select id="sg-mode" class="opt-select"><option value="combined">通常+深層</option><option value="normal">通常のみ</option></select></label>
+      </div>
+      <div class="inspector-section">
+        <h4 id="sg-build-label">定番のビルドから始める（任意）</h4>
+        <select id="sg-build" class="opt-select"></select>
+        <p id="sg-build-info" class="suggest-hint"></p>
+      </div>
+      <div class="inspector-section">
+        <h4 id="sg-weapons-label">武器種</h4>
+        <div id="sg-weapons" class="suggest-chips"></div>
+      </div>
+      <div class="inspector-section" id="sg-types"></div>
+      <div class="inspector-section">
+        <h4 id="sg-focus-label">重視すること</h4>
+        <div class="suggest-focus">
+          <span id="sg-focus-left">火力</span>
+          <input type="range" id="sg-focus" min="-2" max="2" step="1" value="0">
+          <span id="sg-focus-right">生存</span>
+        </div>
+      </div>
+      <div class="inspector-section">
+        <h4 id="sg-preview-label">探索する条件</h4>
+        <div id="sg-preview" class="suggest-preview"></div>
+      </div>
+    </div>
+    <div class="inspector-footer">
+      <button id="suggest-clear" class="btn-secondary"><span class="icon" data-icon="eraser" data-size="14"></span><span id="suggest-clear-label">クリア</span></button>
+      <button id="suggest-run" class="btn-primary"><span class="icon" data-icon="play" data-size="14"></span><span id="suggest-run-label">提案を探す</span></button>
+    </div>
+  </div>
+
   <!-- Effect Selection Inspector Panel -->
   <div id="effect-select-backdrop" class="inspector-backdrop hidden"></div>
   <div id="effect-select-inspector" class="inspector effect-select-inspector">
@@ -445,6 +491,7 @@
   <script src="relic-parser.js"></script>
   <script src="relic-optimizer.js"></script>
   <script src="relic-share.js"></script>
+  <script src="relic-suggest.js"></script>
   <script src="lib/qrcode.js"></script>
   <script src="app.js"></script>
 </body>

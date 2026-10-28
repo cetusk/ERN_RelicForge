@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('api', {
   loadEffectsData: () => ipcRenderer.invoke('load-effects-data'),
   loadStackingData: () => ipcRenderer.invoke('load-stacking-data'),
   loadVesselsData: () => ipcRenderer.invoke('load-vessels-data'),
+  loadSuggestData: () => ipcRenderer.invoke('load-suggest-data'),
   savePresetDialog: (jsonStr) => ipcRenderer.invoke('save-preset-dialog', jsonStr),
   loadPresetDialog: () => ipcRenderer.invoke('load-preset-dialog'),
 });

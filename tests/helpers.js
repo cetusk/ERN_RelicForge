@@ -90,5 +90,5 @@ function normalizeOptimizerOutput(output) {
 
 module.exports = {
   ROOT_DIR, FIXTURES_DIR, APP_DIRS,
-  loadFixture, loadResource, parseSave, parserContext, runOptimizer, normalizeOptimizerOutput,
+  loadFixture, loadResource, runScripts, parseSave, parserContext, runOptimizer, normalizeOptimizerOutput,
 };

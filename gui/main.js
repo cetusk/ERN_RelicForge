@@ -159,6 +159,15 @@ ipcMain.handle('load-stacking-data', async () => {
   }
 });
 
+ipcMain.handle('load-suggest-data', async () => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(resourcesDir, 'build_suggest.json'), 'utf-8'));
+  } catch (e) {
+    console.error('Failed to load build suggestion data:', e.message);
+    return null;
+  }
+});
+
 ipcMain.handle('load-vessels-data', async () => {
   const vesselsFile = path.join(resourcesDir, 'vessels_data.json');
   try {

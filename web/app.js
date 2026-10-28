@@ -384,6 +384,7 @@ function renderMobileMenu() {
   // Tools (same buttons as the wide-screen toolbar)
   setText('mm-tools-title', ja ? '機能' : 'Tools');
   const tools = [
+    [btnSuggest, 'lightbulb', ja ? '型や武器種から組み合わせを提案（試験的）' : 'Suggest from playstyles (beta)'],
     [btnOptimizer, 'wand-sparkles', ja ? '献器と遺物の組み合わせを探す' : 'Find vessel & relic sets'],
     [btnCatalog, 'book-open', ja ? '効果の一覧と重複の可否' : 'All effects & stacking'],
     [document.getElementById('btn-share'), 'share-2', ja ? '別の端末で開くリンク' : 'Open on another device'],
@@ -391,7 +392,7 @@ function renderMobileMenu() {
   ].filter(([btn]) => !btn.classList.contains('hidden') && btn.style.display !== 'none');
   document.getElementById('mm-tools').innerHTML = tools.map(([btn, icon, sub]) =>
     `<button type="button" class="mm-tool" data-target="${btn.id}">${iconSvg(icon, 22)}` +
-    `<span class="mm-tool-label">${escapeHtml(btn.textContent.trim())}</span>` +
+    `<span class="mm-tool-label">${escapeHtml((btn.querySelector('[id$="-label"]') || btn).textContent.trim())}</span>` +
     `<span class="mm-tool-sub">${escapeHtml(sub)}</span></button>`).join('') +
     (CAN_SCAN_QR
       ? `<button type="button" class="mm-tool" data-action="qr-scan">${iconSvg('scan-qr-code', 22)}` +
@@ -473,7 +474,7 @@ document.getElementById('mm-tools').addEventListener('click', async (e) => {
   const tool = e.target.closest('.mm-tool');
   if (!tool) return;
   await setMobileMenu(false);
-  const panels = { 'qr-scan': 'qr-scan', 'btn-optimizer': 'optimizer', 'btn-share': 'share' };
+  const panels = { 'qr-scan': 'qr-scan', 'btn-optimizer': 'optimizer', 'btn-suggest': 'suggest', 'btn-share': 'share' };
   menuReturnKey = panels[tool.dataset.action || tool.dataset.target] || null;
   if (tool.dataset.action === 'qr-scan') openQrScanner();
   else document.getElementById(tool.dataset.target).click();
@@ -602,6 +603,8 @@ filterLang.addEventListener('change', () => {
   updateCacheInfo(currentCache);
   renderSteamGuideText();
   renderShareDialogText();
+  renderSuggestText();
+  if (suggestInspector.classList.contains('open')) renderSuggestPanel();
   renderTable();
   updateHeaderInfo();
   updateResultCount();   // also re-renders the phone menu
@@ -693,6 +696,7 @@ function displayRelicData(record) {
   toolbar.classList.remove('hidden');
   btnInspector.classList.remove('hidden');
   btnOptimizer.classList.remove('hidden');
+  btnSuggest.classList.remove('hidden');
   btnCatalog.classList.remove('hidden');
   btnExportTable.classList.remove('hidden');
   document.getElementById('btn-share').classList.remove('hidden');
@@ -2948,17 +2952,7 @@ async function openOptimizerInspector() {
   optimizerInspector.classList.add('open');
   openBackEntry('optimizer', closeOptimizerInspector);
 
-  // Load vessels data if not cached
-  if (!vesselsData) {
-    try {
-      const resp = await fetch('../resources/vessels_data.json');
-      if (!resp.ok) throw new Error('Failed to load vessels_data.json');
-      vesselsData = await resp.json();
-    } catch (err) {
-      alert(`献器データの読み込みに失敗: ${err}`);
-      return;
-    }
-  }
+  if (!(await loadVesselsData())) return;
 
   renderOptimizerCharacterSelect();
   renderOptimizerVesselList();
@@ -3069,7 +3063,7 @@ function renderOptEffectsTags() {
     html += `<div class="opt-effect-group-cards">`;
     keys.forEach((key, idx) => {
       const eff = allUniqueEffects.find(e => e.key === key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(key, ja);
       const rankHtml = `<span class="opt-effect-rank">${idx + 1}</span>`;
       const dragHandle = `<span class="opt-effect-drag-handle">${iconSvg('grip-vertical', 14)}</span>`;
       html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="true">
@@ -3255,7 +3249,8 @@ function collectOptimizerParams() {
 // === Optimizer Execution (Web Worker) ===
 let currentOptWorker = null;
 
-async function runOptimization() {
+// options: { label, suggestion } when run from the build suggestion panel
+async function runOptimization(options = {}) {
   if (!relicData) return;
 
   const params = collectOptimizerParams();
@@ -3271,12 +3266,11 @@ async function runOptimization() {
     (vesselsData && vesselsData.characters[params.character]
       ? vesselsData.characters[params.character].nameEn
       : params.character);
-  const label = ja
-    ? `${charName} #${nextTabId}`
-    : `${charName} #${nextTabId}`;
+  const label = options.label || `${charName} #${nextTabId}`;
 
   // Create tab immediately with loading state
   const tabId = addOptimizerTabLoading(label, params);
+  if (options.suggestion) optimizerTabs.get(tabId).suggestion = options.suggestion;
 
   panelDone('optimizer');
   closeOptimizerInspector();
@@ -3333,7 +3327,7 @@ async function runOptimization() {
 
     if (data.result) {
       // Replace loading state with results
-      optimizerTabs.set(tabId, { label, data: data.result, params });
+      optimizerTabs.set(tabId, { label, data: data.result, params, suggestion: options.suggestion });
       const container = document.getElementById(`opt-result-${tabId}`);
       if (container) {
         container.classList.remove('opt-loading');
@@ -3389,7 +3383,7 @@ btnOptimizer.addEventListener('click', openOptimizerInspector);
 optimizerClose.addEventListener('click', closeOptimizerInspector);
 optimizerBackdrop.addEventListener('click', closeOptimizerInspector);
 optAddEffect.addEventListener('click', openEffectSelectInspector);
-optimizerRunBtn.addEventListener('click', runOptimization);
+optimizerRunBtn.addEventListener('click', () => runOptimization());
 optimizerClearBtn.addEventListener('click', () => {
   optSelectedEffects.clear();
   renderOptEffectsTags();
@@ -3498,6 +3492,334 @@ function applyPreset(preset) {
   if (preset.candidates) optCandidates.value = preset.candidates;
   if (preset.top) optTop.value = preset.top;
 }
+
+// ============================================================
+// === Build Suggestion (experimental) ===
+// ============================================================
+// Pick a character, weapon types, playstyles (型) and a 火力↔生存 balance (optionally start from a known
+// build). relic-suggest.js turns the choices into build-search conditions, which are put into the build
+// search panel and run as a normal search, so they can be fine-tuned there afterwards.
+const suggestInspector = document.getElementById('suggest-inspector');
+const suggestBackdrop = document.getElementById('suggest-backdrop');
+const btnSuggest = document.getElementById('btn-suggest');
+const sgCharacter = document.getElementById('sg-character');
+const sgVessel = document.getElementById('sg-vessel');
+const sgMode = document.getElementById('sg-mode');
+const sgBuild = document.getElementById('sg-build');
+const sgFocus = document.getElementById('sg-focus');
+const SUGGEST_AXES = [
+  ['style', '戦い方', 'Playstyle'],
+  ['magic', '魔術・祈祷', 'Sorceries / Incantations'],
+  ['status', '状態異常・属性', 'Status ailments / Elements'],
+  ['role', '役割', 'Role'],
+];
+const SUGGEST_PRIORITY_LABELS = {
+  required: ['必須', 'Required'], preferred: ['推奨', 'Preferred'], nice_to_have: ['任意', 'Nice to have'], exclude: ['除外', 'Exclude'],
+};
+let suggestData = null;
+let suggestInfoCache = null;
+let effectNameCache = null;
+const suggestPicks = { weapons: new Set(), types: new Set() };
+
+function suggestInfo() {
+  if (!suggestInfoCache) suggestInfoCache = suggestEffectInfo(effectsData);
+  return suggestInfoCache;
+}
+
+// Effect name by key from the data files (the build search can ask for effects the player does not own yet)
+function effectNameByKey(key, ja) {
+  if (!effectNameCache) {
+    effectNameCache = {};
+    for (const e of Object.values((effectsData && effectsData.effects) || {})) {
+      if (!effectNameCache[e.key]) effectNameCache[e.key] = e;
+    }
+  }
+  const e = effectNameCache[key];
+  return e ? (ja ? e.name_ja : e.name_en) || key : key;
+}
+
+async function loadVesselsData() {
+  if (vesselsData) return true;
+  try {
+    const resp = await fetch('../resources/vessels_data.json');
+    if (!resp.ok) throw new Error('Failed to load vessels_data.json');
+    vesselsData = await resp.json();
+    return true;
+  } catch (err) {
+    alert(`献器データの読み込みに失敗: ${err}`);
+    return false;
+  }
+}
+
+async function loadSuggestData() {
+  if (suggestData) return true;
+  try {
+    const resp = await fetch('../resources/build_suggest.json');
+    if (!resp.ok) throw new Error('Failed to load build_suggest.json');
+    suggestData = await resp.json();
+    return true;
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? 'ビルド提案のデータの読み込みに失敗' : 'Could not load the build suggestion data'}: ${err}`);
+    return false;
+  }
+}
+
+function charDisplayName(charJa, ja) {
+  const c = vesselsData && vesselsData.characters[charJa];
+  return ja || !c ? charJa : (c.nameEn || charJa);
+}
+
+function vesselDisplayName(key, ja) {
+  const all = [...((vesselsData && vesselsData.vesselTypes) || []), ...((vesselsData && vesselsData.universalVessels) || [])];
+  const v = all.find((x) => x.key === key);
+  return v ? (ja ? v.nameJa : v.nameEn) : key;
+}
+
+function renderSuggestText() {
+  const ja = displayLang === 'ja';
+  const t = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+  t('btn-suggest-label', ja ? 'ビルド提案' : 'Build Suggestion');
+  t('btn-suggest-badge', ja ? '試験的' : 'Beta');
+  t('suggest-title', ja ? 'ビルド提案' : 'Build Suggestion');
+  t('suggest-badge', ja ? '試験的' : 'Beta');
+  t('suggest-lead', ja
+    ? '型や武器種などを選ぶと、遺物効果の条件に置き換えてビルド探索を実行します。条件はビルド探索の画面に引き継がれるので、あとから細かく調整できます。型や効果の対応は神攻略wikiの情報をもとにしています。'
+    : 'Pick playstyles, weapon types and more; they are turned into relic-effect conditions and the build search runs with them. The conditions stay in the build search panel for fine-tuning. Based on the Japanese Kamikouryaku wiki (names are in Japanese).');
+  t('sg-character-label', ja ? 'キャラクター' : 'Character');
+  t('sg-vessel-label', ja ? '献器' : 'Vessel');
+  t('sg-mode-label', ja ? 'モード' : 'Mode');
+  sgMode.options[0].textContent = ja ? '通常+深層' : 'Normal + Deep';
+  sgMode.options[1].textContent = ja ? '通常のみ' : 'Normal only';
+  t('sg-build-label', ja ? '定番のビルドから始める（任意）' : 'Start from a known build (optional)');
+  t('sg-weapons-label', ja ? '武器種' : 'Weapon types');
+  t('sg-focus-label', ja ? '重視すること' : 'Focus');
+  t('sg-focus-left', ja ? '火力' : 'Damage');
+  t('sg-focus-right', ja ? '生存' : 'Survival');
+  t('sg-preview-label', ja ? '探索する条件' : 'Search conditions');
+  t('suggest-clear-label', ja ? 'クリア' : 'Clear');
+  t('suggest-run-label', ja ? '提案を探す' : 'Find builds');
+}
+
+function suggestChip(kind, id, title) {
+  const on = suggestPicks[kind].has(id);
+  return `<button type="button" class="suggest-chip" data-kind="${kind}" data-id="${escapeHtml(id)}" aria-pressed="${on}"${
+    title ? ` title="${escapeHtml(title)}"` : ''}>${escapeHtml(id)}</button>`;
+}
+
+function renderSuggestPanel() {
+  if (!vesselsData || !suggestData) return;
+  const ja = displayLang === 'ja';
+  renderSuggestText();
+
+  const prevChar = sgCharacter.value || optCharacter.value;
+  sgCharacter.innerHTML = Object.keys(vesselsData.characters || {})
+    .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(charDisplayName(c, ja))}</option>`).join('');
+  if (prevChar && vesselsData.characters[prevChar]) sgCharacter.value = prevChar;
+
+  const prevVessel = sgVessel.value;
+  const vessels = [...(vesselsData.vesselTypes || []), ...(vesselsData.universalVessels || [])];
+  sgVessel.innerHTML = `<option value="">${ja ? 'おまかせ（すべての献器を比べる）' : 'Any (compare all vessels)'}</option>` +
+    vessels.map((v) => `<option value="${escapeHtml(v.key)}">${escapeHtml(ja ? v.nameJa : v.nameEn)}</option>`).join('');
+  if (vessels.some((v) => v.key === prevVessel)) sgVessel.value = prevVessel;
+
+  renderSuggestBuilds();
+  document.getElementById('sg-weapons').innerHTML = suggestData.weapons.map((w) => suggestChip('weapons', w.id)).join('');
+  document.getElementById('sg-types').innerHTML = SUGGEST_AXES.map(([axis, labelJa, labelEn]) => `
+    <h4>${ja ? labelJa : labelEn}</h4>
+    <div class="suggest-chips">${suggestData.types.filter((t) => t.axis === axis).map((t) => suggestChip('types', t.id, t.summary)).join('')}</div>`).join('');
+  updateSuggestPreview();
+}
+
+function renderSuggestBuilds() {
+  const ja = displayLang === 'ja';
+  const prev = sgBuild.value;
+  const builds = suggestData.builds.filter((b) => b.character === sgCharacter.value);
+  const option = (b) => `<option value="${escapeHtml(b.id)}">${escapeHtml(b.name)}${b.target ? escapeHtml(`（${b.target}）`) : ''}</option>`;
+  const general = builds.filter((b) => !b.target);
+  const targeted = builds.filter((b) => b.target);
+  sgBuild.innerHTML = `<option value="">${ja ? '使わない' : 'None'}</option>` +
+    (general.length ? `<optgroup label="${ja ? '汎用' : 'General'}">${general.map(option).join('')}</optgroup>` : '') +
+    (targeted.length ? `<optgroup label="${ja ? '特定の相手向け' : 'For a specific boss'}">${targeted.map(option).join('')}</optgroup>` : '');
+  if (builds.some((b) => b.id === prev)) sgBuild.value = prev;
+  renderSuggestBuildInfo();
+}
+
+function renderSuggestBuildInfo() {
+  const ja = displayLang === 'ja';
+  const b = suggestData && suggestData.builds.find((x) => x.id === sgBuild.value);
+  const el = document.getElementById('sg-build-info');
+  if (!b) {
+    el.textContent = ja ? `${sgCharacter.value} の定番ビルド ${suggestData.builds.filter((x) => x.character === sgCharacter.value).length} 件から選べます。` : '';
+    return;
+  }
+  el.innerHTML = [
+    b.aim && `${ja ? '狙い' : 'Aim'}: ${escapeHtml(b.aim)}`,
+    b.mode && `${ja ? 'モード' : 'Mode'}: ${escapeHtml(b.mode)}`,
+    b.target && `${ja ? '相手' : 'Target'}: ${escapeHtml(b.target)}`,
+    b.sources[0] && `<a href="${escapeHtml(b.sources[0])}" target="_blank" rel="noopener noreferrer">${ja ? '出典（神攻略wiki）' : 'Source (wiki)'}</a>`,
+  ].filter(Boolean).join(' ／ ');
+}
+
+function collectSuggestInput() {
+  return {
+    character: sgCharacter.value,
+    vessel: sgVessel.value,
+    mode: sgMode.value,
+    buildId: sgBuild.value || null,
+    weapons: [...suggestPicks.weapons],
+    types: [...suggestPicks.types],
+    focus: Number(sgFocus.value) || 0,
+  };
+}
+
+function suggestionCounts(cond) {
+  const counts = { required: 0, preferred: 0, nice_to_have: 0, exclude: 0 };
+  cond.effects.forEach((e) => { counts[e.exclude ? 'exclude' : e.priority]++; });
+  return counts;
+}
+
+function suggestionCountsText(cond, ja) {
+  const counts = suggestionCounts(cond);
+  return Object.entries(counts).filter(([, n]) => n)
+    .map(([k, n]) => `${SUGGEST_PRIORITY_LABELS[k][ja ? 0 : 1]} ${n}`).join(ja ? '・' : ', ');
+}
+
+function conflictText(c, ja) {
+  const name = effectNameByKey(c.key, ja);
+  return ja
+    ? `「${name}」は ${c.wantedBy.join('・')} では使いたい効果、${c.avoidedBy.join('・')} では避けたい効果です（使いたい側を優先しました）`
+    : `"${name}" is wanted by ${c.wantedBy.join(', ')} but avoided by ${c.avoidedBy.join(', ')} (kept)`;
+}
+
+function updateSuggestPreview() {
+  if (!suggestData) return;
+  const ja = displayLang === 'ja';
+  const input = collectSuggestInput();
+  const el = document.getElementById('sg-preview');
+  const runBtn = document.getElementById('suggest-run');
+  const picked = input.buildId || input.weapons.length || input.types.length;
+  if (!picked) {
+    el.innerHTML = `<p class="suggest-hint">${ja ? '定番のビルド・武器種・型のどれかを選んでください。' : 'Pick a known build, a weapon type or a playstyle.'}</p>`;
+    runBtn.disabled = true;
+    return;
+  }
+  const cond = suggestConditions(suggestData, input, suggestInfo());
+  runBtn.disabled = !cond.effects.length;
+  const rows = cond.effects.map((e) => {
+    const p = e.exclude ? 'exclude' : e.priority;
+    return `<li><span class="sg-pri sg-pri-${p}">${SUGGEST_PRIORITY_LABELS[p][ja ? 0 : 1]}</span>${escapeHtml(effectNameByKey(e.key, ja))}<span class="sg-why">${escapeHtml(e.reasons.join('・'))}</span></li>`;
+  }).join('');
+  el.innerHTML = `<p class="sg-counts">${escapeHtml(suggestionCountsText(cond, ja))}</p>` +
+    cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('') +
+    `<details class="sg-detail"><summary>${ja ? '効果の一覧と理由' : 'Effects and why'}</summary><ul>${rows}</ul></details>`;
+}
+
+async function openSuggest() {
+  suggestBackdrop.classList.remove('hidden');
+  suggestInspector.classList.add('open');
+  openBackEntry('suggest', closeSuggest);
+  if (!(await loadVesselsData()) || !(await loadSuggestData())) return;
+  renderSuggestPanel();
+}
+
+function closeSuggest() {
+  suggestBackdrop.classList.add('hidden');
+  suggestInspector.classList.remove('open');
+  returnToMenuAfter('suggest', closeBackEntry('suggest'));
+}
+
+// Put a suggestion's conditions into the build search panel
+function applySuggestionToOptimizer(sug) {
+  renderOptimizerCharacterSelect();
+  optCharacter.value = sug.input.character;
+  renderOptimizerVesselList();
+  optVesselList.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.checked = !sug.input.vessel || cb.value === sug.input.vessel;
+  });
+  updateOptVesselCount();
+  optMode.value = sug.input.mode;
+  optSelectedEffects = new Map(sug.cond.effects.map((e) => [e.key, e.exclude ? `exclude_${e.priority}` : e.priority]));
+  renderOptEffectsTags();
+  updateOptEffectsCount();
+}
+
+function runSuggestion() {
+  if (!suggestData || !relicData) return;
+  const ja = displayLang === 'ja';
+  const input = collectSuggestInput();
+  const cond = suggestConditions(suggestData, input, suggestInfo());
+  if (!cond.effects.length) return;
+  const sug = { input, cond };
+  applySuggestionToOptimizer(sug);
+  panelDone('suggest');
+  closeSuggest();
+  runOptimization({ label: `${ja ? '提案' : 'Suggest'}: ${charDisplayName(input.character, ja)} #${nextTabId}`, suggestion: sug });
+}
+
+// Summary shown at the top of a suggestion's result tab
+function renderSuggestionSummary(sug) {
+  const ja = displayLang === 'ja';
+  const { input, cond } = sug;
+  const build = suggestData && input.buildId ? suggestData.builds.find((b) => b.id === input.buildId) : null;
+  const f = input.focus;
+  const focusText = f === 0 ? (ja ? 'バランス' : 'Balanced')
+    : `${f < 0 ? (ja ? '火力' : 'Damage') : (ja ? '生存' : 'Survival')}${Math.abs(f) === 2 ? (ja ? '（強）' : ' (strong)') : ''}`;
+  const choices = [
+    [ja ? 'キャラ' : 'Character', charDisplayName(input.character, ja)],
+    [ja ? '献器' : 'Vessel', input.vessel ? vesselDisplayName(input.vessel, ja) : (ja ? 'おまかせ' : 'Any')],
+    [ja ? 'モード' : 'Mode', input.mode === 'normal' ? (ja ? '通常のみ' : 'Normal only') : (ja ? '通常+深層' : 'Normal + Deep')],
+    build && [ja ? '定番' : 'Build', `${build.name}${build.target ? `（${build.target}）` : ''}`],
+    input.weapons.length && [ja ? '武器種' : 'Weapons', input.weapons.join('・')],
+    input.types.length && [ja ? '型' : 'Playstyles', input.types.join('・')],
+    [ja ? '重視' : 'Focus', focusText],
+  ].filter(Boolean);
+  const leftmost = cond.effects.some((e) => /^(潜在する力から|出撃時の武器)/.test(effectNameByKey(e.key, true)));
+  const notOnRelics = cond.notOnRelics.length
+    ? `<p class="sg-note">${ja ? 'この型で大事だが遺物では得られない効果（武器の付帯効果などで狙います）' : 'Important for these playstyles but not available on relics (weapon passives etc.)'}: ${
+      cond.notOnRelics.map((n) => `${escapeHtml(n.name)}（${escapeHtml(n.type)}）`).join('、')}</p>` : '';
+  return `<div class="sg-summary">
+    <div class="sg-summary-head">${iconSvg('lightbulb', 16)}<span>${ja ? 'ビルド提案' : 'Build Suggestion'}</span><span class="experimental-badge">${ja ? '試験的' : 'Beta'}</span></div>
+    <dl class="sg-choices">${choices.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('')}</dl>
+    <p class="sg-counts">${ja ? '探索した条件' : 'Searched with'}: ${escapeHtml(suggestionCountsText(cond, ja))}
+      <button type="button" class="btn-secondary sg-open-optimizer">${iconSvg('wand-sparkles', 14)}<span>${ja ? 'ビルド探索で細かく調整' : 'Fine-tune in Build Search'}</span></button></p>
+    ${cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('')}
+    ${notOnRelics}
+    ${leftmost ? `<p class="sg-note">${ja ? '「潜在する力から…」「出撃時の武器の…」の効果は、献器の最も左の遺物の効果しか発動しません。探索はこれを考慮しないため、結果の並び順を確認してください。' : '"Dormant power…" and "starting armament…" effects only work from the leftmost relic of a vessel; the search does not take this into account.'}</p>` : ''}
+  </div>`;
+}
+
+btnSuggest.addEventListener('click', openSuggest);
+document.getElementById('suggest-close').addEventListener('click', closeSuggest);
+suggestBackdrop.addEventListener('click', closeSuggest);
+document.getElementById('suggest-run').addEventListener('click', runSuggestion);
+document.getElementById('suggest-clear').addEventListener('click', () => {
+  suggestPicks.weapons.clear();
+  suggestPicks.types.clear();
+  sgBuild.value = '';
+  sgFocus.value = '0';
+  renderSuggestPanel();
+});
+sgCharacter.addEventListener('change', () => { renderSuggestBuilds(); updateSuggestPreview(); });
+sgBuild.addEventListener('change', () => { renderSuggestBuildInfo(); updateSuggestPreview(); });
+[sgVessel, sgMode, sgFocus].forEach((el) => el.addEventListener('input', updateSuggestPreview));
+suggestInspector.addEventListener('click', (e) => {
+  const chip = e.target.closest('.suggest-chip');
+  if (!chip) return;
+  const set = suggestPicks[chip.dataset.kind];
+  if (set.has(chip.dataset.id)) set.delete(chip.dataset.id);
+  else set.add(chip.dataset.id);
+  chip.setAttribute('aria-pressed', String(set.has(chip.dataset.id)));
+  updateSuggestPreview();
+});
+// "Fine-tune in Build Search" on a suggestion's result tab: restore that suggestion's conditions
+document.getElementById('main-content').addEventListener('click', (e) => {
+  if (!e.target.closest('.sg-open-optimizer')) return;
+  const tab = optimizerTabs.get(activeTab);
+  if (!tab || !tab.suggestion) return;
+  applySuggestionToOptimizer(tab.suggestion);
+  openOptimizerInspector();
+});
+renderSuggestText();
 
 // ============================================================
 // === Effect Selection Inspector ===
@@ -3752,6 +4074,9 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
 
   let html = '';
 
+  const suggestion = (optimizerTabs.get(tabId) || {}).suggestion;
+  if (suggestion) html += renderSuggestionSummary(suggestion);
+
   // Summary header
   if (bestResult) {
     const best = bestResult.result;
@@ -3802,7 +4127,7 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     html += `<div class="opt-conditions-effects">`;
     params.effects.forEach(e => {
       const eff = allUniqueEffects.find(u => u.key === e.key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(e.key, ja);
       const displayPriority = e.exclude ? `exclude_${e.priority}` : e.priority;
       const pLabel = PRIORITY_LABELS[displayPriority]
         ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
@@ -4102,7 +4427,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   // Missing required
   (res.missingRequired || []).forEach(key => {
     const eff = allUniqueEffects.find(e => e.key === key);
-    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(key, ja);
     html += `<div class="detail-score-row" style="opacity:0.5">`;
     html += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
     html += `<div class="detail-effect-meta">${ja ? '未達' : 'Missing'}</div>`;
@@ -4514,7 +4839,7 @@ function exportOptimizerResultsToHTML(tabId) {
     bodyHTML += `<div class="opt-conditions-row"><span class="opt-conditions-label">${ja ? '効果' : 'Effects'}:</span><div class="opt-conditions-effects">`;
     params.effects.forEach(e => {
       const eff = allUniqueEffects.find(u => u.key === e.key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(e.key, ja);
       const displayPriority = e.exclude ? `exclude_${e.priority}` : e.priority;
       const pLabel = PRIORITY_LABELS[displayPriority]
         ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
@@ -4577,7 +4902,7 @@ function exportOptimizerResultsToHTML(tabId) {
     }
     (res.missingRequired || []).forEach(key => {
       const eff = allUniqueEffects.find(e => e.key === key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(key, ja);
       bodyHTML += `<div class="detail-score-row" style="opacity:0.5">`;
       bodyHTML += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
       bodyHTML += `<div class="detail-effect-meta">${ja ? '未達' : 'Missing'}</div>`;

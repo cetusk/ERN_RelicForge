@@ -23,7 +23,8 @@ ERN_RelicForge/
 ├── resources/
 │   ├── items_data.json          # アイテムデータ (1003件, 日英名称付き)
 │   ├── effects_data.json        # エフェクトデータ (1117件, 日英名称・重複可否・備考付き)
-│   └── vessels_data.json        # 献器データ (全10キャラ・4汎用献器)
+│   ├── vessels_data.json        # 献器データ (全10キャラ・4汎用献器)
+│   └── build_suggest.json       # ビルド提案の変換ルール (tools/build_suggest で生成)
 │
 ├── gui/                         # Electron GUI アプリ (Python 不要)
 │   ├── package.json
@@ -35,6 +36,7 @@ ERN_RelicForge/
 │       ├── relic-parser.js      # JS 版パーサー (web/ と共通)
 │       ├── relic-optimizer.js   # JS 版最適化 (web/ と共通)
 │       ├── relic-share.js       # 共有リンク・QR コードの作成・読み込み (web/ と共通)
+│       ├── relic-suggest.js     # ビルド提案の条件の作成 (web/ と共通)
 │       ├── lib/
 │       │   ├── crypto-js.min.js # AES-CBC 復号化用
 │       │   ├── icons.js         # 画面のアイコン (Lucide)
@@ -47,6 +49,7 @@ ERN_RelicForge/
 │   ├── relic-parser.js          # JS 版パーサー (CryptoJS 使用)
 │   ├── relic-optimizer.js       # JS 版最適化 (Web Worker 対応)
 │   ├── relic-share.js           # 共有リンク・QR コードの作成・読み込み
+│   ├── relic-suggest.js         # ビルド提案の条件の作成
 │   ├── style.css                # ダークテーマスタイル
 │   └── lib/
 │       ├── crypto-js.min.js     # AES-CBC 復号化用
@@ -61,7 +64,8 @@ ERN_RelicForge/
 │
 ├── tools/
 │   ├── wiki_effects/            # 効果データ (重ね掛け・備考) の攻略 Wiki 照合ツール
-│   └── icons/                   # 画面アイコン (lib/icons.js) の生成
+│   ├── icons/                   # 画面アイコン (lib/icons.js) の生成
+│   └── build_suggest/           # ビルド提案の変換ルール (resources/build_suggest.json) の元データと作成
 │
 └── tests/                       # 回帰テスト (GitHub Actions で自動実行)
     ├── test_*.py                # Python 版パーサー・オプティマイザ・データ整合性
@@ -125,6 +129,12 @@ ERN_RelicForge/
 - 効果がカテゴリー別にグループ化（全 19 カテゴリー: キャラクター固有, 能力値, 攻撃力, スキル／アーツ, 魔術／祈祷, カット率, 状態異常耐性, 回復, アクション, 出撃時の武器（戦技）, 出撃時の武器（付加）, 出撃時の武器（魔術／祈祷）, 出撃時のアイテム, 出撃時のアイテム（結晶の雫）, マップ環境, チームメンバー, 夜の力, デメリット, その他）
 - **AND グループフィルタリング**: 3 つの独立した条件グループ（グループ内は OR、グループ間は AND）
   - 例: 条件 1 で攻撃力系、条件 2 で回復系を指定 → 両方を満たす遺物のみ表示
+
+### ビルド提案（試験的、Web 版・Electron 版）
+- キャラ・献器・モードと、**型（バッタ・戦技・魔術の系統・出血・凍傷ループ・タンクなど 46 種）**、**武器種**、**重視すること（火力 ↔ 生存のつまみ）**、**定番のビルド（キャラ別 174 件）** を選ぶと、遺物効果の条件に置き換えてビルド探索を実行する
+- 条件はビルド探索の画面に引き継がれ、結果のタブから「ビルド探索で細かく調整」で呼び戻せる
+- 結果には、選んだ内容・ぶつかる効果・その型で大事だが遺物では得られない効果（武器の付帯効果など）を表示
+- 型と効果の対応、定番のビルドは神攻略wikiの情報をもとに作成。未公開の効果は使わない（[変換ルールと元データ](tools/build_suggest/README.md)）
 
 ### ビルド探索（GUI 内最適化）
 - キャラクター・献器選択による一括最適化
