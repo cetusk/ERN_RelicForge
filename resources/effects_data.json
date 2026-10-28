@@ -1256,7 +1256,8 @@
       "name_ja": "大教会の強敵を倒す度、最大HP上昇",
       "stackable": false,
       "stackNotes": "+5%",
-      "stackNotesFull": "+5%"
+      "stackNotesFull": "+5%",
+      "deepOnly": true
     },
     "6060400": {
       "key": "runesAndItemDiscoveryIncreasedForEachGreatEnemyDefeatedAtAFort",
@@ -1273,7 +1274,8 @@
       "name_ja": "遺跡の強敵を倒す度、神秘上昇",
       "stackable": false,
       "stackNotes": "+4",
-      "stackNotesFull": "+4"
+      "stackNotesFull": "+4",
+      "deepOnly": true
     },
     "6060600": {
       "key": "maxStaminaIncreasedForEachGreatEnemyDefeatedAtAGreatEncampment",
@@ -1962,7 +1964,8 @@
       "name_ja": "潜在する力から、大剣を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6630300": {
       "key": "dormantPowerHelpsDiscoverColossalSwords",
@@ -1979,7 +1982,8 @@
       "name_ja": "潜在する力から、曲剣を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6630500": {
       "key": "dormantPowerHelpsDiscoverCurvedGreatswords",
@@ -1987,7 +1991,8 @@
       "name_ja": "潜在する力から、大曲剣を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6630600": {
       "key": "dormantPowerHelpsDiscoverKatana",
@@ -1995,7 +2000,8 @@
       "name_ja": "潜在する力から、刀を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6630700": {
       "key": "dormantPowerHelpsDiscoverTwinblades",
@@ -2003,7 +2009,8 @@
       "name_ja": "潜在する力から、両刃剣を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6630800": {
       "key": "dormantPowerHelpsDiscoverThrustingSwords",
@@ -2020,7 +2027,8 @@
       "name_ja": "潜在する力から、重刺剣を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6631000": {
       "key": "dormantPowerHelpsDiscoverAxes",
@@ -2037,7 +2045,8 @@
       "name_ja": "潜在する力から、大斧を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6631200": {
       "key": "dormantPowerHelpsDiscoverHammers",
@@ -2063,7 +2072,8 @@
       "name_ja": "潜在する力から、フレイルを見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6631500": {
       "key": "dormantPowerHelpsDiscoverSpears",
@@ -2080,7 +2090,8 @@
       "name_ja": "潜在する力から、大槍を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6631700": {
       "key": "dormantPowerHelpsDiscoverHalberds",
@@ -2097,7 +2108,8 @@
       "name_ja": "潜在する力から、鎌を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6631900": {
       "key": "dormantPowerHelpsDiscoverFists",
@@ -2105,7 +2117,8 @@
       "name_ja": "潜在する力から、拳を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6632000": {
       "key": "dormantPowerHelpsDiscoverClaws",
@@ -2113,7 +2126,8 @@
       "name_ja": "潜在する力から、爪を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6632100": {
       "key": "dormantPowerHelpsDiscoverWhips",
@@ -2130,7 +2144,8 @@
       "name_ja": "潜在する力から、特大武器を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6632300": {
       "key": "dormantPowerHelpsDiscoverBows",
@@ -2147,7 +2162,8 @@
       "name_ja": "潜在する力から、大弓を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6632500": {
       "key": "dormantPowerHelpsDiscoverCrossbows",
@@ -2200,7 +2216,8 @@
       "name_ja": "潜在する力から、杖を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6633100": {
       "key": "dormantPowerHelpsDiscoverSacredSeals",
@@ -2208,7 +2225,8 @@
       "name_ja": "潜在する力から、聖印を見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
-      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種"
+      "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
+      "deepOnly": true
     },
     "6633200": {
       "key": "dormantPowerHelpsDiscoverTorches",
@@ -2225,7 +2243,8 @@
       "name_ja": "【追跡者】精神力上昇、生命力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 精神力+10, 生命力-5",
-      "stackNotesFull": "Lv.15時、精神力+10, 生命力-5"
+      "stackNotesFull": "Lv.15時、精神力+10, 生命力-5",
+      "deepOnly": true
     },
     "6640100": {
       "key": "wylderImprovedIntelligenceAndFaithReducedStrengthAndDexterity",
@@ -2233,7 +2252,8 @@
       "name_ja": "【追跡者】知力/信仰上昇、筋力/技量低下",
       "stackable": false,
       "stackNotes": "Lv.15時 知力+15, 信仰+15, 筋力-7, 技量-5",
-      "stackNotesFull": "Lv.15時、知力+15, 信仰+15, 筋力-7, 技量-5"
+      "stackNotesFull": "Lv.15時、知力+15, 信仰+15, 筋力-7, 技量-5",
+      "deepOnly": true
     },
     "6641000": {
       "key": "guardianImprovedStrengthAndDexterityReducedVigor",
@@ -2241,7 +2261,8 @@
       "name_ja": "【守護者】筋力/技量上昇、生命力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 筋力+9, 技量+19, 生命力-8",
-      "stackNotesFull": "Lv.15時、筋力+9, 技量+19, 生命力-8"
+      "stackNotesFull": "Lv.15時、筋力+9, 技量+19, 生命力-8",
+      "deepOnly": true
     },
     "6641100": {
       "key": "guardianImprovedMindAndFaithReducedVigor",
@@ -2249,7 +2270,8 @@
       "name_ja": "【守護者】精神力/信仰上昇、生命力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 精神力+8, 信仰+17, 生命力-6",
-      "stackNotesFull": "Lv.15時、精神力+8, 信仰+17, 生命力-6"
+      "stackNotesFull": "Lv.15時、精神力+8, 信仰+17, 生命力-6",
+      "deepOnly": true
     },
     "6642000": {
       "key": "ironeyeImprovedArcaneReducedDexterity",
@@ -2257,7 +2279,8 @@
       "name_ja": "【鉄の目】神秘上昇、技量低下",
       "stackable": false,
       "stackNotes": "Lv.15時 神秘+15, 技量-9",
-      "stackNotesFull": "Lv.15時、神秘+15, 技量-9"
+      "stackNotesFull": "Lv.15時、神秘+15, 技量-9",
+      "deepOnly": true
     },
     "6642100": {
       "key": "ironeyeImprovedVigorAndStrengthReducedDexterity",
@@ -2265,7 +2288,8 @@
       "name_ja": "【鉄の目】生命力/筋力上昇、技量低下",
       "stackable": false,
       "stackNotes": "Lv.15時 生命力+5, 筋力+20, 技量-13",
-      "stackNotesFull": "Lv.15時、生命力+5, 筋力+20, 技量-13"
+      "stackNotesFull": "Lv.15時、生命力+5, 筋力+20, 技量-13",
+      "deepOnly": true
     },
     "6643000": {
       "key": "duchessImprovedVigorAndStrengthReducedMind",
@@ -2273,7 +2297,8 @@
       "name_ja": "【レディ】生命力/筋力上昇、精神力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 生命力+3, 筋力+24, 精神力-14",
-      "stackNotesFull": "Lv.15時、生命力+3,筋力+24, 精神力-14"
+      "stackNotesFull": "Lv.15時、生命力+3,筋力+24, 精神力-14",
+      "deepOnly": true
     },
     "6643100": {
       "key": "duchessImprovedMindAndFaithReducedIntelligence",
@@ -2281,7 +2306,8 @@
       "name_ja": "【レディ】精神力/信仰上昇、知力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 精神力+3, 信仰+13, 知力-5",
-      "stackNotesFull": "Lv.15時、精神力+3, 信仰+13, 知力-5"
+      "stackNotesFull": "Lv.15時、精神力+3, 信仰+13, 知力-5",
+      "deepOnly": true
     },
     "6644000": {
       "key": "raiderImprovedMindAndIntelligenceReducedVigorAndEndurance",
@@ -2289,7 +2315,8 @@
       "name_ja": "【無頼漢】精神力/知力上昇、生命力/持久力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 精神力+9, 知力+35, 生命力-8, 持久力-4",
-      "stackNotesFull": "Lv.15時、精神力+9, 知力+35, 生命力-8, 持久力-4"
+      "stackNotesFull": "Lv.15時、精神力+9, 知力+35, 生命力-8, 持久力-4",
+      "deepOnly": true
     },
     "6644100": {
       "key": "raiderImprovedArcaneReducedVigor",
@@ -2297,7 +2324,8 @@
       "name_ja": "【無頼漢】神秘上昇、生命力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 神秘+17, 生命力-4",
-      "stackNotesFull": "Lv.15時、神秘+17, 生命力-4"
+      "stackNotesFull": "Lv.15時、神秘+17, 生命力-4",
+      "deepOnly": true
     },
     "6645000": {
       "key": "revenantImprovedVigorAndEnduranceReducedMind",
@@ -2305,7 +2333,8 @@
       "name_ja": "【復讐者】生命力/持久力上昇、精神力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 生命力+5, 持久力+5, 精神力-11",
-      "stackNotesFull": "Lv.15時、生命力+5, 持久力+5, 精神力-11"
+      "stackNotesFull": "Lv.15時、生命力+5, 持久力+5, 精神力-11",
+      "deepOnly": true
     },
     "6645100": {
       "key": "revenantImprovedStrengthReducedFaith",
@@ -2313,7 +2342,8 @@
       "name_ja": "【復讐者】筋力上昇、信仰低下",
       "stackable": false,
       "stackNotes": "Lv.15時 筋力+25, 信仰-6",
-      "stackNotesFull": "Lv.15時、筋力+25, 信仰-6"
+      "stackNotesFull": "Lv.15時、筋力+25, 信仰-6",
+      "deepOnly": true
     },
     "6646000": {
       "key": "recluseImprovedVigorEnduranceAndDexterityReducedIntelligenceAndFaith",
@@ -2321,7 +2351,8 @@
       "name_ja": "【隠者】生命力/持久力/技量上昇、知力/信仰低下",
       "stackable": false,
       "stackNotes": "Lv.15時 生命力+4, 持久力+5, 技量+20, 知力-10, 信仰-10",
-      "stackNotesFull": "Lv.15時、生命力+4, 持久力+5, 技量+20, 知力-10, 信仰-10"
+      "stackNotesFull": "Lv.15時、生命力+4, 持久力+5, 技量+20, 知力-10, 信仰-10",
+      "deepOnly": true
     },
     "6646100": {
       "key": "recluseImprovedIntelligenceAndFaithReducedMind",
@@ -2329,7 +2360,8 @@
       "name_ja": "【隠者】知力/信仰上昇、精神力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 知力+12, 信仰+12, 精神力-13",
-      "stackNotesFull": "Lv.15時、知力+12, 信仰+12, 精神力-13"
+      "stackNotesFull": "Lv.15時、知力+12, 信仰+12, 精神力-13",
+      "deepOnly": true
     },
     "6647000": {
       "key": "executorImprovedVigorAndEnduranceReducedArcane",
@@ -2337,7 +2369,8 @@
       "name_ja": "【執行者】生命力/持久力上昇、神秘低下",
       "stackable": false,
       "stackNotes": "Lv.15時 生命力+5, 持久力+6, 神秘-13",
-      "stackNotesFull": "Lv.15時、生命力+5, 持久力+6,神秘-13"
+      "stackNotesFull": "Lv.15時、生命力+5, 持久力+6,神秘-13",
+      "deepOnly": true
     },
     "6647100": {
       "key": "executorImprovedDexterityAndArcaneReducedVigor",
@@ -2345,7 +2378,8 @@
       "name_ja": "【執行者】技量/神秘上昇、生命力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 技量+12, 神秘+9, 生命力-7",
-      "stackNotesFull": "Lv.15時、技量+12, 神秘+9, 生命力-7"
+      "stackNotesFull": "Lv.15時、技量+12, 神秘+9, 生命力-7",
+      "deepOnly": true
     },
     "6647200": {
       "key": "scholarImprovedMindReducedVigor",
@@ -2353,7 +2387,8 @@
       "name_ja": "【学者】精神力上昇、生命力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 精神力+9, 生命力-3",
-      "stackNotesFull": "Lv.15時、精神力+9、生命力-3"
+      "stackNotesFull": "Lv.15時、精神力+9、生命力-3",
+      "deepOnly": true
     },
     "6647300": {
       "key": "scholarImprovedEnduranceAndDexterityReducedIntelligenceAndArcane",
@@ -2361,7 +2396,8 @@
       "name_ja": "【学者】持久力/技量上昇、知力/神秘低下",
       "stackable": false,
       "stackNotes": "Lv.15時 持久力+6, 技量+40, 知力-4, 神秘-20",
-      "stackNotesFull": "Lv.15時、持久力+6、技量+40、知力-4、神秘-20"
+      "stackNotesFull": "Lv.15時、持久力+6、技量+40、知力-4、神秘-20",
+      "deepOnly": true
     },
     "6647400": {
       "key": "undertakerImprovedDexterityReducedVigorAndFaith",
@@ -2369,7 +2405,8 @@
       "name_ja": "【葬儀屋】技量上昇、生命力/信仰低下",
       "stackable": false,
       "stackNotes": "Lv.15時 技量+19, 生命力-5, 信仰-13",
-      "stackNotesFull": "Lv.15時、技量+19、生命力-5、信仰-13"
+      "stackNotesFull": "Lv.15時、技量+19、生命力-5、信仰-13",
+      "deepOnly": true
     },
     "6647500": {
       "key": "undertakerImprovedMindAndFaithReducedStrength",
@@ -2377,7 +2414,8 @@
       "name_ja": "【葬儀屋】精神力/信仰上昇、筋力低下",
       "stackable": false,
       "stackNotes": "Lv.15時 精神力+9, 信仰+9, 筋力-15",
-      "stackNotesFull": "Lv.15時、精神力+9、信仰+9、筋力-15"
+      "stackNotesFull": "Lv.15時、精神力+9、信仰+9、筋力-15",
+      "deepOnly": true
     },
     "6800000": {
       "key": "reducedVigor",
