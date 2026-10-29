@@ -37,6 +37,9 @@ test('build_suggest.json: every effect exists on relics and none is unreleased',
   for (const w of data.weapons) check([...w.attack, ...w.three, ...w.find], `武器種 ${w.id}`);
   check([...data.generic.offense, ...data.generic.survival], 'つまみ');
   for (const b of data.builds) assert.ok(vessels.characters[b.character], `ビルド ${b.id}: unknown character`);
+  assert.deepEqual(Object.keys(data.favoredWeapons).sort(), Object.keys(vessels.characters).sort(), 'favoured weapons for every character');
+  for (const ws of Object.values(data.favoredWeapons)) for (const w of ws) assert.ok(data.weapons.some((x) => x.id === w), w);
+  for (const p of Object.values(data.modePreference)) check([...p.first, ...p.second], 'モード');
   assert.ok(data.types.every((t) => ['style', 'magic', 'status', 'role'].includes(t.axis)));
 });
 
@@ -68,6 +71,37 @@ for (const dir of APP_DIRS) {
     const great = suggest(ctx, { character: '追跡者', mode: 'combined', types: ['バッタ', '大型武器・タメ'], weapons: ['大剣'], focus: 0 });
     const used = new Set(great.effects.filter((e) => weaponOf.has(e.key)).map((e) => weaponOf.get(e.key)));
     assert.deepEqual([...used], ['大剣']);
+  });
+
+  test(`${dir}: 「見つけやすくなる」 is preferred only for a type the character does not find often, and only one`, () => {
+    const ctx = suggestContext(dir);
+    const find = (w) => data.weapons.find((x) => x.id === w).find[0];
+    const pr = (input) => Object.fromEntries(suggest(ctx, input).effects.map((e) => [e.key, e.priority]));
+    const base = { character: '追跡者', mode: 'combined', types: [], focus: 0 };
+    assert.equal(pr({ ...base, weapons: ['大剣'] })[find('大剣')], undefined, 'favoured type: no effect');
+    assert.equal(pr({ ...base, weapons: ['刀'] })[find('刀')], 'preferred');
+    const two = pr({ ...base, weapons: ['大剣', '鎌', '刀'] });
+    assert.equal(two[find('鎌')], 'preferred', 'the first picked other type');
+    assert.equal(two[find('刀')], 'nice_to_have', 'only one works');
+    // 無頼漢 finds three types more often; narrowing them down to one is still useful
+    assert.equal(pr({ ...base, character: '無頼漢', weapons: ['大斧'] })[find('大斧')], 'nice_to_have');
+    const r = suggest(ctx, { ...base, weapons: ['大剣', '鎌', '刀'] });
+    assert.deepEqual(r.notes.filter((n) => n.kind.startsWith('find')).map((n) => n.kind), ['findFavored', 'findReplaces', 'findOnlyOne']);
+  });
+
+  test(`${dir}: 封牢 and 夜の侵入者 are ranked by mode (通常のみ = 通常モード, 通常+深層 = 深き夜)`, () => {
+    const ctx = suggestContext(dir);
+    const evergaol = 'attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated';
+    const invader = 'attackPowerUpAfterDefeatingANightInvader';
+    for (const [mode, first, second] of [['normal', evergaol, invader], ['combined', invader, evergaol]]) {
+      for (const focus of [-2, 0, 2]) {
+        const effects = suggest(ctx, { character: '追跡者', mode, types: ['バッタ'], weapons: [], focus }).effects;
+        const at = (k) => effects.findIndex((e) => e.key === k);
+        assert.ok(at(first) >= 0 && at(first) < at(second), `${mode} ${focus}: ${first} first`);
+        assert.equal(effects[at(first)].priority, 'preferred', `${mode} ${focus}`);   // 定番 rec
+        assert.equal(effects[at(second)].priority, 'nice_to_have', `${mode} ${focus}`);
+      }
+    }
   });
 
   test(`${dir}: a known build makes its defining effects required; staples stay preferred`, () => {

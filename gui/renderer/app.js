@@ -2599,8 +2599,8 @@ function renderSuggestText() {
   t('sg-character-label', ja ? 'キャラクター' : 'Character');
   t('sg-vessel-label', ja ? '献器' : 'Vessel');
   t('sg-mode-label', ja ? 'モード' : 'Mode');
-  sgMode.options[0].textContent = ja ? '通常+深層' : 'Normal + Deep';
-  sgMode.options[1].textContent = ja ? '通常のみ' : 'Normal only';
+  sgMode.options[0].textContent = suggestModeText('combined', ja);
+  sgMode.options[1].textContent = suggestModeText('normal', ja);
   t('sg-build-label', ja ? '定番のビルドから始める（任意）' : 'Start from a known build (optional)');
   t('sg-weapons-label', ja ? '武器種' : 'Weapon types');
   t('sg-focus-label', ja ? '重視すること' : 'Focus');
@@ -2609,6 +2609,12 @@ function renderSuggestText() {
   t('sg-preview-label', ja ? '探索する条件' : 'Search conditions');
   t('suggest-clear-label', ja ? 'クリア' : 'Clear');
   t('suggest-run-label', ja ? '提案を探す' : 'Find builds');
+}
+
+// Deep relics only work in Deep of Night, so the relic slots double as the expedition mode
+function suggestModeText(mode, ja) {
+  if (mode === 'normal') return ja ? '通常モード（通常の遺物のみ）' : 'Normal mode (normal relics only)';
+  return ja ? '深き夜（通常+深層の遺物）' : 'Deep of Night (normal + deep relics)';
 }
 
 function suggestChip(kind, id, title) {
@@ -2703,6 +2709,30 @@ function conflictText(c, ja) {
     : `"${name}" is wanted by ${c.wantedBy.join(', ')} but avoided by ${c.avoidedBy.join(', ')} (kept)`;
 }
 
+function suggestNoteText(n, input, ja) {
+  const q = (key) => (ja ? `「${effectNameByKey(key, true)}」` : `"${effectNameByKey(key, false)}"`);
+  if (n.kind === 'findFavored') {
+    return ja ? `${n.weapons.join('・')}は${input.character}がもともと見つけやすい武器種なので、「見つけやすくなる」効果は使いません`
+      : `${n.weapons.join(', ')}: already found more often by this character, so the "helps discover" effect is not used`;
+  }
+  if (n.kind === 'findReplaces') {
+    return ja ? `「${n.weapon}を見つけやすくなる」は、もともと見つけやすい${n.favored.join('・')}と置き換わります（${n.favored.join('・')}は見つけやすくなくなります）`
+      : `"Helps discover ${n.weapon}" replaces the type this character finds more often (${n.favored.join(', ')})`;
+  }
+  if (n.kind === 'findOnlyOne') {
+    return ja ? `「見つけやすくなる」は複数付けても1つしか効かない（最も左の遺物のもの）ため、最初に選んだ${n.first}を推奨、${n.rest.join('・')}を任意にしました`
+      : `Only one "helps discover" effect works (the leftmost relic's): ${n.first} (picked first) is preferred, ${n.rest.join(', ')} nice to have`;
+  }
+  if (n.kind === 'mode') {
+    const why = input.mode === 'normal'
+      ? (ja ? '通常モードでは災域が発生しないことがあるため' : 'in normal mode there may be no Night Invaders')
+      : (ja ? '深き夜では災域が必ず発生し、封牢には変異体が出ることがあるため' : 'in Deep of Night Night Invaders always appear and evergaols can have augmented bosses');
+    return ja ? `${n.first.map(q).join('')}を${n.second.map(q).join('')}より優先しました（${why}）`
+      : `${n.first.map(q).join(', ')} is ranked above ${n.second.map(q).join(', ')} (${why})`;
+  }
+  return '';
+}
+
 function updateSuggestPreview() {
   if (!suggestData) return;
   const ja = displayLang === 'ja';
@@ -2723,6 +2753,7 @@ function updateSuggestPreview() {
   }).join('');
   el.innerHTML = `<p class="sg-counts">${escapeHtml(suggestionCountsText(cond, ja))}</p>` +
     cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('') +
+    (cond.notes || []).map((n) => `<p class="sg-note">${escapeHtml(suggestNoteText(n, input, ja))}</p>`).join('') +
     `<details class="sg-detail"><summary>${ja ? '効果の一覧と理由' : 'Effects and why'}</summary><ul>${rows}</ul></details>`;
 }
 
@@ -2776,7 +2807,7 @@ function renderSuggestionSummary(sug) {
   const choices = [
     [ja ? 'キャラ' : 'Character', charDisplayName(input.character, ja)],
     [ja ? '献器' : 'Vessel', input.vessel ? vesselDisplayName(input.vessel, ja) : (ja ? 'おまかせ' : 'Any')],
-    [ja ? 'モード' : 'Mode', input.mode === 'normal' ? (ja ? '通常のみ' : 'Normal only') : (ja ? '通常+深層' : 'Normal + Deep')],
+    [ja ? 'モード' : 'Mode', suggestModeText(input.mode, ja)],
     build && [ja ? '定番' : 'Build', `${build.name}${build.target ? `（${build.target}）` : ''}`],
     input.weapons.length && [ja ? '武器種' : 'Weapons', input.weapons.join('・')],
     input.types.length && [ja ? '型' : 'Playstyles', input.types.join('・')],
@@ -2793,8 +2824,9 @@ function renderSuggestionSummary(sug) {
     <p class="sg-counts">${ja ? '探索した条件' : 'Searched with'}: ${escapeHtml(suggestionCountsText(cond, ja))}
       <button type="button" class="btn-secondary sg-open-optimizer">${iconSvg('wand-sparkles', 14)}<span>${ja ? 'ビルド探索で細かく調整' : 'Fine-tune in Build Search'}</span></button></p>
     ${cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('')}
+    ${(cond.notes || []).map((n) => `<p class="sg-note">${escapeHtml(suggestNoteText(n, input, ja))}</p>`).join('')}
     ${notOnRelics}
-    ${leftmost ? `<p class="sg-note">${ja ? '「潜在する力から…」「出撃時の武器の…」の効果は、献器の最も左の遺物の効果しか発動しません。探索はこれを考慮しないため、結果の並び順を確認してください。' : '"Dormant power…" and "starting armament…" effects only work from the leftmost relic of a vessel; the search does not take this into account.'}</p>` : ''}
+    ${leftmost ? `<p class="sg-note">${ja ? '「潜在する力から…」「出撃時の武器の…」の効果は、同じ種類を複数付けても献器の最も左の遺物のものしか発動しません。探索はこれを考慮しないため、結果の並び順を確認してください。' : 'When several "dormant power…" or "starting armament…" effects of the same kind are equipped, only the one on the leftmost relic of the vessel works; the search does not take this into account.'}</p>` : ''}
   </div>`;
 }
 

@@ -143,11 +143,39 @@ for k, name in NAME_BY_KEY.items():
             weapons.setdefault(m.group(1), {'attack': [], 'three': [], 'find': []})[kind].append(k)
 weapons = [{'id': w, **weapons[w]} for w in WEAPON_ORDER if w in weapons]
 
+# 潜在する力から出やすい武器種（キャラごと）。神攻略wiki「潜在する力」の出現内容の詳細と各キャラページの得意武器:
+#   基本は得意武器と同じ。隠者は杖、復讐者は聖印（図録の得意武器は「なし」）。追跡者の小盾・守護者の大盾は出やすくない。
+#   無頼漢は 3 種が均等。「潜在する力から、○○を見つけやすくなる」はこの武器種を置き換える
+#   （元から出やすい武器種を指定しても効果はない。無頼漢は 3 種から 1 種に絞る効果がある）
+FAVORED_WEAPONS = {
+    '追跡者': ['大剣'], '守護者': ['斧槍'], '鉄の目': ['弓'], 'レディ': ['短剣'], '無頼漢': ['大斧', '大槌', '特大武器'],
+    '復讐者': ['聖印'], '隠者': ['杖'], '執行者': ['刀'], '学者': ['刺剣'], '葬儀屋': ['槌'],
+}
+for ch, ws in FAVORED_WEAPONS.items():
+    if ch not in characters:
+        errors.append(f'出やすい武器種: unknown character {ch}')
+    errors.extend(f'出やすい武器種: unknown weapon type {w} ({ch})' for w in ws if all(x['id'] != w for x in weapons))
+
 # ---------------------------------------------------------------- generic effects for the 火力 ↔ 生存 slider
 
 GENERIC = {
     'offense': keys_of(ns['PHYS'] + ns['UNIV'], '汎用の火力'),
     'survival': keys_of(ns['VIG'] + ns['CUTP'] + ns['CUTA'] + ns['POISE'] + ns['REGAIN'], '汎用の生存'),
+}
+
+# ---------------------------------------------------------------- mode: 封牢バフ vs 侵入バフ
+# 神攻略wiki（用語集「封牢バフ」「侵入バフ」、封牢・災域ページ、遺物効果）:
+#   封牢の囚を倒す度 … 封牢 1 か所ごとに 5%。通常モードで人気。深き夜では封牢のボスが変異体になることがあり、
+#                      大空洞には封牢が無いため採用率が大きく低下
+#   夜の侵入者を倒す度 … 災域の罪人 1 体につき 7%。通常モードでは災域が発生しないことがあり人気が無かったが、
+#                      深き夜では災域が必ず 1 か所以上発生し、変異体も出ないため相対的に価値が上がった
+# 深層の遺物は深き夜でしか使えないので、「通常+深層」を深き夜、「通常のみ」を通常モードとみなす。
+# first はモードで優先する方、second はもう一方（first より 1 段下げる）
+EVERGAOL = 'attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated'
+INVADER = 'attackPowerUpAfterDefeatingANightInvader'
+MODE_PREFERENCE = {
+    'normal': {'label': '通常モード', 'first': keys_of([EVERGAOL], '通常モード'), 'second': keys_of([INVADER], '通常モード')},
+    'combined': {'label': '深き夜', 'first': keys_of([INVADER], '深き夜'), 'second': keys_of([EVERGAOL], '深き夜')},
 }
 
 # ---------------------------------------------------------------- character builds and staples
@@ -211,7 +239,9 @@ data = {
     'types': types,
     'combos': COMBOS,
     'weapons': weapons,
+    'favoredWeapons': FAVORED_WEAPONS,
     'generic': GENERIC,
+    'modePreference': MODE_PREFERENCE,
     'builds': builds,
     'staples': staples,
     'demerits': demerits,

@@ -7,10 +7,16 @@
  *   type tiers   core → preferred, good / opt → nice_to_have, avoid → exclude
  *   known build  must → required (effects that define it), rec → preferred, opt → nice_to_have, avoid → exclude
  *   staples      character-wide staples: rec → preferred, opt → nice_to_have, avoid → exclude
- *   weapons      「○○の攻撃力上昇」 → preferred; 3つ以上装備 / 潜在する力 → nice_to_have.
+ *   weapons      「○○の攻撃力上昇」 → preferred; 3つ以上装備 → nice_to_have.
  *                Weapon-type effects that come with a type or the staples are used only for the
  *                weapon types the player picked (a type lists several weapons; the rest is noise)
+ *   find         「潜在する力から、○○を見つけやすくなる」 replaces the type the character finds more
+ *                often (favoredWeapons): for the first picked type that is not favoured → preferred, other
+ *                picked types → nice_to_have (only one works: the leftmost relic's). For a favoured type it
+ *                does nothing and is not used, except to narrow a character with several favoured types
  *   slider       火力 side: generic offense → preferred; 生存 side: generic survival → preferred
+ *   mode         封牢バフ vs 侵入バフ (modePreference): the one that suits the mode (通常のみ = 通常モード,
+ *                通常+深層 = 深き夜) gets the better of the two levels, the other one a level lower
  *   demerits     deep demerits the wiki says to avoid → exclude (normal + deep mode only)
  * An effect wanted by one choice and avoided by another is kept (wanted wins) and reported as a conflict.
  * Unreleased effects are never used (spoilers); deep-only effects are dropped in normal-only mode;
@@ -23,18 +29,24 @@ const SUGGEST_LEVELS = ['required', 'preferred', 'nice_to_have'];
  * @param {object} data   resources/build_suggest.json
  * @param {object} input  { character, mode: 'combined'|'normal', weapons: [], types: [], focus: -2..2, buildId }
  * @param {object} effectInfo  effect key -> { unreleased, deepOnly, character } (see suggestEffectInfo)
- * @returns {{effects: Array, conflicts: Array, notOnRelics: Array, unknown: Array}}
+ * @returns {{effects: Array, conflicts: Array, notOnRelics: Array, notes: Array, unknown: Array}}
  *   effects: [{ key, priority, exclude, reasons: [label] }] in rank order (most important first)
+ *   notes: [{ kind: 'findFavored' | 'findReplaces' | 'findOnlyOne' | 'mode', ... }] for the screen to explain
  */
 function suggestConditions(data, input, effectInfo) {
   const wanted = new Map();    // key -> { level (index in SUGGEST_LEVELS), order, reasons }
   const avoided = new Map();   // key -> { order, reasons }
   const unknown = [];
   let order = 0;
+  const favored = new Set(((data.favoredWeapons || {})[input.character]) || []);
+  const findOf = new Map();   // 「見つけやすくなる」 key -> weapon type
+  for (const w of data.weapons || []) for (const k of w.find) findOf.set(k, w.id);
   const usable = (key) => {
     const info = effectInfo[key];
     if (!info || info.unreleased) return false;
     if (info.character && info.character !== input.character) return false;
+    // a favoured type is found more often already; the effect only helps to narrow several down to one
+    if (findOf.has(key) && favored.has(findOf.get(key)) && favored.size < 2) return false;
     return !(input.mode === 'normal' && info.deepOnly);
   };
   const want = (keys, level, reason) => {
@@ -77,6 +89,8 @@ function suggestConditions(data, input, effectInfo) {
   const staples = (data.staples || {})[input.character];
   const focus = Math.max(-2, Math.min(2, Number(input.focus) || 0));
   const generic = data.generic || {};
+  const others = weapons.filter((w) => !favored.has(w.id));   // picked types the character does not find often
+  const notes = [];
 
   // Add in importance order so that the rank inside each priority follows it
   if (build) want(build.must, 'required', build.name);
@@ -84,11 +98,12 @@ function suggestConditions(data, input, effectInfo) {
   if (staples) want(onlyPickedWeapons(staples.rec), 'preferred', `${input.character}の定番`);
   for (const t of types) want(onlyPickedWeapons(t.core), 'preferred', t.id);
   for (const w of weapons) want(w.attack, 'preferred', w.id);
+  if (others.length) want(others[0].find, 'preferred', `${others[0].id}を出やすく`);
   if (focus < 0) want(generic.offense, 'preferred', '火力重視');
   if (focus > 0) want(generic.survival, 'preferred', '生存重視');
   if (build) want(build.opt, 'nice_to_have', build.name);
   for (const t of types) want(onlyPickedWeapons(t.good), 'nice_to_have', t.id);
-  for (const w of weapons) want([...w.three, ...w.find], 'nice_to_have', w.id);
+  for (const w of weapons) want(w === others[0] ? w.three : [...w.three, ...w.find], 'nice_to_have', w.id);
   if (staples) want(onlyPickedWeapons(staples.opt), 'nice_to_have', `${input.character}の定番`);
   for (const t of types) want(onlyPickedWeapons(t.opt), 'nice_to_have', t.id);
   if (focus === 0) {
@@ -96,6 +111,40 @@ function suggestConditions(data, input, effectInfo) {
     want(generic.survival, 'nice_to_have', '生存');
   } else if (Math.abs(focus) === 1) {
     want(focus < 0 ? generic.survival : generic.offense, 'nice_to_have', focus < 0 ? '生存' : '火力');
+  }
+
+  // Only one 「見つけやすくなる」 works: keep one above nice_to_have (the first one in rank order)
+  const finds = [...wanted].filter(([k, w]) => findOf.has(k) && w.level === 1).sort((x, y) => x[1].order - y[1].order);
+  for (const [, w] of finds.slice(1)) w.level = 2;
+  const favoredPicked = weapons.filter((w) => favored.has(w.id)).map((w) => w.id);
+  if (favoredPicked.length && favored.size < 2) notes.push({ kind: 'findFavored', weapons: favoredPicked });
+  if (others.length && favoredPicked.length && others[0].find.some((k) => wanted.has(k))) {
+    notes.push({ kind: 'findReplaces', weapon: others[0].id, favored: [...favored] });
+  }
+  if (others.length > 1) notes.push({ kind: 'findOnlyOne', first: others[0].id, rest: others.slice(1).map((w) => w.id) });
+
+  // 封牢バフ vs 侵入バフ by mode: the one that suits the mode goes first, the other one a level lower
+  const pref = (data.modePreference || {})[input.mode === 'normal' ? 'normal' : 'combined'];
+  if (pref) {
+    const first = pref.first.filter(usable);
+    const second = pref.second.filter(usable);
+    const touched = [...first, ...second].filter((k) => wanted.has(k));
+    if (first.length && touched.length) {
+      const top = Math.max(1, Math.min(...touched.map((k) => wanted.get(k).level)));   // never makes one required
+      const ord = Math.min(...touched.map((k) => wanted.get(k).order));
+      want(first, SUGGEST_LEVELS[top], `${pref.label}で優先`);
+      for (const k of first) {
+        const w = wanted.get(k);
+        if (w.level === top) w.order = ord - 0.5;
+      }
+      for (const k of second) {
+        const w = wanted.get(k);
+        if (!w || w.level === 0) continue;
+        w.level = Math.min(2, Math.max(w.level, top + 1));
+        w.reasons.push(`${pref.label}では控えめ`);
+      }
+      notes.push({ kind: 'mode', mode: pref.label, first, second });
+    }
   }
 
   if (build) avoid(build.avoid, build.name);
@@ -124,7 +173,7 @@ function suggestConditions(data, input, effectInfo) {
       if (!notOnRelics.some((n) => n.name === name)) notOnRelics.push({ name, type: t.id });
     }
   }
-  return { effects, conflicts, notOnRelics, unknown };
+  return { effects, conflicts, notOnRelics, notes, unknown };
 }
 
 /**
