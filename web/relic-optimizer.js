@@ -15,6 +15,26 @@ const PRIORITY_WEIGHTS = {
 
 const CONCENTRATION_BONUS = 5;
 
+// Effects that only work from the leftmost relic of a vessel when several of the same group are set
+// (effects_data.json "leftmost"; normal slots 1-3 come before deep slots 4-6). Groups as bits.
+const LEFTMOST_BITS = { find: 1, skill: 2, spell: 4, imbue: 8 };
+// 復讐者 cannot change the skill of the fist and the incantation of the seal at the same time (wiki)
+const LEFTMOST_SHARED = { '復讐者': { spell: 'skill' } };
+
+// Permutations of 0..n-1 in lexicographic order (same order as Python's itertools.permutations)
+const _permCache = {};
+function permutationsOf(n) {
+  if (_permCache[n]) return _permCache[n];
+  const out = [];
+  const rec = (prefix, rest) => {
+    if (!rest.length) { out.push(prefix); return; }
+    for (let i = 0; i < rest.length; i++) rec([...prefix, rest[i]], rest.slice(0, i).concat(rest.slice(i + 1)));
+  };
+  rec([], [...Array(n).keys()]);
+  _permCache[n] = out;
+  return out;
+}
+
 // === Character Name Mapping ===
 const CHARACTER_NAMES = {
   '追跡者': 'Wylder',
@@ -128,13 +148,23 @@ function loadStackingData(effectsData) {
   return keyStackable;
 }
 
+// effects_data.json "leftmost" (effects that only work from the leftmost relic): key -> group
+function loadLeftmostData(effectsData) {
+  const groups = {};
+  for (const entry of Object.values(effectsData.effects || {})) {
+    if (entry.leftmost && !(entry.key in groups)) groups[entry.key] = entry.leftmost;
+  }
+  return groups;
+}
+
 // === RelicOptimizer ===
 class RelicOptimizer {
-  constructor(relics, effectSpecs, vesselsData, stackingData) {
+  constructor(relics, effectSpecs, vesselsData, stackingData, leftmostData) {
     this.allRelics = relics;
     this.effectSpecs = effectSpecs;
     this.vesselsData = vesselsData;
     this.stackingData = stackingData || {};
+    this.leftmostData = leftmostData || {};
 
     // Caches
     this._effectKeysCache = {};
@@ -279,6 +309,224 @@ class RelicOptimizer {
     // Compact relic map: rid -> specIndices (populated by _compactRelic)
     this._compactMap = {};
     this._siBuf = new Array(8);   // reusable list of relics' desired-effect indices (concentration)
+
+    // Leftmost-only groups (set per character in _setLeftmostCharacter)
+    this._leftmostCharacter = null;
+    this._keyBit = null;
+    this._specBit = new Int32Array(nSpec);
+    this._relicGroupsCache = {};
+    this._curSlots = [];
+  }
+
+  // === Effects that only work from the leftmost relic ===
+
+  _setLeftmostCharacter(character) {
+    const charJa = character ? resolveCharacterNameJa(character) : null;
+    if (this._keyBit && charJa === this._leftmostCharacter) return;
+    this._leftmostCharacter = charJa;
+    const shared = LEFTMOST_SHARED[charJa] || {};
+    this._keyBit = {};
+    for (const [k, g] of Object.entries(this.leftmostData)) {
+      const bit = LEFTMOST_BITS[shared[g] || g];
+      if (bit) this._keyBit[k] = bit;
+    }
+    for (let i = 0; i < this._nSpec; i++) this._specBit[i] = this._keyBit[this._specKeyList[i]] || 0;
+    this._relicGroupsCache = {};
+  }
+
+  // [[bit, key], ...]: the relic's leftmost-only effects, the first one of each group
+  _relicGroups(rid) {
+    let groups = this._relicGroupsCache[rid];
+    if (!groups) {
+      let seen = 0;
+      groups = [];
+      for (const group of this._relicById[rid].effects) {
+        for (const e of group) {
+          const b = this._keyBit[e.key] || 0;
+          if (b && !(seen & b)) { seen |= b; groups.push([b, e.key]); }
+        }
+      }
+      this._relicGroupsCache[rid] = groups;
+    }
+    return groups;
+  }
+
+  // Orders of the relics that fit the slot colors (left to right), in permutation order of rids
+  _arrangements(rids, slotColors) {
+    const out = [];
+    const n = rids.length;
+    const colors = rids.map(r => this._relicById[r].itemColor || '');
+    for (const perm of permutationsOf(n)) {
+      let ok = true;
+      for (let p = 0; p < n; p++) {
+        if (slotColors[p] !== 'Any' && colors[perm[p]] !== slotColors[p]) { ok = false; break; }
+      }
+      if (ok) out.push(perm.map(i => rids[i]));
+    }
+    return out;
+  }
+
+  // The orders worth trying: one per way the side's own groups can turn out. A group matters only when
+  // two relics of the side have different effects of it and no relic on the left has one
+  _ordersByEffect(rids, slotColors, priorBits) {
+    const orders = this._arrangements([...rids].sort((a, b) => a - b), slotColors);
+    const keys = new Map();
+    for (const rid of rids) {
+      for (const [b, k] of this._relicGroups(rid)) {
+        if (!keys.has(b)) keys.set(b, new Set());
+        keys.get(b).add(k);
+      }
+    }
+    const ambiguous = [...keys].filter(([b, ks]) => ks.size > 1 && !(b & priorBits)).map(([b]) => b).sort((a, b) => a - b);
+    if (!ambiguous.length) return orders.slice(0, 1);
+    const out = [];
+    const seen = new Set();
+    for (const order of orders) {
+      const first = new Map();
+      for (const rid of order) {
+        for (const [b, k] of this._relicGroups(rid)) if (!first.has(b)) first.set(b, k);
+      }
+      const sig = ambiguous.map(b => first.get(b)).join('\u0000');
+      if (!seen.has(sig)) {
+        seen.add(sig);
+        out.push(order);
+      }
+    }
+    return out;
+  }
+
+  // Deep relics' desired effects that work in no placement: a normal relic (on the left) has an effect
+  // of the same group and none has this one. Returns [their indices, the deep relics' concentration bonus
+  // without them]
+  _overridden(nKeys, dWanted) {
+    const removed = new Set();
+    let conc = 0;
+    for (const [nSi, occ] of dWanted) {
+      let k = nSi;
+      for (const [i, b, key] of occ) {
+        if (nKeys.has(b) && !nKeys.get(b).has(key)) {
+          removed.add(i);
+          k--;
+        }
+      }
+      conc += Math.trunc(CONCENTRATION_BONUS * k * (k - 1) / 2);
+    }
+    return [removed, conc];
+  }
+
+  // group bit -> keys of the side's leftmost-only effects
+  _sideKeys(rids) {
+    const keys = new Map();
+    for (const rid of rids) {
+      for (const [b, k] of this._relicGroups(rid)) {
+        if (!keys.has(b)) keys.set(b, new Set());
+        keys.get(b).add(k);
+      }
+    }
+    return keys;
+  }
+
+  // Per relic: [number of desired effects, [[idx, bit, key] of its desired leftmost-only effects]]
+  _sideWantedGroups(rids) {
+    const specBit = this._specBit;
+    const keys = this._specKeyList;
+    return rids.map(rid => {
+      const si = this._compactMap[rid];
+      return [si.length, si.filter(i => specBit[i]).map(i => [i, specBit[i], keys[i]])];
+    });
+  }
+
+  // Score of desired effect i present c times (same rule as _fastStackingScore)
+  _contribution(i, c) {
+    if (c === 0) return 0;
+    const si = this._specStackingInt[i];
+    const w = this._specWeights[i];
+    if (si === 1) return w * c;
+    if (si === 2) return w - this._specPenalty30[i] * (c - 1);
+    return w - this._specPenalty50[i] * (c - 1);
+  }
+
+  // Desired-effect indices per relic, without those another group effect on the left overrides.
+  // active: group bit -> key of the relics on the left (updated). inactive: collects "rid key"
+  _effective(order, active, inactive) {
+    const specBit = this._specBit;
+    const keys = this._specKeyList;
+    const lists = [];
+    for (const rid of order) {
+      const si = this._compactMap[rid];
+      lists.push(si.filter(i => !(specBit[i] && active.has(specBit[i]) && active.get(specBit[i]) !== keys[i])));
+      for (const [b, k] of this._relicGroups(rid)) {
+        if (active.has(b)) {
+          if (inactive && active.get(b) !== k) inactive.add(rid + ' ' + k);
+        } else {
+          active.set(b, k);
+        }
+      }
+    }
+    return lists;
+  }
+
+  // Best placement of the relics (normal left to right, then deep) for the leftmost-only effects.
+  // Returns [score without exclusions, sub-score without exclusions, counts, concentration,
+  // required mask, normal order, deep order]; ties keep the first order (relic ids ascending first)
+  _arrangeBest(nRids, nSlots, dRids, dSlots) {
+    const nOrders = this._ordersByEffect(nRids, nSlots, 0);
+    const dOrdersByPrior = new Map();
+    const nSpec = this._nSpec;
+    const w = this._specWeights, st = this._specStackingInt;
+    const p30 = this._specPenalty30, p50 = this._specPenalty50;
+    let best = null;
+    for (const nOrder of nOrders) {
+      const nActive = new Map();
+      const nLists = this._effective(nOrder, nActive);
+      let prior = 0;
+      for (const b of nActive.keys()) prior |= b;
+      let dOrders = dOrdersByPrior.get(prior);
+      if (!dOrders) {
+        dOrders = this._ordersByEffect(dRids, dSlots, prior);
+        dOrdersByPrior.set(prior, dOrders);
+      }
+      for (const dOrder of dOrders) {
+        const lists = nLists.concat(this._effective(dOrder, new Map(nActive)));
+        const counts = new Int32Array(nSpec);
+        for (const si of lists) for (const idx of si) counts[idx]++;
+        let score = 0, dup = false, sub = 0, rm = 0;
+        for (let i = 0; i < nSpec; i++) {
+          const c = counts[i];
+          if (c === 0) continue;
+          if (st[i] === 1) score += w[i] * c;
+          else if (st[i] === 2) { score += w[i]; if (c > 1) score -= p30[i] * (c - 1); }
+          else { score += w[i]; if (c > 1) { score -= p50[i] * (c - 1); dup = true; } }
+          sub += this._specSubRankValues[i];
+          if (this._isRequired[i]) rm |= (1 << i);   // used only while nSpec < 32 (fullReqMask)
+        }
+        let cb = 0;
+        if (dup) cb = this._concentration(lists, lists.length);
+        else for (const si of lists) cb += Math.trunc(CONCENTRATION_BONUS * si.length * (si.length - 1) / 2);
+        score += cb;
+        if (!best || score > best[0] || (score === best[0] && sub > best[1])) {
+          best = [score, sub, counts, cb, rm, nOrder, dOrder];
+        }
+      }
+    }
+    return best;
+  }
+
+  // "rid key" of the leftmost-only effects that do not work in this placement
+  _inactiveEffects(nOrder, dOrder) {
+    const inactive = new Set();
+    const active = new Map();
+    this._effective(nOrder, active, inactive);
+    this._effective(dOrder, active, inactive);
+    return inactive;
+  }
+
+  // A phase combo; when a desired leftmost-only effect may be overridden by another relic's effect of
+  // the same group, score its best placement instead (lm = true, with its counts)
+  _phaseEntry(score, rids, cb, ep, her, sub, esr, rm, gm, wm, multi) {
+    if (!(multi & wm)) return [score, rids, cb, ep, her, sub, esr, rm, gm, wm, false, null];
+    const [sc, sb, cts, cb2, rm2] = this._arrangeBest(rids, this._curSlots, [], []);
+    return [sc - ep, rids, cb2, ep, her, sb, esr, this._nSpec < 32 ? rm2 : rm, gm, wm, true, cts];
   }
 
   _resolveNameMatches(nameJa, nameEn, spec, weight, targetLookup) {
@@ -447,11 +695,18 @@ class RelicOptimizer {
       }
     }
 
-    return [rid, specIndices, exclPenalty, hasExclReq, concBonus, exclSubRank, reqMask];
+    // Leftmost-only groups on the relic (any effect) and those of its desired effects
+    let groupMask = 0;
+    for (const [b] of this._relicGroups(rid)) groupMask |= b;
+    let wantMask = 0;
+    for (const idx of specIndices) wantMask |= this._specBit[idx];
+
+    return [rid, specIndices, exclPenalty, hasExclReq, concBonus, exclSubRank, reqMask, groupMask, wantMask];
   }
 
   _enumerateCombos(compactCands, slotColors) {
     const nSpec = this._nSpec;
+    this._curSlots = slotColors;
     const nSlots = slotColors.length;
     const hasAny = slotColors.includes('Any');
     const colorsNoAny = slotColors.filter(c => c !== 'Any');
@@ -530,7 +785,8 @@ class RelicOptimizer {
         for (let k = j + 1; k < n; k++) {
           const rk = cands[k];
           const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm]);
+          results.push(this._phaseEntry(sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm,
+            ri[7] | rj[7] | rk[7], ri[8] | rj[8] | rk[8], (ri[7] & rj[7]) | (ri[7] & rk[7]) | (rj[7] & rk[7])));
         }
       }
     }
@@ -547,8 +803,10 @@ class RelicOptimizer {
       for (let b = 0; b < c1.length; b++) {
         const rj = c1[b];
         for (let g = 0; g < c2.length; g++) {
-          const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, c2[g]);
-          results.push([sc, [ri[0], rj[0], c2[g][0]], cb, ep, her, sub, esr, rm]);
+          const rk = c2[g];
+          const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
+          results.push(this._phaseEntry(sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm,
+            ri[7] | rj[7] | rk[7], ri[8] | rj[8] | rk[8], (ri[7] & rj[7]) | (ri[7] & rk[7]) | (rj[7] & rk[7])));
         }
       }
     }
@@ -585,7 +843,8 @@ class RelicOptimizer {
           const rk = diffCands[g];
           if (rk[0] === ri[0] || rk[0] === rj[0]) continue;
           const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
-          results.push([sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm]);
+          results.push(this._phaseEntry(sc, [ri[0], rj[0], rk[0]], cb, ep, her, sub, esr, rm,
+            ri[7] | rj[7] | rk[7], ri[8] | rj[8] | rk[8], (ri[7] & rj[7]) | (ri[7] & rk[7]) | (rj[7] & rk[7])));
         }
       }
     }
@@ -629,7 +888,8 @@ class RelicOptimizer {
 
           const [sc, sub, cb, ep, her, esr, rm] = this._inlineScoreAndReset(counts, ri, rj, rk);
           // Keep slot order (same as Python); the sorted triple is only the dedup key
-          results.push([sc, [riId, rjId, rkId], cb, ep, her, sub, esr, rm]);
+          results.push(this._phaseEntry(sc, [riId, rjId, rkId], cb, ep, her, sub, esr, rm,
+            ri[7] | rj[7] | rk[7], ri[8] | rj[8] | rk[8], (ri[7] & rj[7]) | (ri[7] & rk[7]) | (rj[7] & rk[7])));
         }
       }
     }
@@ -644,6 +904,7 @@ class RelicOptimizer {
     const chosenIds = new Array(nSlots);
     const chosenSi = new Array(nSlots);
     let partialEp = 0, partialHer = false, partialCb = 0, partialEsr = 0, partialReqMask = 0;
+    let partialGm = 0, partialWm = 0, partialMulti = 0;
 
     const self = this;
     const recurse = (slotIdx) => {
@@ -673,7 +934,8 @@ class RelicOptimizer {
         const cb = dup ? self._concentration(chosenSi, nSlots) : partialCb;
         score += cb - partialEp;
         // Keep slot order (same as Python); the sorted IDs are only the dedup key
-        results.push([score, chosenIds.slice(0, nSlots), cb, partialEp, partialHer, sub, partialEsr, partialReqMask]);
+        results.push(self._phaseEntry(score, chosenIds.slice(0, nSlots), cb, partialEp, partialHer, sub, partialEsr,
+          partialReqMask, partialGm, partialWm, partialMulti));
         return;
       }
 
@@ -690,11 +952,15 @@ class RelicOptimizer {
         chosenIds[slotIdx] = rid;
         chosenSi[slotIdx] = cand[1];
         const savedEp = partialEp, savedHer = partialHer, savedCb = partialCb, savedEsr = partialEsr, savedReqMask = partialReqMask;
+        const savedGm = partialGm, savedWm = partialWm, savedMulti = partialMulti;
         partialEp += cand[2];
         partialHer = partialHer || cand[3];
         partialCb += cand[4];
         partialEsr += cand[5];
         partialReqMask |= cand[6];
+        partialMulti |= partialGm & cand[7];
+        partialGm |= cand[7];
+        partialWm |= cand[8];
 
         recurse(slotIdx + 1);
 
@@ -704,6 +970,9 @@ class RelicOptimizer {
         partialCb = savedCb;
         partialEsr = savedEsr;
         partialReqMask = savedReqMask;
+        partialGm = savedGm;
+        partialWm = savedWm;
+        partialMulti = savedMulti;
       }
     };
 
@@ -808,12 +1077,14 @@ class RelicOptimizer {
 
     const normalFiltered = this.filterRelics(normalTypes, character);
     const deepFiltered = this.filterRelics(deepTypes, character);
+    this._setLeftmostCharacter(character);
 
     const normalCands = this._buildSlotCandidates(normalSlotColors, normalFiltered, candidatesPerSlot);
     const deepCands = this._buildSlotCandidates(deepSlotColors, deepFiltered, candidatesPerSlot);
 
     // Phase 1: Enumerate normal combos
-    const nCacheKey = [...normalSlotColors].sort().join(',');
+    // (slot order matters: it decides which relic is on the left)
+    const nCacheKey = normalSlotColors.join(',');
     let normalCombos;
     if (this._phaseCache[nCacheKey]) {
       normalCombos = this._phaseCache[nCacheKey];
@@ -826,7 +1097,7 @@ class RelicOptimizer {
     }
 
     // Phase 2: Enumerate deep combos
-    const dCacheKey = 'deep,' + [...deepSlotColors].sort().join(',');
+    const dCacheKey = 'deep,' + deepSlotColors.join(',');
     let deepCombos;
     if (this._phaseCache[dCacheKey]) {
       deepCombos = this._phaseCache[dCacheKey];
@@ -856,7 +1127,7 @@ class RelicOptimizer {
     // Single-side (normal-only / deep-only, or one side without candidates):
     // pair with one empty combo so both modes share the Phase 3 ranking
     // (required-met first, sub-score tiebreak, deterministic order)
-    const EMPTY_COMBO = [0, [], 0, 0, false, 0, 0, 0];
+    const EMPTY_COMBO = [0, [], 0, 0, false, 0, 0, 0, 0, 0, false, null];
     const singleSide = !normalCombos.length || !deepCombos.length;
     if (!normalCombos.length) normalCombos = [EMPTY_COMBO];
     if (!deepCombos.length) deepCombos = [EMPTY_COMBO];
@@ -890,9 +1161,10 @@ class RelicOptimizer {
 
     // Pre-build counts for top combos
     const nCountsArr = new Array(nTop);
-    for (let i = 0; i < nTop; i++) nCountsArr[i] = rebuildCounts(normalTop[i][1]);
+    // (a combo placed for the leftmost-only effects carries its own counts)
+    for (let i = 0; i < nTop; i++) nCountsArr[i] = normalTop[i][11] || rebuildCounts(normalTop[i][1]);
     const dCountsArr = new Array(dTop);
-    for (let i = 0; i < dTop; i++) dCountsArr[i] = rebuildCounts(deepTop[i][1]);
+    for (let i = 0; i < dTop; i++) dCountsArr[i] = deepTop[i][11] || rebuildCounts(deepTop[i][1]);
 
     // Bitmask pre-filter setup
     const fullReqMask = this._fullReqMask;
@@ -907,10 +1179,13 @@ class RelicOptimizer {
     let trueFull = false; // once heapTrue.size >= topN, stop accepting false entries
     const subRankValues = this._specSubRankValues;
 
+    const dWanted = new Array(dTop).fill(null);   // per deep combo, built when first needed
     for (let ni = 0; ni < nTop; ni++) {
       const nCombo = normalTop[ni];
+      let nKeys = null;
       const ns = nCombo[0], nRids = nCombo[1], nConc = nCombo[2], nEp = nCombo[3], nHer = nCombo[4], nExclSub = nCombo[6] || 0;
       const nReqMask = nCombo[7] || 0;
+      const nGm = nCombo[8], nLm = nCombo[10];
       const nCts = nCountsArr[ni];
 
       // Outer pruning: if trueFull, use heapTrue threshold for score-only pruning
@@ -923,6 +1198,7 @@ class RelicOptimizer {
         const dCombo = deepTop[di];
         const ds = dCombo[0], dRids = dCombo[1], dConc = dCombo[2], dEp = dCombo[3], dHer = dCombo[4], dExclSub = dCombo[6] || 0;
         const dReqMask = dCombo[7] || 0;
+        const dWm = dCombo[9], dLm = dCombo[10];
         const dCts = dCountsArr[di];
 
         // Inner pruning (score-only, against heapTrue only)
@@ -967,12 +1243,57 @@ class RelicOptimizer {
 
         score += nConc + dConc - nEp - dEp;
         const hasExclReq = nHer || dHer;
-        const reqMet = hasAllRequired && !hasExclReq;
+        let reqMet = hasAllRequired && !hasExclReq;
 
+        // Leftmost-only effects: a deep relic's desired effect is overridden by a normal relic's effect
+        // of the same group (normal slots are on the left), or a side was already placed for them (lm):
+        // score the best placement of all six relics
+        const lmPair = nLm || dLm || (nGm & dWm);
+        let resN = nCts, resD = dCts;
+        if (lmPair) {
+          // Deep effects a normal relic's effect of the same group always overrides: take them away
+          // now. The placement only takes effects away, so this is an upper bound
+          if (nGm & dWm) {
+            if (!nKeys) nKeys = this._sideKeys(nRids);
+            if (!dWanted[di]) dWanted[di] = this._sideWantedGroups(dRids);
+            const [removed, dConcLeft] = this._overridden(nKeys, dWanted[di]);
+            score -= dConc - Math.min(dConc, dConcLeft);
+            for (const i of removed) {
+              // no normal relic has it, so none is left (dCts may already miss some)
+              const c = nCts[i] + dCts[i];
+              if (c) {
+                score -= this._contribution(i, c) - this._contribution(i, nCts[i]);
+                if (!nCts[i]) {
+                  subScore -= subRankValues[i];
+                  if (isRequired[i]) reqMet = false;
+                }
+              }
+            }
+          }
+          const bound = [-score, -subScore, counter];
+          const canTrue = reqMet && (heapTrue.size < topN || this._heapCompare3(bound, heapTrue.peek()) < 0);
+          const canFalse = !trueFull && (heapFalse.size < topN || this._heapCompare3(bound, heapFalse.peek()) < 0);
+          if (!(canTrue || canFalse)) {
+            counter++;
+            continue;
+          }
+          const [sc, sb, cts] = this._arrangeBest(nRids, normalSlotColors, dRids, deepSlotColors);
+          score = sc - nEp - dEp;
+          subScore = sb - (nExclSub + dExclSub);
+          let allReq = true;
+          for (const i of requiredIdxSet) if (cts[i] === 0) { allReq = false; break; }
+          reqMet = allReq && !hasExclReq;
+          resN = cts;
+          resD = new Int32Array(nSpec);
+          if (!reqMet && trueFull) {
+            counter++;
+            continue;
+          }
+        }
         // Concentration: duplicates across the normal and deep sides earn no bonus either. The bonus
         // only goes down, so the score above is an upper bound: work out the exact one only when that
         // bound could still enter its heap (the result is the same, without the cost for every pair)
-        if (dup) {
+        else if (dup) {
           const heap = reqMet ? heapTrue : (trueFull ? null : heapFalse);
           if (!heap || (heap.size >= topN && this._heapCompare3([-score, -subScore, counter], heap.peek()) >= 0)) {
             counter++;
@@ -992,22 +1313,22 @@ class RelicOptimizer {
           // Insert into heapTrue
           if (heapTrue.size < topN) {
             heapTrue.push(heapKey);
-            resultMap.set(counter, [true, score, subScore, nCts, dCts, nRids, dRids]);
+            resultMap.set(counter, [true, score, subScore, resN, resD, nRids, dRids]);
             if (heapTrue.size >= topN) trueFull = true;
           } else if (this._heapCompare3(heapKey, heapTrue.peek()) < 0) {
             const evicted = heapTrue.replace(heapKey);
             resultMap.delete(evicted[2]);
-            resultMap.set(counter, [true, score, subScore, nCts, dCts, nRids, dRids]);
+            resultMap.set(counter, [true, score, subScore, resN, resD, nRids, dRids]);
           }
         } else if (!trueFull) {
           // Insert into heapFalse only if heapTrue not yet full
           if (heapFalse.size < topN) {
             heapFalse.push(heapKey);
-            resultMap.set(counter, [false, score, subScore, nCts, dCts, nRids, dRids]);
+            resultMap.set(counter, [false, score, subScore, resN, resD, nRids, dRids]);
           } else if (this._heapCompare3(heapKey, heapFalse.peek()) < 0) {
             const evicted = heapFalse.replace(heapKey);
             resultMap.delete(evicted[2]);
-            resultMap.set(counter, [false, score, subScore, nCts, dCts, nRids, dRids]);
+            resultMap.set(counter, [false, score, subScore, resN, resD, nRids, dRids]);
           }
         }
 
@@ -1018,7 +1339,11 @@ class RelicOptimizer {
     // Build full results from both heaps
     const buildResult = (hk) => {
       const data = resultMap.get(hk[2]);
-      const [reqMet, score, subScore, nCts, dCts, nRids, dRids] = data;
+      const [reqMet, score, subScore, nCts, dCts] = data;
+      // relics in slot order (left to right), placed for the leftmost-only effects
+      const placed = this._arrangeBest(data[5], normalSlotColors, data[6], deepSlotColors);
+      const nRids = placed[5], dRids = placed[6];
+      const inactive = this._inactiveEffects(nRids, dRids);
 
       const matchedKeys = new Set();
       for (let i = 0; i < nSpec; i++) {
@@ -1051,6 +1376,7 @@ class RelicOptimizer {
         relics: [...nRelics, ...dRelics],
         normal_relics: nRelics,
         deep_relics: dRelics,
+        inactive,
       };
     };
 
@@ -1096,7 +1422,8 @@ class RelicOptimizer {
     return a[2] - b[2];
   }
 
-  _formatRelic(relic, matchedKeys, excludedKeys) {
+  // inactive: "rid key" of effects that do not work because a relic on the left has one of the same group
+  _formatRelic(relic, matchedKeys, excludedKeys, inactive) {
     const effectsOut = [];
     const exclSet = excludedKeys || new Set();
     for (const group of relic.effects) {
@@ -1116,6 +1443,7 @@ class RelicOptimizer {
         effEntry.excluded = true;
         effEntry.excludePriority = this.excludeLookup[mainEff.key].priority;
       }
+      if (inactive && inactive.has(relic.id + ' ' + mainEff.key)) effEntry.inactive = true;
       effectsOut.push(effEntry);
       for (let si = 1; si < group.length; si++) {
         const subMatched = matchedKeys.has(group[si].key);
@@ -1159,8 +1487,8 @@ class RelicOptimizer {
 
       let entry;
       if (isCombined && res.normal_relics) {
-        const normalOut = res.normal_relics.map(r => this._formatRelic(r, matchedKeys, excludedKeys));
-        const deepOut = res.deep_relics.map(r => this._formatRelic(r, matchedKeys, excludedKeys));
+        const normalOut = res.normal_relics.map(r => this._formatRelic(r, matchedKeys, excludedKeys, res.inactive));
+        const deepOut = res.deep_relics.map(r => this._formatRelic(r, matchedKeys, excludedKeys, res.inactive));
         entry = {
           rank: rank + 1,
           score: res.score,
@@ -1173,7 +1501,7 @@ class RelicOptimizer {
           excludedPresent: [...excludedKeys].sort(),
         };
       } else {
-        const relicsOut = res.relics.map(r => this._formatRelic(r, matchedKeys, excludedKeys));
+        const relicsOut = res.relics.map(r => this._formatRelic(r, matchedKeys, excludedKeys, res.inactive));
         entry = {
           rank: rank + 1,
           score: res.score,
@@ -1282,10 +1610,10 @@ function buildOutput(allOutput, topN = 50) {
 // === Web Worker Message Handler ===
 if (typeof self !== 'undefined' && typeof self.postMessage === 'function' && typeof window === 'undefined') {
   self.onmessage = function(e) {
-    const { relics, effectSpecs, vesselsData, stackingData, params } = e.data;
+    const { relics, effectSpecs, vesselsData, stackingData, leftmostData, params } = e.data;
 
     try {
-      const optimizer = new RelicOptimizer(relics, effectSpecs, vesselsData, stackingData);
+      const optimizer = new RelicOptimizer(relics, effectSpecs, vesselsData, stackingData, leftmostData);
 
       if (params.character && vesselsData) {
         const vesselTypes = params.vessel ? params.vessel.split(',') : null;

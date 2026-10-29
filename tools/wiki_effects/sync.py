@@ -14,6 +14,7 @@ import collections
 import glob
 import json
 import os
+import re
 import sys
 
 TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -45,6 +46,14 @@ def effects_in_saves(save_paths, effects):
             for group in relic['effects']:
                 seen.update(group)
     return seen
+
+
+def leftmost_group(name_ja):
+    """rules.LEFTMOST_GROUPS: the group of an effect that only works from the leftmost relic, or None"""
+    for rx, group in rules.LEFTMOST_GROUPS:
+        if re.match(rx, name_ja or ''):
+            return group
+    return None
 
 
 def main():
@@ -135,6 +144,13 @@ def main():
                     entry['unreleased'] = True
                 else:
                     entry.pop('unreleased', None)
+                updated = True
+            group = leftmost_group(entry.get('name_ja'))
+            if group != entry.get('leftmost'):
+                if group:
+                    entry['leftmost'] = group
+                else:
+                    entry.pop('leftmost', None)
                 updated = True
             changed += updated
         with open(EFFECTS_PATH, 'w', encoding='utf-8', newline='\n') as f:

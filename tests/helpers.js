@@ -63,12 +63,14 @@ function runOptimizer(appDir, relics, scenario) {
   const ctx = runScripts({ self, console }, appDir, ['relic-optimizer.js']);
   ctx.__effectsData = loadResource('effects_data.json');
   const stackingData = vm.runInContext('loadStackingData(__effectsData)', ctx);
+  const leftmostData = vm.runInContext('loadLeftmostData(__effectsData)', ctx);
   self.onmessage({
     data: {
       relics,
       effectSpecs: scenario.effects,
       vesselsData: loadResource('vessels_data.json'),
       stackingData,
+      leftmostData,
       params: scenario.params,
     },
   });

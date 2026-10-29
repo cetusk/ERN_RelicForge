@@ -67,6 +67,13 @@ python tools/wiki_effects/sync.py --offline --apply
 - セーブを1つも渡さないと出現を判定できないため、公開状況は変更しない（警告を出す）
 - `python tests/check_real_saves.py` は、未公開の印が付いた効果がセーブに出てきたら NG にする
 
+## 最も左の遺物のものだけ発動する効果
+
+- 「潜在する力から、○○を見つけやすくなる」「出撃時の武器の戦技／魔術／祈祷を…にする」「出撃時の武器に…を付加」に、
+  まとまり（`"leftmost": "find" | "skill" | "spell" | "imbue"`）を付ける。同じまとまりの効果を複数付けると、献器の最も左の
+  遺物のものしか発動しない（遺物効果ページ「出撃時の武器」と「潜在する力から、○○を見つけやすくなる」の備考）。ビルド探索が使う
+- 名前のパターンは `rules.py` の `LEFTMOST_GROUPS`。`--apply` で付け直す
+
 ## 照合できない効果が出たとき
 
 実行時に `WARNING: ... effects seen in saves have no wiki row` が出た場合は、

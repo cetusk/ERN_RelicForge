@@ -14,6 +14,7 @@
   relic_pool.json          オプティマイザテスト用の遺物プール (パーサー出力形式)
   relic_pool_stack_tie.json  同点で必須充足/未充足が混在するケース用の小さな遺物プール
   relic_pool_nonstack_dup.json  重ね掛け不可の効果が重複するケース用の小さな遺物プール
+  relic_pool_leftmost.json  最も左の遺物の効果だけが発動するケース（戦技の変更）用の小さな遺物プール
   optimizer_scenarios.json オプティマイザのテストシナリオ
   optimizer_expected.json  各シナリオの期待される結果
 
@@ -414,6 +415,53 @@ def generate_nonstack_dup_pool(items_all, effects_all):
     return pool, scenario
 
 
+def generate_leftmost_pool(items_all, effects_all):
+    """Pool where a skill change (戦技) only works from the leftmost relic.
+
+    A = [K1, P] (Red), B = [K2, X] (Red), D = [Y] (Red), C = [K2, V] (Blue), E = [W] (Blue);
+    K1 required, P/X/V preferred, Y/W nice to have; K1 and K2 change the skill (only the leftmost works).
+    Wylder's Urn (Red, Red, Blue): A goes left of B, so K1 works: A+B+C = 135.
+    Wylder's Sealed Urn (Blue, Red, Red): a blue relic is leftmost, so C's K2 overrides K1 and A+B+C misses
+    K1; E+A+B (126) meets it. Without the rule, A+B+C (135) was the best for both.
+    """
+    eff_ids = sorted(int(k) for k in effects_all)
+    stack_by_key = {}
+    for v in effects_all.values():
+        stack_by_key.setdefault(v['key'], set()).add(v['stackable'])
+    normal = [i for i in eff_ids if 7000000 <= i < 7400000 and not effects_all[str(i)].get('deepOnly')
+              and not effects_all[str(i)].get('unreleased') and stack_by_key[effects_all[str(i)]['key']] == {False}]
+    skills = [i for i in normal if effects_all[str(i)].get('leftmost') == 'skill']
+    plain, keys_seen = [], set()
+    for i in normal:
+        k = effects_all[str(i)]['key']
+        if not effects_all[str(i)].get('leftmost') and k not in keys_seen and '【' not in effects_all[str(i)]['name_ja']:
+            keys_seen.add(k)
+            plain.append(i)
+    k1, k2 = skills[:2]
+    p, x, v, y, w = plain[:5]
+    red = sorted(int(k) for k, it in items_all.items() if it['type'] == 'Relic' and it['color'] == 'Red')[0]
+    blue = sorted(int(k) for k, it in items_all.items() if it['type'] == 'Relic' and it['color'] == 'Blue')[0]
+    layout = [(red, (k1, p)), (red, (k2, x)), (red, (y,)), (blue, (k2, v)), (blue, (w,))]   # A B D C E
+    relics = []
+    for idx, (item_id, effs) in enumerate(layout):
+        item = items_all[str(item_id)]
+        relics.append({
+            'id': 0xC0830001 + idx, 'itemId': item_id, 'itemKey': item['key'],
+            'itemNameEn': item['name_en'], 'itemNameJa': item['name_ja'],
+            'itemColor': item['color'], 'itemType': 'Relic',
+            'effects': [[effect_entry(effects_all, e)] for e in effs], 'sortKey': len(layout) - idx,
+        })
+    pool = {'characterName': 'Synthetic', 'totalRelics': len(relics), 'relics': relics}
+    key = lambda i: effects_all[str(i)]['key']
+    scenario = {
+        'name': 'wylder_normal_leftmost_skill', 'pool': 'relic_pool_leftmost.json',
+        'params': {'character': '追跡者', 'vessel': 'urn,sealedUrn', 'combined': False, 'candidates': 30, 'top': 10},
+        'effects': gui_effect_specs([(key(k1), 'required'), (key(p), 'preferred'), (key(x), 'preferred'),
+                                     (key(v), 'preferred'), (key(y), 'nice_to_have'), (key(w), 'nice_to_have')]),
+    }
+    return pool, scenario
+
+
 def scenario_pool_path(scenario):
     return os.path.join(FIXTURES_DIR, scenario.get('pool', 'relic_pool.json'))
 
@@ -425,7 +473,9 @@ def generate_optimizer_fixtures(items_all, effects_all):
     write_json('relic_pool_stack_tie.json', tie_pool)
     dup_pool, dup_scenario = generate_nonstack_dup_pool(items_all, effects_all)
     write_json('relic_pool_nonstack_dup.json', dup_pool)
-    scenarios = generate_scenarios(pool) + [tie_scenario, dup_scenario]
+    lm_pool, lm_scenario = generate_leftmost_pool(items_all, effects_all)
+    write_json('relic_pool_leftmost.json', lm_pool)
+    scenarios = generate_scenarios(pool) + [tie_scenario, dup_scenario, lm_scenario]
     write_json('optimizer_scenarios.json', scenarios)
 
     expected = {}

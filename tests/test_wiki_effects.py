@@ -117,3 +117,19 @@ class TestProposal(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestLeftmostGroups(unittest.TestCase):
+    """effects_data.json の "leftmost" が rules.LEFTMOST_GROUPS と一致すること（sync.py --apply が付ける）"""
+
+    def test_effects_data_matches_rules(self):
+        import json
+        import rules
+        import sync
+        with open(os.path.join(ROOT_DIR, 'resources', 'effects_data.json'), encoding='utf-8') as f:
+            effects = json.load(f)['effects']
+        for eid, e in effects.items():
+            want = sync.leftmost_group(e['name_ja']) if rules.in_scope(int(eid)) else None
+            self.assertEqual(e.get('leftmost'), want, f'{eid} {e["name_ja"]}')
+        groups = {e.get('leftmost') for e in effects.values()}
+        self.assertEqual(groups, {None, 'find', 'skill', 'spell', 'imbue'})

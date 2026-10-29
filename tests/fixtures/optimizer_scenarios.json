@@ -275,5 +275,48 @@
     "rank": 1
    }
   ]
+ },
+ {
+  "name": "wylder_normal_leftmost_skill",
+  "pool": "relic_pool_leftmost.json",
+  "params": {
+   "character": "追跡者",
+   "vessel": "urn,sealedUrn",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "partialHpRestorationUponPostDamageAttacks",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "flaskAlsoHealsAllies",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+    "priority": "preferred",
+    "rank": 2
+   },
+   {
+    "key": "improvedPoiseNearTotemStela",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+    "priority": "nice_to_have",
+    "rank": 1
+   }
+  ]
  }
 ]

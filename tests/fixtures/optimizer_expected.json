@@ -1013,7 +1013,8 @@
         "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
         "name_ja": "出撃時の武器の戦技を「毒の霧」にする",
         "name_en": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition",
-        "matched": false
+        "matched": false,
+        "inactive": true
        },
        {
         "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -1206,7 +1207,8 @@
         "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
         "name_ja": "出撃時の武器の戦技を「毒の霧」にする",
         "name_en": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition",
-        "matched": false
+        "matched": false,
+        "inactive": true
        },
        {
         "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -1255,25 +1257,25 @@
     ],
     "deepRelics": [
      {
-      "id": 3229614474,
-      "itemKey": "deepDelicateBurningScene",
-      "itemNameJa": "繊細な燃える景色（深層）",
-      "itemNameEn": "Deep Delicate Burning Scene",
+      "id": 3229614468,
+      "itemKey": "deepPolishedBurningScene",
+      "itemNameJa": "端正な燃える景色（深層）",
+      "itemNameEn": "Deep Polished Burning Scene",
       "itemColor": "Red",
       "itemType": "DeepRelic",
       "effects": [
        {
-        "key": "undertakerActivatingUltimateArtIncreasesAttackPower",
-        "name_ja": "【葬儀屋】アーツ発動時、攻撃力上昇",
-        "name_en": "Undertaker Activating Ultimate Art Increases Attack Power",
+        "key": "improvedGreatSpearAttackPower",
+        "name_ja": "大槍の攻撃力上昇",
+        "name_en": "Improved Great Spear Attack Power",
         "matched": false
        },
        {
-        "key": "gestureCrossedLegsBuildsUpMadness",
-        "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
-        "name_en": "Gesture Crossed Legs Builds Up Madness",
+        "key": "arcanePlus1",
+        "name_ja": "神秘+1",
+        "name_en": "Arcane Plus 1",
         "matched": true,
-        "priority": "required"
+        "priority": "preferred"
        }
       ]
      },
@@ -1307,25 +1309,25 @@
       ]
      },
      {
-      "id": 3229614468,
-      "itemKey": "deepPolishedBurningScene",
-      "itemNameJa": "端正な燃える景色（深層）",
-      "itemNameEn": "Deep Polished Burning Scene",
+      "id": 3229614474,
+      "itemKey": "deepDelicateBurningScene",
+      "itemNameJa": "繊細な燃える景色（深層）",
+      "itemNameEn": "Deep Delicate Burning Scene",
       "itemColor": "Red",
       "itemType": "DeepRelic",
       "effects": [
        {
-        "key": "improvedGreatSpearAttackPower",
-        "name_ja": "大槍の攻撃力上昇",
-        "name_en": "Improved Great Spear Attack Power",
+        "key": "undertakerActivatingUltimateArtIncreasesAttackPower",
+        "name_ja": "【葬儀屋】アーツ発動時、攻撃力上昇",
+        "name_en": "Undertaker Activating Ultimate Art Increases Attack Power",
         "matched": false
        },
        {
-        "key": "arcanePlus1",
-        "name_ja": "神秘+1",
-        "name_en": "Arcane Plus 1",
+        "key": "gestureCrossedLegsBuildsUpMadness",
+        "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
+        "name_en": "Gesture Crossed Legs Builds Up Madness",
         "matched": true,
-        "priority": "preferred"
+        "priority": "required"
        }
       ]
      }
@@ -1386,7 +1388,8 @@
         "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
         "name_ja": "出撃時の武器の戦技を「毒の霧」にする",
         "name_en": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition",
-        "matched": false
+        "matched": false,
+        "inactive": true
        },
        {
         "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -1579,7 +1582,8 @@
         "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
         "name_ja": "出撃時の武器の戦技を「毒の霧」にする",
         "name_en": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition",
-        "matched": false
+        "matched": false,
+        "inactive": true
        },
        {
         "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -1772,7 +1776,8 @@
         "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
         "name_ja": "出撃時の武器の戦技を「毒の霧」にする",
         "name_en": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition",
-        "matched": false
+        "matched": false,
+        "inactive": true
        },
        {
         "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -1821,25 +1826,38 @@
     ],
     "deepRelics": [
      {
-      "id": 3229614474,
-      "itemKey": "deepDelicateBurningScene",
-      "itemNameJa": "繊細な燃える景色（深層）",
-      "itemNameEn": "Deep Delicate Burning Scene",
+      "id": 3229614391,
+      "itemKey": "deepPolishedBurningScene",
+      "itemNameJa": "端正な燃える景色（深層）",
+      "itemNameEn": "Deep Polished Burning Scene",
       "itemColor": "Red",
       "itemType": "DeepRelic",
       "effects": [
        {
-        "key": "undertakerActivatingUltimateArtIncreasesAttackPower",
-        "name_ja": "【葬儀屋】アーツ発動時、攻撃力上昇",
-        "name_en": "Undertaker Activating Ultimate Art Increases Attack Power",
+        "key": "improvedHolyDamageNegationPlus2",
+        "name_ja": "聖カット率上昇+2",
+        "name_en": "Improved Holy Damage Negation Plus 2",
         "matched": false
        },
        {
-        "key": "gestureCrossedLegsBuildsUpMadness",
-        "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
-        "name_en": "Gesture Crossed Legs Builds Up Madness",
+        "key": "changesCompatibleArmamentsSorceryToMagicGlintbladeAtStartOfExpedition",
+        "name_ja": "出撃時の武器の魔術を「魔術の輝剣」にする",
+        "name_en": "Changes Compatible Armaments Sorcery To Magic Glintblade At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "attacksInflictPoisonPlus2",
+        "name_ja": "攻撃に毒の状態異常を付加+2",
+        "name_en": "Attacks Inflict Poison Plus 2",
         "matched": true,
-        "priority": "required"
+        "priority": "nice_to_have"
+       },
+       {
+        "key": "reducedEndurance",
+        "name_ja": "持久力低下",
+        "name_en": "Reduced Endurance",
+        "matched": false,
+        "isDebuff": true
        }
       ]
      },
@@ -1873,38 +1891,25 @@
       ]
      },
      {
-      "id": 3229614391,
-      "itemKey": "deepPolishedBurningScene",
-      "itemNameJa": "端正な燃える景色（深層）",
-      "itemNameEn": "Deep Polished Burning Scene",
+      "id": 3229614474,
+      "itemKey": "deepDelicateBurningScene",
+      "itemNameJa": "繊細な燃える景色（深層）",
+      "itemNameEn": "Deep Delicate Burning Scene",
       "itemColor": "Red",
       "itemType": "DeepRelic",
       "effects": [
        {
-        "key": "improvedHolyDamageNegationPlus2",
-        "name_ja": "聖カット率上昇+2",
-        "name_en": "Improved Holy Damage Negation Plus 2",
+        "key": "undertakerActivatingUltimateArtIncreasesAttackPower",
+        "name_ja": "【葬儀屋】アーツ発動時、攻撃力上昇",
+        "name_en": "Undertaker Activating Ultimate Art Increases Attack Power",
         "matched": false
        },
        {
-        "key": "changesCompatibleArmamentsSorceryToMagicGlintbladeAtStartOfExpedition",
-        "name_ja": "出撃時の武器の魔術を「魔術の輝剣」にする",
-        "name_en": "Changes Compatible Armaments Sorcery To Magic Glintblade At Start Of Expedition",
-        "matched": false
-       },
-       {
-        "key": "attacksInflictPoisonPlus2",
-        "name_ja": "攻撃に毒の状態異常を付加+2",
-        "name_en": "Attacks Inflict Poison Plus 2",
+        "key": "gestureCrossedLegsBuildsUpMadness",
+        "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
+        "name_en": "Gesture Crossed Legs Builds Up Madness",
         "matched": true,
-        "priority": "nice_to_have"
-       },
-       {
-        "key": "reducedEndurance",
-        "name_ja": "持久力低下",
-        "name_en": "Reduced Endurance",
-        "matched": false,
-        "isDebuff": true
+        "priority": "required"
        }
       ]
      }
@@ -1965,7 +1970,8 @@
         "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
         "name_ja": "出撃時の武器の戦技を「毒の霧」にする",
         "name_en": "Changes Compatible Armaments Skill To Poisonous Mist At Start Of Expedition",
-        "matched": false
+        "matched": false,
+        "inactive": true
        },
        {
         "key": "attackPowerUpWhenFacingScarletRotAfflictedEnemy",
@@ -2108,25 +2114,32 @@
    "requiredMet": true,
    "normalRelics": [
     {
-     "id": 3229614104,
-     "itemKey": "grandBurningScene",
-     "itemNameJa": "壮大な燃える景色",
-     "itemNameEn": "Grand Burning Scene",
-     "itemColor": "Red",
+     "id": 3229614137,
+     "itemKey": "delicateTranquilScene",
+     "itemNameJa": "繊細な静まる景色",
+     "itemNameEn": "Delicate Tranquil Scene",
+     "itemColor": "Green",
      "itemType": "Relic",
      "effects": [
       {
-       "key": "duchessCharacterSkillInflictsSleep",
-       "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-       "name_en": "Duchess Character Skill Inflicts Sleep",
-       "matched": false
+       "key": "guardianDamageNegationForAlliesImproved",
+       "name_ja": "【守護者】味方のカット率上昇効果を強化",
+       "name_en": "Guardian Damage Negation For Allies Improved",
+       "matched": true,
+       "priority": "preferred"
       },
       {
-       "key": "starlightShardsInPossessionAtStartOfExpedition",
-       "name_ja": "出撃時に「星光の欠片」を持つ",
-       "name_en": "Starlight Shards In Possession At Start Of Expedition",
+       "key": "maxFpUpWith3PlusSacredSealsEquipped",
+       "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+       "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
        "matched": true,
        "priority": "required"
+      },
+      {
+       "key": "smallPouchInPossessionAtStartOfExpedition",
+       "name_ja": "出撃時に「小さなポーチ」を持つ",
+       "name_en": "Small Pouch In Possession At Start Of Expedition",
+       "matched": false
       }
      ]
     },
@@ -2160,37 +2173,75 @@
      ]
     },
     {
-     "id": 3229614137,
-     "itemKey": "delicateTranquilScene",
-     "itemNameJa": "繊細な静まる景色",
-     "itemNameEn": "Delicate Tranquil Scene",
-     "itemColor": "Green",
+     "id": 3229614104,
+     "itemKey": "grandBurningScene",
+     "itemNameJa": "壮大な燃える景色",
+     "itemNameEn": "Grand Burning Scene",
+     "itemColor": "Red",
      "itemType": "Relic",
      "effects": [
       {
-       "key": "guardianDamageNegationForAlliesImproved",
-       "name_ja": "【守護者】味方のカット率上昇効果を強化",
-       "name_en": "Guardian Damage Negation For Allies Improved",
-       "matched": true,
-       "priority": "preferred"
+       "key": "duchessCharacterSkillInflictsSleep",
+       "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+       "name_en": "Duchess Character Skill Inflicts Sleep",
+       "matched": false
       },
       {
-       "key": "maxFpUpWith3PlusSacredSealsEquipped",
-       "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-       "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+       "key": "starlightShardsInPossessionAtStartOfExpedition",
+       "name_ja": "出撃時に「星光の欠片」を持つ",
+       "name_en": "Starlight Shards In Possession At Start Of Expedition",
        "matched": true,
        "priority": "required"
-      },
-      {
-       "key": "smallPouchInPossessionAtStartOfExpedition",
-       "name_ja": "出撃時に「小さなポーチ」を持つ",
-       "name_en": "Small Pouch In Possession At Start Of Expedition",
-       "matched": false
       }
      ]
     }
    ],
    "deepRelics": [
+    {
+     "id": 3229614341,
+     "itemKey": "deepPolishedLuminousScene",
+     "itemNameJa": "端正な輝く景色（深層）",
+     "itemNameEn": "Deep Polished Luminous Scene",
+     "itemColor": "Yellow",
+     "itemType": "DeepRelic",
+     "effects": [
+      {
+       "key": "hpRestorationUponHalberdAttacks",
+       "name_ja": "斧槍の攻撃でHP回復",
+       "name_en": "Hp Restoration Upon Halberd Attacks",
+       "matched": false
+      },
+      {
+       "key": "poisonboneDartsInPossessionAtStartOfExpedition",
+       "name_ja": "出撃時に「骨の毒投げ矢」を持つ",
+       "name_en": "Poisonbone Darts In Possession At Start Of Expedition",
+       "matched": false
+      }
+     ]
+    },
+    {
+     "id": 3229614378,
+     "itemKey": "deepPolishedTranquilScene",
+     "itemNameJa": "端正な静まる景色（深層）",
+     "itemNameEn": "Deep Polished Tranquil Scene",
+     "itemColor": "Green",
+     "itemType": "DeepRelic",
+     "effects": [
+      {
+       "key": "rotInVicinityCausesContinuousHpRecovery",
+       "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
+       "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
+       "matched": false
+      },
+      {
+       "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+       "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
+       "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
+       "matched": true,
+       "priority": "nice_to_have"
+      }
+     ]
+    },
     {
      "id": 3229614384,
      "itemKey": "deepPolishedLuminousScene",
@@ -2226,51 +2277,6 @@
        "isDebuff": true
       }
      ]
-    },
-    {
-     "id": 3229614378,
-     "itemKey": "deepPolishedTranquilScene",
-     "itemNameJa": "端正な静まる景色（深層）",
-     "itemNameEn": "Deep Polished Tranquil Scene",
-     "itemColor": "Green",
-     "itemType": "DeepRelic",
-     "effects": [
-      {
-       "key": "rotInVicinityCausesContinuousHpRecovery",
-       "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
-       "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
-       "matched": false
-      },
-      {
-       "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
-       "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
-       "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
-       "matched": true,
-       "priority": "nice_to_have"
-      }
-     ]
-    },
-    {
-     "id": 3229614341,
-     "itemKey": "deepPolishedLuminousScene",
-     "itemNameJa": "端正な輝く景色（深層）",
-     "itemNameEn": "Deep Polished Luminous Scene",
-     "itemColor": "Yellow",
-     "itemType": "DeepRelic",
-     "effects": [
-      {
-       "key": "hpRestorationUponHalberdAttacks",
-       "name_ja": "斧槍の攻撃でHP回復",
-       "name_en": "Hp Restoration Upon Halberd Attacks",
-       "matched": false
-      },
-      {
-       "key": "poisonboneDartsInPossessionAtStartOfExpedition",
-       "name_ja": "出撃時に「骨の毒投げ矢」を持つ",
-       "name_en": "Poisonbone Darts In Possession At Start Of Expedition",
-       "matched": false
-      }
-     ]
     }
    ],
    "matchedEffects": [
@@ -2292,25 +2298,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -2344,37 +2357,75 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
     ],
     "deepRelics": [
+     {
+      "id": 3229614341,
+      "itemKey": "deepPolishedLuminousScene",
+      "itemNameJa": "端正な輝く景色（深層）",
+      "itemNameEn": "Deep Polished Luminous Scene",
+      "itemColor": "Yellow",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "hpRestorationUponHalberdAttacks",
+        "name_ja": "斧槍の攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Halberd Attacks",
+        "matched": false
+       },
+       {
+        "key": "poisonboneDartsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「骨の毒投げ矢」を持つ",
+        "name_en": "Poisonbone Darts In Possession At Start Of Expedition",
+        "matched": false
+       }
+      ]
+     },
+     {
+      "id": 3229614378,
+      "itemKey": "deepPolishedTranquilScene",
+      "itemNameJa": "端正な静まる景色（深層）",
+      "itemNameEn": "Deep Polished Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "rotInVicinityCausesContinuousHpRecovery",
+        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
+        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
+        "matched": false
+       },
+       {
+        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
+        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
      {
       "id": 3229614384,
       "itemKey": "deepPolishedLuminousScene",
@@ -2410,51 +2461,6 @@
         "isDebuff": true
        }
       ]
-     },
-     {
-      "id": 3229614378,
-      "itemKey": "deepPolishedTranquilScene",
-      "itemNameJa": "端正な静まる景色（深層）",
-      "itemNameEn": "Deep Polished Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "rotInVicinityCausesContinuousHpRecovery",
-        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
-        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
-        "matched": false
-       },
-       {
-        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
-        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
-        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
-        "matched": true,
-        "priority": "nice_to_have"
-       }
-      ]
-     },
-     {
-      "id": 3229614341,
-      "itemKey": "deepPolishedLuminousScene",
-      "itemNameJa": "端正な輝く景色（深層）",
-      "itemNameEn": "Deep Polished Luminous Scene",
-      "itemColor": "Yellow",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "hpRestorationUponHalberdAttacks",
-        "name_ja": "斧槍の攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Halberd Attacks",
-        "matched": false
-       },
-       {
-        "key": "poisonboneDartsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「骨の毒投げ矢」を持つ",
-        "name_en": "Poisonbone Darts In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
      }
     ],
     "matchedEffects": [
@@ -2475,25 +2481,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -2527,32 +2540,25 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
@@ -2672,25 +2678,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -2724,32 +2737,25 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
@@ -2875,25 +2881,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -2927,96 +2940,30 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
     ],
     "deepRelics": [
-     {
-      "id": 3229614384,
-      "itemKey": "deepPolishedLuminousScene",
-      "itemNameJa": "端正な輝く景色（深層）",
-      "itemNameEn": "Deep Polished Luminous Scene",
-      "itemColor": "Yellow",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "ironjarAromaticInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「鉄壺の香薬」を持つ",
-        "name_en": "Ironjar Aromatic In Possession At Start Of Expedition",
-        "matched": false
-       },
-       {
-        "key": "attacksInflictPoisonPlus2",
-        "name_ja": "攻撃に毒の状態異常を付加+2",
-        "name_en": "Attacks Inflict Poison Plus 2",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "undertakerAttackPowerIncreasedByLandingTheFinalBlowOfAChainAttack",
-        "name_ja": "【葬儀屋】連撃の最終攻撃命中時、攻撃力上昇",
-        "name_en": "Undertaker Attack Power Increased By Landing The Final Blow Of Achain Attack",
-        "matched": false
-       },
-       {
-        "key": "maxHPReducesAttackPower",
-        "name_ja": "最大HP時、攻撃力低下",
-        "name_en": "Max Hpreduces Attack Power",
-        "matched": false,
-        "isDebuff": true
-       }
-      ]
-     },
-     {
-      "id": 3229614378,
-      "itemKey": "deepPolishedTranquilScene",
-      "itemNameJa": "端正な静まる景色（深層）",
-      "itemNameEn": "Deep Polished Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "rotInVicinityCausesContinuousHpRecovery",
-        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
-        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
-        "matched": false
-       },
-       {
-        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
-        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
-        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
-        "matched": true,
-        "priority": "nice_to_have"
-       }
-      ]
-     },
      {
       "id": 3229614344,
       "itemKey": "deepGrandLuminousScene",
@@ -3058,6 +3005,65 @@
         "matched": false
        }
       ]
+     },
+     {
+      "id": 3229614378,
+      "itemKey": "deepPolishedTranquilScene",
+      "itemNameJa": "端正な静まる景色（深層）",
+      "itemNameEn": "Deep Polished Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "rotInVicinityCausesContinuousHpRecovery",
+        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
+        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
+        "matched": false
+       },
+       {
+        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
+        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
+     {
+      "id": 3229614384,
+      "itemKey": "deepPolishedLuminousScene",
+      "itemNameJa": "端正な輝く景色（深層）",
+      "itemNameEn": "Deep Polished Luminous Scene",
+      "itemColor": "Yellow",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "ironjarAromaticInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「鉄壺の香薬」を持つ",
+        "name_en": "Ironjar Aromatic In Possession At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "attacksInflictPoisonPlus2",
+        "name_ja": "攻撃に毒の状態異常を付加+2",
+        "name_en": "Attacks Inflict Poison Plus 2",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "undertakerAttackPowerIncreasedByLandingTheFinalBlowOfAChainAttack",
+        "name_ja": "【葬儀屋】連撃の最終攻撃命中時、攻撃力上昇",
+        "name_en": "Undertaker Attack Power Increased By Landing The Final Blow Of Achain Attack",
+        "matched": false
+       },
+       {
+        "key": "maxHPReducesAttackPower",
+        "name_ja": "最大HP時、攻撃力低下",
+        "name_en": "Max Hpreduces Attack Power",
+        "matched": false,
+        "isDebuff": true
+       }
+      ]
      }
     ],
     "matchedEffects": [
@@ -3078,25 +3084,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -3130,32 +3143,25 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
@@ -3261,25 +3267,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -3313,32 +3326,25 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
@@ -3381,29 +3387,6 @@
       ]
      },
      {
-      "id": 3229614378,
-      "itemKey": "deepPolishedTranquilScene",
-      "itemNameJa": "端正な静まる景色（深層）",
-      "itemNameEn": "Deep Polished Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "rotInVicinityCausesContinuousHpRecovery",
-        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
-        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
-        "matched": false
-       },
-       {
-        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
-        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
-        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
-        "matched": true,
-        "priority": "nice_to_have"
-       }
-      ]
-     },
-     {
       "id": 3229614346,
       "itemKey": "deepGrandTranquilScene",
       "itemNameJa": "壮大な静まる景色（深層）",
@@ -3437,6 +3420,29 @@
         "isDebuff": true
        }
       ]
+     },
+     {
+      "id": 3229614378,
+      "itemKey": "deepPolishedTranquilScene",
+      "itemNameJa": "端正な静まる景色（深層）",
+      "itemNameEn": "Deep Polished Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "rotInVicinityCausesContinuousHpRecovery",
+        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
+        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
+        "matched": false
+       },
+       {
+        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
+        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
      }
     ],
     "matchedEffects": [
@@ -3457,25 +3463,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -3509,32 +3522,25 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
@@ -3660,25 +3666,32 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614104,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "duchessCharacterSkillInflictsSleep",
-        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
-        "name_en": "Duchess Character Skill Inflicts Sleep",
-        "matched": false
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
        },
        {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
         "matched": true,
         "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -3712,37 +3725,75 @@
       ]
      },
      {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614104,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
        {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
+        "key": "duchessCharacterSkillInflictsSleep",
+        "name_ja": "【レディ】スキルに睡眠の状態異常を付加",
+        "name_en": "Duchess Character Skill Inflicts Sleep",
+        "matched": false
        },
        {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
        }
       ]
      }
     ],
     "deepRelics": [
+     {
+      "id": 3229614348,
+      "itemKey": "deepDelicateLuminousScene",
+      "itemNameJa": "繊細な輝く景色（深層）",
+      "itemNameEn": "Deep Delicate Luminous Scene",
+      "itemColor": "Yellow",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "attacksInflictSleepPlus1",
+        "name_ja": "攻撃に睡眠の状態異常を付加+1",
+        "name_en": "Attacks Inflict Sleep Plus 1",
+        "matched": false
+       },
+       {
+        "key": "partialHPRestorationUponPostDamageAttacksPlus1",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復+1",
+        "name_en": "Partial Hprestoration Upon Post Damage Attacks Plus 1",
+        "matched": false
+       }
+      ]
+     },
+     {
+      "id": 3229614378,
+      "itemKey": "deepPolishedTranquilScene",
+      "itemNameJa": "端正な静まる景色（深層）",
+      "itemNameEn": "Deep Polished Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "DeepRelic",
+      "effects": [
+       {
+        "key": "rotInVicinityCausesContinuousHpRecovery",
+        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
+        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
+        "matched": false
+       },
+       {
+        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
+        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
      {
       "id": 3229614384,
       "itemKey": "deepPolishedLuminousScene",
@@ -3776,51 +3827,6 @@
         "name_en": "Max Hpreduces Attack Power",
         "matched": false,
         "isDebuff": true
-       }
-      ]
-     },
-     {
-      "id": 3229614378,
-      "itemKey": "deepPolishedTranquilScene",
-      "itemNameJa": "端正な静まる景色（深層）",
-      "itemNameEn": "Deep Polished Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "rotInVicinityCausesContinuousHpRecovery",
-        "name_ja": "周囲で腐敗状態の発生時、HP持続回復",
-        "name_en": "Rot In Vicinity Causes Continuous Hp Recovery",
-        "matched": false
-       },
-       {
-        "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
-        "name_ja": "出撃時の武器の戦技を「聖なる刃」にする",
-        "name_en": "Changes Compatible Armaments Skill To Sacred Blade At Start Of Expedition",
-        "matched": true,
-        "priority": "nice_to_have"
-       }
-      ]
-     },
-     {
-      "id": 3229614348,
-      "itemKey": "deepDelicateLuminousScene",
-      "itemNameJa": "繊細な輝く景色（深層）",
-      "itemNameEn": "Deep Delicate Luminous Scene",
-      "itemColor": "Yellow",
-      "itemType": "DeepRelic",
-      "effects": [
-       {
-        "key": "attacksInflictSleepPlus1",
-        "name_ja": "攻撃に睡眠の状態異常を付加+1",
-        "name_en": "Attacks Inflict Sleep Plus 1",
-        "matched": false
-       },
-       {
-        "key": "partialHPRestorationUponPostDamageAttacksPlus1",
-        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復+1",
-        "name_en": "Partial Hprestoration Upon Post Damage Attacks Plus 1",
-        "matched": false
        }
       ]
      }
@@ -4239,7 +4245,8 @@
         "key": "dormantPowerHelpsDiscoverCrossbows",
         "name_ja": "潜在する力から、ボウガンを見つけやすくなる",
         "name_en": "Dormant Power Helps Discover Crossbows",
-        "matched": false
+        "matched": false,
+        "inactive": true
        }
       ]
      }
@@ -4480,35 +4487,6 @@
     "requiredMet": true,
     "relics": [
      {
-      "id": 3229614208,
-      "itemKey": "polishedDrizzlyScene",
-      "itemNameJa": "端正な滴る景色",
-      "itemNameEn": "Polished Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "improvedTwinbladeAttackPower",
-        "name_ja": "両刃剣の攻撃力上昇",
-        "name_en": "Improved Twinblade Attack Power",
-        "matched": false
-       },
-       {
-        "key": "attacksInflictSleepPlus1",
-        "name_ja": "攻撃に睡眠の状態異常を付加+1",
-        "name_en": "Attacks Inflict Sleep Plus 1",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "attacksInflictMadness",
-        "name_ja": "攻撃に発狂の状態異常を付加",
-        "name_en": "Attacks Inflict Madness",
-        "matched": false
-       }
-      ]
-     },
-     {
       "id": 3229614126,
       "itemKey": "grandDrizzlyScene",
       "itemNameJa": "壮大な滴る景色",
@@ -4535,6 +4513,35 @@
         "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229614208,
+      "itemKey": "polishedDrizzlyScene",
+      "itemNameJa": "端正な滴る景色",
+      "itemNameEn": "Polished Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedTwinbladeAttackPower",
+        "name_ja": "両刃剣の攻撃力上昇",
+        "name_en": "Improved Twinblade Attack Power",
+        "matched": false
+       },
+       {
+        "key": "attacksInflictSleepPlus1",
+        "name_ja": "攻撃に睡眠の状態異常を付加+1",
+        "name_en": "Attacks Inflict Sleep Plus 1",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "attacksInflictMadness",
+        "name_ja": "攻撃に発狂の状態異常を付加",
+        "name_en": "Attacks Inflict Madness",
+        "matched": false
        }
       ]
      },
@@ -4587,35 +4594,6 @@
     "requiredMet": true,
     "relics": [
      {
-      "id": 3229614228,
-      "itemKey": "delicateDrizzlyScene",
-      "itemNameJa": "繊細な滴る景色",
-      "itemNameEn": "Delicate Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "attacksInflictSleepPlus1",
-        "name_ja": "攻撃に睡眠の状態異常を付加+1",
-        "name_en": "Attacks Inflict Sleep Plus 1",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "changesCompatibleArmamentsSkillToPoisonMothFlightAtStartOfExpedition",
-        "name_ja": "出撃時の武器の戦技を「毒蛾は二度舞う」にする",
-        "name_en": "Changes Compatible Armaments Skill To Poison Moth Flight At Start Of Expedition",
-        "matched": false
-       },
-       {
-        "key": "hpRestorationUponColossalSwordAttacks",
-        "name_ja": "特大剣の攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Colossal Sword Attacks",
-        "matched": false
-       }
-      ]
-     },
-     {
       "id": 3229614126,
       "itemKey": "grandDrizzlyScene",
       "itemNameJa": "壮大な滴る景色",
@@ -4642,6 +4620,35 @@
         "name_en": "Starlight Shards In Possession At Start Of Expedition",
         "matched": true,
         "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229614228,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "attacksInflictSleepPlus1",
+        "name_ja": "攻撃に睡眠の状態異常を付加+1",
+        "name_en": "Attacks Inflict Sleep Plus 1",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "changesCompatibleArmamentsSkillToPoisonMothFlightAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「毒蛾は二度舞う」にする",
+        "name_en": "Changes Compatible Armaments Skill To Poison Moth Flight At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "hpRestorationUponColossalSwordAttacks",
+        "name_ja": "特大剣の攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Colossal Sword Attacks",
+        "matched": false
        }
       ]
      },
@@ -4799,6 +4806,36 @@
     "requiredMet": true,
     "relics": [
      {
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
+       }
+      ]
+     },
+     {
       "id": 3229614086,
       "itemKey": "polishedDrizzlyScene",
       "itemNameJa": "端正な滴る景色",
@@ -4856,7 +4893,25 @@
         "priority": "preferred"
        }
       ]
-     },
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictSleepPlus1",
+     "guardianDamageNegationForAlliesImproved",
+     "hpRestorationUponAxeAttacks",
+     "maxFpUpWith3PlusSacredSealsEquipped",
+     "starlightShardsInPossessionAtStartOfExpedition"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "forgottenGoblet"
+   },
+   {
+    "rank": 4,
+    "score": 231,
+    "subScore": 30302,
+    "requiredMet": true,
+    "relics": [
      {
       "id": 3229614137,
       "itemKey": "delicateTranquilScene",
@@ -4886,25 +4941,37 @@
         "matched": false
        }
       ]
-     }
-    ],
-    "matchedEffects": [
-     "attacksInflictSleepPlus1",
-     "guardianDamageNegationForAlliesImproved",
-     "hpRestorationUponAxeAttacks",
-     "maxFpUpWith3PlusSacredSealsEquipped",
-     "starlightShardsInPossessionAtStartOfExpedition"
-    ],
-    "missingRequired": [],
-    "excludedPresent": [],
-    "vessel": "forgottenGoblet"
-   },
-   {
-    "rank": 4,
-    "score": 231,
-    "subScore": 30302,
-    "requiredMet": true,
-    "relics": [
+     },
+     {
+      "id": 3229614126,
+      "itemKey": "grandDrizzlyScene",
+      "itemNameJa": "壮大な滴る景色",
+      "itemNameEn": "Grand Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestorationUponAxeAttacks",
+        "name_ja": "斧の攻撃でHP回復",
+        "name_en": "Hp Restoration Upon Axe Attacks",
+        "matched": true,
+        "priority": "nice_to_have"
+       },
+       {
+        "key": "improvedSkillAttackPower",
+        "name_ja": "戦技攻撃力上昇",
+        "name_en": "Improved Skill Attack Power",
+        "matched": false
+       },
+       {
+        "key": "starlightShardsInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「星光の欠片」を持つ",
+        "name_en": "Starlight Shards In Possession At Start Of Expedition",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
      {
       "id": 3229614208,
       "itemKey": "polishedDrizzlyScene",
@@ -4933,6 +5000,54 @@
         "matched": false
        }
       ]
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictSleepPlus1",
+     "guardianDamageNegationForAlliesImproved",
+     "hpRestorationUponAxeAttacks",
+     "maxFpUpWith3PlusSacredSealsEquipped",
+     "starlightShardsInPossessionAtStartOfExpedition"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "forgottenGoblet"
+   },
+   {
+    "rank": 6,
+    "score": 231,
+    "subScore": 30302,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229614137,
+      "itemKey": "delicateTranquilScene",
+      "itemNameJa": "繊細な静まる景色",
+      "itemNameEn": "Delicate Tranquil Scene",
+      "itemColor": "Green",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "guardianDamageNegationForAlliesImproved",
+        "name_ja": "【守護者】味方のカット率上昇効果を強化",
+        "name_en": "Guardian Damage Negation For Allies Improved",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "maxFpUpWith3PlusSacredSealsEquipped",
+        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
+        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "smallPouchInPossessionAtStartOfExpedition",
+        "name_ja": "出撃時に「小さなポーチ」を持つ",
+        "name_en": "Small Pouch In Possession At Start Of Expedition",
+        "matched": false
+       }
+      ]
      },
      {
       "id": 3229614126,
@@ -4964,54 +5079,6 @@
        }
       ]
      },
-     {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
-        "matched": false
-       }
-      ]
-     }
-    ],
-    "matchedEffects": [
-     "attacksInflictSleepPlus1",
-     "guardianDamageNegationForAlliesImproved",
-     "hpRestorationUponAxeAttacks",
-     "maxFpUpWith3PlusSacredSealsEquipped",
-     "starlightShardsInPossessionAtStartOfExpedition"
-    ],
-    "missingRequired": [],
-    "excludedPresent": [],
-    "vessel": "forgottenGoblet"
-   },
-   {
-    "rank": 6,
-    "score": 231,
-    "subScore": 30302,
-    "requiredMet": true,
-    "relics": [
      {
       "id": 3229614228,
       "itemKey": "delicateDrizzlyScene",
@@ -5040,37 +5107,25 @@
         "matched": false
        }
       ]
-     },
-     {
-      "id": 3229614126,
-      "itemKey": "grandDrizzlyScene",
-      "itemNameJa": "壮大な滴る景色",
-      "itemNameEn": "Grand Drizzly Scene",
-      "itemColor": "Blue",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "hpRestorationUponAxeAttacks",
-        "name_ja": "斧の攻撃でHP回復",
-        "name_en": "Hp Restoration Upon Axe Attacks",
-        "matched": true,
-        "priority": "nice_to_have"
-       },
-       {
-        "key": "improvedSkillAttackPower",
-        "name_ja": "戦技攻撃力上昇",
-        "name_en": "Improved Skill Attack Power",
-        "matched": false
-       },
-       {
-        "key": "starlightShardsInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「星光の欠片」を持つ",
-        "name_en": "Starlight Shards In Possession At Start Of Expedition",
-        "matched": true,
-        "priority": "preferred"
-       }
-      ]
-     },
+     }
+    ],
+    "matchedEffects": [
+     "attacksInflictSleepPlus1",
+     "guardianDamageNegationForAlliesImproved",
+     "hpRestorationUponAxeAttacks",
+     "maxFpUpWith3PlusSacredSealsEquipped",
+     "starlightShardsInPossessionAtStartOfExpedition"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "forgottenGoblet"
+   },
+   {
+    "rank": 10,
+    "score": 225,
+    "subScore": 30300,
+    "requiredMet": true,
+    "relics": [
      {
       "id": 3229614137,
       "itemKey": "delicateTranquilScene",
@@ -5100,25 +5155,7 @@
         "matched": false
        }
       ]
-     }
-    ],
-    "matchedEffects": [
-     "attacksInflictSleepPlus1",
-     "guardianDamageNegationForAlliesImproved",
-     "hpRestorationUponAxeAttacks",
-     "maxFpUpWith3PlusSacredSealsEquipped",
-     "starlightShardsInPossessionAtStartOfExpedition"
-    ],
-    "missingRequired": [],
-    "excludedPresent": [],
-    "vessel": "forgottenGoblet"
-   },
-   {
-    "rank": 10,
-    "score": 225,
-    "subScore": 30300,
-    "requiredMet": true,
-    "relics": [
+     },
      {
       "id": 3229614086,
       "itemKey": "polishedDrizzlyScene",
@@ -5173,36 +5210,6 @@
         "key": "vigorPlus2",
         "name_ja": "生命力+2",
         "name_en": "Vigor Plus 2",
-        "matched": false
-       }
-      ]
-     },
-     {
-      "id": 3229614137,
-      "itemKey": "delicateTranquilScene",
-      "itemNameJa": "繊細な静まる景色",
-      "itemNameEn": "Delicate Tranquil Scene",
-      "itemColor": "Green",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "guardianDamageNegationForAlliesImproved",
-        "name_ja": "【守護者】味方のカット率上昇効果を強化",
-        "name_en": "Guardian Damage Negation For Allies Improved",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "maxFpUpWith3PlusSacredSealsEquipped",
-        "name_ja": "聖印を3つ以上装備していると最大FP上昇",
-        "name_en": "Max Fp Up With 3Plus Sacred Seals Equipped",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "smallPouchInPossessionAtStartOfExpedition",
-        "name_ja": "出撃時に「小さなポーチ」を持つ",
-        "name_en": "Small Pouch In Possession At Start Of Expedition",
         "matched": false
        }
       ]
@@ -5440,31 +5447,31 @@
    "requiredMet": true,
    "normalRelics": [
     {
-     "id": 3229614193,
-     "itemKey": "grandBurningScene",
-     "itemNameJa": "壮大な燃える景色",
-     "itemNameEn": "Grand Burning Scene",
-     "itemColor": "Red",
+     "id": 3229614131,
+     "itemKey": "grandTranquilScene",
+     "itemNameJa": "壮大な静まる景色",
+     "itemNameEn": "Grand Tranquil Scene",
+     "itemColor": "Green",
      "itemType": "Relic",
      "effects": [
-      {
-       "key": "startingArmamentInflictsScarletRot",
-       "name_ja": "出撃時の武器に腐敗の状態異常を付加",
-       "name_en": "Starting Armament Inflicts Scarlet Rot",
-       "matched": false
-      },
-      {
-       "key": "ironeyeBoostsThrustingCounterattacksAfterArt",
-       "name_ja": "【鉄の目】アーツ発動後、刺突カウンター強化",
-       "name_en": "Ironeye Boosts Thrusting Counterattacks After Art",
-       "matched": false
-      },
       {
        "key": "gestureCrossedLegsBuildsUpMadness",
        "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
        "name_en": "Gesture Crossed Legs Builds Up Madness",
        "matched": true,
        "priority": "preferred"
+      },
+      {
+       "key": "fireAttackPowerUpPlus2",
+       "name_ja": "炎攻撃力上昇+2",
+       "name_en": "Fire Attack Power Up Plus 2",
+       "matched": false
+      },
+      {
+       "key": "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
+       "name_ja": "出撃時の武器の戦技を「落雷」にする",
+       "name_en": "Changes Compatible Armaments Skill To Thunderbolt At Start Of Expedition",
+       "matched": false
       }
      ]
     },
@@ -5491,31 +5498,31 @@
      ]
     },
     {
-     "id": 3229614131,
-     "itemKey": "grandTranquilScene",
-     "itemNameJa": "壮大な静まる景色",
-     "itemNameEn": "Grand Tranquil Scene",
-     "itemColor": "Green",
+     "id": 3229614193,
+     "itemKey": "grandBurningScene",
+     "itemNameJa": "壮大な燃える景色",
+     "itemNameEn": "Grand Burning Scene",
+     "itemColor": "Red",
      "itemType": "Relic",
      "effects": [
+      {
+       "key": "startingArmamentInflictsScarletRot",
+       "name_ja": "出撃時の武器に腐敗の状態異常を付加",
+       "name_en": "Starting Armament Inflicts Scarlet Rot",
+       "matched": false
+      },
+      {
+       "key": "ironeyeBoostsThrustingCounterattacksAfterArt",
+       "name_ja": "【鉄の目】アーツ発動後、刺突カウンター強化",
+       "name_en": "Ironeye Boosts Thrusting Counterattacks After Art",
+       "matched": false
+      },
       {
        "key": "gestureCrossedLegsBuildsUpMadness",
        "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
        "name_en": "Gesture Crossed Legs Builds Up Madness",
        "matched": true,
        "priority": "preferred"
-      },
-      {
-       "key": "fireAttackPowerUpPlus2",
-       "name_ja": "炎攻撃力上昇+2",
-       "name_en": "Fire Attack Power Up Plus 2",
-       "matched": false
-      },
-      {
-       "key": "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
-       "name_ja": "出撃時の武器の戦技を「落雷」にする",
-       "name_en": "Changes Compatible Armaments Skill To Thunderbolt At Start Of Expedition",
-       "matched": false
       }
      ]
     }
@@ -5644,31 +5651,31 @@
     "requiredMet": true,
     "normalRelics": [
      {
-      "id": 3229614193,
-      "itemKey": "grandBurningScene",
-      "itemNameJa": "壮大な燃える景色",
-      "itemNameEn": "Grand Burning Scene",
-      "itemColor": "Red",
+      "id": 3229614131,
+      "itemKey": "grandTranquilScene",
+      "itemNameJa": "壮大な静まる景色",
+      "itemNameEn": "Grand Tranquil Scene",
+      "itemColor": "Green",
       "itemType": "Relic",
       "effects": [
-       {
-        "key": "startingArmamentInflictsScarletRot",
-        "name_ja": "出撃時の武器に腐敗の状態異常を付加",
-        "name_en": "Starting Armament Inflicts Scarlet Rot",
-        "matched": false
-       },
-       {
-        "key": "ironeyeBoostsThrustingCounterattacksAfterArt",
-        "name_ja": "【鉄の目】アーツ発動後、刺突カウンター強化",
-        "name_en": "Ironeye Boosts Thrusting Counterattacks After Art",
-        "matched": false
-       },
        {
         "key": "gestureCrossedLegsBuildsUpMadness",
         "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
         "name_en": "Gesture Crossed Legs Builds Up Madness",
         "matched": true,
         "priority": "preferred"
+       },
+       {
+        "key": "fireAttackPowerUpPlus2",
+        "name_ja": "炎攻撃力上昇+2",
+        "name_en": "Fire Attack Power Up Plus 2",
+        "matched": false
+       },
+       {
+        "key": "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「落雷」にする",
+        "name_en": "Changes Compatible Armaments Skill To Thunderbolt At Start Of Expedition",
+        "matched": false
        }
       ]
      },
@@ -5695,31 +5702,31 @@
       ]
      },
      {
-      "id": 3229614131,
-      "itemKey": "grandTranquilScene",
-      "itemNameJa": "壮大な静まる景色",
-      "itemNameEn": "Grand Tranquil Scene",
-      "itemColor": "Green",
+      "id": 3229614193,
+      "itemKey": "grandBurningScene",
+      "itemNameJa": "壮大な燃える景色",
+      "itemNameEn": "Grand Burning Scene",
+      "itemColor": "Red",
       "itemType": "Relic",
       "effects": [
+       {
+        "key": "startingArmamentInflictsScarletRot",
+        "name_ja": "出撃時の武器に腐敗の状態異常を付加",
+        "name_en": "Starting Armament Inflicts Scarlet Rot",
+        "matched": false
+       },
+       {
+        "key": "ironeyeBoostsThrustingCounterattacksAfterArt",
+        "name_ja": "【鉄の目】アーツ発動後、刺突カウンター強化",
+        "name_en": "Ironeye Boosts Thrusting Counterattacks After Art",
+        "matched": false
+       },
        {
         "key": "gestureCrossedLegsBuildsUpMadness",
         "name_ja": "ジェスチャー「あぐら」により、発狂が蓄積",
         "name_en": "Gesture Crossed Legs Builds Up Madness",
         "matched": true,
         "priority": "preferred"
-       },
-       {
-        "key": "fireAttackPowerUpPlus2",
-        "name_ja": "炎攻撃力上昇+2",
-        "name_en": "Fire Attack Power Up Plus 2",
-        "matched": false
-       },
-       {
-        "key": "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
-        "name_ja": "出撃時の武器の戦技を「落雷」にする",
-        "name_en": "Changes Compatible Armaments Skill To Thunderbolt At Start Of Expedition",
-        "matched": false
        }
       ]
      }
@@ -9699,30 +9706,6 @@
    "requiredMet": true,
    "relics": [
     {
-     "id": 3229745155,
-     "itemKey": "delicateBurningScene",
-     "itemNameJa": "繊細な燃える景色",
-     "itemNameEn": "Delicate Burning Scene",
-     "itemColor": "Red",
-     "itemType": "Relic",
-     "effects": [
-      {
-       "key": "duchessDaggerChainAttackReprises",
-       "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演",
-       "name_en": "Duchess Dagger Chain Attack Reprises",
-       "matched": true,
-       "priority": "required"
-      },
-      {
-       "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
-       "name_ja": "【復讐者】自身のHPと引き換えに周囲の味方のHPを全回復",
-       "name_en": "Revenant Expend Own Hpto Fully Heal Nearby Allies",
-       "matched": true,
-       "priority": "nice_to_have"
-      }
-     ]
-    },
-    {
      "id": 3229745153,
      "itemKey": "delicateBurningScene",
      "itemNameJa": "繊細な燃える景色",
@@ -9750,6 +9733,30 @@
        "name_en": "Wylder Art Activation Spreads Fire In Area",
        "matched": true,
        "priority": "preferred"
+      }
+     ]
+    },
+    {
+     "id": 3229745155,
+     "itemKey": "delicateBurningScene",
+     "itemNameJa": "繊細な燃える景色",
+     "itemNameEn": "Delicate Burning Scene",
+     "itemColor": "Red",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "duchessDaggerChainAttackReprises",
+       "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演",
+       "name_en": "Duchess Dagger Chain Attack Reprises",
+       "matched": true,
+       "priority": "required"
+      },
+      {
+       "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+       "name_ja": "【復讐者】自身のHPと引き換えに周囲の味方のHPを全回復",
+       "name_en": "Revenant Expend Own Hpto Fully Heal Nearby Allies",
+       "matched": true,
+       "priority": "nice_to_have"
       }
      ]
     },
@@ -9791,30 +9798,6 @@
     "requiredMet": true,
     "relics": [
      {
-      "id": 3229745155,
-      "itemKey": "delicateBurningScene",
-      "itemNameJa": "繊細な燃える景色",
-      "itemNameEn": "Delicate Burning Scene",
-      "itemColor": "Red",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "duchessDaggerChainAttackReprises",
-        "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演",
-        "name_en": "Duchess Dagger Chain Attack Reprises",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
-        "name_ja": "【復讐者】自身のHPと引き換えに周囲の味方のHPを全回復",
-        "name_en": "Revenant Expend Own Hpto Fully Heal Nearby Allies",
-        "matched": true,
-        "priority": "nice_to_have"
-       }
-      ]
-     },
-     {
       "id": 3229745153,
       "itemKey": "delicateBurningScene",
       "itemNameJa": "繊細な燃える景色",
@@ -9842,6 +9825,30 @@
         "name_en": "Wylder Art Activation Spreads Fire In Area",
         "matched": true,
         "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229745155,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "duchessDaggerChainAttackReprises",
+        "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演",
+        "name_en": "Duchess Dagger Chain Attack Reprises",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+        "name_ja": "【復讐者】自身のHPと引き換えに周囲の味方のHPを全回復",
+        "name_en": "Revenant Expend Own Hpto Fully Heal Nearby Allies",
+        "matched": true,
+        "priority": "nice_to_have"
        }
       ]
      },
@@ -9882,37 +9889,6 @@
     "requiredMet": true,
     "relics": [
      {
-      "id": 3229745154,
-      "itemKey": "delicateBurningScene",
-      "itemNameJa": "繊細な燃える景色",
-      "itemNameEn": "Delicate Burning Scene",
-      "itemColor": "Red",
-      "itemType": "Relic",
-      "effects": [
-       {
-        "key": "partialHpRestorationUponPostDamageAttacks",
-        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
-        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
-        "matched": true,
-        "priority": "preferred"
-       },
-       {
-        "key": "duchessDaggerChainAttackReprises",
-        "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演",
-        "name_en": "Duchess Dagger Chain Attack Reprises",
-        "matched": true,
-        "priority": "required"
-       },
-       {
-        "key": "raiderCharacterSkillDamageUp",
-        "name_ja": "【無頼漢】スキル中に攻撃を受けると攻撃力と最大スタミナ上昇",
-        "name_en": "Raider Character Skill Damage Up",
-        "matched": true,
-        "priority": "nice_to_have"
-       }
-      ]
-     },
-     {
       "id": 3229745153,
       "itemKey": "delicateBurningScene",
       "itemNameJa": "繊細な燃える景色",
@@ -9940,6 +9916,37 @@
         "name_en": "Wylder Art Activation Spreads Fire In Area",
         "matched": true,
         "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229745154,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       },
+       {
+        "key": "duchessDaggerChainAttackReprises",
+        "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演",
+        "name_en": "Duchess Dagger Chain Attack Reprises",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "raiderCharacterSkillDamageUp",
+        "name_ja": "【無頼漢】スキル中に攻撃を受けると攻撃力と最大スタミナ上昇",
+        "name_en": "Raider Character Skill Damage Up",
+        "matched": true,
+        "priority": "nice_to_have"
        }
       ]
      },
@@ -10062,6 +10069,916 @@
     "missingRequired": [],
     "excludedPresent": [],
     "vessel": "urn"
+   }
+  ]
+ },
+ "wylder_normal_leftmost_skill": {
+  "best": {
+   "rank": 1,
+   "score": 135,
+   "subScore": 10600,
+   "requiredMet": true,
+   "relics": [
+    {
+     "id": 3229810689,
+     "itemKey": "delicateBurningScene",
+     "itemNameJa": "繊細な燃える景色",
+     "itemNameEn": "Delicate Burning Scene",
+     "itemColor": "Red",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+       "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+       "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+       "matched": true,
+       "priority": "required"
+      },
+      {
+       "key": "partialHpRestorationUponPostDamageAttacks",
+       "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+       "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+       "matched": true,
+       "priority": "preferred"
+      }
+     ]
+    },
+    {
+     "id": 3229810690,
+     "itemKey": "delicateBurningScene",
+     "itemNameJa": "繊細な燃える景色",
+     "itemNameEn": "Delicate Burning Scene",
+     "itemColor": "Red",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+       "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+       "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+       "matched": false,
+       "inactive": true
+      },
+      {
+       "key": "flaskAlsoHealsAllies",
+       "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+       "name_en": "Flask Also Heals Allies",
+       "matched": true,
+       "priority": "preferred"
+      }
+     ]
+    },
+    {
+     "id": 3229810692,
+     "itemKey": "delicateDrizzlyScene",
+     "itemNameJa": "繊細な滴る景色",
+     "itemNameEn": "Delicate Drizzly Scene",
+     "itemColor": "Blue",
+     "itemType": "Relic",
+     "effects": [
+      {
+       "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+       "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+       "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+       "matched": false,
+       "inactive": true
+      },
+      {
+       "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+       "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+       "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+       "matched": true,
+       "priority": "preferred"
+      }
+     ]
+    }
+   ],
+   "matchedEffects": [
+    "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+    "flaskAlsoHealsAllies",
+    "partialHpRestorationUponPostDamageAttacks",
+    "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+   ],
+   "missingRequired": [],
+   "excludedPresent": [],
+   "vessel": "urn"
+  },
+  "results": [
+   {
+    "rank": 1,
+    "score": 135,
+    "subScore": 10600,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810690,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "flaskAlsoHealsAllies",
+        "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+        "name_en": "Flask Also Heals Allies",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810692,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+        "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+        "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "flaskAlsoHealsAllies",
+     "partialHpRestorationUponPostDamageAttacks",
+     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 2,
+    "score": 126,
+    "subScore": 10501,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810690,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "flaskAlsoHealsAllies",
+        "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+        "name_en": "Flask Also Heals Allies",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810693,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+        "name_ja": "苔薬などのアイテム使用でHP回復",
+        "name_en": "Hp Restored When Using Medicinal Boluses Etc",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "flaskAlsoHealsAllies",
+     "hpRestoredWhenUsingMedicinalBolusesEtc",
+     "partialHpRestorationUponPostDamageAttacks"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 4,
+    "score": 126,
+    "subScore": 10402,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810691,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedPoiseNearTotemStela",
+        "name_ja": "トーテム・ステラの周囲で、強靭度上昇",
+        "name_en": "Improved Poise Near Totem Stela",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
+     {
+      "id": 3229810692,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+        "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+        "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "improvedPoiseNearTotemStela",
+     "partialHpRestorationUponPostDamageAttacks",
+     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 5,
+    "score": 117,
+    "subScore": 10303,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810691,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedPoiseNearTotemStela",
+        "name_ja": "トーテム・ステラの周囲で、強靭度上昇",
+        "name_en": "Improved Poise Near Totem Stela",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
+     {
+      "id": 3229810693,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+        "name_ja": "苔薬などのアイテム使用でHP回復",
+        "name_en": "Hp Restored When Using Medicinal Boluses Etc",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "hpRestoredWhenUsingMedicinalBolusesEtc",
+     "improvedPoiseNearTotemStela",
+     "partialHpRestorationUponPostDamageAttacks"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 9,
+    "score": 21,
+    "subScore": 302,
+    "requiredMet": false,
+    "relics": [
+     {
+      "id": 3229810690,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "flaskAlsoHealsAllies",
+        "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+        "name_en": "Flask Also Heals Allies",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810691,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedPoiseNearTotemStela",
+        "name_ja": "トーテム・ステラの周囲で、強靭度上昇",
+        "name_en": "Improved Poise Near Totem Stela",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
+     {
+      "id": 3229810692,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+        "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+        "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "flaskAlsoHealsAllies",
+     "improvedPoiseNearTotemStela",
+     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+    ],
+    "missingRequired": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition"
+    ],
+    "excludedPresent": [],
+    "vessel": "urn"
+   },
+   {
+    "rank": 3,
+    "score": 126,
+    "subScore": 10501,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229810693,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+        "name_ja": "苔薬などのアイテム使用でHP回復",
+        "name_en": "Hp Restored When Using Medicinal Boluses Etc",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810690,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "flaskAlsoHealsAllies",
+        "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+        "name_en": "Flask Also Heals Allies",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "flaskAlsoHealsAllies",
+     "hpRestoredWhenUsingMedicinalBolusesEtc",
+     "partialHpRestorationUponPostDamageAttacks"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "sealedUrn"
+   },
+   {
+    "rank": 6,
+    "score": 117,
+    "subScore": 10303,
+    "requiredMet": true,
+    "relics": [
+     {
+      "id": 3229810693,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+        "name_ja": "苔薬などのアイテム使用でHP回復",
+        "name_en": "Hp Restored When Using Medicinal Boluses Etc",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     },
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": true,
+        "priority": "required"
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810691,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedPoiseNearTotemStela",
+        "name_ja": "トーテム・ステラの周囲で、強靭度上昇",
+        "name_en": "Improved Poise Near Totem Stela",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "hpRestoredWhenUsingMedicinalBolusesEtc",
+     "improvedPoiseNearTotemStela",
+     "partialHpRestorationUponPostDamageAttacks"
+    ],
+    "missingRequired": [],
+    "excludedPresent": [],
+    "vessel": "sealedUrn"
+   },
+   {
+    "rank": 7,
+    "score": 30,
+    "subScore": 600,
+    "requiredMet": false,
+    "relics": [
+     {
+      "id": 3229810692,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+        "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+        "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810690,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "flaskAlsoHealsAllies",
+        "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+        "name_en": "Flask Also Heals Allies",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "flaskAlsoHealsAllies",
+     "partialHpRestorationUponPostDamageAttacks",
+     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+    ],
+    "missingRequired": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition"
+    ],
+    "excludedPresent": [],
+    "vessel": "sealedUrn"
+   },
+   {
+    "rank": 8,
+    "score": 21,
+    "subScore": 402,
+    "requiredMet": false,
+    "relics": [
+     {
+      "id": 3229810692,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+        "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+        "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810689,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする",
+        "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+        "matched": false,
+        "inactive": true
+       },
+       {
+        "key": "partialHpRestorationUponPostDamageAttacks",
+        "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+        "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810691,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedPoiseNearTotemStela",
+        "name_ja": "トーテム・ステラの周囲で、強靭度上昇",
+        "name_en": "Improved Poise Near Totem Stela",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "improvedPoiseNearTotemStela",
+     "partialHpRestorationUponPostDamageAttacks",
+     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+    ],
+    "missingRequired": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition"
+    ],
+    "excludedPresent": [],
+    "vessel": "sealedUrn"
+   },
+   {
+    "rank": 10,
+    "score": 21,
+    "subScore": 302,
+    "requiredMet": false,
+    "relics": [
+     {
+      "id": 3229810692,
+      "itemKey": "delicateDrizzlyScene",
+      "itemNameJa": "繊細な滴る景色",
+      "itemNameEn": "Delicate Drizzly Scene",
+      "itemColor": "Blue",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+        "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+        "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810690,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+        "name_ja": "出撃時の武器の戦技を「グラビタス」にする",
+        "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+        "matched": false
+       },
+       {
+        "key": "flaskAlsoHealsAllies",
+        "name_ja": "聖杯瓶の回復を、周囲の味方に分配",
+        "name_en": "Flask Also Heals Allies",
+        "matched": true,
+        "priority": "preferred"
+       }
+      ]
+     },
+     {
+      "id": 3229810691,
+      "itemKey": "delicateBurningScene",
+      "itemNameJa": "繊細な燃える景色",
+      "itemNameEn": "Delicate Burning Scene",
+      "itemColor": "Red",
+      "itemType": "Relic",
+      "effects": [
+       {
+        "key": "improvedPoiseNearTotemStela",
+        "name_ja": "トーテム・ステラの周囲で、強靭度上昇",
+        "name_en": "Improved Poise Near Totem Stela",
+        "matched": true,
+        "priority": "nice_to_have"
+       }
+      ]
+     }
+    ],
+    "matchedEffects": [
+     "flaskAlsoHealsAllies",
+     "improvedPoiseNearTotemStela",
+     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+    ],
+    "missingRequired": [
+     "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition"
+    ],
+    "excludedPresent": [],
+    "vessel": "sealedUrn"
    }
   ]
  }

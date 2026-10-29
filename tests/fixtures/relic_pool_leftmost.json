@@ -1,0 +1,130 @@
+{
+ "characterName": "Synthetic",
+ "totalRelics": 5,
+ "relics": [
+  {
+   "id": 3229810689,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7122700,
+      "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+      "name_en": "Changes Compatible Armaments Skill To Glintblade Phalanx At Start Of Expedition",
+      "name_ja": "出撃時の武器の戦技を「輝剣の円陣」にする"
+     }
+    ],
+    [
+     {
+      "id": 7005600,
+      "key": "partialHpRestorationUponPostDamageAttacks",
+      "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+      "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復"
+     }
+    ]
+   ],
+   "sortKey": 5
+  },
+  {
+   "id": 3229810690,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7122800,
+      "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+      "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+      "name_ja": "出撃時の武器の戦技を「グラビタス」にする"
+     }
+    ],
+    [
+     {
+      "id": 7010200,
+      "key": "flaskAlsoHealsAllies",
+      "name_en": "Flask Also Heals Allies",
+      "name_ja": "聖杯瓶の回復を、周囲の味方に分配"
+     }
+    ]
+   ],
+   "sortKey": 4
+  },
+  {
+   "id": 3229810691,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7030000,
+      "key": "improvedPoiseNearTotemStela",
+      "name_en": "Improved Poise Near Totem Stela",
+      "name_ja": "トーテム・ステラの周囲で、強靭度上昇"
+     }
+    ]
+   ],
+   "sortKey": 3
+  },
+  {
+   "id": 3229810692,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7122800,
+      "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+      "name_en": "Changes Compatible Armaments Skill To Gravitas At Start Of Expedition",
+      "name_ja": "出撃時の武器の戦技を「グラビタス」にする"
+     }
+    ],
+    [
+     {
+      "id": 7012200,
+      "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+      "name_en": "Slowly Restore Hp For Self And Nearby Allies When Hp Is Low",
+      "name_ja": "HP低下時、周囲の味方を含めHPをゆっくりと回復"
+     }
+    ]
+   ],
+   "sortKey": 2
+  },
+  {
+   "id": 3229810693,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7030200,
+      "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+      "name_en": "Hp Restored When Using Medicinal Boluses Etc",
+      "name_ja": "苔薬などのアイテム使用でHP回復"
+     }
+    ]
+   ],
+   "sortKey": 1
+  }
+ ]
+}

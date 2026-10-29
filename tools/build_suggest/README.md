@@ -62,4 +62,3 @@ python tools/build_suggest/research/characters_gen.py    # → research/characte
 
 - ことば入力（「刀 二刀 出血」のような自由入力を別名の辞書で選択肢に置き換える）
 - 戦技・術の固定（詳細設定）
-- 「潜在する力から…」「出撃時の武器の…」を複数付けると献器の最も左の遺物のものしか効かないことを探索で考慮する

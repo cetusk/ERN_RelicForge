@@ -78,6 +78,50 @@ class TestOptimizerScenarios(unittest.TestCase):
         self.assertEqual(results[1]['score'], 156)
 
 
+    def test_leftmost_only_effects_follow_the_slot_order(self):
+        # A skill change works only from the leftmost relic (see generate_leftmost_pool)
+        results = self.expected['wylder_normal_leftmost_skill']['results']
+        name = 'ABDCE'
+        order = lambda res: ''.join(name[r['id'] - 0xC0830001] for r in res['relics'])
+        urn = [r for r in results if r['vessel'] == 'urn']
+        sealed = [r for r in results if r['vessel'] == 'sealedUrn']
+        # Urn (Red, Red, Blue): A is placed left of B, B's and C's skill changes do not work
+        self.assertEqual((order(urn[0]), urn[0]['score'], urn[0]['requiredMet']), ('ABC', 135, True))
+        self.assertEqual([[e.get('inactive', False) for e in r['effects']] for r in urn[0]['relics']],
+                         [[False, False], [True, False], [True, False]])
+        # Sealed Urn (Blue, Red, Red): the blue relic is leftmost, so C's skill change overrides A's
+        self.assertEqual((order(sealed[0]), sealed[0]['score'], sealed[0]['requiredMet']), ('EAB', 126, True))
+        for r in sealed:
+            if 'C' in order(r) and 'A' in order(r):
+                self.assertFalse(r['requiredMet'])
+                self.assertTrue(r['relics'][1]['effects'][0]['inactive'])
+
+
+class TestLeftmostSharedGroup(unittest.TestCase):
+    """復讐者は戦技の変更と祈祷の変更が同時に効かない（最も左のものだけ）。ほかのキャラは別々に効く"""
+
+    def test_revenant_skill_and_incantation_changes_share_the_leftmost_rule(self):
+        from relic_optimizer import RelicOptimizer, load_leftmost_data, load_stacking_data
+        path = os.path.join(os.path.dirname(TESTS_DIR), 'resources', 'effects_data.json')
+        with open(path, encoding='utf-8') as f:
+            effects = json.load(f)['effects']
+        pick = lambda group: next(e for i, e in sorted(effects.items())
+                                  if e.get('leftmost') == group and not e.get('unreleased') and not e.get('deepOnly'))
+        skill, spell = pick('skill'), pick('spell')
+        plain = next(e for i, e in sorted(effects.items()) if int(i) >= 7000000 and not e.get('leftmost')
+                     and not e.get('unreleased') and not e.get('deepOnly') and '【' not in e['name_ja'])
+        relic = lambda rid, color, eff: {
+            'id': rid, 'itemKey': 'r', 'itemColor': color, 'itemType': 'Relic',
+            'effects': [[{'key': eff['key'], 'name_ja': eff['name_ja'], 'name_en': eff['name_en']}]]}
+        relics = [relic(1, 'Red', skill), relic(2, 'Red', spell), relic(3, 'Blue', plain)]
+        specs = [{'key': e['key'], 'priority': 'preferred'} for e in (skill, spell, plain)]
+        for character, score in (('追跡者', 30), ('復讐者', 20)):
+            opt = RelicOptimizer(relics, specs, None, load_stacking_data(path), load_leftmost_data(path))
+            best = opt.optimize_combined(['Red', 'Red', 'Blue'], [], deep_types=[], character=character, top_n=1)[0]
+            self.assertEqual(best['score'], score, character)
+            self.assertEqual(len(best['inactive']), 0 if character == '追跡者' else 1, character)
+
+
 class TestEffectsConfigLoader(unittest.TestCase):
     """README 形式の除外指定 (exclude_required 等) を GUI と同じ形式に変換すること"""
 

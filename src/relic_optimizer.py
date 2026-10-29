@@ -10,7 +10,7 @@ import re
 import sys
 import argparse
 import heapq
-from itertools import combinations, product
+from itertools import combinations, permutations, product
 from typing import List, Dict, Set, Tuple, Optional
 
 
@@ -23,6 +23,12 @@ PRIORITY_WEIGHTS = {
 
 # Concentration bonus: reward for multiple desired effects on a single relic
 CONCENTRATION_BONUS = 5
+
+# Effects that only work from the leftmost relic of a vessel when several of the same group are set
+# (effects_data.json "leftmost"; normal slots 1-3 come before deep slots 4-6). Groups as bits.
+LEFTMOST_BITS = {'find': 1, 'skill': 2, 'spell': 4, 'imbue': 8}
+# 復讐者 cannot change the skill of the fist and the incantation of the seal at the same time (wiki)
+LEFTMOST_SHARED = {'復讐者': {'spell': 'skill'}}
 
 # Character name mapping (JA -> EN)
 CHARACTER_NAMES = {
@@ -94,6 +100,17 @@ def load_stacking_data(effects_data_file: str) -> Dict:
     return key_stackable
 
 
+def load_leftmost_data(effects_data_file: str) -> Dict[str, str]:
+    """effects_data.json の "leftmost"（最も左の遺物のものだけ発動する効果のまとまり）: key -> group"""
+    with open(effects_data_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    groups: Dict[str, str] = {}
+    for entry in data.get('effects', {}).values():
+        if entry.get('leftmost'):
+            groups.setdefault(entry['key'], entry['leftmost'])
+    return groups
+
+
 def _extract_base_key_and_level(key: str):
     """PlusN サフィックスからベースキーとレベルを抽出
 
@@ -121,11 +138,13 @@ def resolve_character_name_ja(name: str) -> str:
 class RelicOptimizer:
     def __init__(self, relics: List[Dict], effect_specs: List[Dict],
                  vessels_data: Optional[Dict] = None,
-                 stacking_data: Optional[Dict] = None):
+                 stacking_data: Optional[Dict] = None,
+                 leftmost_data: Optional[Dict] = None):
         self.all_relics = relics
         self.effect_specs = effect_specs
         self.vessels_data = vessels_data
         self.stacking_data: Dict[str, bool] = stacking_data or {}
+        self.leftmost_data: Dict[str, str] = leftmost_data or {}
 
         # Pre-computed caches (populated on demand)
         self._effect_keys_cache: Dict[int, Set[str]] = {}
@@ -257,6 +276,193 @@ class RelicOptimizer:
 
         # Phase cache for cross-vessel reuse
         self._phase_cache: Dict[tuple, list] = {}
+
+        # Leftmost-only groups (set per character in _set_leftmost_character)
+        self._leftmost_character = None
+        self._key_bit: Dict[str, int] = {}
+        self._spec_bit = [0] * n_spec
+        self._relic_groups_cache: Dict[int, Tuple] = {}
+        self._cur_slots: List[str] = []
+
+    # === Effects that only work from the leftmost relic ===
+
+    def _set_leftmost_character(self, character):
+        char_ja = resolve_character_name_ja(character) if character else None
+        if self._key_bit and char_ja == self._leftmost_character:
+            return
+        self._leftmost_character = char_ja
+        shared = LEFTMOST_SHARED.get(char_ja, {})
+        self._key_bit = {k: LEFTMOST_BITS[shared.get(g, g)] for k, g in self.leftmost_data.items()
+                         if shared.get(g, g) in LEFTMOST_BITS}
+        self._spec_bit = [self._key_bit.get(k, 0) for k in self._spec_key_list]
+        self._relic_groups_cache = {}
+
+    def _relic_groups(self, rid) -> Tuple:
+        """((bit, key), ...): the relic's leftmost-only effects, the first one of each group"""
+        groups = self._relic_groups_cache.get(rid)
+        if groups is None:
+            seen = 0
+            out = []
+            for group in self._relic_by_id[rid]['effects']:
+                for e in group:
+                    b = self._key_bit.get(e['key'], 0)
+                    if b and not seen & b:
+                        seen |= b
+                        out.append((b, e['key']))
+            groups = tuple(out)
+            self._relic_groups_cache[rid] = groups
+        return groups
+
+    def _arrangements(self, rids, slot_colors):
+        """Orders of the relics that fit the slot colors (left to right), in permutation order of rids"""
+        out = []
+        n = len(rids)
+        colors = [self._relic_by_id[r].get('itemColor', '') for r in rids]
+        for perm in permutations(range(n)):
+            if all(slot_colors[p] == 'Any' or colors[perm[p]] == slot_colors[p] for p in range(n)):
+                out.append(tuple(rids[i] for i in perm))
+        return out
+
+    def _orders_by_effect(self, rids, slot_colors, prior_bits):
+        """The orders worth trying: one per way the side's own groups can turn out. A group matters only
+        when two relics of the side have different effects of it and no relic on the left has one"""
+        orders = self._arrangements(tuple(sorted(rids)), slot_colors)
+        keys: Dict[int, set] = {}
+        for rid in rids:
+            for b, k in self._relic_groups(rid):
+                keys.setdefault(b, set()).add(k)
+        ambiguous = sorted(b for b, ks in keys.items() if len(ks) > 1 and not b & prior_bits)
+        if not ambiguous:
+            return orders[:1]
+        out, seen = [], set()
+        for order in orders:
+            first = {}
+            for rid in order:
+                for b, k in self._relic_groups(rid):
+                    first.setdefault(b, k)
+            sig = tuple(first[b] for b in ambiguous)
+            if sig not in seen:
+                seen.add(sig)
+                out.append(order)
+        return out
+
+    def _side_keys(self, rids):
+        """group bit -> keys of the side's leftmost-only effects"""
+        keys: Dict[int, set] = {}
+        for rid in rids:
+            for b, k in self._relic_groups(rid):
+                keys.setdefault(b, set()).add(k)
+        return keys
+
+    def _side_wanted_groups(self, rids):
+        """Per relic: (number of desired effects, ((idx, bit, key) of its desired leftmost-only effects))"""
+        spec_bit = self._spec_bit
+        keys = self._spec_key_list
+        return tuple((len(self._compact_si[rid]),
+                      tuple((i, spec_bit[i], keys[i]) for i in self._compact_si[rid] if spec_bit[i]))
+                     for rid in rids)
+
+    @staticmethod
+    def _overridden(n_keys, d_wanted):
+        """Deep relics' desired effects that work in no placement: a normal relic (on the left) has an
+        effect of the same group and none has this one. Returns (their indices, the deep relics'
+        concentration bonus without them)"""
+        removed = set()
+        conc = 0
+        for n_si, occ in d_wanted:
+            k = n_si
+            for i, b, key in occ:
+                if b in n_keys and key not in n_keys[b]:
+                    removed.add(i)
+                    k -= 1
+            conc += CONCENTRATION_BONUS * k * (k - 1) // 2
+        return removed, conc
+
+    def _contribution(self, i, c):
+        """Score of desired effect i present c times (same rule as _fast_stacking_score)"""
+        if c == 0:
+            return 0
+        si = self._spec_stacking_int[i]
+        w = self._spec_weights[i]
+        if si == 1:
+            return w * c
+        if si == 2:
+            return w - self._spec_penalty30[i] * (c - 1)
+        return w - self._spec_penalty50[i] * (c - 1)
+
+    def _effective(self, order, active, inactive=None):
+        """Desired-effect indices per relic, without those another group effect on the left overrides.
+        active: group bit -> key of the relics on the left (updated). inactive: collects (rid, key)"""
+        spec_bit = self._spec_bit
+        keys = self._spec_key_list
+        lists = []
+        for rid in order:
+            si = self._compact_si[rid]
+            lists.append(tuple(i for i in si if not (spec_bit[i] and spec_bit[i] in active
+                                                     and active[spec_bit[i]] != keys[i])))
+            for b, k in self._relic_groups(rid):
+                if b in active:
+                    if inactive is not None and active[b] != k:
+                        inactive.add((rid, k))
+                else:
+                    active[b] = k
+        return lists
+
+    def _arrange_best(self, n_rids, n_slots, d_rids, d_slots):
+        """Best placement of the relics (normal left to right, then deep) for the leftmost-only effects.
+        Returns (score without exclusions, sub-score without exclusions, counts, concentration,
+        required mask, normal order, deep order); ties keep the first order (relic ids ascending first)"""
+        n_orders = self._orders_by_effect(n_rids, n_slots, 0)
+        d_orders_by_prior: Dict[int, list] = {}
+        n_spec = self._n_spec
+        best = None
+        for n_order in n_orders:
+            n_active: Dict[int, str] = {}
+            n_lists = self._effective(n_order, n_active)
+            prior = 0
+            for b in n_active:
+                prior |= b
+            d_orders = d_orders_by_prior.get(prior)
+            if d_orders is None:
+                d_orders = d_orders_by_prior[prior] = self._orders_by_effect(d_rids, d_slots, prior)
+            for d_order in d_orders:
+                lists = n_lists + self._effective(d_order, dict(n_active))
+                counts = [0] * n_spec
+                for si in lists:
+                    for idx in si:
+                        counts[idx] += 1
+                score, has_dup = self._fast_stacking_score_dup(counts)
+                if has_dup:
+                    cb = self._concentration(lists)
+                else:
+                    cb = sum(CONCENTRATION_BONUS * len(si) * (len(si) - 1) // 2 for si in lists)
+                score += cb
+                sub = 0
+                rm = 0
+                for i in range(n_spec):
+                    if counts[i]:
+                        sub += self._spec_sub_rank_values[i]
+                        if self._is_required[i]:
+                            rm |= 1 << i
+                if best is None or (score, sub) > (best[0], best[1]):
+                    best = (score, sub, counts, cb, rm, n_order, d_order)
+        return best
+
+    def _inactive_effects(self, n_order, d_order):
+        """(rid, key) of the leftmost-only effects that do not work in this placement"""
+        inactive = set()
+        active: Dict[int, str] = {}
+        self._effective(n_order, active, inactive)
+        self._effective(d_order, active, inactive)
+        return inactive
+
+    def _phase_entry(self, score, counts, cb, ep, her, ids, esr, rm, gm, wm, multi):
+        """A phase combo; when a desired leftmost-only effect may be overridden by another relic's
+        effect of the same group, score its best placement instead (lm = True)"""
+        if not multi & wm:
+            return (score, tuple(counts), cb, ep, her, ids, esr, rm, gm, wm, False)
+        sc, _, cts, cb, rm, _, _ = self._arrange_best(ids, self._cur_slots, (), ())
+        return (sc - ep, tuple(cts), cb, ep, her, ids, esr, rm, gm, wm, True)
 
     def _resolve_name_matches(self, name_ja: Optional[str], name_en: Optional[str],
                                spec: Dict, weight: int,
@@ -421,7 +627,7 @@ class RelicOptimizer:
     def _compact_relic(self, relic: Dict) -> Tuple:
         """レリックをコンパクトなタプルに変換
         Returns: (rid, spec_indices, excl_penalty, has_excl_req,
-                  conc_bonus, excl_sub_rank, req_mask)
+                  conc_bonus, excl_sub_rank, req_mask, group_mask, want_mask)
         """
         rid = relic['id']
         spec_keys = self._get_spec_keys(relic)
@@ -449,16 +655,26 @@ class RelicOptimizer:
             if self._is_required[idx]:
                 req_mask |= (1 << idx)
 
+        # Leftmost-only groups on the relic (any effect) and those of its desired effects
+        group_mask = 0
+        for b, _ in self._relic_groups(rid):
+            group_mask |= b
+        want_mask = 0
+        for idx in spec_indices:
+            want_mask |= self._spec_bit[idx]
+
         return (rid, spec_indices, excl_penalty, has_excl_req,
-                conc_bonus, excl_sub_rank, req_mask)
+                conc_bonus, excl_sub_rank, req_mask, group_mask, want_mask)
 
     def _enumerate_combos(self, compact_cands, slot_colors):
         """スロット色パターンに応じた最適なコンボ列挙
         Returns: list of (score, counts_tuple, conc, excl_pen,
-                          has_excl_req, relic_ids, excl_sub_sum, req_mask)
+                          has_excl_req, relic_ids, excl_sub_sum, req_mask,
+                          group_mask, want_mask, leftmost_scored)
         """
         n_spec = self._n_spec
         n_slots = len(slot_colors)
+        self._cur_slots = list(slot_colors)
 
         # Classify the slot pattern
         has_any = 'Any' in slot_colors
@@ -479,11 +695,11 @@ class RelicOptimizer:
         results = []
         n = len(cands)
         for i in range(n):
-            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm = cands[i]
+            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm, ri_gm, ri_wm = cands[i]
             for j in range(i + 1, n):
-                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm = cands[j]
+                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm, rj_gm, rj_wm = cands[j]
                 for k in range(j + 1, n):
-                    rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm = cands[k]
+                    rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm, rk_gm, rk_wm = cands[k]
                     counts = [0] * n_spec
                     for idx in ri_si:
                         counts[idx] += 1
@@ -497,24 +713,22 @@ class RelicOptimizer:
                     score += cb
                     score -= ri_ep + rj_ep + rk_ep
                     her = ri_her or rj_her or rk_her
-                    results.append((
-                        score,
-                        tuple(counts),
-                        cb,
-                        ri_ep + rj_ep + rk_ep,
-                        her,
+                    results.append(self._phase_entry(
+                        score, counts, cb, ri_ep + rj_ep + rk_ep, her,
                         (ri_id, rj_id, rk_id),
                         ri_esr + rj_esr + rk_esr,
-                        ri_rm | rj_rm | rk_rm))
+                        ri_rm | rj_rm | rk_rm,
+                        ri_gm | rj_gm | rk_gm, ri_wm | rj_wm | rk_wm,
+                        (ri_gm & rj_gm) | (ri_gm & rk_gm) | (rj_gm & rk_gm)))
         return results
 
     def _enum_all_diff(self, compact_cands, n_spec):
         """全スロット異色: 重複チェック不要"""
         results = []
         c0, c1, c2 = compact_cands[0], compact_cands[1], compact_cands[2]
-        for ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm in c0:
-            for rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm in c1:
-                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm in c2:
+        for ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm, ri_gm, ri_wm in c0:
+            for rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm, rj_gm, rj_wm in c1:
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm, rk_gm, rk_wm in c2:
                     counts = [0] * n_spec
                     for idx in ri_si:
                         counts[idx] += 1
@@ -528,15 +742,13 @@ class RelicOptimizer:
                     score += cb
                     score -= ri_ep + rj_ep + rk_ep
                     her = ri_her or rj_her or rk_her
-                    results.append((
-                        score,
-                        tuple(counts),
-                        cb,
-                        ri_ep + rj_ep + rk_ep,
-                        her,
+                    results.append(self._phase_entry(
+                        score, counts, cb, ri_ep + rj_ep + rk_ep, her,
                         (ri_id, rj_id, rk_id),
                         ri_esr + rj_esr + rk_esr,
-                        ri_rm | rj_rm | rk_rm))
+                        ri_rm | rj_rm | rk_rm,
+                        ri_gm | rj_gm | rk_gm, ri_wm | rj_wm | rk_wm,
+                        (ri_gm & rj_gm) | (ri_gm & rk_gm) | (rj_gm & rk_gm)))
         return results
 
     def _enum_two_same(self, compact_cands, slot_colors, n_spec):
@@ -555,10 +767,10 @@ class RelicOptimizer:
         n_same = len(same_cands)
 
         for i in range(n_same):
-            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm = same_cands[i]
+            ri_id, ri_si, ri_ep, ri_her, ri_cb, ri_esr, ri_rm, ri_gm, ri_wm = same_cands[i]
             for j in range(i + 1, n_same):
-                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm = same_cands[j]
-                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm in diff_cands:
+                rj_id, rj_si, rj_ep, rj_her, rj_cb, rj_esr, rj_rm, rj_gm, rj_wm = same_cands[j]
+                for rk_id, rk_si, rk_ep, rk_her, rk_cb, rk_esr, rk_rm, rk_gm, rk_wm in diff_cands:
                     if rk_id == ri_id or rk_id == rj_id:
                         continue
                     counts = [0] * n_spec
@@ -574,15 +786,13 @@ class RelicOptimizer:
                     score += cb
                     score -= ri_ep + rj_ep + rk_ep
                     her = ri_her or rj_her or rk_her
-                    results.append((
-                        score,
-                        tuple(counts),
-                        cb,
-                        ri_ep + rj_ep + rk_ep,
-                        her,
+                    results.append(self._phase_entry(
+                        score, counts, cb, ri_ep + rj_ep + rk_ep, her,
                         (ri_id, rj_id, rk_id),
                         ri_esr + rj_esr + rk_esr,
-                        ri_rm | rj_rm | rk_rm))
+                        ri_rm | rj_rm | rk_rm,
+                        ri_gm | rj_gm | rk_gm, ri_wm | rj_wm | rk_wm,
+                        (ri_gm & rj_gm) | (ri_gm & rk_gm) | (rj_gm & rk_gm)))
         return results
 
     def _enum_general(self, compact_cands, n_spec):
@@ -591,7 +801,8 @@ class RelicOptimizer:
         seen = set()
 
         def recurse(slot_idx, chosen_ids, partial_si, partial_ep,
-                     partial_her, partial_cb, partial_esr, partial_rm):
+                     partial_her, partial_cb, partial_esr, partial_rm,
+                     partial_gm, partial_wm, partial_multi):
             if slot_idx == len(compact_cands):
                 canon = tuple(sorted(chosen_ids))
                 if canon in seen:
@@ -604,15 +815,13 @@ class RelicOptimizer:
                 score, has_dup = self._fast_stacking_score_dup(counts)
                 cb = self._concentration(partial_si) if has_dup else partial_cb
                 score += cb - partial_ep
-                results.append((
-                    score,
-                    tuple(counts),
-                    cb, partial_ep, partial_her,
-                    tuple(chosen_ids),
-                    partial_esr, partial_rm))
+                results.append(self._phase_entry(
+                    score, counts, cb, partial_ep, partial_her,
+                    tuple(chosen_ids), partial_esr, partial_rm,
+                    partial_gm, partial_wm, partial_multi))
                 return
 
-            for rid, si, ep, her, cb, esr, rm in compact_cands[slot_idx]:
+            for rid, si, ep, her, cb, esr, rm, gm, wm in compact_cands[slot_idx]:
                 if rid in chosen_ids:
                     continue
                 recurse(
@@ -623,9 +832,12 @@ class RelicOptimizer:
                     partial_her or her,
                     partial_cb + cb,
                     partial_esr + esr,
-                    partial_rm | rm)
+                    partial_rm | rm,
+                    partial_gm | gm,
+                    partial_wm | wm,
+                    partial_multi | (partial_gm & gm))
 
-        recurse(0, (), (), 0, False, 0, 0, 0)
+        recurse(0, (), (), 0, False, 0, 0, 0, 0, 0, 0)
         return results
 
     def is_stackable(self, key: str) -> bool:
@@ -928,6 +1140,7 @@ class RelicOptimizer:
             types=normal_types, character=character)
         deep_filtered = self.filter_relics(
             types=deep_types, character=character)
+        self._set_leftmost_character(character)
 
         # Build candidate lists for all 6 slots
         normal_cands = self._build_slot_candidates(
@@ -954,7 +1167,8 @@ class RelicOptimizer:
         # Phase 1: Enumerate normal combos using optimized enumeration
         # Compact format: (score, counts_tuple, conc, excl_pen,
         #                   has_excl_req, relic_ids, excl_sub_sum)
-        n_cache_key = tuple(sorted(normal_slot_colors))
+        # (slot order matters: it decides which relic is on the left)
+        n_cache_key = tuple(normal_slot_colors)
         if n_cache_key in self._phase_cache:
             normal_combos = self._phase_cache[n_cache_key]
         elif all(len(sc) > 0 for sc in normal_cands):
@@ -967,7 +1181,7 @@ class RelicOptimizer:
             normal_combos = []
 
         # Phase 2: Enumerate deep combos
-        d_cache_key = ('deep', tuple(sorted(deep_slot_colors)))
+        d_cache_key = ('deep', tuple(deep_slot_colors))
         if d_cache_key in self._phase_cache:
             deep_combos = self._phase_cache[d_cache_key]
         elif all(len(sc) > 0 for sc in deep_cands):
@@ -1003,7 +1217,7 @@ class RelicOptimizer:
         # Single-side (normal-only / deep-only, or one side without candidates):
         # pair with one empty combo so both modes share the Phase 3 ranking
         # (required-met first, sub-score tiebreak, deterministic order)
-        empty_combo = (0, (0,) * n_spec, 0, 0, False, (), 0, 0)
+        empty_combo = (0, (0,) * n_spec, 0, 0, False, (), 0, 0, 0, 0, False)
         single_side = not normal_combos or not deep_combos
         if not normal_combos:
             normal_combos = [empty_combo]
@@ -1038,8 +1252,10 @@ class RelicOptimizer:
         true_full = False  # once heap_true >= topN, stop accepting false entries
         evaluated = 0
 
-        for ns, n_cts, n_conc, n_ep, n_her, n_rids, n_esr, n_rm \
+        d_wanted = [None] * len(deep_top)   # per deep combo, built when first needed
+        for ns, n_cts, n_conc, n_ep, n_her, n_rids, n_esr, n_rm, n_gm, n_wm, n_lm \
                 in normal_top:
+            n_keys = None
             # Outer pruning (score-based, against heap_true)
             if true_full and len(heap_true) >= top_n:
                 best_possible_score = ns + best_deep_score
@@ -1047,8 +1263,8 @@ class RelicOptimizer:
                 if -best_possible_score >= heap_true[0][0]:
                     break
 
-            for ds, d_cts, d_conc, d_ep, d_her, d_rids, d_esr, d_rm \
-                    in deep_top:
+            for di, (ds, d_cts, d_conc, d_ep, d_her, d_rids, d_esr, d_rm, d_gm, d_wm, d_lm) \
+                    in enumerate(deep_top):
                 # Inner pruning
                 if true_full and len(heap_true) >= top_n:
                     best_possible_score = ns + ds
@@ -1099,10 +1315,50 @@ class RelicOptimizer:
 
                 evaluated += 1
 
+                # Leftmost-only effects: a deep relic's desired effect is overridden by a normal relic's
+                # effect of the same group (normal slots are on the left), or a side was already
+                # placed for them (lm): score the best placement of all six relics
+                lm_pair = n_lm or d_lm or (n_gm & d_wm)
+                res_n, res_d = n_cts, d_cts
+                if lm_pair:
+                    # Deep effects a normal relic's effect of the same group always overrides: take them
+                    # away now. The placement only takes effects away, so this is an upper bound
+                    if n_gm & d_wm:
+                        if n_keys is None:
+                            n_keys = self._side_keys(n_rids)
+                        if d_wanted[di] is None:
+                            d_wanted[di] = self._side_wanted_groups(d_rids)
+                        removed, d_conc_left = self._overridden(n_keys, d_wanted[di])
+                        score -= d_conc - min(d_conc, d_conc_left)
+                        for i in removed:
+                            # no normal relic has it, so none is left (d_cts may already miss some)
+                            c = n_cts[i] + d_cts[i]
+                            if c:
+                                score -= self._contribution(i, c) - self._contribution(i, n_cts[i])
+                                if not n_cts[i]:
+                                    sub_score -= sub_rank_values[i]
+                                    if is_required[i]:
+                                        req_met = False
+                    bound = (-score, -sub_score, counter)
+                    can_true = req_met and (len(heap_true) < top_n or bound < heap_true[0])
+                    can_false = not true_full and (len(heap_false) < top_n or bound < heap_false[0])
+                    if not (can_true or can_false):
+                        counter += 1
+                        continue
+                    sc, sub, cts, _, _, _, _ = self._arrange_best(
+                        n_rids, normal_slot_colors, d_rids, deep_slot_colors)
+                    score = sc - n_ep - d_ep
+                    sub_score = sub - (n_esr + d_esr)
+                    has_all_required = all(cts[i] for i in required_idx_set)
+                    req_met = has_all_required and not has_excl_req
+                    res_n, res_d = cts, (0,) * n_spec
+                    if not req_met and true_full:
+                        counter += 1
+                        continue
                 # Concentration: duplicates across the normal and deep sides earn no bonus either.
                 # The bonus only goes down, so the score above is an upper bound: work out the exact
                 # one only when that bound could still enter its heap (same result as JS)
-                if has_dup:
+                elif has_dup:
                     heap = heap_true if req_met else (None if true_full else heap_false)
                     if heap is None or (len(heap) >= top_n
                                         and (-score, -sub_score, counter) >= heap[0]):
@@ -1118,7 +1374,7 @@ class RelicOptimizer:
                     if len(heap_true) < top_n:
                         heapq.heappush(heap_true, heap_key)
                         result_map[counter] = (
-                            True, score, sub_score, n_cts, d_cts,
+                            True, score, sub_score, res_n, res_d,
                             n_rids, d_rids)
                         if len(heap_true) >= top_n:
                             true_full = True
@@ -1126,20 +1382,20 @@ class RelicOptimizer:
                         evicted = heapq.heapreplace(heap_true, heap_key)
                         del result_map[evicted[2]]
                         result_map[counter] = (
-                            True, score, sub_score, n_cts, d_cts,
+                            True, score, sub_score, res_n, res_d,
                             n_rids, d_rids)
                 elif not true_full:
                     # Insert into heap_false only if heap_true not yet full
                     if len(heap_false) < top_n:
                         heapq.heappush(heap_false, heap_key)
                         result_map[counter] = (
-                            False, score, sub_score, n_cts, d_cts,
+                            False, score, sub_score, res_n, res_d,
                             n_rids, d_rids)
                     elif heap_key < heap_false[0]:
                         evicted = heapq.heapreplace(heap_false, heap_key)
                         del result_map[evicted[2]]
                         result_map[counter] = (
-                            False, score, sub_score, n_cts, d_cts,
+                            False, score, sub_score, res_n, res_d,
                             n_rids, d_rids)
 
                 counter += 1
@@ -1152,6 +1408,9 @@ class RelicOptimizer:
         def build_result(hk):
             data = result_map[hk[2]]
             rm, sc, ss, nc, dc, nr, dr = data
+            # relics in slot order (left to right), placed for the leftmost-only effects
+            _, _, _, _, _, nr, dr = self._arrange_best(nr, normal_slot_colors, dr, deep_slot_colors)
+            inactive = self._inactive_effects(nr, dr)
             matched = set()
             for i in range(n_spec):
                 if nc[i] + dc[i] > 0:
@@ -1171,6 +1430,7 @@ class RelicOptimizer:
                 'excluded_present': excl,
                 'relics': n_rel + d_rel,
                 'normal_relics': n_rel, 'deep_relics': d_rel,
+                'inactive': inactive,
             }
 
         # Deterministic tiebreaker: sorted relic IDs (ascending)
@@ -1243,10 +1503,12 @@ class RelicOptimizer:
         return results[:top_n]
 
     def _format_relic(self, relic: Dict, matched_keys: Set[str],
-                      excluded_keys: Optional[Set[str]] = None) -> Dict:
-        """遺物1つの出力フォーマット"""
+                      excluded_keys: Optional[Set[str]] = None,
+                      inactive: Optional[Set] = None) -> Dict:
+        """遺物1つの出力フォーマット（inactive: 左の遺物の効果が優先されて発動しない (id, key)）"""
         effects_out = []
         excl_set = excluded_keys or set()
+        inactive = inactive or set()
         for group in relic['effects']:
             main_eff = group[0]
             matched = main_eff['key'] in matched_keys
@@ -1264,6 +1526,8 @@ class RelicOptimizer:
                 eff_entry['excluded'] = True
                 eff_entry['excludePriority'] = \
                     self.exclude_lookup[main_eff['key']]['priority']
+            if (relic['id'], main_eff['key']) in inactive:
+                eff_entry['inactive'] = True
             effects_out.append(eff_entry)
             for sub in group[1:]:
                 sub_matched = sub['key'] in matched_keys
@@ -1305,11 +1569,12 @@ class RelicOptimizer:
             excluded_keys = res.get('excluded_present', set())
 
             if is_combined and 'normal_relics' in res:
+                inactive = res.get('inactive')
                 normal_out = [self._format_relic(r, matched_keys,
-                              excluded_keys)
+                              excluded_keys, inactive)
                               for r in res['normal_relics']]
                 deep_out = [self._format_relic(r, matched_keys,
-                            excluded_keys)
+                            excluded_keys, inactive)
                             for r in res['deep_relics']]
                 entry = {
                     'rank': rank,
@@ -1324,7 +1589,7 @@ class RelicOptimizer:
                 }
             else:
                 relics_out = [self._format_relic(r, matched_keys,
-                              excluded_keys)
+                              excluded_keys, res.get('inactive'))
                               for r in res['relics']]
                 entry = {
                     'rank': rank,
@@ -1531,10 +1796,13 @@ def main():
         n_stackable = sum(1 for v in stacking_data.values() if v)
         print(f"  Effects with stacking info: {len(stacking_data)} "
               f"({n_stackable} stackable)", file=sys.stderr)
+        leftmost_data = load_leftmost_data(effects_data_file)
+    else:
+        leftmost_data = None
 
     # Create optimizer
     optimizer = RelicOptimizer(relics, effect_specs, vessels_data,
-                               stacking_data)
+                               stacking_data, leftmost_data)
 
     # Vessel-aware mode (character specified + vessels data available)
     if args.character and vessels_data:

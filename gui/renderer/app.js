@@ -2331,6 +2331,11 @@ async function runOptimization(options = {}) {
       }
     }
   }
+  // Effects that only work from the leftmost relic (key -> group), see relic-optimizer.js
+  const leftmostData = {};
+  for (const entry of Object.values((effectsData && effectsData.effects) || {})) {
+    if (entry.leftmost && !(entry.key in leftmostData)) leftmostData[entry.key] = entry.leftmost;
+  }
 
   // Terminate previous worker if running
   if (currentOptWorker) {
@@ -2411,6 +2416,7 @@ async function runOptimization(options = {}) {
     effectSpecs: params.effects,
     vesselsData: vesselsData,
     stackingData: stackingData,
+    leftmostData: leftmostData,
     params: {
       character: params.character,
       vessel: params.vessel,
@@ -2826,7 +2832,7 @@ function renderSuggestionSummary(sug) {
     ${cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('')}
     ${(cond.notes || []).map((n) => `<p class="sg-note">${escapeHtml(suggestNoteText(n, input, ja))}</p>`).join('')}
     ${notOnRelics}
-    ${leftmost ? `<p class="sg-note">${ja ? '「潜在する力から…」「出撃時の武器の…」の効果は、同じ種類を複数付けても献器の最も左の遺物のものしか発動しません。探索はこれを考慮しないため、結果の並び順を確認してください。' : 'When several "dormant power…" or "starting armament…" effects of the same kind are equipped, only the one on the leftmost relic of the vessel works; the search does not take this into account.'}</p>` : ''}
+    ${leftmost ? `<p class="sg-note">${ja ? '「潜在する力から…」「出撃時の武器の…」の効果は、同じ種類を複数付けると献器の最も左の遺物のものしか発動しません。探索はこれを考慮して遺物の並び（左から）を決めます。結果の並び順どおりにセットしてください。' : 'When several "dormant power…" or "starting armament…" effects of the same kind are equipped, only the one on the leftmost relic of the vessel works. The search takes this into account and lists the relics left to right: set them in that order.'}</p>` : ''}
   </div>`;
 }
 
@@ -3282,8 +3288,9 @@ function renderResultCard(res, ja, isBest, params, idx) {
         } else if (isSpec) {
           cls += ' spec-miss';
         }
-        if (eff._wasted) cls += ' wasted';
-        html += `<span class="${cls}"${eff._wasted ? ` title="${wastedLabel(ja)}"` : ''}>${effName}</span>`;
+        if (eff._wasted || eff.inactive) cls += ' wasted';
+        const note = eff.inactive ? inactiveLabel(ja) : eff._wasted ? wastedLabel(ja) : '';
+        html += `<span class="${cls}"${note ? ` title="${note}"` : ''}>${effName}</span>`;
       });
       html += `</div>`;
       html += `</div>`;
@@ -3323,7 +3330,7 @@ function markWastedDuplicates(res) {
   const matchedCount = relics.map(r => (r.effects || []).filter(e => e.matched).length);
   const holders = new Map();
   relics.forEach((r, ri) => (r.effects || []).forEach(eff => {
-    if (eff.isDebuff || stack[eff.key] !== false) return;
+    if (eff.isDebuff || eff.inactive || stack[eff.key] !== false) return;
     if (!holders.has(eff.key)) holders.set(eff.key, []);
     holders.get(eff.key).push({ ri, eff });
   }));
@@ -3339,6 +3346,12 @@ function markWastedDuplicates(res) {
 
 function wastedLabel(ja) {
   return ja ? '重複・効果なし' : 'Duplicate (no effect)';
+}
+
+// An effect that only works from the leftmost relic, overridden by one of the same kind further left
+// (marked `inactive` by the build search; relics are listed left to right)
+function inactiveLabel(ja) {
+  return ja ? '左の遺物が優先・効果なし' : 'Overridden by a relic on the left (no effect)';
 }
 
 function computeScoreBreakdown(res, params) {
@@ -3609,7 +3622,8 @@ function renderOptDetailRelic(relic, ja) {
     if (excluded) effCls += ' excluded';
     else if (matched) effCls += ' matched';
     html += `<div class="opt-detail-effect-item">`;
-    html += `<div class="${effCls}">${mainName}${group.main._wasted ? `<span class="opt-wasted-badge">${wastedLabel(ja)}</span>` : ''}</div>`;
+    const badge = group.main.inactive ? inactiveLabel(ja) : group.main._wasted ? wastedLabel(ja) : '';
+    html += `<div class="${effCls}">${mainName}${badge ? `<span class="opt-wasted-badge">${badge}</span>` : ''}</div>`;
     group.debuffs.forEach(d => {
       const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
       const isDemerit = classifyEffect(d.name_ja, d.name_en, d.key) === 'demerit';
