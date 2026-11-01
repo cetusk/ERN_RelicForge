@@ -2610,8 +2610,22 @@ function renderSuggestText() {
   t('sg-build-label', ja ? '定番のビルドから始める（任意）' : 'Start from a known build (optional)');
   t('sg-weapons-label', ja ? '武器種' : 'Weapon types');
   t('sg-focus-label', ja ? '重視すること' : 'Focus');
-  t('sg-focus-left', ja ? '生存' : 'Survival');
-  t('sg-focus-right', ja ? '火力' : 'Damage');
+  t('sg-focus-keep', ja
+    ? '選んだ型や定番のビルドの効果は、つまみの位置に関係なく残ります。つまみは、それに足す汎用の効果を決めるだけです。'
+    : 'The effects of the playstyles and the known build you picked stay wherever the slider is. The slider only decides which general effects are added on top.');
+  t('sg-focus-guide-label', ja ? '選び方の目安' : 'How to choose');
+  document.getElementById('sg-focus-guide').innerHTML = (ja ? [
+    '夜の王や強敵に倒されることが多い → 生存側へ',
+    '倒されはしないが、倒すのに時間がかかる → 火力側へ',
+    '守ってくれる味方がいる → 火力側も選びやすい',
+    '迷ったら → バランス',
+  ] : [
+    'You often go down against Nightlords and strong enemies → toward Survival',
+    'You survive, but kills take long → toward Damage',
+    'A teammate protects you → Damage is easier to pick',
+    'Not sure → Balanced',
+  ]).map((x) => `<li>${escapeHtml(x)}</li>`).join('');
+  renderSuggestFocus();
   t('sg-preview-label', ja ? '探索する条件' : 'Search conditions');
   t('suggest-clear-label', ja ? 'クリア' : 'Clear');
   t('suggest-run-label', ja ? '提案を探す' : 'Find builds');
@@ -2621,6 +2635,46 @@ function renderSuggestText() {
 function suggestModeText(mode, ja) {
   if (mode === 'normal') return ja ? '通常モード（通常の遺物のみ）' : 'Normal mode (normal relics only)';
   return ja ? '深き夜（通常+深層の遺物）' : 'Deep of Night (normal + deep relics)';
+}
+
+// The 生存 ↔ 火力 slider: slider value -2 (left, 生存) .. 2 (right, 火力). suggestConditions takes the
+// opposite sign (negative = 火力)
+const SUGGEST_FOCUS_STEPS = {
+  '-2': {
+    ja: ['生存特化', '守りの効果（最大HP・カット率・強靭度・リゲイン）を「推奨」にします。攻撃力の効果は足しません。'],
+    en: ['Survival', 'Defensive effects (max HP, damage negation, poise, HP regain on attack) become Preferred. No attack effects are added.'],
+  },
+  '-1': {
+    ja: ['生存寄り', '守りの効果を「推奨」にし、攻撃力の効果を「任意」で少し足します。'],
+    en: ['Lean survival', 'Defensive effects become Preferred; attack effects are added as Nice to have.'],
+  },
+  0: {
+    ja: ['バランス', '守りと攻撃力の効果を、両方「任意」で少し足します（迷ったらここ）。'],
+    en: ['Balanced', 'Both defensive and attack effects are added as Nice to have (pick this if unsure).'],
+  },
+  1: {
+    ja: ['火力寄り', '攻撃力の効果（物理攻撃力・封牢／夜の侵入者を倒す度）を「推奨」にし、守りの効果を「任意」で少し足します。'],
+    en: ['Lean damage', 'Attack effects (physical attack, evergaol / Night Invader buffs) become Preferred; defensive effects are added as Nice to have.'],
+  },
+  2: {
+    ja: ['火力特化', '攻撃力の効果を「推奨」にします。守りの効果は足しません。'],
+    en: ['Damage', 'Attack effects become Preferred. No defensive effects are added.'],
+  },
+};
+
+function suggestFocusStep(value, ja) {
+  const step = SUGGEST_FOCUS_STEPS[Math.max(-2, Math.min(2, Number(value) || 0))];
+  return ja ? step.ja : step.en;
+}
+
+function renderSuggestFocus() {
+  const ja = displayLang === 'ja';
+  const value = Number(sgFocus.value) || 0;
+  const steps = document.getElementById('sg-focus-steps');
+  steps.innerHTML = [-2, -1, 0, 1, 2].map((v, i) => `<button type="button" class="suggest-focus-step" style="--i:${i}" data-value="${v}" aria-pressed="${v === value}">${escapeHtml(suggestFocusStep(v, ja)[0])}</button>`).join('');
+  const [name, desc] = suggestFocusStep(value, ja);
+  document.getElementById('sg-focus-desc').innerHTML = `<strong>${escapeHtml(name)}</strong>: ${escapeHtml(desc)}`;
+  sgFocus.setAttribute('aria-valuetext', name);
 }
 
 function suggestChip(kind, id, title) {
@@ -2807,9 +2861,7 @@ function renderSuggestionSummary(sug) {
   const ja = displayLang === 'ja';
   const { input, cond } = sug;
   const build = suggestData && input.buildId ? suggestData.builds.find((b) => b.id === input.buildId) : null;
-  const f = input.focus;
-  const focusText = f === 0 ? (ja ? 'バランス' : 'Balanced')
-    : `${f < 0 ? (ja ? '火力' : 'Damage') : (ja ? '生存' : 'Survival')}${Math.abs(f) === 2 ? (ja ? '（強）' : ' (strong)') : ''}`;
+  const focusText = suggestFocusStep(-input.focus, ja)[0];   // input.focus: negative = 火力
   const choices = [
     [ja ? 'キャラ' : 'Character', charDisplayName(input.character, ja)],
     [ja ? '献器' : 'Vessel', input.vessel ? vesselDisplayName(input.vessel, ja) : (ja ? 'おまかせ' : 'Any')],
@@ -2845,11 +2897,19 @@ document.getElementById('suggest-clear').addEventListener('click', () => {
   suggestPicks.types.clear();
   sgBuild.value = '';
   sgFocus.value = '0';
+  renderSuggestFocus();
   renderSuggestPanel();
 });
 sgCharacter.addEventListener('change', () => { renderSuggestBuilds(); updateSuggestPreview(); });
 sgBuild.addEventListener('change', () => { renderSuggestBuildInfo(); updateSuggestPreview(); });
 [sgVessel, sgMode, sgFocus].forEach((el) => el.addEventListener('input', updateSuggestPreview));
+sgFocus.addEventListener('input', renderSuggestFocus);
+document.getElementById('sg-focus-steps').addEventListener('click', (e) => {
+  const step = e.target.closest('.suggest-focus-step');
+  if (!step) return;
+  sgFocus.value = step.dataset.value;
+  sgFocus.dispatchEvent(new Event('input'));
+});
 suggestInspector.addEventListener('click', (e) => {
   const chip = e.target.closest('.suggest-chip');
   if (!chip) return;

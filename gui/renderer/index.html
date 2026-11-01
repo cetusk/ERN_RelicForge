@@ -339,10 +339,15 @@
       <div class="inspector-section">
         <h4 id="sg-focus-label">重視すること</h4>
         <div class="suggest-focus">
-          <span id="sg-focus-left">生存</span>
-          <input type="range" id="sg-focus" min="-2" max="2" step="1" value="0">
-          <span id="sg-focus-right">火力</span>
+          <input type="range" id="sg-focus" min="-2" max="2" step="1" value="0" aria-describedby="sg-focus-desc">
+          <div id="sg-focus-steps" class="suggest-focus-steps"></div>
         </div>
+        <p id="sg-focus-desc" class="suggest-focus-desc"></p>
+        <p id="sg-focus-keep" class="suggest-hint"></p>
+        <details class="suggest-focus-guide">
+          <summary id="sg-focus-guide-label">選び方の目安</summary>
+          <ul id="sg-focus-guide"></ul>
+        </details>
       </div>
       <div class="inspector-section">
         <h4 id="sg-preview-label">探索する条件</h4>
