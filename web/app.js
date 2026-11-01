@@ -3772,6 +3772,18 @@ function suggestNoteText(n, input, ja) {
     return ja ? `「見つけやすくなる」は複数付けても1つしか効かない（最も左の遺物のもの）ため、最初に選んだ${n.first}を推奨、${n.rest.join('・')}を任意にしました`
       : `Only one "helps discover" effect works (the leftmost relic's): ${n.first} (picked first) is preferred, ${n.rest.join(', ')} nice to have`;
   }
+  if (n.kind === 'character') {
+    // why texts are short Japanese notes from the wiki research; the English UI keeps the effect names only
+    if (!ja) return `Avoided for this character: ${n.items.map((x) => q(x.key)).join(', ')}`;
+    const groups = new Map();   // effects with the same reason share one note
+    for (const x of n.items) {
+      const why = `${x.why}${x.tier === 'comment' ? '、コメント欄より' : ''}`;
+      if (!groups.has(why)) groups.set(why, []);
+      groups.get(why).push(q(x.key));
+    }
+    const list = [...groups].map(([why, names]) => `${names.join('')}（${why}）`);
+    return `${n.character}の特性に合わせて避ける効果: ${list.join('、')}`;
+  }
   if (n.kind === 'mode') {
     const why = input.mode === 'normal'
       ? (ja ? '通常モードでは災域が発生しないことがあるため' : 'in normal mode there may be no Night Invaders')

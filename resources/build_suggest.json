@@ -10301,5 +10301,294 @@
    "reducedRuneAcquisition",
    "allResistancesDown"
   ]
+ },
+ "characters": {
+  "追跡者": {
+   "avoid": [
+    {
+     "key": "ultimateArtChargingImpaired",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "カリゴなどの大技阻止にアーツが要る"
+    }
+   ],
+   "useless": []
+  },
+  "守護者": {
+   "avoid": [
+    {
+     "key": "moreDamageTakenAfterEvasion",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "ステップの無敵が全キャラで最短（20F）"
+    },
+    {
+     "key": "takingDamageCausesMadnessBuildup",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "発症すると隙が大きい"
+    },
+    {
+     "key": "takingDamageCausesSleepBuildup",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "発症すると隙が大きい"
+    },
+    {
+     "key": "ultimateArtChargingImpaired",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "回復のアーツが必要な時に溜まっていない"
+    },
+    {
+     "key": "nearDeathReducesMaxHP",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "HPが減るとガードカウンターも弱まる"
+    },
+    {
+     "key": "lowerAttackWhenBelowMaxHP",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "ガードの貫通でHPが削れたまま戦いやすい"
+    },
+    {
+     "key": "poisonBuildupWhenBelowMaxHP",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "ガードの貫通でHPが削れたまま戦いやすい"
+    },
+    {
+     "key": "rotBuildupWhenBelowMaxHP",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "ガードの貫通でHPが削れたまま戦いやすい"
+    }
+   ],
+   "useless": []
+  },
+  "レディ": {
+   "avoid": [
+    {
+     "key": "poisonBuildupWhenBelowMaxHP",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "リブラなどの長期戦で重い"
+    }
+   ],
+   "useless": []
+  },
+  "無頼漢": {
+   "avoid": [
+    {
+     "key": "moreDamageTakenAfterEvasion",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "回避の無敵が短く（25F）体が大きい"
+    },
+    {
+     "key": "lowerAttackWhenBelowMaxHP",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "被弾しながら殴るので常に発動しやすい"
+    },
+    {
+     "key": "takingDamageCausesMadnessBuildup",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "発症するとスキル受けのカットが剥がれる"
+    },
+    {
+     "key": "takingDamageCausesSleepBuildup",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "発症するとスキル受けのカットが剥がれる"
+    }
+   ],
+   "useless": []
+  },
+  "復讐者": {
+   "avoid": [
+    {
+     "key": "reducedFlaskHPRestoration",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "HP最大時の付帯が戻るまでが長くなる"
+    },
+    {
+     "key": "takingDamageCausesMadnessBuildup",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "狂い火の祈祷を使いにくくなる"
+    },
+    {
+     "key": "takingDamageCausesDeathBuildup",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "夜の王戦でアーツの回転が落ちる"
+    },
+    {
+     "key": "allResistancesDown",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "狂い火のタメ2回で発狂するようになる"
+    },
+    {
+     "key": "repeatedEvasionsLowerDamageNegation",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "ローリングが主な守り"
+    },
+    {
+     "key": "reducedRuneAcquisition",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "星光の欠片などを買いたい"
+    },
+    {
+     "key": "nearDeathReducesMaxHP",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "一撃死の線を簡単に下回る"
+    },
+    {
+     "key": "continuousHPLoss",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "HP最大時の付帯が生命線"
+    }
+   ],
+   "useless": []
+  },
+  "隠者": {
+   "avoid": [
+    {
+     "key": "ultimateArtChargingImpaired",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "アーツの高回転が立ち回りの軸"
+    },
+    {
+     "key": "continuousHPLoss",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "HP最大時の付帯が剥がれる"
+    }
+   ],
+   "useless": [
+    {
+     "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToFlamingStrikeAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToEruptionAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToLightningSlashAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToPrayerfulStrikeAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToPoisonMothFlightAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToSeppukuAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToWhiteShadowsLureAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToEndureAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToQuickstepAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToStormStompAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToDeterminationAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "changesCompatibleArmamentsSkillToRainOfArrowsAtStartOfExpedition",
+     "why": "出撃時の武器が杖なので戦技を付けられない"
+    },
+    {
+     "key": "fpRestorationUponSuccessiveAttacks",
+     "why": "魔術では発動しない"
+    }
+   ]
+  },
+  "執行者": {
+   "avoid": [
+    {
+     "key": "reducedVigorAndArcane",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "神秘で状態異常を伸ばし、HPも高くない"
+    }
+   ],
+   "useless": []
+  },
+  "葬儀屋": {
+   "avoid": [
+    {
+     "key": "reducedVigorAndArcane",
+     "priority": "preferred",
+     "tier": "body",
+     "why": "もともと耐久がぎりぎり"
+    },
+    {
+     "key": "takingDamageCausesMadnessBuildup",
+     "priority": "nice_to_have",
+     "tier": "comment",
+     "why": "長く止まり、トランスでの押し切りが効かない"
+    }
+   ],
+   "useless": []
+  }
  }
 }

@@ -229,6 +229,37 @@ for label, v in cg.STAPLES.items():
 # 深層デメリットのうち、神攻略wiki の考察で「避ける」とされるもの（全体で除外: 任意）
 demerits = {'avoid': entry_keys(cg.AVOID_COMMON, '避けたい深層デメリット')}
 
+# ---------------------------------------------------------------- per-character evaluations (research/character_effects.py)
+
+import character_effects as ce  # noqa: E402
+
+TIER_PRIORITY = {'body': 'preferred', 'comment': 'nice_to_have'}   # 除外の重み: 本文 = 推奨、コメント = 任意
+
+
+def id_keys(ids, where):
+    missing = [i for i in ids if str(i) not in effects]
+    if missing:
+        errors.append(f'{where}: unknown effect ids {missing}')
+    return keys_of([effects[str(i)]['key'] for i in ids if str(i) in effects], where)
+
+
+character_rules = {}
+for ch in characters:
+    avoid, useless = [], []
+    for x in ce.DEMERITS.get(ch, []):
+        where = f'{ch} のデメリット評価'
+        if x['verdict'] != 'avoid' or x['tier'] not in TIER_PRIORITY:
+            errors.append(f'{where}: unsupported {x["verdict"]} / {x["tier"]}')
+        avoid += [{'key': k, 'priority': TIER_PRIORITY[x['tier']], 'tier': x['tier'], 'why': x['why']}
+                  for k in id_keys(x['ids'], where)]
+    for x in ce.USELESS.get(ch, []):
+        useless += [{'key': k, 'why': x['why']} for k in id_keys(x['ids'], f'{ch} の意味のない効果')]
+    if avoid or useless:
+        character_rules[ch] = {'avoid': avoid, 'useless': useless}
+for ch in set(ce.DEMERITS) | set(ce.USELESS):
+    if ch not in characters:
+        errors.append(f'character_effects: unknown character {ch}')
+
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     sys.exit(1)
@@ -245,6 +276,7 @@ data = {
     'builds': builds,
     'staples': staples,
     'demerits': demerits,
+    'characters': character_rules,
 }
 text = json.dumps(data, ensure_ascii=False, indent=1) + '\n'
 if '--check' in sys.argv:

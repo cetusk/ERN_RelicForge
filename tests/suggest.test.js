@@ -40,6 +40,11 @@ test('build_suggest.json: every effect exists on relics and none is unreleased',
   assert.deepEqual(Object.keys(data.favoredWeapons).sort(), Object.keys(vessels.characters).sort(), 'favoured weapons for every character');
   for (const ws of Object.values(data.favoredWeapons)) for (const w of ws) assert.ok(data.weapons.some((x) => x.id === w), w);
   for (const p of Object.values(data.modePreference)) check([...p.first, ...p.second], 'モード');
+  for (const [c, r] of Object.entries(data.characters)) {
+    assert.ok(vessels.characters[c], c);
+    check([...r.avoid, ...r.useless].map((x) => x.key), `${c} の評価`);
+    for (const x of r.avoid) assert.ok(['preferred', 'nice_to_have'].includes(x.priority) && x.why, `${c} ${x.key}`);
+  }
   assert.ok(data.types.every((t) => ['style', 'magic', 'status', 'role'].includes(t.axis)));
 });
 
@@ -102,6 +107,31 @@ for (const dir of APP_DIRS) {
         assert.equal(effects[at(second)].priority, 'nice_to_have', `${mode} ${focus}`);
       }
     }
+  });
+
+  test(`${dir}: per-character evaluations: avoided demerits (body text weighs more) and effects that do not work`, () => {
+    const ctx = suggestContext(dir);
+    const dodge = 'moreDamageTakenAfterEvasion';   // 回避直後、カット率低下
+    assert.ok(data.characters['守護者'].avoid.some((x) => x.key === dodge && x.priority === 'preferred'), 'fixture: 守護者 body text');
+    const guardian = suggest(ctx, { character: '守護者', mode: 'combined', types: ['タンク'], weapons: [], focus: 0 });
+    const e = guardian.effects.find((x) => x.key === dodge);
+    assert.ok(e && e.exclude && e.priority === 'preferred', '守護者 avoids it, with the body-text weight');
+    assert.ok(e.reasons.some((r) => r.startsWith('守護者: ')));
+    const wylder = suggest(ctx, { character: '追跡者', mode: 'combined', types: ['タンク'], weapons: [], focus: 0 });
+    const charReason = (r, c) => r.effects.some((x) => x.key === dodge && x.reasons.some((why) => why.startsWith(`${c}: `)));
+    assert.ok(!charReason(wylder, '追跡者') && !charReason(wylder, '守護者'), 'not for a character without the evaluation');
+    const normal = suggest(ctx, { character: '守護者', mode: 'normal', types: ['タンク'], weapons: [], focus: 0 });
+    assert.ok(!charReason(normal, '守護者'), 'deep demerits only in deep mode');
+    // a comment-only evaluation adds the weaker exclusion
+    const rc = data.characters['無頼漢'].avoid.find((x) => x.tier === 'comment');
+    const raider = suggest(ctx, { character: '無頼漢', mode: 'combined', types: ['タンク'], weapons: [], focus: 0 });
+    assert.equal(raider.effects.find((x) => x.key === rc.key).priority, 'nice_to_have');
+    // 隠者: skill changes for the starting armament do not work on a staff
+    const skillKeys = new Set(data.characters['隠者'].useless.map((x) => x.key));
+    const recluse = suggest(ctx, { character: '隠者', mode: 'combined', types: data.types.map((t) => t.id), weapons: [], focus: 0 });
+    assert.deepEqual(recluse.effects.filter((x) => skillKeys.has(x.key)).map((x) => x.key), []);
+    const other = suggest(ctx, { character: '追跡者', mode: 'combined', types: ['戦技'], weapons: [], focus: 0 });
+    assert.ok(other.effects.some((x) => skillKeys.has(x.key)), 'other characters still use them');
   });
 
   test(`${dir}: a known build makes its defining effects required; staples stay preferred`, () => {

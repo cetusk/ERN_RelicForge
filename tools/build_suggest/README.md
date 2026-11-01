@@ -13,14 +13,22 @@
 ```bash
 # 元データを直したら作り直す（効果データの unreleased や名前を変えたときも）
 python tools/build_suggest/build_data.py
+python tools/build_suggest/catalog.py      # 付録のカタログ（catalog/*.md）
 
 # 確認用のレポート（Git 管理外）を作る
 python tools/build_suggest/research/archetypes_gen.py    # → research/archetypes.md（型ごとの説明と効果の対応）
 python tools/build_suggest/research/characters_gen.py    # → research/characters.md（キャラ別のビルド）
 ```
 
-`python -m unittest discover -s tests` の `test_build_suggest` が、`resources/build_suggest.json` が
+`python -m unittest discover -s tests` の `test_build_suggest` が、`resources/build_suggest.json` と付録のカタログが
 元データから作り直した結果と一致するかを確認する（作り直し忘れの検出）。
+
+## 付録（カタログ）
+
+| ファイル | 内容 |
+|---|---|
+| [`catalog/builds.md`](catalog/builds.md) | キャラ別のビルド一覧（キャラの定番の効果と、神攻略wiki のビルド 174 件） |
+| [`catalog/characters.md`](catalog/characters.md) | キャラ別の評価と数値（ビルド提案で使っている評価、デメリットの評価と投稿数、キャラの数値、版ごとの性能変更） |
 
 ## ファイル
 
@@ -29,7 +37,10 @@ python tools/build_suggest/research/characters_gen.py    # → research/characte
 | `build_data.py` | `resources/build_suggest.json` を作る。どの型を選択肢にするか、武器種・つまみに使う効果、キャラごとの出やすい武器種、モードごとの封牢／侵入バフの優先もここで決める |
 | `research/archetypes_content.py` | **型ごとの効果の対応**（中核／相性良／任意／避けたい）、別名、説明、出典 |
 | `research/archetypes_gen.py` | 型のレポートを作る（効果のまとまり `PHYS` などの定義もここ） |
-| `research/characters_gen.py` | **キャラ別のビルド**（174 件）、**キャラごとの定番の効果**、深層デメリットの評価 |
+| `research/characters_gen.py` | **キャラ別のビルド**（174 件）、**キャラごとの定番の効果**、深層デメリットの全キャラ共通の評価 |
+| `research/character_effects.py` | **キャラごとのデメリットの評価**（ビルド提案で使うもの。共通の評価と違うものだけ）と、そのキャラでは働かない効果 |
+| `research/character_research.json` | キャラ別の調査結果（評価と投稿数・キャラの数値・版ごとの性能変更）。付録 `catalog/characters.md` の元データ |
+| `catalog.py` | 付録のカタログを作る |
 | `research/*_changes.md` | 調査の経緯（第1版からの変更点） |
 
 ## 変換ルール（アプリの `relic-suggest.js`）
@@ -44,11 +55,15 @@ python tools/build_suggest/research/characters_gen.py    # → research/characte
 | つまみ（生存 ↔ 火力） | | 寄せた側の汎用効果 | 中央なら両方、1段なら反対側 | |
 | モード | | 封牢／侵入バフのうちモードに合う方（もう一方より 1 段上） | もう一方 | |
 | 深層デメリット | | | | Wiki で「避ける」とされるもの（通常のみでは使わない） |
+| キャラ別の評価 | | | | そのキャラで避けたいデメリット（本文 = 除外の推奨、コメントで一致 = 除外の任意。通常のみでは使わない） |
 
 - **出やすい武器種**（`favoredWeapons`、神攻略wiki「潜在する力」と各キャラページの得意武器）: 追跡者 大剣、守護者 斧槍、
   鉄の目 弓、レディ 短剣、無頼漢 大斧・大槌・特大武器、復讐者 聖印、隠者 杖、執行者 刀、学者 刺剣、葬儀屋 槌。
   「潜在する力から、○○を見つけやすくなる」はこれを置き換える効果で、元から出やすい武器種を指定しても効果はない
   （無頼漢だけは 3 種から 1 種に絞る効果がある）。複数付けると最も左の遺物のものだけが効くので、推奨にするのは 1 つだけ
+- **キャラ別の評価**（`characters`、`research/character_effects.py`）: 本文の評価を主に使い、コメント欄は同じ評価の投稿が
+  3 件以上かつ反対の 2 倍以上のときだけ使う。関係する性能変更より前の投稿は数えない。条件付きの評価は使わない。
+  そのキャラで仕組み上働かない効果（隠者の戦技変更など）は提案に使わない。詳細と根拠は `catalog/characters.md`
 - **モード**（`modePreference`）: 深層の遺物は深き夜でしか使えないので、「通常のみ」を通常モード、「通常＋深層」を深き夜とみなす。
   通常モードは「封牢の囚を倒す度」（封牢 1 か所ごとに 5%）、深き夜は「夜の侵入者を倒す度」（罪人 1 体ごとに 7%）を優先する。
   通常モードでは災域が発生しないことがあり、深き夜では災域が必ず 1 か所以上発生する一方、封牢には変異体が出ることがあり大空洞には封牢が無い（用語集「封牢バフ」「侵入バフ」、封牢・災域ページ）

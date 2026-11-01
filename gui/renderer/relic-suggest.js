@@ -18,6 +18,9 @@
  *   mode         封牢バフ vs 侵入バフ (modePreference): the one that suits the mode (通常のみ = 通常モード,
  *                通常+深層 = 深き夜) gets the better of the two levels, the other one a level lower
  *   demerits     deep demerits the wiki says to avoid → exclude (normal + deep mode only)
+ *   character    per-character evaluations (characters[name]): demerits this character should avoid →
+ *                exclude (wiki body text: preferred weight, agreeing comments: nice_to_have); effects that
+ *                do not work for this character (useless) are not used at all
  * An effect wanted by one choice and avoided by another is kept (wanted wins) and reported as a conflict.
  * Unreleased effects are never used (spoilers); deep-only effects are dropped in normal-only mode;
  * effects for another character (「【キャラ名】…」) are dropped because they do nothing for the chosen one.
@@ -31,13 +34,15 @@ const SUGGEST_LEVELS = ['required', 'preferred', 'nice_to_have'];
  * @param {object} effectInfo  effect key -> { unreleased, deepOnly, character } (see suggestEffectInfo)
  * @returns {{effects: Array, conflicts: Array, notOnRelics: Array, notes: Array, unknown: Array}}
  *   effects: [{ key, priority, exclude, reasons: [label] }] in rank order (most important first)
- *   notes: [{ kind: 'findFavored' | 'findReplaces' | 'findOnlyOne' | 'mode', ... }] for the screen to explain
+ *   notes: [{ kind: 'findFavored' | 'findReplaces' | 'findOnlyOne' | 'mode' | 'character', ... }] for the screen to explain
  */
 function suggestConditions(data, input, effectInfo) {
   const wanted = new Map();    // key -> { level (index in SUGGEST_LEVELS), order, reasons }
   const avoided = new Map();   // key -> { order, reasons }
   const unknown = [];
   let order = 0;
+  const charRules = (data.characters || {})[input.character] || { avoid: [], useless: [] };
+  const useless = new Set(charRules.useless.map((x) => x.key));
   const favored = new Set(((data.favoredWeapons || {})[input.character]) || []);
   const findOf = new Map();   // 「見つけやすくなる」 key -> weapon type
   for (const w of data.weapons || []) for (const k of w.find) findOf.set(k, w.id);
@@ -45,6 +50,7 @@ function suggestConditions(data, input, effectInfo) {
     const info = effectInfo[key];
     if (!info || info.unreleased) return false;
     if (info.character && info.character !== input.character) return false;
+    if (useless.has(key)) return false;
     // a favoured type is found more often already; the effect only helps to narrow several down to one
     if (findOf.has(key) && favored.has(findOf.get(key)) && favored.size < 2) return false;
     return !(input.mode === 'normal' && info.deepOnly);
@@ -62,12 +68,16 @@ function suggestConditions(data, input, effectInfo) {
       }
     }
   };
-  const avoid = (keys, reason) => {
+  const avoid = (keys, reason, level = 'nice_to_have') => {
     for (const key of keys || []) {
       if (!usable(key)) continue;
+      const lv = SUGGEST_LEVELS.indexOf(level);
       const cur = avoided.get(key);
-      if (!cur) avoided.set(key, { order: order++, reasons: [reason] });
-      else if (!cur.reasons.includes(reason)) cur.reasons.push(reason);
+      if (!cur) avoided.set(key, { level: lv, order: order++, reasons: [reason] });
+      else {
+        if (lv < cur.level) cur.level = lv;
+        if (!cur.reasons.includes(reason)) cur.reasons.push(reason);
+      }
     }
   };
 
@@ -150,7 +160,10 @@ function suggestConditions(data, input, effectInfo) {
   if (build) avoid(build.avoid, build.name);
   if (staples) avoid(staples.avoid, `${input.character}の定番`);
   for (const t of types) avoid(t.avoid, t.id);
-  if (input.mode !== 'normal') avoid((data.demerits || {}).avoid, '避けたい深層デメリット');
+  if (input.mode !== 'normal') {
+    avoid((data.demerits || {}).avoid, '避けたい深層デメリット');
+    for (const x of charRules.avoid) avoid([x.key], `${input.character}: ${x.why}`, x.priority);
+  }
 
   const effects = [];
   const conflicts = [];
@@ -161,10 +174,13 @@ function suggestConditions(data, input, effectInfo) {
   }
   for (const [key, a] of avoided) {
     if (!wanted.has(key)) {
-      effects.push({ key, priority: 'nice_to_have', exclude: true, reasons: a.reasons, _l: 3, _o: a.order });
+      effects.push({ key, priority: SUGGEST_LEVELS[a.level], exclude: true, reasons: a.reasons, _l: 3 + a.level, _o: a.order });
     }
   }
   effects.sort((x, y) => x._l - y._l || x._o - y._o);
+  // per-character exclusions that made it into the conditions (the screen explains them briefly)
+  const charAvoided = charRules.avoid.filter((x) => avoided.has(x.key) && !wanted.has(x.key));
+  if (charAvoided.length) notes.push({ kind: 'character', character: input.character, items: charAvoided.map((x) => ({ key: x.key, why: x.why, tier: x.tier })) });
   for (const e of effects) { delete e._l; delete e._o; }
 
   const notOnRelics = [];
