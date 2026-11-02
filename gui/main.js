@@ -168,6 +168,15 @@ ipcMain.handle('load-suggest-data', async () => {
   }
 });
 
+ipcMain.handle('load-profiles-data', async () => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(resourcesDir, 'character_profiles.json'), 'utf-8'));
+  } catch (e) {
+    console.error('Failed to load character guide data:', e.message);
+    return null;
+  }
+});
+
 ipcMain.handle('load-vessels-data', async () => {
   const vesselsFile = path.join(resourcesDir, 'vessels_data.json');
   try {

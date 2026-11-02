@@ -1,0 +1,5383 @@
+{
+ "format": 1,
+ "about": "キャラ図鑑のデータ。出典は神攻略wiki。tools/build_suggest/build_data.py で生成（手で編集しない）",
+ "researched": "2026-11-01",
+ "pages": [
+  {
+   "name": "キャラクター",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC",
+   "last_updated": "2026-02-05"
+  },
+  {
+   "name": "ステータス",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9",
+   "last_updated": "2026-09-27"
+  },
+  {
+   "name": "強靭度",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E5%BC%B7%E9%9D%AD%E5%BA%A6",
+   "last_updated": "2026-10-30"
+  },
+  {
+   "name": "基本アクション",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E5%9F%BA%E6%9C%AC%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3",
+   "last_updated": "2026-09-28"
+  },
+  {
+   "name": "状態変化",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E7%8A%B6%E6%85%8B%E5%A4%89%E5%8C%96",
+   "last_updated": "2026-05-06"
+  },
+  {
+   "name": "遺物効果",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E9%81%BA%E7%89%A9%E5%8A%B9%E6%9E%9C",
+   "last_updated": "2026-10-21"
+  },
+  {
+   "name": "深き夜",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E6%B7%B1%E3%81%8D%E5%A4%9C",
+   "last_updated": "2026-10-19"
+  },
+  {
+   "name": "おすすめキャラクターと評価",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%81%8A%E3%81%99%E3%81%99%E3%82%81%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E3%81%A8%E8%A9%95%E4%BE%A1",
+   "last_updated": "2025-06-23"
+  },
+  {
+   "name": "コメント/遺物効果3",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88/%E9%81%BA%E7%89%A9%E5%8A%B9%E6%9E%9C3",
+   "last_updated": "2026-11-01"
+  },
+  {
+   "name": "コメント/遺物効果2",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88/%E9%81%BA%E7%89%A9%E5%8A%B9%E6%9E%9C2",
+   "last_updated": "2025-10-23"
+  },
+  {
+   "name": "コメント/遺物効果",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88/%E9%81%BA%E7%89%A9%E5%8A%B9%E6%9E%9C",
+   "last_updated": "2025-09-18"
+  },
+  {
+   "name": "コメント/キャラクター",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88/%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC",
+   "last_updated": "2026-10-10"
+  },
+  {
+   "name": "コメント/深き夜6",
+   "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88/%E6%B7%B1%E3%81%8D%E5%A4%9C6",
+   "last_updated": "2026-10-31"
+  }
+ ],
+ "characters": {
+  "追跡者": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E8%BF%BD%E8%B7%A1%E8%80%85",
+    "last_updated": "2026-10-18"
+   },
+   "stats": {
+    "得意武器": "大剣",
+    "能力値ランク": "HP A、FP C、スタミナ B、筋力 A、技量 B、知力 C、信仰 C、神秘 C",
+    "Lv15 の HP / FP / スタミナ": "1120 / 140 / 102",
+    "回避": "ローリング 無敵 27F（全体 42F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 5.3%、魔力 5.9%、炎 7.4%、雷 4.3%、聖 7.7%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の成長",
+     "value": "HP A / FP C / スタ B / 筋 A / 技 B / 知 C / 信 C / 神 C。Lv15 で HP1120・FP140・スタ102・筋50・技40"
+    },
+    {
+     "what": "HP・FP・スタミナ",
+     "value": "HP は全キャラ中3位で高め。FP は近接系の約1.3倍。スタミナは普通"
+    },
+    {
+     "what": "アビリティ：第六感",
+     "value": "瀕死になる攻撃を一度だけ自動回避（祝福で再使用可、夜ボス・夜の王戦では一度限り）。スリップダメージ（毒/腐敗・遺物/付帯効果）、状態異常の発症ダメージ、掴み攻撃には発動しない"
+    },
+    {
+     "what": "生存力の位置づけ（深き夜）",
+     "value": "高い生命力と第六感で素でも生存力が極めて高いので、遺物は耐久より攻撃力を優先"
+    },
+    {
+     "what": "回避",
+     "value": "ローリング。全体42F・無敵27F・後隙14F（ローリング組の標準）"
+    },
+    {
+     "what": "強靭度",
+     "value": "低いグループ（守護者・無頼漢以外）。コメントでは基本強靭度40と推定。遺物効果ページの検証では、訓練場の人形兵の突き1段目（強靭削り50と仮定）に強靭度+5で怯まない（+4では怯む）"
+    },
+    {
+     "what": "状態異常耐性（Lv15 で発症までの被弾回数）",
+     "value": "毒6・腐敗7・出血6・冷気6・睡眠6・発狂6・死8（守護者より毒/腐敗/出血/冷気が1回少ない）"
+    },
+    {
+     "what": "カット率（コメント・二次資料）",
+     "value": "標準19 斬20 刺19 打20 魔19 火19 雷20 聖17（物理・属性とも平均的）"
+    },
+    {
+     "what": "スキル：クローショット",
+     "value": "クールタイム8秒（遺物効果ページの計測で480F）。移動・接近・離脱・小型の引き寄せ・救助（1ゲージの半分）。無敵はない"
+    },
+    {
+     "what": "アーツ：襲撃の楔",
+     "value": "動作中無敵。ほとんどの敵の行動を怯みでキャンセル、2ゲージまで一撃救助。タメなしならゲージ3割残る"
+    },
+    {
+     "what": "得意武器・立ち回り",
+     "value": "得意武器は大剣。筋技バランス型で直剣・大剣など全キャラ最高の攻撃力。前線で継続的に攻撃しターゲットを取る"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "持続が長く数値も大きい。ローリング主体の追跡者でも避けるという意見が大勢",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "アーツが火力・大技阻止・救助の要。ファームは撃破アーツで補えるが、大技キャンセルが必要な相手では足りなくなる",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "クローショットの機動力で追加の雑魚狩りが苦にならず、1つなら許容できたという実戦報告",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    },
+    {
+     "name": "能力値低下系（筋力と知力 など）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 5,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "筋力低下1つで与ダメ約1.5%低下にとどまる",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedDexterityAndFaith",
+      "reducedIntelligenceAndDexterity",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "被ダメージ時の状態異常蓄積／HP最大未満時の毒・腐敗",
+     "source": "本文",
+     "verdict": "depends",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "拳で近接タンクをして敵と揉み合うと被弾が増え、発症しやすい",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup",
+      "takingDamageCausesDeathBuildup",
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "被ダメージ時、出血・冷気・睡眠を蓄積（重ね付け）",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "複数の被ダメ蓄積を付けたまま状態異常を使う夜の王に出て全滅した実例",
+     "keys": [
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時の状態異常蓄積（1つ）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "クリティカルなデメリットではないという個人の意見",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup",
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "被ダメ蓄積と重なると発症を繰り返す",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "スキル出血＋物理+4＋物理カット+2 の遺物に付いた場合「デメリット含めてだいぶ当たり」との評価",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 1,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "気にならなくなったという声が1件だけ",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒／腐敗が蓄積（切腹・瓦礫ビルド）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 4,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "戦技『切腹』と瓦礫の遺物を使うビルドでは、HPを満タンにしないことでバフを維持しやすくなる",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "【追跡者】アーツ発動時、周囲を延焼",
+     "level": "must",
+     "source": "本文",
+     "why": "延焼で3ゲージの味方を救助できる。マルチでは強く推奨",
+     "keys": [
+      "wylderArtActivationSpreadsFireInArea"
+     ]
+    },
+    {
+     "name": "【追跡者】スキルの使用回数+1",
+     "level": "strong",
+     "source": "本文",
+     "why": "クローショットを2回ストックでき、1ゲージ救助も可能",
+     "keys": [
+      "wylderAdditionalCharacterSkillUse"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（＋1）",
+     "level": "strong",
+     "source": "本文",
+     "why": "アーツの回数を大きく増やせる。夜の王戦では効かない",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1"
+     ]
+    },
+    {
+     "name": "【追跡者】スキルに、出血の状態異常を付加",
+     "level": "strong",
+     "source": "本文",
+     "why": "雑魚を素早く処理でき、ファームが速くなる。慣れないうちは必ず入れたいというコメントもある",
+     "keys": [
+      "wylderCharacterSkillInflictsBloodLoss"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇+3/+4（深層）",
+     "level": "strong",
+     "source": "本文",
+     "why": "深き夜では耐久より攻撃力を優先。+4 を複数積む",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "深き夜では敵のHPが大きく上がるので攻撃力を上げることが重要",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader"
+     ]
+    },
+    {
+     "name": "属性攻撃力上昇（深層）",
+     "level": "nice",
+     "source": "本文",
+     "why": "属性戦技ビルド（鎌など）で",
+     "keys": [
+      "improvedAffinityAttackPower",
+      "improvedAffinityAttackPowerPlus1",
+      "improvedAffinityAttackPowerPlus2"
+     ]
+    },
+    {
+     "name": "大剣を3つ以上装備していると攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "得意武器の大剣を3本揃えるのは難しくなく、二刀流が主な候補なので枠を圧迫しにくい。ただ運に左右される",
+     "keys": [
+      "improvedAttackPowerWith3PlusGreatswordsEquipped"
+     ]
+    },
+    {
+     "name": "封牢の囚を倒す度、攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "攻撃力上昇の単体効果としてトップクラス（通常モード）",
+     "keys": [
+      "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
+     ]
+    },
+    {
+     "name": "ダメージで吹き飛ばされた時、強靭度とカット率上昇 ＋ リゲイン",
+     "level": "nice",
+     "source": "本文",
+     "why": "セットで、大型の敵の足元で殴り合える",
+     "keys": [
+      "improvedPoiseDamageNegationWhenKnockedBackByDamage",
+      "partialHpRestorationUponPostDamageAttacks",
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2"
+     ]
+    },
+    {
+     "name": "戦技攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "扱える武器が多く FP もあるので戦技特化に向く",
+     "keys": [
+      "improvedSkillAttackPower"
+     ]
+    },
+    {
+     "name": "潜在する力から、鎌／大槍／拳／大弓を見つけやすくなる",
+     "level": "nice",
+     "source": "本文",
+     "why": "武器種内の数が少なく、夜の王に合う武器を狙いやすい",
+     "keys": [
+      "dormantPowerHelpsDiscoverReapers",
+      "dormantPowerHelpsDiscoverGreatSpears",
+      "dormantPowerHelpsDiscoverFists",
+      "dormantPowerHelpsDiscoverGreatbows"
+     ]
+    },
+    {
+     "name": "通常攻撃の1段目強化",
+     "level": "nice",
+     "source": "本文",
+     "why": "1段目ビルド（複数積みが前提）",
+     "keys": [
+      "improvedInitialStandardAttack"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "【追跡者】スキル使用時、通常攻撃で炎を纏った追撃を行う（大剣のみ）",
+     "source": "本文",
+     "why": "炎エンチャントで上書きされ、凍傷を解除する・火薬樽を起爆する・炎以外の弱点を突いた特殊怯みが出なくなる。エンチャント系の戦技とも競合する。大剣以外では効果がない",
+     "keys": [
+      "wylderStandardAttacksEnhancedWithFieryFollowUpsWhenUsingCharacterSkill"
+     ]
+    },
+    {
+     "name": "耐久系の深層効果（最大HP上昇・カット率上昇）",
+     "source": "本文",
+     "why": "不要とまでは書かれていないが、第六感と高い生命力があるので攻撃力より後回し。最大HPは1つで足りる、初期の1120で困らないというコメントもある",
+     "keys": [
+      "increasedMaximumHP",
+      "improvedPhysicalDamageNegation",
+      "improvedPhysicalDamageNegationPlus1",
+      "improvedPhysicalDamageNegationPlus2",
+      "improvedAffinityDamageNegation",
+      "improvedAffinityDamageNegationPlus1",
+      "improvedAffinityDamageNegationPlus2"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "能力値低下系デメリット（筋力など）",
+     "views": [
+      "筋力低下は与ダメ1.5%程度でむしろ当たり（コメント/追跡者4）",
+      "平均的なステータスで一芸がないキャラなので、ステ低下系のデメリットは1つも付けたくない（コメント/追跡者5）"
+     ]
+    },
+    {
+     "topic": "回避連続時、カット率低下",
+     "views": [
+      "全キャラで避けるべき／10秒持続は長すぎる",
+      "クイックステップで踏み倒せる、神遺物ならあり"
+     ]
+    },
+    {
+     "topic": "【追跡者】知力/信仰上昇、筋力/技量低下（6640100）",
+     "views": [
+      "筋技が下がるので知信補正の武器でも火力はほぼ変わらず、魔術・祈祷を使わないとステ変なしと差がない",
+      "知信補正の汎用戦技はステ変なしの約1.1倍になる",
+      "深度5まで知信で通せた、無理に活用しようとしないのが一番"
+     ]
+    },
+    {
+     "topic": "物理攻撃力上昇+4 と 大剣攻撃力上昇",
+     "views": [
+      "物理+4 の方が大剣以外・アーツにも乗る",
+      "大剣攻撃力上昇はデメリットが付かないのが偉い"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "スキル「クローショット」発動中の強靭度を上方修正、ガードに対するスタミナ攻撃力も上方修正"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "fix",
+     "text": "大剣を右手で攻撃した直後に左手で魔術・祈祷を使うと硬直が短くなっていた不具合を修正（実質の下方）"
+    }
+   ]
+  },
+  "守護者": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E5%AE%88%E8%AD%B7%E8%80%85",
+    "last_updated": "2026-10-22"
+   },
+   "stats": {
+    "得意武器": "斧槍",
+    "能力値ランク": "HP S、FP C、スタミナ A、筋力 B、技量 C、知力 D、信仰 C、神秘 C",
+    "Lv15 の HP / FP / スタミナ": "1280 / 115 / 124",
+    "回避": "ステップ 無敵 20F（全体 36F）",
+    "強靭度": "高いグループ",
+    "カット率（相対値）": "物理(標準) 15.8%、魔力 17.6%、炎 11.1%、雷 8.7%、聖 15.4%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 7、腐敗 8、出血 7、冷気 7、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の成長",
+     "value": "HP S / FP C / スタ A / 筋 B / 技 C / 知 D / 信 C / 神 C。Lv15 で HP1280・FP115・スタ124・筋41・技31"
+    },
+    {
+     "what": "固有の特性",
+     "value": "ガード強度+10%（盾・武器ガード）、カット率が他キャラより高い、強靭度が無頼漢と並んで高い"
+    },
+    {
+     "what": "強靭度",
+     "value": "高いグループ（守護者・無頼漢）。コメントでは強靭度120（他キャラ40）と推定"
+    },
+    {
+     "what": "回避",
+     "value": "ステップ。無敵20F（ローリング27F）で全キャラ最短、移動距離も短い。潜在する力の回避強化でローリング並みになる"
+    },
+    {
+     "what": "カット率（コメント・二次資料）",
+     "value": "標準24 斬25 刺24 打20 魔19 火14 雷15 聖17（物理が高く、属性はやや低い）"
+    },
+    {
+     "what": "状態異常耐性（Lv15 で発症までの被弾回数）",
+     "value": "毒7・腐敗8・出血7・冷気7・睡眠6・発狂6・死8。毒（Lv14-15）・腐敗（Lv13-15）は全キャラで唯一1回多い。出血・冷気は無頼漢・執行者と並んで最高"
+    },
+    {
+     "what": "立ち回り（ガード主体）",
+     "value": "ハイガードで受け、属性攻撃のガードでは貫通ダメージを受ける。深き夜では貫通ダメージ対策が必須"
+    },
+    {
+     "what": "役割",
+     "value": "生存と救助が第一。倒れないことが絶対条件。ヘイト管理・拘束・状態異常で補助"
+    },
+    {
+     "what": "火力・ファーム",
+     "value": "攻撃系の能力値が低く火力が出しにくい。ファームが遅いのが短所"
+    },
+    {
+     "what": "スキル：つむじ風",
+     "value": "範囲攻撃・拘束。クールタイム14秒（遺物効果ページの計測で810F＝13.5秒）。物理攻撃力上昇の影響を受ける"
+    },
+    {
+     "what": "アーツ：救世の翼",
+     "value": "瀕死ゲージの本数に関係なく一撃で救助。防御陣で自分と味方を無敵にし、状態異常の蓄積も防ぐ。夜の王戦が本命"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "知力を含む能力値低下（筋力と知力／知力と技量）",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "body",
+     "why": "能力値低下系はどのキャラでも当たり。守護者は知力を使う機会が最も少ないので、知力を含むものがいちばん良い",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedIntelligenceAndDexterity"
+     ]
+    },
+    {
+     "name": "能力値低下系（技量と信仰／信仰と筋力）",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "body",
+     "why": "最終的なダメージの低下は2〜3%程度で、立ち回りに影響しない",
+     "keys": [
+      "reducedDexterityAndFaith",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "生命力と神秘が低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 6,
+     "decision": "mixed",
+     "tier": "body-contested",
+     "why": "生命力低下は他の効果や潜在する力で補いやすく、HPの高い守護者は特に気にならない（共通評価では序盤に響くとされる）",
+     "keys": [
+      "reducedVigorAndArcane"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment-over-body-mixed",
+     "why": "状態異常を使わない夜の王なら3日目は無視できる。ただファーム中にも影響し、被ダメ蓄積・最大未満系と悪い相乗がある",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "聖杯瓶使用時、カット率低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "聖杯瓶は安全を確保して飲むので軽微",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 8,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "高深度ほど貫通ダメージが大きく回避が大事になるのに、守護者はもともとステップ回避が難しい。ハイガード移行のステップは対象外",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "本文",
+     "verdict": "depends",
+     "accept_posts": 1,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "ハイガード移行のステップは対象外。ヘイトを取って連撃をいなすので発動しうるが、盾主体ならほぼ発動しない（全キャラ共通の評価では避けたいとされる）",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 5,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "盾主体なら基本的に発動しない",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "被ダメージ時、○○を蓄積（全般）",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "Ver.1.02.3でガードの貫通ダメージでは蓄積しなくなった。それでも高HPで粘る守護者は、蓄積する状態異常の種類を選ぶ必要がある。同じ状態異常の重複は避ける",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup",
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒／腐敗を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "蓄積量が大きく、長期戦では発症しやすい（共通評価では軽いとされる）",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂／睡眠を蓄積",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 1,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "発症時の隙がかなり大きく、万が一発症すると極めて危険（共通評価では睡眠は軽いとされる）",
+     "keys": [
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 6,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "comment-over-body-mixed",
+     "why": "発症すれば瀕死になるが、蓄積量が少なく意外と気にならない。被弾の頻度によってはほぼ無視できる",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、○○を蓄積（1枠・重複なし）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 9,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "無頼漢のように体で受けるわけではない（盾で受ける）ので、重複しなければ気にならない",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup",
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒／腐敗が蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "条件は実際にはHP85%以下。採用するなら毒が無難。先に毒を発症しておくとグノスターの寄生を防げる。ただ最後の1人で粘る守護者には致命的な場面もある",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時の系統（毒・腐敗・攻撃力低下）",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 4,
+     "avoid_posts": 13,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "守護者は最大カットがなくても耐えられ、HP8割ほどで戦い続けることが多いので、普通のキャラより発動しやすい。属性攻撃を盾で受けるのもストレスになる",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP",
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "本文",
+     "verdict": "depends",
+     "accept_posts": 1,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "ガード主体だと、貫通ダメージでHPが削れたまま戦うことが多く、火力に影響しやすい（共通評価では軽いとされる）",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 4,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "守護者でもこの減少量は無視できず、悪循環に陥る。HPが減るとガードカウンターのHP加算も下がる（コメント）",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 2,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "必要なときにアーツが溜まっていないことになりやすい。ガード成功時アーツゲージ増加などで緩和はできる",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "comment-over-body-mixed",
+     "why": "セッション全体では大きくない（最終的にルーンは余る）が、ファーム中はレベルが1低くなりがちで、ファームの遅い守護者には響く（共通評価では『付けない方が良い』寄り）",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    },
+    {
+     "name": "聖杯瓶の回復量低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "許容できるデメリットとして挙げられている（コメント1件）",
+     "keys": [
+      "reducedFlaskHPRestoration"
+     ]
+    },
+    {
+     "name": "HP持続減少（武器の付帯効果版）",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "ガード主体だとHPを最大に保たないことが多く、-1程度ならあまり気にならない。HP持続回復で相殺もできる。※遺物の HP持続減少（6850500）ではなく付帯効果についての記述",
+     "keys": []
+    },
+    {
+     "name": "瀕死時、アーツゲージが減少（付帯効果）",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "何度も瀕死が出る劣勢で立て直しが難しくなる。※付帯効果",
+     "keys": []
+    }
+   ],
+   "important": [
+    {
+     "name": "【守護者】アビリティ発動中、ガード成功時、衝撃波が発生（ガード反射）",
+     "level": "must",
+     "source": "本文",
+     "why": "最優先・採用前提。ヘイト維持・救助・体勢崩し",
+     "keys": [
+      "guardianSuccessfulGuardsSendOutShockwaves"
+     ]
+    },
+    {
+     "name": "【守護者】アーツ発動時、周囲の味方HPを徐々に回復",
+     "level": "must",
+     "source": "本文",
+     "why": "最優先・採用前提。聖杯瓶を節約できる",
+     "keys": [
+      "guardianSlowlyRestoresNearbyAlliesHP"
+     ]
+    },
+    {
+     "name": "最大HP上昇（深層・1.1倍）",
+     "level": "strong",
+     "source": "本文",
+     "why": "回避が難しくガードが増える＝貫通ダメージ対策が必要なので、他キャラより重要度が高い。最大HPが高いほど上昇量も大きい",
+     "keys": [
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "属性カット率上昇（深層）",
+     "level": "strong",
+     "source": "本文",
+     "why": "貫通ダメージ対策。+1以上はデメリット付きで、差が小さいので無印でもよい",
+     "keys": [
+      "improvedAffinityDamageNegation",
+      "improvedAffinityDamageNegationPlus1",
+      "improvedAffinityDamageNegationPlus2"
+     ]
+    },
+    {
+     "name": "【守護者】スキル使用時、周囲の味方のカット率上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "パーティ全体の耐久力を上げる。属性カットも上がり貫通ダメージを減らす。かけ直しが必要",
+     "keys": [
+      "guardianCharacterSkillBoostsDamageNegationOfNearbyAllies"
+     ]
+    },
+    {
+     "name": "【守護者】スキルの持続時間延長",
+     "level": "strong",
+     "source": "本文",
+     "why": "雑魚狩りの時間短縮、騎士系を複数まとめて怯ませ続けられる、救助時に瀕死ゲージの戻りを止める。深き夜で特に価値が高い",
+     "keys": [
+      "guardianIncreasedDurationForCharacterSkill"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "汎用物理型の必須。1体ごとに1.07倍",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇+3/+4（深層）",
+     "level": "strong",
+     "source": "本文",
+     "why": "近接に加え、ハイガード衝撃波・スキル・アーツも物理なので常に恩恵がある",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4"
+     ]
+    },
+    {
+     "name": "ガードカウンターに、自身の現在HPの一部を加える",
+     "level": "strong",
+     "source": "本文",
+     "why": "ガードカウンター特化では必須。HPが高いほど威力が上がる",
+     "keys": [
+      "guardCounterIsGivenABoostBasedOnCurrentHP"
+     ]
+    },
+    {
+     "name": "ガードカウンター強化（+1/+2）",
+     "level": "strong",
+     "source": "本文",
+     "why": "1つで1.17倍、深層+2で+29%。乗算で重なる（ガードカウンター特化型）",
+     "keys": [
+      "improvedGuardCounters",
+      "improvedGuardCountersPlus1",
+      "improvedGuardCountersPlus2"
+     ]
+    },
+    {
+     "name": "ガード成功時、アーツゲージ増加（+1）",
+     "level": "nice",
+     "source": "本文",
+     "why": "夜の王戦でガードするだけでアーツが溜まる。+1は盾チク中に発動しない（Ver.1.03.1時点）",
+     "keys": [
+      "artGaugeChargedFromSuccessfulGuarding",
+      "artGaugeChargedFromSuccessfulGuardingPlus1"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（+1）",
+     "level": "nice",
+     "source": "本文",
+     "why": "道中でアーツを連発でき、ファーム中の事故を減らせる",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1"
+     ]
+    },
+    {
+     "name": "攻撃命中時、スタミナ回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "ハイガード中のスタミナ管理。衝撃波・延長つむじ風の1ヒットごとに発動",
+     "keys": [
+      "staminaRecoveryUponLandingAttacks",
+      "staminaRecoveryUponLandingAttacksPlus1"
+     ]
+    },
+    {
+     "name": "ダメージを受けた直後、攻撃によりHPの一部を回復（リゲイン）",
+     "level": "nice",
+     "source": "本文",
+     "why": "被弾前提の立ち回りやタメつむじ風と相性がよい。属性攻撃を連発する敵とは相性が悪い",
+     "keys": [
+      "partialHpRestorationUponPostDamageAttacks",
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2"
+     ]
+    },
+    {
+     "name": "刺突カウンター発生時、HP回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "盾チクで簡単に発動（刺剣ドレイン型の必須）",
+     "keys": [
+      "hpRestorationUponThrustingCounterattack",
+      "hpRestorationUponThrustingCounterattackPlus1"
+     ]
+    },
+    {
+     "name": "大教会の強敵を倒す度、最大HP上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "デメリットが付かず、場合によっては最大HP上昇を超える。運に左右される",
+     "keys": [
+      "maxHPIncreasedForEachGreatEnemyDefeatedAtAGreatChurch"
+     ]
+    },
+    {
+     "name": "潜在する力から、大盾を見つけやすくなる ＋ 大盾を3つ以上装備していると最大HP上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "夜の王の属性に強い大盾を拾いやすく、盾専用の付帯も狙える",
+     "keys": [
+      "dormantPowerHelpsDiscoverGreatshields",
+      "maxHpUpWith3PlusGreatshieldsEquipped"
+     ]
+    },
+    {
+     "name": "ガード中、敵に狙われやすくなる",
+     "level": "nice",
+     "source": "本文",
+     "why": "盾で敵を引き付ける守護者にうってつけ（要検証）",
+     "keys": [
+      "drawEnemyAttentionWhileGuarding"
+     ]
+    },
+    {
+     "name": "盾脂を持つ／ガード成功時HP回復／攻撃を受けると攻撃力上昇／斧槍タメ攻撃時つむじ風",
+     "level": "nice",
+     "source": "本文",
+     "why": "ガン盾や被弾前提の立ち回りに適性（プレイスタイルで選ぶ）",
+     "keys": [
+      "shieldGreaseInPossessionAtStartOfExpedition",
+      "hpRecoveryFromSuccessfulGuarding",
+      "takingAttacksImprovesAttackPower",
+      "guardianCreatesWhirlwindWhenChargingHalberd"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "ガード中、敵に狙われやすくなる",
+     "source": "本文",
+     "why": "グノスターではフォルティスだけでなくグノスターのヘイトまで取ってしまう。ストラゲスでは前半の大量の雑魚も引き付ける",
+     "keys": [
+      "drawEnemyAttentionWhileGuarding"
+     ]
+    },
+    {
+     "name": "【守護者】スキルの持続時間延長",
+     "source": "本文",
+     "why": "ダメージレベルが下がり一部の強敵を止められなくなる。打ち上げがなくなる。味方の遠距離攻撃まで弾くことがある（バグの可能性）",
+     "keys": [
+      "guardianIncreasedDurationForCharacterSkill"
+     ]
+    },
+    {
+     "name": "【守護者】筋力／技量上昇、生命力低下（斧槍・ガードカウンター特化のとき）",
+     "source": "本文",
+     "why": "斧槍メインでは火力の伸びが小さく生命力低下に見合わない。ガードカウンター特化では生命力低下でHP加算が減り、上昇は約3%",
+     "keys": [
+      "guardianImprovedStrengthAndDexterityReducedVigor"
+     ]
+    },
+    {
+     "name": "封牢の囚を倒す度、攻撃力上昇",
+     "source": "本文",
+     "why": "深き夜では封牢の難易度が激変し旨味が減ったので、採用機会は大きく限られる",
+     "keys": [
+      "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
+     ]
+    },
+    {
+     "name": "刺突カウンター発生時、HP回復（ガードカウンター型のとき）",
+     "source": "コメント",
+     "why": "ガードカウンターでは基本的に刺突カウンターが発動しない（コメント）",
+     "keys": [
+      "hpRestorationUponThrustingCounterattack",
+      "hpRestorationUponThrustingCounterattackPlus1"
+     ]
+    },
+    {
+     "name": "【守護者】斧槍タメ攻撃時、つむじ風が発生",
+     "source": "本文",
+     "why": "斧槍のタメ攻撃でしか出ないので、道中で拾った斧槍以外の武器を使いにくくなる",
+     "keys": [
+      "guardianCreatesWhirlwindWhenChargingHalberd"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "【守護者】筋力／技量上昇、生命力低下（6641000）",
+     "views": [
+      "本文: 刺剣ドレイン型など技量武器のビルドとは相性がよい。斧槍・ガードカウンター特化では見合わない。クイステ二刀では斧槍の攻撃力約+16%で、物理+4（12%）と大差ない",
+      "コメント: ステ変はデメリットが割に合わないほど弱い／減ったHPを補う神遺物がないとデメリットの方が大きい",
+      "コメント: 最終的にはかなり差が付くので上質化は当然したい"
+     ]
+    },
+    {
+     "topic": "瀕死時、最大HP低下（6851700）",
+     "views": [
+      "本文: 守護者でも無視できず推奨しない",
+      "コメント: HPが減るのでガードカウンターのHP加算も下がる、避けたい",
+      "コメント: ダウンしたら負けのつもりなら全然あり。守護者はHP最大を保つ必要がなく、アーツ回復で取り戻せる"
+     ]
+    },
+    {
+     "topic": "アーツゲージ蓄積鈍化（6840200）",
+     "views": [
+      "本文: 無視できない",
+      "コメント: 1個ならガードアーツと撃破アーツ+1で補える？／ファーム中は撃破アーツで影響なし",
+      "コメント: 攻撃時の蓄積も下がるので夜ボス・夜の王ではガードアーツ1つでは取り戻せない。守護者のアーツは夜の王戦が本命なので1つでも入れたくない"
+     ]
+    },
+    {
+     "topic": "HP最大未満時、攻撃力低下（6851200）",
+     "views": [
+      "本文: ガード主体では火力に影響が出やすい、よく考えたい",
+      "コメント: セーフ扱いにしている",
+      "コメント: 1割減るので物理+3の恩恵がほぼなくなる"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "レベルアップで上がる筋力・技量を上方修正（【補足】Lv15で筋力+2、技量+2）"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "アビリティ「ハイガード」で盾を構えている間のガード可能な角度を拡大"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "アーツ「救世の翼」の武器部分の攻撃範囲を拡大。発動時に敵の攻撃などで中断される／攻撃が弾かれて中断される不具合を修正"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "斧槍のガードカウンターの攻撃力を上方修正（【補足】タメ攻撃時の威力約7.5%上昇）"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "物理・各属性のカット率を上方修正（【補足】前バージョン比で物理約0.95倍、属性約0.9倍の被ダメージ）"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "ガード強度を上方修正（【補足】1倍→1.1倍）"
+    }
+   ]
+  },
+  "鉄の目": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E9%89%84%E3%81%AE%E7%9B%AE",
+    "last_updated": "2026-10-25"
+   },
+   "stats": {
+    "得意武器": "弓",
+    "能力値ランク": "HP C、FP C、スタミナ B、筋力 C、技量 A、知力 D、信仰 D、神秘 B",
+    "Lv15 の HP / FP / スタミナ": "820 / 115 / 104",
+    "回避": "ローリング 無敵 27F（全体 42F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 5.3%、魔力 5.9%、炎 0.0%、雷 4.3%、聖 7.7%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の成長",
+     "value": "HP C / FP C / スタ B / 筋 C / 技 A / 知 D / 信 D / 神 B。Lv15 で HP820・FP115・スタ104・技57・神13"
+    },
+    {
+     "what": "HP・スタミナ",
+     "value": "HP・FPは低めだが遠距離職としては高い。スタミナは並以上"
+    },
+    {
+     "what": "状態異常耐性",
+     "value": "本文は『全体的に他キャラより低め』。表では Lv15 で毒6・腐敗7・出血6・冷気6・睡眠6・発狂6・死8（追跡者と同じ）だが、次の段階に上がるレベルが遅い（例：Lv10 で毒5・睡眠5・発狂5・死6）。コメントでは『発狂耐性クソザコ』"
+    },
+    {
+     "what": "カット率（コメント・二次資料）",
+     "value": "標準19 斬15 刺14 打15 魔19 火14 雷15 聖17（物理の斬・刺・打が低い）"
+    },
+    {
+     "what": "強靭度",
+     "value": "低いグループ（守護者・無頼漢以外）"
+    },
+    {
+     "what": "回避",
+     "value": "ローリング無敵27F。スキル『マーキング』は無敵34Fの長距離ステップで、回避にも使える"
+    },
+    {
+     "what": "スキル：マーキング",
+     "value": "クールタイム10秒（600F）。弱点を付けて被ダメ+10%、蓄積で弱点破壊。無敵時間で回避・咄嗟の離脱に使える。使用回数・クールタイムの遺物の影響が他キャラより大きい"
+    },
+    {
+     "what": "アーツ：ワンショット",
+     "value": "貫通する一射。筋力補正が強い（コメントの検証で筋+9でアーツ509→553）。2ゲージまで救助"
+    },
+    {
+     "what": "立ち回り（深き夜）",
+     "value": "中距離から弓。一撃も受けない気持ちで戦い、HP最大時カット率上昇を優先する回避タンク。HP1100程度＋最大時カット1つが目安"
+    },
+    {
+     "what": "盾",
+     "value": "弓は片手で撃てるので盾と併用しやすい。筋力に関係なく大盾を持てる"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "筋力と知力が低下／信仰と筋力が低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "ほぼ使わない能力値なので許容しやすい。筋力低下でアーツの火力が少し落ちる点に注意",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "最大HPが低い鉄の目は、HP85%以下で攻撃し続けることがまれ",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒／腐敗を蓄積",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "ゲージが溜まるほど被弾していれば、発症前に瀕死になっている可能性が高い",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "聖杯瓶使用時、カット率低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "低下は使っている間だけ",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 0,
+     "avoid_posts": 3,
+     "decision": "mixed",
+     "tier": "body-contested",
+     "why": "効果時間がほぼ回避動作中だけ。スキル（マーキング）で回避を担える（遺物効果ページでも『鉄の目は若干デメリットが低いか』）",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 5,
+     "decision": "mixed",
+     "tier": "body-contested",
+     "why": "回避2回まではノーリスク。マーキングや大盾を混ぜて回避を重ねないようにできる（全キャラ共通の評価では避けたいとされる）",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "他キャラ（追跡者）の掲示板でも、採用できるのは鉄の目くらいとされている",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 4,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "鉄の目は常にHP満タンで立ち回り、そこまで被弾しない。蓄積値も低い",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂を蓄積",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 2,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "発狂耐性が低い鉄の目は、リブラ戦（鉄の目の罪人のカスダメ、逃れられぬ眼）で死ぬ前に発症し、それが死因になる",
+     "keys": [
+      "takingDamageCausesMadnessBuildup"
+     ]
+    },
+    {
+     "name": "筋力低下2種・聖杯瓶回復量低下・被ダメ出血・毒・発狂の組み合わせ",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "デメリットがあってないようなもの、とのコメント",
+     "keys": [
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesPoisonBuildup",
+      "reducedFlaskHPRestoration",
+      "reducedStrengthAndIntelligence",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒／腐敗が蓄積",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 0,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "深海の暗き夜（持続回復）があれば我慢できるが、ないと鬱陶しい・怖い。泥試合になりやすい相手では避ける",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP持続減少",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 0,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "深海の暗き夜のHP持続回復で1つまで相殺できる（基本セットに深海が入っている）",
+     "keys": [
+      "continuousHPLoss"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "",
+     "keys": [
+      "allResistancesDown"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "【鉄の目】スキルの使用回数+1",
+     "level": "must",
+     "source": "本文",
+     "why": "攻守の生命線のマーキングを2回ストック。最優先",
+     "keys": [
+      "ironeyeAdditionalCharacterSkillUse"
+     ]
+    },
+    {
+     "name": "出撃時の武器に○○を付加（毒・冷気・出血、または弱点属性）",
+     "level": "strong",
+     "source": "本文",
+     "why": "狙った属性の弓は拾いにくい。鉄の目の専用モーションは連射が速く状態異常を入れやすい。基本セット",
+     "keys": [
+      "startingArmamentDealsMagicDamage",
+      "startingArmamentDealsFireDamage",
+      "startingArmamentDealsLightningDamage",
+      "startingArmamentDealsHolyDamage",
+      "startingArmamentInflictsFrost",
+      "startingArmamentInflictsPoison",
+      "startingArmamentInflictsBloodLoss"
+     ]
+    },
+    {
+     "name": "【鉄の目】スキルに毒を付加し、毒状態の敵に大ダメージ",
+     "level": "strong",
+     "source": "本文",
+     "why": "毒の発症・雑魚掃討・侵入者処理・攻撃連続時カット付帯の発動に使える。基本セット",
+     "keys": [
+      "ironeyeCharacterSkillInflictsHeavyPoisonDamageOnPoisonedEnemies"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（無印と+1）",
+     "level": "strong",
+     "source": "本文",
+     "why": "ファーム中の狩り性能が高い。衝撃波で倒しても発動。理想は両方",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1"
+     ]
+    },
+    {
+     "name": "最大HP上昇（深海の暗き夜の+100／深層の+10%）",
+     "level": "strong",
+     "source": "本文",
+     "why": "低めのHPを補い即死ラインを上げる。深海＋最大HP1つで Lv15 約1000。深度4以上はカット率よりHP",
+     "keys": [
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "深海の暗き夜（HP持続回復／HP低下時、周囲の味方を含めHPをゆっくりと回復）",
+     "level": "strong",
+     "source": "本文",
+     "why": "HP最大時系を維持し、HP持続減少を相殺できる。最大HP上昇を複数持っていれば外してもよいが聖杯瓶の節約はできなくなる",
+     "keys": [
+      "continuousHpRecovery",
+      "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度／封牢の囚を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "全ての攻撃力が永続的に上がる。深き夜では侵入者ルートが定番",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader",
+      "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇+3/+4（深層）",
+     "level": "strong",
+     "source": "本文",
+     "why": "常時発動で汎用性が高く、スキルとアーツにも乗る。属性付加の初期弓でも、その属性の上昇より伸びることが多い",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4"
+     ]
+    },
+    {
+     "name": "スキルクールタイム軽減+1〜+3",
+     "level": "nice",
+     "source": "本文",
+     "why": "スキルが強いので回転率を上げる意味が大きい",
+     "keys": [
+      "characterSkillCooldownReductionPlus1",
+      "characterSkillCooldownReductionPlus2",
+      "characterSkillCooldownReductionPlus3"
+     ]
+    },
+    {
+     "name": "攻撃命中時、スタミナ回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "弓など手数の多い技量武器と相性が良い",
+     "keys": [
+      "staminaRecoveryUponLandingAttacks",
+      "staminaRecoveryUponLandingAttacksPlus1"
+     ]
+    },
+    {
+     "name": "毒状態の敵に対する攻撃を強化（+0〜+2）",
+     "level": "nice",
+     "source": "本文",
+     "why": "スキル毒と相性が良い。+1以上はデメリット付きだが倍率も高い",
+     "keys": [
+      "attackPowerUpWhenFacingPoisonAfflictedEnemy",
+      "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus1",
+      "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus2"
+     ]
+    },
+    {
+     "name": "凍傷状態の敵に対する攻撃を強化（+0〜+2）",
+     "level": "nice",
+     "source": "本文",
+     "why": "冷気付加の初期弓と組む。マルチでは炎で凍傷が解除されやすく、どちらかというとソロ向け",
+     "keys": [
+      "attackPowerUpWhenFacingFrostbiteAfflictedEnemy",
+      "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus1",
+      "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus2"
+     ]
+    },
+    {
+     "name": "弓の攻撃でHP回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "距離を取りながら回復でき、HP最大時系を活かしやすい。深海の暗き夜がないなら必須級というコメントも",
+     "keys": [
+      "hpRestorationUponBowAttacks"
+     ]
+    },
+    {
+     "name": "刺突カウンター発生時、HP回復（+0〜+1）",
+     "level": "nice",
+     "source": "本文",
+     "why": "弓なら刺突カウンターを狙いやすく、HP最大を保つ足しになる",
+     "keys": [
+      "hpRestorationUponThrustingCounterattack",
+      "hpRestorationUponThrustingCounterattackPlus1"
+     ]
+    },
+    {
+     "name": "【鉄の目】弱点の持続時間を延長／アーツのタメ発動時、毒の状態異常を付加",
+     "level": "nice",
+     "source": "本文",
+     "why": "優先度は低いがあると嬉しい",
+     "keys": [
+      "ironeyeExtendsDurationOfWeakPoint",
+      "ironeyeArtChargeActivationAddsPoisonEffect"
+     ]
+    },
+    {
+     "name": "【鉄の目】生命力/筋力上昇、技量低下",
+     "level": "nice",
+     "source": "本文",
+     "why": "HP+100（820→920）、大弓とアーツの火力が上がる。最大HP上昇と共存できる。弓は約7〜10%下がる",
+     "keys": [
+      "ironeyeImprovedVigorAndStrengthReducedDexterity"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "ダメージを受けた直後、攻撃によりHPの一部を回復（リゲイン）",
+     "source": "本文",
+     "why": "弓での回復量が少なく、HP最大時カット率上昇を維持するという観点では向かない",
+     "keys": [
+      "partialHpRestorationUponPostDamageAttacks",
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2"
+     ]
+    },
+    {
+     "name": "【鉄の目】アーツ発動後、刺突カウンター強化",
+     "source": "本文",
+     "why": "効果時間が限られ、総ダメージの上昇はそれほど大きくない",
+     "keys": [
+      "ironeyeBoostsThrustingCounterattacksAfterArt"
+     ]
+    },
+    {
+     "name": "通常攻撃の1段目強化（弓で使う場合）",
+     "source": "本文",
+     "why": "両手に弓を持って交互に撃つ必要があり、射撃速度・アーツの回転・状態異常の蓄積が落ち、武器スロットも減る。よほどの神遺物がなければ無理に積む必要はない",
+     "keys": [
+      "improvedInitialStandardAttack"
+     ]
+    },
+    {
+     "name": "【鉄の目】神秘上昇、技量低下",
+     "source": "本文",
+     "why": "技量低下で弓の攻撃力が下がる（蛇弓のみ神秘補正で上がる）",
+     "keys": [
+      "ironeyeImprovedArcaneReducedDexterity"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "回避直後／回避連続時、カット率低下（6850700／6850800）",
+     "views": [
+      "本文: 許容しやすい（回避2回まではノーリスク、スキルや大盾を混ぜる）",
+      "コメント: 他キャラより踏み倒しやすいとはいえ危険。被ダメ毒・腐敗以外を外してまで入れるのは違和感",
+      "コメント: 通常回避への自信次第。マーキングで苦手なモーションを誤魔化せるので気にならない人もいる。試して落ちる回数が増えたらやめる"
+     ]
+    },
+    {
+     "topic": "【鉄の目】神秘上昇、技量低下（6642000）の評価",
+     "views": [
+      "本文: 状態異常の蓄積が Lv13〜15 で約25%上がる。状態異常武器の多い武器種と併用すると強い",
+      "コメント: 神秘ステ変がかなり好き、状態異常をサクサク入れられて外せない",
+      "コメント: 本文で上質ステ変と同列に扱われているのはおかしい"
+     ]
+    },
+    {
+     "topic": "通常攻撃の1段目強化",
+     "views": [
+      "本文: 弓では欠点が多く、無理に積む必要はない",
+      "コメント: デメリットが付かないのが強み。デメリット無しにしたいなら1段目"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-06-18",
+     "version": "App 1.01.3 / Regulation 1.01.4",
+     "kind": "fix",
+     "text": "スキル「マーキング」の弱点を破壊した際、一部の敵へのダメージが想定より高い／低い不具合を修正"
+    }
+   ]
+  },
+  "レディ": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E3%83%AC%E3%83%87%E3%82%A3",
+    "last_updated": "2026-10-20"
+   },
+   "stats": {
+    "得意武器": "短剣",
+    "能力値ランク": "HP C、FP B、スタミナ D、筋力 D、技量 B、知力 A、信仰 B、神秘 C",
+    "Lv15 の HP / FP / スタミナ": "860 / 180 / 84",
+    "回避": "ステップ 無敵 NoneF（全体 NoneF）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 5.3%、魔力 17.6%、炎 7.4%、雷 8.7%、聖 11.5%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値",
+     "value": "HP C / FP B / スタミナ D / 筋力 D / 技量 B / 知力 A / 信仰 B / 神秘 C。Lv15 で HP860・FP180・スタミナ84"
+    },
+    {
+     "what": "スタミナ",
+     "value": "全キャラ中最低。華麗な身ごなしで短剣攻撃・回避・疾走の消費は軽減される"
+    },
+    {
+     "what": "回避（ステップ）",
+     "value": "二連ステップ可。単発は全体28F・無敵27F・後隙0F、連続は全体59F・無敵43F（ローリングは全体42F・無敵27F）"
+    },
+    {
+     "what": "その場回避",
+     "value": "スティック無入力の回避にもレディだけ無敵がある"
+    },
+    {
+     "what": "耐久",
+     "value": "非常に脆い。深度4以降はちょっとした攻撃でも瀕死"
+    },
+    {
+     "what": "状態異常耐性",
+     "value": "Lv15 で毒6・腐敗7・出血6・冷気6・睡眠6・発狂6・死8回で発症。出血・冷気は無頼漢（7回）より1回少ない。全体として中位で、特別高い・低いものはない"
+    },
+    {
+     "what": "カット率（参考）",
+     "value": "二次資料のスプレッドシート：標準19・斬15・刺14・打15・魔22・火28・雷28・聖23（物理は低め、属性は高め）"
+    },
+    {
+     "what": "スキル",
+     "value": "リステージ：直近約3秒のダメージ・状態異常蓄積・強靭削りの50%を再演。CT12秒"
+    },
+    {
+     "what": "アーツ",
+     "value": "フィナーレ：周囲の味方と共に約17秒姿を隠す（攻撃力はない）"
+    },
+    {
+     "what": "立ち回り",
+     "value": "FPを使う魔術・戦技・祈祷が主力。FPが枯渇しやすい。救助は苦手（ゴリ押しできるアーツがない）"
+    },
+    {
+     "what": "救助",
+     "value": "苦手分野。救助までのプランを常に考える必要がある"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "回避直後、カット率低下",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 4,
+     "avoid_posts": 5,
+     "decision": null,
+     "tier": null,
+     "why": "回避の性能が高いので軽くなるかはコメントで話題になったが、検証はされていない。1段目ステップは後隙0Fだが、無敵が始まる前の1F目には効く可能性があると推測されている",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "安寧の遺志「カット率低下時、稀に敵から受ける攻撃を無効化」と組み合わせて使っている例",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "一度崩れると立て直しが難しい",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "1つでも初動から中盤のレベルが遅れる、という意見と、深度5ならルーンは余るという意見がある。レディは初動が弱い側とされる",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "魔術型（遠距離）なら被弾が少なく実質ないも同然、という1件の意見",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒が蓄積",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "重く見る、という1件の意見（理由の説明はない）",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "魔術を積極的に当てていれば、鈍化1つでも常夜グラディウスの分裂前に溜まった、という1件の報告",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 9,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "【レディ】スキル使用時、僅かに無敵",
+     "level": "must",
+     "source": "本文",
+     "why": "スキル発動直後に1ステップ分の無敵。被弾するタイミングで攻撃し、リステージで無効化できる。深層遺物で唯一ほぼ必須",
+     "keys": [
+      "duchessUseCharacterSkillForBriefInvulnerability"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "深き夜では封牢より主流。1体で魔力攻撃力上昇+2を上回る",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader"
+     ]
+    },
+    {
+     "name": "属性攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "魔術と属性戦技の両方を伸ばせる。属性主体なら第一候補",
+     "keys": [
+      "improvedAffinityAttackPower",
+      "improvedAffinityAttackPowerPlus1",
+      "improvedAffinityAttackPowerPlus2"
+     ]
+    },
+    {
+     "name": "魔力攻撃力上昇+3/+4",
+     "level": "strong",
+     "source": "本文",
+     "why": "+4 は12%で、属性攻撃力+2・魔術強化+2（10%）を上回る。魔術特化向け",
+     "keys": [
+      "magicAttackPowerUpPlus3",
+      "magicAttackPowerUpPlus4"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇+3/+4",
+     "level": "strong",
+     "source": "本文",
+     "why": "物理主体（短剣・技量近接・筋力ステ変）の場合。物理＞属性",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4"
+     ]
+    },
+    {
+     "name": "最大FP上昇／魔術師塔の仕掛けが解除される度、最大FP上昇／杖を3つ以上装備していると最大FP上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "FPが枯渇しやすいので必須級。ただし結晶特化では火力を優先して外すことが多い",
+     "keys": [
+      "increasedMaximumFP",
+      "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
+      "maxFpUpWith3PlusStavesEquipped"
+     ]
+    },
+    {
+     "name": "潜在する力から、杖を見つけやすくなる",
+     "level": "must",
+     "source": "本文",
+     "why": "魔術型では必須。結晶杖・カーリアの輝石杖などが出やすくなる",
+     "keys": [
+      "dormantPowerHelpsDiscoverStaves"
+     ]
+    },
+    {
+     "name": "初期戦技（血の刃／冷気の霧／霜踏み）・初期武器に冷気／出血を付加",
+     "level": "strong",
+     "source": "本文",
+     "why": "FPが伸びきるまで魔術を連発できないので、序中盤は初期短剣にこれらを付けて戦う。冷気＋出血の組み合わせが主流",
+     "keys": [
+      "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
+      "startingArmamentInflictsFrost",
+      "startingArmamentInflictsBloodLoss"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加",
+     "level": "nice",
+     "source": "本文",
+     "why": "ファーム効率化と雑魚を召喚する夜ボス向け。常夜リブラ以外の夜の王では腐る",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
+      "defeatingEnemiesFillsMoreOfTheArtGauge"
+     ]
+    },
+    {
+     "name": "最大HP上昇・生命力",
+     "level": "strong",
+     "source": "本文",
+     "why": "最大カット1つで一撃死しないよう HP1000 超を目安に、深層の最大HP2つか常夜マリス＋最大HP1つ",
+     "keys": [
+      "increasedMaximumHP",
+      "vigorPlus1",
+      "vigorPlus2",
+      "vigorPlus3"
+     ]
+    },
+    {
+     "name": "安寧の遺志・安寧者の遺志（近接攻撃力上昇／戦技攻撃力上昇／カット率低下時、稀に無効化）",
+     "level": "must",
+     "source": "本文",
+     "why": "戦技型ビルドの土台。DLC以降は戦技型が主流",
+     "keys": [
+      "occasionallyNullifyAttacksWhenDamageNegationsIsLowered",
+      "improvedMeleeAttackPower",
+      "improvedSkillAttackPower"
+     ]
+    },
+    {
+     "name": "攻撃命中時、スタミナ回復",
+     "level": "nice",
+     "source": "コメント",
+     "why": "短剣型ではスタミナ不足を補うため必須という声",
+     "keys": [
+      "staminaRecoveryUponLandingAttacks",
+      "staminaRecoveryUponLandingAttacksPlus1"
+     ]
+    },
+    {
+     "name": "【レディ】生命力/筋力上昇、精神力低下",
+     "level": "nice",
+     "source": "コメント",
+     "why": "物理型では必須（短剣型は HP を盛れれば不要）という提案。FPは180→110に減る",
+     "keys": [
+      "duchessImprovedVigorAndStrengthReducedMind"
+     ]
+    },
+    {
+     "name": "毒状態の敵に対する攻撃を強化",
+     "level": "nice",
+     "source": "本文",
+     "why": "鉄の目の毒ビルドが味方にいるとき",
+     "keys": [
+      "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus1",
+      "attackPowerUpWhenFacingPoisonAfflictedEnemyPlus2"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "属性攻撃力が付加された時、属性攻撃力上昇",
+     "source": "本文",
+     "why": "魔術と祈祷には乗らない。魔術型には無意味で、戦技型なら候補",
+     "keys": [
+      "boostsAttackPowerOfAddedAffinityAttacks"
+     ]
+    },
+    {
+     "name": "潜在する力から、杖を見つけやすくなる",
+     "source": "本文",
+     "why": "短剣・戦技型では、強い戦技付きのレア短剣が出にくくなる",
+     "keys": [
+      "dormantPowerHelpsDiscoverStaves"
+     ]
+    },
+    {
+     "name": "杖を3つ以上装備していると最大FP上昇",
+     "source": "本文",
+     "why": "レディは潜在する力から杖が出にくく、武器スロット3枠も使う",
+     "keys": [
+      "maxFpUpWith3PlusStavesEquipped"
+     ]
+    },
+    {
+     "name": "【レディ】アーツ発動中、敵撃破で攻撃力上昇",
+     "source": "本文",
+     "why": "雑魚が出ない強敵戦（常夜リブラ以外）では腐る",
+     "keys": [
+      "duchessDefeatingEnemiesWhileArtActiveUpsAttack"
+     ]
+    },
+    {
+     "name": "スキルクールタイム軽減",
+     "source": "本文",
+     "why": "素のCTが12秒なので+3でも恩恵は小さい。他の強い効果のおまけで付いていれば十分",
+     "keys": [
+      "characterSkillCooldownReductionPlus1",
+      "characterSkillCooldownReductionPlus2",
+      "characterSkillCooldownReductionPlus3"
+     ]
+    },
+    {
+     "name": "【レディ】生命力/筋力上昇、精神力低下",
+     "source": "本文",
+     "why": "最大FPが180→110に大きく減る。FPを使う戦法が主体ならFPの補助が必須",
+     "keys": [
+      "duchessImprovedVigorAndStrengthReducedMind"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "耐久（最大HP）をどこまで盛るか",
+     "views": [
+      "最大カット32%で一撃死しない HP1100（または1000＋潜在 HP10%/カット12%）までは盛るべき",
+      "紙耐久で回避が強いキャラなので中途半端に耐久を盛っても仕方ない／未カンスト勢は火力を盛ってほしい"
+     ]
+    },
+    {
+     "topic": "取得ルーン減少（6840000）の重さ",
+     "views": [
+      "1つでも初動〜中盤のレベルが遅れる。2つは論外",
+      "深度5だとルーンは余るので、ほとんど気にならない"
+     ]
+    },
+    {
+     "topic": "深層で物理と属性のどちらを盛るか（戦技型・ハルハル）",
+     "views": [
+      "物理主体（短剣・技量近接・筋ステ変）なら物理が上",
+      "属性戦技・魔術を使うなら属性が上",
+      "物理×2属性×1と物理×1属性×2のどちらがいいか結論は出ていない"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-06-02",
+     "version": "App 1.01.1 / Regulation 1.01.2",
+     "kind": "fix",
+     "text": "スキル「リステージ」で、他プレイヤーの攻撃による状態異常の蓄積で状態異常が発動しない場合がある不具合を修正"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "レベルアップで上がる技量を上方修正（【補足】Lv15で技量+4）"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "change",
+     "text": "短剣の一部攻撃の攻撃力を上方修正、両手持ち強攻撃 2 発目（タメ除く）は下方修正"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "アーツ「フィナーレ」の効果時間を延長（【補足】15s→17s）"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "change",
+     "text": "スキル「リステージ」発動時の幻影の視認性を調整"
+    }
+   ]
+  },
+  "無頼漢": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E7%84%A1%E9%A0%BC%E6%BC%A2",
+    "last_updated": "2026-10-29"
+   },
+   "stats": {
+    "得意武器": "大斧・大槌・特大武器",
+    "能力値ランク": "HP A、FP D、スタミナ A、筋力 S、技量 C、知力 D、信仰 D、神秘 C",
+    "Lv15 の HP / FP / スタミナ": "1200 / 95 / 122",
+    "回避": "ローリング 無敵 25F（全体 44F）",
+    "強靭度": "高いグループ",
+    "カット率（相対値）": "物理(標準) 13.2%、魔力 0.0%、炎 11.1%、雷 0.0%、聖 7.7%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 7、冷気 7、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値",
+     "value": "筋力 S、HP・スタミナ A、他は C 以下（FP D）。Lv15 で HP1200・FP95・スタミナ122"
+    },
+    {
+     "what": "FP",
+     "value": "低い。戦技の多用はできない"
+    },
+    {
+     "what": "回避（ローリング）",
+     "value": "他キャラより無敵が約2F短い（無敵25F・後隙18F。標準は無敵27F・後隙14F）。体も大きい"
+    },
+    {
+     "what": "強靭度",
+     "value": "基礎強靭度は追跡者40に対して120と仮定した検証で、クロスボウの矢が12発目で怯む（追跡者は4発）"
+    },
+    {
+     "what": "スキル（逆襲）",
+     "value": "スーパーアーマー、被ダメージと状態異常蓄積が0.25倍、致命傷でもHP1で耐える、スタミナ回復。CT12秒（＋リチャージ開始まで約1〜2秒）"
+    },
+    {
+     "what": "アビリティ（闘争心）",
+     "value": "被弾でスキルが強化される。Ver.1.03.2 からHP25%以下で10秒間与ダメージ1.5倍"
+    },
+    {
+     "what": "アーツ（トーテム・ステラ）",
+     "value": "範囲攻撃＋墓石の上の味方に攻撃力+15%＋足場。アーツはやや貧弱でスキルが非常に強力"
+    },
+    {
+     "what": "状態異常耐性",
+     "value": "Lv15 で毒6・腐敗7・出血7・冷気7・睡眠6・発狂6・死8回。出血・冷気はレディ・復讐者より1回多い。一方、睡眠・発狂は Lv1〜8 で4回と、低レベル帯ではレディ・復讐者（Lv2〜で5回）より低い"
+    },
+    {
+     "what": "カット率（参考）",
+     "value": "コメント：物理15%カット組（守護者・執行者と同じ）。二次資料の表では標準24・打15・魔14・火24・雷15・聖17"
+    },
+    {
+     "what": "立ち回り",
+     "value": "被弾しながら殴り合う。回避・ガードで凌ぐほどスキル強化が溜まりにくい。深度4以降は回避が苦手なのに丁寧な回避を強いられる"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "回避直後、カット率低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 7,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "ローリングの無敵が短く体が大きいので、他キャラより重い。本文・遺物効果ページ・コメントで一致している",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "遺物効果ページの共通考察でも無頼漢を名指しで注意している",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "HP持続減少",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 4,
+     "avoid_posts": 8,
+     "decision": "avoid",
+     "tier": "comment-over-body-mixed",
+     "why": "本文では、スキルでHP1で耐えても直後に削られて瀕死になるため要注意。コメントでは、HP最大時カットに頼らなくてよい・マリス遺物で補えるので許容できるという声が多い",
+     "keys": [
+      "continuousHPLoss"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "スキル受けで凌ぐので回避を連続させない立ち回りなら発生しにくい、という声がある。全キャラ共通の考察（オススメ度は低い）とは違う見方",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 7,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "被弾しながら殴るので、ほぼ常にHP85%以下になり、常時攻撃力-10%になる。全キャラ共通では「当たり」とされる効果だが、無頼漢では逆になる",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "物理+4の12%と比べても見合わない、殴り合い型には重い",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒／腐敗が蓄積",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 15,
+     "avoid_posts": 5,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "HP最大を保たない戦い方なので常に蓄積する。瓦礫の夜（状態異常ゲージがある時、徐々に攻撃力上昇）ビルドならむしろ利点になる（1つまで）。それ以外では避ける声が多い",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒／腐敗を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 16,
+     "avoid_posts": 5,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "被ダメ状態異常の中では最も軽く、足が止まらない（各1個まで）、という声が多い。一方、毒・腐敗中はスキルでHP1で耐えてもスリップダメージで瀕死になる（本文）、遺物で上げた耐久以上に割合で削られる、という反対意見もある",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、出血／冷気を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 7,
+     "avoid_posts": 12,
+     "decision": null,
+     "tier": null,
+     "why": "1個までなら発症前にダメージで落ちるので許容、無頼漢は出血・冷気の耐性が高い、という声。リゲインで殴り合う型では溜まって動きが止まるので不可、という声もある",
+     "keys": [
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesFrostBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂／睡眠を蓄積",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 4,
+     "avoid_posts": 13,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "発症すると硬直が長く、スキル受けしても発症するとスキルを貫通してカットが剥がれる。被弾前提の戦い方と噛み合わない。耐性の表でも、睡眠・発狂は低レベル帯で他キャラより低い",
+     "keys": [
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂／睡眠を蓄積",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "スキル受けをしても発症するとカットが剥がれて倒れる、という実例",
+     "keys": [
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 13,
+     "avoid_posts": 12,
+     "decision": null,
+     "tier": null,
+     "why": "「論外」とする声が多い。一方、スキル中は蓄積が0.25倍で、逆襲中に死が発症してもHP1で耐えるので大丈夫、という声もある",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 7,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "被弾前提なので他の状態異常デメリットが全部重くなる。ミミズ顔や湖沼では特に危険",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下／被ダメージ時、睡眠を蓄積",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "遺物効果ページのコメントでも、被弾前提の無頼漢には睡眠と状態異常耐性低下が噛み合わない、とされている",
+     "keys": [
+      "allResistancesDown",
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "時間が長すぎて、その間立て直せない（共通の評価と同じ）",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 9,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "アーツよりスキルが要なので影響が小さい（本文：アーツゲージ増加よりスキルCTを優先）",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "筋力と知力が低下／信仰と筋力が低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "全キャラ共通では最も軽いとされるが、筋力Sの無頼漢では測定で1つにつき約2%火力が下がる。「当たり」とする声と「物理+3/+4と悩むなら割と痛い」という声がある",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "技量と信仰が低下／知力と技量が低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 5,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "筋力も生命力も下がらない能力値低下は、ほぼ無害",
+     "keys": [
+      "reducedDexterityAndFaith",
+      "reducedIntelligenceAndDexterity"
+     ]
+    },
+    {
+     "name": "聖杯瓶使用時、カット率低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 6,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "ほぼ無害（共通の評価と同じ）",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages"
+     ]
+    },
+    {
+     "name": "生命力と神秘が低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "できるだけ避ける、という1件の分類",
+     "keys": [
+      "reducedVigorAndArcane"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "ダメージを受けた直後、攻撃によりHPの一部を回復（リゲイン）",
+     "level": "must",
+     "source": "本文",
+     "why": "スキルで攻撃を受ける前提なので必須。+1と+2は重ね掛けできる。スキル・アーツの攻撃では回復しない",
+     "keys": [
+      "partialHpRestorationUponPostDamageAttacks",
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2"
+     ]
+    },
+    {
+     "name": "ダメージで吹き飛ばされた時、強靭度とカット率上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "吹き飛ばし攻撃をスキルで受けるだけで発動する（実際に吹き飛ばなくてもよい）",
+     "keys": [
+      "improvedPoiseDamageNegationWhenKnockedBackByDamage"
+     ]
+    },
+    {
+     "name": "【無頼漢】スキル中に攻撃を受けると攻撃力と最大スタミナ上昇＋攻撃を受けると攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "2つ揃えるとスキルで受けたとき攻撃力1.265倍",
+     "keys": [
+      "raiderCharacterSkillDamageUp",
+      "takingAttacksImprovesAttackPower"
+     ]
+    },
+    {
+     "name": "【無頼漢】スキル命中時、敵の攻撃力低下",
+     "level": "strong",
+     "source": "本文",
+     "why": "チームの生存力が上がる。強化スキルなら「攻撃連続時、一度だけカット率上昇」が1発で発動する",
+     "keys": [
+      "raiderHitWithCharacterSkillToReduceEnemyAttackPower"
+     ]
+    },
+    {
+     "name": "スキルクールタイム軽減",
+     "level": "strong",
+     "source": "本文",
+     "why": "スキルが要なので、アーツゲージ増加より優先。+9まで積むと約3〜4秒短縮",
+     "keys": [
+      "characterSkillCooldownReductionPlus1",
+      "characterSkillCooldownReductionPlus2",
+      "characterSkillCooldownReductionPlus3"
+     ]
+    },
+    {
+     "name": "通常攻撃の1段目強化",
+     "level": "nice",
+     "source": "本文",
+     "why": "深き夜では6つまで積め、3つで1.52倍。深層でもデメリットが付かない",
+     "keys": [
+      "improvedInitialStandardAttack"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇／物理攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "攻撃面の基本",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader",
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4"
+     ]
+    },
+    {
+     "name": "状態異常ゲージがある時、徐々に攻撃力上昇（瓦礫の夜）",
+     "level": "nice",
+     "source": "本文",
+     "why": "最大1.45倍。被ダメ蓄積・未満時蓄積のデメリットをメリットに変えられる",
+     "keys": [
+      "statusAilmentGaugesSlowlyIncreaseAttackPower"
+     ]
+    },
+    {
+     "name": "HP低下時、周囲の味方を含めHPをゆっくりと回復",
+     "level": "strong",
+     "source": "コメント",
+     "why": "リゲインと並んでほぼ必須という声",
+     "keys": [
+      "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
+     ]
+    },
+    {
+     "name": "HP低下時、カット率上昇",
+     "level": "nice",
+     "source": "コメント",
+     "why": "低下時カットビルド。HP25%以下の1.5倍バフと噛み合い、デメリットも付かないので遺物を揃えやすい、という提案",
+     "keys": [
+      "improvedDamageNegationAtLowHP"
+     ]
+    },
+    {
+     "name": "初期戦技（霜踏み／冷気の霧／デターミネーション／祈りの一撃）",
+     "level": "nice",
+     "source": "本文",
+     "why": "初期戦技の変更先として有力。ただしFPが低いので多用はできない",
+     "keys": [
+      "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToDeterminationAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToPrayerfulStrikeAtStartOfExpedition"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "敵を倒した時、アーツゲージ増加（アーツ系全般）",
+     "source": "本文",
+     "why": "アーツはやや貧弱なので、スキルCTを優先",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
+      "defeatingEnemiesFillsMoreOfTheArtGauge"
+     ]
+    },
+    {
+     "name": "最大HP上昇",
+     "source": "本文",
+     "why": "物理・属性の両方に効くが、回復量が最大HPに比例しないリゲインとは相性が悪い。考察ではカット率上昇を優先すべきとされる",
+     "keys": [
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "【無頼漢】精神力/知力上昇、生命力/持久力低下",
+     "source": "本文",
+     "why": "ネタ寄り（戦技・魔術を使う変わり種向け）",
+     "keys": [
+      "raiderImprovedMindAndIntelligenceReducedVigorAndEndurance"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "HP持続減少（6850500）",
+     "views": [
+      "本文：スキルでHP1で耐えても直後に削られて瀕死になるので要注意",
+      "コメント：無頼漢はHP最大時カットに頼らなくてよいのでカバーできる。マリス遺物を使うなら入れて大丈夫。両手タメ型では痛くない",
+      "コメント：瓦礫・未満腐敗ビルドでは、持続減少は時間がかかりすぎて役に立たない"
+     ]
+    },
+    {
+     "topic": "被ダメージ時の状態異常蓄積（毒・腐敗を含む）を許容するか",
+     "views": [
+      "毒・腐敗は1個までなら当たり。出血・冷気は最悪1つ。発狂・睡眠・死はNG",
+      "被ダメ蓄積は毒・腐敗を含めて全部避けるべき（割合ダメージで耐久盛りが無意味になる。リゲインで回収できない）",
+      "気にせず死・睡眠・発狂も付けている（ほとんどデメリットを感じない）",
+      "被弾し続けて強化スキルを連発するのが強みなので、状態異常を嫌って被弾を抑えるビルドは微妙"
+     ]
+    },
+    {
+     "topic": "HP最大未満時の毒・腐敗蓄積（6851300/6851400）",
+     "views": [
+      "未満時系は絶対に付けない／被ダメ蓄積より厄介",
+      "瓦礫ビルドなら利点（1つまで）／未満腐敗は必須級",
+      "立ち回りが瓦礫なしの瓦礫無頼漢と同じになるだけで気にしなくてよい"
+     ]
+    },
+    {
+     "topic": "HP最大未満時、攻撃力低下（6851200）",
+     "views": [
+      "無頼漢では常時-10%なので絶対に避ける（多数）",
+      "影響はあるが許容範囲（#5ije）"
+     ]
+    },
+    {
+     "topic": "回避連続時、カット率低下（6850800）",
+     "views": [
+      "スキル受けを使うので割とアリ／意識すれば発生しない",
+      "事故の元／ナメレス・フルゴール戦ではきつい"
+     ]
+    },
+    {
+     "topic": "筋力低下系の能力値デメリット",
+     "views": [
+      "筋力低下はいくら重なってもダメージはほぼ変わらない（当たり）",
+      "測定すると1つで約2.2%、2つで約3.9%下がる。物理+3か+4かで悩むなら割と痛い"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-06-02",
+     "version": "App 1.01.1 / Regulation 1.01.2",
+     "kind": "fix",
+     "text": "大斧・大槌の一部攻撃の威力が想定より高かった不具合を修正（実質の下方）"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "大斧・大槌の攻撃の体勢を崩す力（強靭削り）を上方修正（【補足】片手通常攻撃 大斧130→135、大槌150→160）"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "スキル「逆襲」の攻撃範囲を拡大"
+    },
+    {
+     "date": "2025-12-03",
+     "version": "App 1.03 / Regulation 1.03.1",
+     "kind": "fix",
+     "text": "スキル「逆襲」中に、ダメージのない一部の敵攻撃で怯んでスキルがキャンセルされる不具合を修正。トーテム・ステラの墓石越しのターゲット固定が外れないよう変更"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "大斧・大槌・特大武器の各種攻撃（二刀・ジャンプ攻撃除く）を高速化し、一部攻撃の移動距離を調整"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "add",
+     "text": "アビリティ「闘争心」に、HP が大きく低下した時に一定時間攻撃力が高まる効果を追加"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "アーツ「トーテム・ステラ」の攻撃範囲を拡大"
+    }
+   ]
+  },
+  "復讐者": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E5%BE%A9%E8%AE%90%E8%80%85",
+    "last_updated": "2026-06-28"
+   },
+   "stats": {
+    "得意武器": "なし*2",
+    "能力値ランク": "HP D、FP A、スタミナ D、筋力 C、技量 C、知力 B、信仰 S、神秘 B",
+    "Lv15 の HP / FP / スタミナ": "780 / 200 / 90",
+    "回避": "ローリング 無敵 27F（全体 42F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 0.0%、魔力 17.6%、炎 18.5%、雷 17.4%、聖 11.5%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値",
+     "value": "HP D / FP A / スタミナ D / 筋力 C / 技量 C / 知力 B / 信仰 S / 神秘 B。Lv15 で HP780・FP200・スタミナ90"
+    },
+    {
+     "what": "FP",
+     "value": "多いが、自前で回復する手段がない"
+    },
+    {
+     "what": "回避（ローリング）",
+     "value": "無敵は標準（27F）。レディや隠者のステップのような高性能さはない"
+    },
+    {
+     "what": "耐久",
+     "value": "HPと物理カット率が低い。狙われたときのリスクが他キャラより高い"
+    },
+    {
+     "what": "カット率（参考）",
+     "value": "コメント：物理0%組（隠者と同じ）。二次資料の表では標準14・斬10・魔28・火29・雷29・聖20（物理が低く属性が高い）"
+    },
+    {
+     "what": "状態異常耐性",
+     "value": "Lv15 で毒6・腐敗7・出血6・冷気6・睡眠6・発狂6・死8回。死は Lv11 から8回で、レディ（Lv13〜）・無頼漢（Lv14〜）より早く上がる"
+    },
+    {
+     "what": "スキル（霊体召喚）",
+     "value": "自律行動するファミリー（ヘレン／フレデリック／セバスチャン）を1体呼ぶ。囮や救助をさせられる"
+    },
+    {
+     "what": "アーツ（不死の行進）",
+     "value": "15秒間HPが1以下にならない（ダメージ・怯みは無効化しない）。死の蓄積は止まる。瀕死の味方をゲージに関係なく即救助"
+    },
+    {
+     "what": "初期装備",
+     "value": "呪爪（専用モーション）と、攻撃祈祷のない聖印（拒絶）。戦技・祈祷とも直接の攻撃能力がない"
+    },
+    {
+     "what": "立ち回り",
+     "value": "ファミリー・死霊・味方に狙わせ、自分は祈祷・魔術で遠距離から攻撃。狙われたら回避に専念"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "知力と技量が低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "ほぼ関係のない能力値が下がるだけ（考察の表で1位＝最も軽い）",
+     "keys": [
+      "reducedIntelligenceAndDexterity"
+     ]
+    },
+    {
+     "name": "聖杯瓶使用時、カット率低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "基本どおりに立ち回ればないに等しい（2位）",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages"
+     ]
+    },
+    {
+     "name": "筋力と知力が低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "十分許容範囲（3位）。「筋力上昇、信仰低下」を付けているなら避けたい",
+     "keys": [
+      "reducedStrengthAndIntelligence"
+     ]
+    },
+    {
+     "name": "技量と信仰が低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "信仰が下がるのは痛いが、影響は少ない方（4位）",
+     "keys": [
+      "reducedDexterityAndFaith"
+     ]
+    },
+    {
+     "name": "信仰と筋力が低下",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "主力の能力値が2つとも下がる（5位）。重複は避けたい",
+     "keys": [
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 3,
+     "decision": "accept",
+     "tier": "body",
+     "why": "HPに余裕がないので、そもそも最大を保っていることが多い。初期聖印の回復で戻しやすい（6位）",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下／毒・腐敗が蓄積",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "body",
+     "why": "HP最大を保たないと即死しやすく、初期聖印の回復で解除もしやすい。ただし毒・腐敗の蓄積は聖杯瓶が尽きると緩やかな死につながるので、できれば避ける",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP",
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "被ダメージ1.4倍は痛く、一撃死しないHPがあっても瀕死になりうるが、練習次第で何とかなる（7位）",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "1つまでならデメリットではない、しんどいのは回避連続の方、という意見。一方、ボス相手に避ける自信があるなら採用、という条件付きの意見もある",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒を蓄積",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "発症する頃にはおそらく瀕死。苔薬でも対応できる（8位）",
+     "keys": [
+      "takingDamageCausesPoisonBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、腐敗を蓄積",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "毒と同じ理由（9位）。ただし腐敗の苔薬は入手性が最悪なので、他の腐敗蓄積効果との併用は避ける",
+     "keys": [
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒／腐敗を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "アーツの不死中（HP1で耐えている状態）は、効果が切れた直後にスリップダメージで死ぬ危険がある",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "生命力と神秘が低下",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "ただでさえ低いHPがさらに減り、状態異常を使う戦法もとりづらくなる（10位）。1つまでなら遺物次第",
+     "keys": [
+      "reducedVigorAndArcane"
+     ]
+    },
+    {
+     "name": "被ダメージ時、出血・冷気を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "「被ダメージ時、カット率上昇」で多段攻撃に対応するのが難しくなり、立ち回りが少しシビアになる（11位）",
+     "keys": [
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesFrostBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、睡眠を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "発症時の行動不能が長く、生き延びても追撃で死にやすい（12位）。全キャラ共通の考察（比較的軽い）より重く見ている",
+     "keys": [
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "聖杯瓶の回復量低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "「HP最大時、カット率上昇」が戻るまでの時間と、聖杯瓶の消費が増える。回復祈祷で抑えられるが、できれば避ける（13位）",
+     "keys": [
+      "reducedFlaskHPRestoration"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒・腐敗が蓄積",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 3,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "HPは最大を保っていることが多いが、アーツ（不死）との噛み合いが悪い。付帯効果の同種デメリットとも重なるので、関連効果は合計1つまで（14位）",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂を蓄積",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 1,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "強力な祈祷「狂い火」を使いにくくなる（15位）",
+     "keys": [
+      "takingDamageCausesMadnessBuildup"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 6,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "状態異常のデメリットが全部重くなる。狂い火のタメ2回で発狂するようになる（16位）",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 5,
+     "avoid_posts": 1,
+     "decision": "mixed",
+     "tier": "body-contested",
+     "why": "アーツが要の復讐者とはかなり相性が悪い。「敵を倒した時、アーツゲージ増加」と併用して1つ妥協できるかどうか（17位）",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 3,
+     "avoid_posts": 6,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "ローリングが主な防御手段なので深刻（18位）",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "ファームが遅くなるうえ、商人から星光の欠片や小さなポーチを買いたい復讐者には相性が悪い（19位）",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 2,
+     "avoid_posts": 2,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "アーツの不死中は蓄積が止まるが、夜の王戦ではアーツの回転が落ちる。多段攻撃の多いマリス・カリゴで特に厳しい（20位）",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "時間経過以外に回復手段がなく、その間は一撃死ラインを簡単に下回る（21位）",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "HP持続減少",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 6,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "「HP最大時、カット率上昇」が生命線の深き夜では最悪（22位＝最下位）",
+     "keys": [
+      "continuousHPLoss"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "出撃時の武器の祈祷を「獣爪」にする＋獣の祈祷強化",
+     "level": "strong",
+     "source": "本文",
+     "why": "燃費・射程・攻撃範囲・物理属性のバランスが良く、序盤から強化して連発できる。夜の王のフィールドでは衝撃波が消えやすい",
+     "keys": [
+      "changesCompatibleArmamentsIncantationToBeastClawAtStartOfExpedition",
+      "improvedBestialIncantations"
+     ]
+    },
+    {
+     "name": "初期祈祷「雷の槍」＋王都古竜信仰の祈祷強化／「火よ！」＋巨人の火の祈祷強化",
+     "level": "strong",
+     "source": "本文",
+     "why": "序盤の攻撃手段。初期祈祷と初期戦技は同時に変えられない（一番左のみ有効）",
+     "keys": [
+      "changesCompatibleArmamentsIncantationToLightningSpearAtStartOfExpedition",
+      "improvedDragonCultIncantations",
+      "changesCompatibleArmamentsIncantationToOFlameAtStartOfExpedition",
+      "improvedGiantsFlameIncantations"
+     ]
+    },
+    {
+     "name": "出撃時に「呪霊喚びの鈴」を持つ／初期戦技「霜踏み」",
+     "level": "strong",
+     "source": "本文",
+     "why": "聖印を手に入れるまでの攻撃手段",
+     "keys": [
+      "wraithCallingBellInPossessionAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "属性攻撃力上昇／祈祷強化",
+     "level": "strong",
+     "source": "本文",
+     "why": "基本の攻撃力上昇。迷ったら属性攻撃力（ただし獣の祈祷には乗らない）",
+     "keys": [
+      "improvedAffinityAttackPower",
+      "improvedAffinityAttackPowerPlus1",
+      "improvedAffinityAttackPowerPlus2",
+      "improvedIncantations",
+      "improvedIncantationsPlus1",
+      "improvedIncantationsPlus2"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（+0/+1 併用可）",
+     "level": "strong",
+     "source": "本文",
+     "why": "不死のアーツを使う機会が増え、深き夜のファームが安定する",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
+      "defeatingEnemiesFillsMoreOfTheArtGauge"
+     ]
+    },
+    {
+     "name": "【復讐者】アーツ発動時、ファミリーと味方を強化",
+     "level": "strong",
+     "source": "本文",
+     "why": "味方の攻撃力30秒1.25倍。撃破アーツと合わせてファーム速度に貢献（夜の王戦では救助用に温存）",
+     "keys": [
+      "revenantStrengthensFamilyAndAlliesWhenUltimateArtActivated"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇／封牢の囚を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "祈祷にも乗る。深き夜では夜侵入の方が有用",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader",
+      "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
+     ]
+    },
+    {
+     "name": "生命力／最大HP上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "打たれ弱さを補う。アーツでの救助が優秀なので、HPを補って生存率を上げる優先度が高い",
+     "keys": [
+      "vigorPlus1",
+      "vigorPlus2",
+      "vigorPlus3",
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "聖印を3つ以上装備していると最大FP上昇／魔術師塔／出撃時に星光の欠片を持つ",
+     "level": "nice",
+     "source": "本文",
+     "why": "FP管理の補助。聖印3つは台座1個で簡単に発動",
+     "keys": [
+      "maxFpUpWith3PlusSacredSealsEquipped",
+      "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
+      "starlightShardsInPossessionAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "【復讐者】アーツ発動時、霊炎の爆発を発生",
+     "level": "nice",
+     "source": "本文",
+     "why": "アーツに範囲攻撃を追加。属性攻撃力上昇で一緒に強化できるので、深き夜では価値が上がった",
+     "keys": [
+      "revenantTriggerGhostflameExplosionDuringUltimateArtActivation"
+     ]
+    },
+    {
+     "name": "【復讐者】アーツ発動時、自身のHPと引き換えに周囲の味方のHPを全回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "救助した味方がすぐに「HP最大時、カット率上昇」を発動できる。自分のHPが減るので慎重に判断",
+     "keys": [
+      "revenantExpendOwnHPToFullyHealNearbyAllies"
+     ]
+    },
+    {
+     "name": "【復讐者】筋力上昇、信仰低下",
+     "level": "nice",
+     "source": "本文",
+     "why": "祈祷の火力をほぼ落とさずに追跡者並みの筋力。祈祷が引けなかったときに近接・戦技で代用しやすい",
+     "keys": [
+      "revenantImprovedStrengthReducedFaith"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "潜在する力から、聖印を見つけやすくなる",
+     "source": "本文",
+     "why": "復讐者はもともと聖印が出やすいので効果がない",
+     "keys": [
+      "dormantPowerHelpsDiscoverSacredSeals"
+     ]
+    },
+    {
+     "name": "【復讐者】生命力/持久力上昇、精神力低下",
+     "source": "本文",
+     "why": "FPの減少が大きく、総合ではデメリットの方が重い",
+     "keys": [
+      "revenantImprovedVigorAndEnduranceReducedMind"
+     ]
+    },
+    {
+     "name": "【復讐者】アビリティ発動時、最大FP上昇",
+     "source": "本文",
+     "why": "Ver.1.02.3 の下方修正で、魔術師塔や聖印のFP増強に大きく見劣りする",
+     "keys": [
+      "revenantIncreasedMaxFPUponAbilityActivation"
+     ]
+    },
+    {
+     "name": "属性攻撃力上昇",
+     "source": "本文",
+     "why": "獣の祈祷（物理）には乗らない。獣爪特化では祈祷強化を選ぶ",
+     "keys": [
+      "improvedAffinityAttackPower",
+      "improvedAffinityAttackPowerPlus1",
+      "improvedAffinityAttackPowerPlus2"
+     ]
+    },
+    {
+     "name": "祈祷強化",
+     "source": "本文",
+     "why": "アーツの霊炎の爆発や霜踏みには効かない",
+     "keys": [
+      "improvedIncantations",
+      "improvedIncantationsPlus1",
+      "improvedIncantationsPlus2"
+     ]
+    },
+    {
+     "name": "【復讐者】筋力上昇、信仰低下",
+     "source": "本文",
+     "why": "初期武器の呪爪（信仰補正S）の攻撃力は上がらない",
+     "keys": [
+      "revenantImprovedStrengthReducedFaith"
+     ]
+    },
+    {
+     "name": "封牢の囚を倒す度、攻撃力上昇",
+     "source": "本文",
+     "why": "地変が大空洞だと封牢が出ないので全く役に立たない",
+     "keys": [
+      "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
+     ]
+    },
+    {
+     "name": "最大FP上昇（深層・15%）",
+     "source": "本文",
+     "why": "属性攻撃力上昇などでもFP効率は同程度なので、おまけで付いていれば嬉しい程度",
+     "keys": [
+      "increasedMaximumFP"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇／通常攻撃の1段目強化",
+     "source": "本文",
+     "why": "筋力ステ変で近接をしても、これらを積む余裕はない",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4",
+      "improvedInitialStandardAttack"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "被ダメージ時の状態異常蓄積をどこまで許容するか（本文の中での差）",
+     "views": [
+      "深層遺物のデメリット効果について：発狂・死以外は比較的許容しやすい",
+      "デメリット効果の考察の表：睡眠（12位）や出血・冷気（11位）は中位で、立ち回りがシビアになる。毒・腐敗（8・9位）は軽い"
+     ]
+    },
+    {
+     "topic": "回避直後、カット率低下（6850700）",
+     "views": [
+      "1つまでならデメリットではない（しんどいのは回避連続時）",
+      "ボス相手に避ける自信があるなら採用、ないなら不採用",
+      "本文の表では7位（練習次第でまだ影響は少ない）"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-07-31",
+     "version": "App 1.02 / Regulation 1.02",
+     "kind": "fix",
+     "text": "召喚した霊体が初めて死亡した際にアーツゲージが蓄積していた不具合を修正（実質の下方）"
+    },
+    {
+     "date": "2025-07-31",
+     "version": "App 1.02 / Regulation 1.02",
+     "kind": "fix",
+     "text": "復讐者など体の小さな夜渡りで、拳・短剣の攻撃が敵に当たりにくい問題を修正"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "change",
+     "text": "霊体召喚の「ヘレン」「フレデリック」をプレイキャラクターがすり抜けられるように変更、味方視点の透明度を調整。霊体の HP が無くなったまま復活しない場合がある不具合を修正"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "霊体召喚中のアーツ「不死の行進」で霊体が行う特殊攻撃の攻撃力を上方修正。深き夜では霊体の攻撃力とカット率を深度に応じて上方（【補足】深度5でカット率約55%）"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "fix",
+     "text": "守護者の「救世の翼」の防御陣内で、復讐者の霊体が敵の攻撃で体勢を崩すことがある不具合を修正"
+    }
+   ]
+  },
+  "隠者": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E9%9A%A0%E8%80%85",
+    "last_updated": "2026-10-23"
+   },
+   "stats": {
+    "得意武器": "なし",
+    "能力値ランク": "HP D、FP A、スタミナ C、筋力 D、技量 C、知力 S、信仰 S、神秘 C",
+    "Lv15 の HP / FP / スタミナ": "740 / 195 / 94",
+    "回避": "ステップ 無敵 31F（全体 42F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 0.0%、魔力 17.6%、炎 11.1%、雷 8.7%、聖 15.4%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の補正ランク",
+     "value": "HP D / FP A / スタミナ C / 筋力 D / 技量 C / 知力 S / 信仰 S / 神秘 C"
+    },
+    {
+     "what": "HP",
+     "value": "Lv15 で 740。全キャラ最低（追跡者の約66%）"
+    },
+    {
+     "what": "FP",
+     "value": "Lv15 で 195。スキル（属性痕の回収）で FP を固定 20 回復できる唯一のキャラ"
+    },
+    {
+     "what": "HP・スタミナ（耐久）",
+     "value": "最低クラスで打たれ弱い"
+    },
+    {
+     "what": "回避（無敵時間）",
+     "value": "レディの2連続回避に次ぐ。単発回避では無敵フレームがトップ"
+    },
+    {
+     "what": "立ち回り",
+     "value": "中〜遠距離の魔術・祈祷が主体。深き夜では近接スタイル（結晶・速剣）の難度が高い"
+    },
+    {
+     "what": "物理カット率（相対値）",
+     "value": "物理(標準) 0.0%（最低）、魔力 17.6%、炎 11.1%、雷 8.7%、聖 15.4%"
+    },
+    {
+     "what": "状態異常耐性",
+     "value": "Lv15 で毒6回・腐敗7回・出血6回・冷気6回・睡眠6回・発狂6回・死8回の被弾で発症（「被ダメージ時、○○を蓄積」1つでの検証）。睡眠・発狂は Lv2-9 で 5回と、鉄の目・無頼漢・執行者より低い側"
+    },
+    {
+     "what": "アーツ（血魂の唄）",
+     "value": "周囲の敵に血の烙印（被ダメ約1.15倍）。烙印の敵を攻撃すると与ダメの40%をHP、10%をFPとして回復（味方も）。1ゲージの瀕死の味方を救助できる。敵を怯ませない"
+    },
+    {
+     "what": "アーツのダメージ判定",
+     "value": "烙印付与ダメージは魔力属性・知力依存で「魔術ではない」。魔力攻撃力上昇・属性攻撃強化は乗り、魔術強化は乗らない。知力低下で下がる"
+    },
+    {
+     "what": "出撃時の武器",
+     "value": "杖（隠者の杖）。戦技を付与できない。魔術の変更（出撃時の武器の魔術を「○○」にする）は実質隠者専用"
+    },
+    {
+     "what": "混成魔法の扱い",
+     "value": "魔術扱い（知力依存）。「攻撃命中時、スタミナ回復」など魔術が対象外の効果は混成魔法も対象外"
+    },
+    {
+     "what": "強靭度",
+     "value": "数値の記載なし。混成魔法「聖のみ」で一時的に強靭度とカット率が上がる"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "聖杯瓶使用時、カット率低下",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 4,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "深き夜考察の遺物（裏）と付帯の両方の「許容デメリット」に挙がっている（理由の記載はなし）",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下（Wiki: 回避直後の被ダメージ増加）",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 4,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "本文は許容デメリットに入れる（理由の記載はなし）。コメントでは倍率が高いので採らない／よほど理想的な遺物でないと許容できない、の声もある",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "最大HPを2つ持てれば深度5でも大技以外はワンパン外になるが、安寧者の3連ビーム斬などで確定で発動するため勧めない（コメント）",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "被ダメージ時、○○を蓄積（系統）",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 5,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "遠距離主体で被弾回数が少なく、高深度では発症する前に倒れるか避けるので、まず発症しない（本文の許容デメリット＋コメント）。ただし夜の王との組み合わせで例外あり（下の個別項目）",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesSleepBuildup",
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、冷気を蓄積／発狂を蓄積（特定の夜の王）",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 4,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "カリゴ相手の冷気、リブラ相手の発狂は1つでもアウト、それ以外は異常1種につき1つまでならセーフ（コメント）",
+     "keys": [
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesMadnessBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "1つなら無害、カリゴと夜巫女の霧の誤爆に注意（コメント）。実際に即死したことはないという報告も",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 8,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "アーツ発動時の最大HP上昇があると、被弾しても増えた分しか食らわなければHP最大を保てるので「HP最大未満時」の効果を最も受けにくい。アーツ出血の直後は必ず発動するが攻撃すれば回復する（コメント）。本文も「HP最大未満時系統」を許容に入れる",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒が蓄積／腐敗が蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "comment-over-body-mixed",
+     "why": "本文は「HP最大未満時系統」を許容に入れ、コメントにも受け入れてよいとの声。一方で「全部重いデメリット」と挙げる人もいる。夜の雨の中を回復しながら走ると発動することがある",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "HP持続減少",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 2,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "「HP最大時」系（HP最大時カット率上昇など、隠者が最優先する付帯）が剥がれるため倉庫行き、との声。なお本文によると、アーツの最大HP上昇は HP持続減少のダメージでは解除されない",
+     "keys": [
+      "continuousHPLoss"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "「死んだ後はアーツHPが剥がれているので実質デメリットなし」という意見に対し、いつHPが戻るか分かりづらく事故死が増える、小パンでも死ぬ、と反論が続いた",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "耐久を盛れていない隠者で、カリゴの床氷やグノスターの鱗粉の連続ヒットから睡眠連打で倒れたという報告（被ダメ睡眠と併用時）",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "技量と信仰が低下／知力と技量が低下（技量を含む能力値低下）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "詠唱速度への影響は誤差（常に3レベル低いくらい）。技量低下が2つ付いていても詠唱速度+2で最速になる（コメント）",
+     "keys": [
+      "reducedDexterityAndFaith",
+      "reducedIntelligenceAndDexterity"
+     ]
+    },
+    {
+     "name": "筋力と知力が低下／知力と技量が低下（知力を含む能力値低下）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 5,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "知力低下による火力低下は約2.4%で大した影響はない（コメント）。ただし魔術・混成魔法とアーツの烙印ダメージ（知力依存）が少し下がる",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedIntelligenceAndDexterity"
+     ]
+    },
+    {
+     "name": "筋力と知力が低下／信仰と筋力が低下（筋力を含む能力値低下）",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "筋力は隠者の火力に関係しないが、筋力低下で火の戦車の頭部への致命の一撃で一撃撃破できなくなる（本文の注記）",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "アーツが隠者の最も強い要素で、本文も「敵を倒した時、アーツゲージ増加」を準必須に挙げ、アーツの高回転を立ち回りの軸にしている。コメントでも重いデメリットとされる",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 5,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "隠者のコメント欄で「重いデメリット」として挙がった（キャラ固有の理由の記載はなし）",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "【隠者】アーツ発動時、最大HP上昇",
+     "level": "must",
+     "source": "本文",
+     "why": "最大HPを1.5倍にし、30秒後も被ダメージまで継続。低耐久を補う。深層の最大HP上昇・カット率上昇はこれとの併用が前提",
+     "keys": [
+      "recluseActivatingUltimateArtRaisesMaxHP"
+     ]
+    },
+    {
+     "name": "【隠者】アーツ発動時、自身が出血状態になり、攻撃力上昇（データ名: 【隠者】自身が出血状態になり、攻撃力上昇）",
+     "level": "must",
+     "source": "本文",
+     "why": "約30秒与ダメ1.16倍。アーツの烙印（約1.15倍）と合わせ約1.33倍。出血のHP減少は烙印の回復で取り戻せる。出血時強化の潜在・モーグウィンの聖槍・血の君主の起動トリガーにもなる",
+     "keys": [
+      "recluseSufferBloodLossAndIncreaseAttackPower"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "1体1.07倍で魔術・スキルにも乗る。深き夜では封牢版より主流",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader"
+     ]
+    },
+    {
+     "name": "魔力攻撃力上昇／属性攻撃力上昇／魔術強化（深層は+4/+2/+2が基本）",
+     "level": "strong",
+     "source": "本文",
+     "why": "火力に直結。魔力は対象が狭いが倍率最大、属性は祈祷・混成魔法にも、魔術強化は全魔術・混成魔法に乗る（祈祷・戦技には無効）",
+     "keys": [
+      "magicAttackPowerUpPlus3",
+      "magicAttackPowerUpPlus4",
+      "magicAttackPowerUp",
+      "magicAttackPowerUpPlus1",
+      "magicAttackPowerUpPlus2",
+      "improvedAffinityAttackPower",
+      "improvedAffinityAttackPowerPlus1",
+      "improvedAffinityAttackPowerPlus2",
+      "improvedSorceries",
+      "improvedSorceriesPlus1",
+      "improvedSorceriesPlus2"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（通常と+1は重複）",
+     "level": "strong",
+     "source": "本文",
+     "why": "アーツの回転を上げてパーティ全体の火力とFP回復に貢献。深き夜で価値が上昇。コメントでは「敵倒2種と固有アーツ2種はマスト」とも",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
+      "defeatingEnemiesFillsMoreOfTheArtGauge"
+     ]
+    },
+    {
+     "name": "○○の魔術を強化（結晶人・重力・カーリアの剣・不可視など）",
+     "level": "nice",
+     "source": "本文",
+     "why": "1つ1.12倍で重複。特化型は基本型に上乗せする思想で、深層では魔力・属性攻撃力上昇と同じ遺物に付いていない場合の採用は厳禁",
+     "keys": [
+      "improvedStonediggerSorcery",
+      "improvedCarianSwordSorcery",
+      "improvedGlintbladeSorcery",
+      "improvedInvisibilitySorcery",
+      "improvedCrystalianSorcery",
+      "improvedGravitySorcery",
+      "improvedThornSorcery"
+     ]
+    },
+    {
+     "name": "【隠者】生命力/持久力/技量上昇、知力/信仰低下",
+     "level": "nice",
+     "source": "本文",
+     "why": "Lv15で HP+80・スタミナ+10・技量+20（詠唱速度+1で最速）。火力は約1割減。深度4以降のワンパンリスクを下げる。高耐久快適型では必須",
+     "keys": [
+      "recluseImprovedVigorEnduranceAndDexterityReducedIntelligenceAndFaith"
+     ]
+    },
+    {
+     "name": "最大HP上昇（深層版は10%。マリス遺物の+100とは別効果）",
+     "level": "nice",
+     "source": "本文",
+     "why": "耐久を高めるが、深度5ではもともと少ない隠者のHPを上げても意味が薄く、【隠者】アーツ発動時、最大HP上昇との併用が前提",
+     "keys": [
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "ダメージで吹き飛ばされた時、強靭度とカット率上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "吹き飛ばされた後20秒、被ダメ20%軽減。最大HPの低い隠者の耐久を大きく高める",
+     "keys": [
+      "improvedPoiseDamageNegationWhenKnockedBackByDamage"
+     ]
+    },
+    {
+     "name": "杖を3つ以上装備していると最大FP上昇／魔術師塔の仕掛けが解除される度、最大FP上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "特に低レベルでFPが少ないうちに有効。「知力/信仰上昇、精神力低下」のFP減少を補う手段",
+     "keys": [
+      "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
+      "maxFpUpWith3PlusStavesEquipped"
+     ]
+    },
+    {
+     "name": "出撃時に「高揚の香り」を持つ",
+     "level": "nice",
+     "source": "本文",
+     "why": "与ダメ上昇（物理のみ）は魔術主体の隠者には効きにくいが、一度だけ被ダメ0.1倍で事故を防げる",
+     "keys": [
+      "upliftingAromaticInPossessionAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "出撃時の武器の魔術を「○○」にする（実質隠者専用）",
+     "level": "nice",
+     "source": "本文",
+     "why": "魔術の輝剣は輝剣特化やタメ強化を活かせる。溶岩弾はグノスター・カリゴ対策。罰の茨は自傷50が序盤重い。夜のつぶては下の contested 参照",
+     "keys": [
+      "changesCompatibleArmamentsSorceryToMagicGlintbladeAtStartOfExpedition",
+      "changesCompatibleArmamentsSorceryToCarianGreatswordAtStartOfExpedition",
+      "changesCompatibleArmamentsSorceryToMagmaShotAtStartOfExpedition",
+      "changesCompatibleArmamentsSorceryToBriarsOfPunishmentAtStartOfExpedition"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "攻撃連続時、FP回復",
+     "source": "本文",
+     "why": "遠距離系攻撃では発動しないので、魔術・祈祷では基本恩恵なし（カーリアの速剣などの近接魔術のみ）",
+     "keys": [
+      "fpRestorationUponSuccessiveAttacks"
+     ]
+    },
+    {
+     "name": "攻撃命中時、スタミナ回復",
+     "source": "本文",
+     "why": "魔術が適用対象外で、混成魔法も対象外",
+     "keys": [
+      "staminaRecoveryUponLandingAttacks",
+      "staminaRecoveryUponLandingAttacksPlus1"
+     ]
+    },
+    {
+     "name": "出撃時の武器の戦技を「○○」にする（全種）",
+     "source": "本文",
+     "why": "出撃時の武器が杖なので戦技を付与できない",
+     "keys": [
+      "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToGravitasAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToFlamingStrikeAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToEruptionAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToThunderboltAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToLightningSlashAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToSacredBladeAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToPrayerfulStrikeAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToPoisonMothFlightAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToSeppukuAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToWhiteShadowsLureAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToEndureAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToQuickstepAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToStormStompAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToDeterminationAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToRainOfArrowsAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "封牢の囚を倒す度、攻撃力上昇",
+     "source": "本文",
+     "why": "通常モードでは採用率が高いが、深き夜では封牢が未攻略になりがちで優先度が低い（モード依存）",
+     "keys": [
+      "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "【隠者】知力/信仰上昇、精神力低下（6646100）の採否",
+     "views": [
+      "火力は1割程度上がるがLv15でFP195→130。滅び・結晶などFP消費の重い魔術が使いにくい、FP系で補う必要（本文・コメント）",
+      "混成魔法ビルドは属性痕を回収しながら戦うのでFP切れが起きず有効／カーリアの剣など消費FPの少ない魔術と相性が良い（コメント）",
+      "FPが尽きるまでに出せる火力量が明確に落ちる（コメント）"
+     ]
+    },
+    {
+     "topic": "回避直後、カット率低下（6850700）を許容するか",
+     "views": [
+      "深き夜考察の遺物（裏）の許容デメリットに含める（本文）",
+      "倍率が高いので採らない／よほど理想的な遺物でないと許容しない（コメント）"
+     ]
+    },
+    {
+     "topic": "HP最大未満時、毒／腐敗が蓄積（6851300/6851400）",
+     "views": [
+      "許容してよい。雨の中の回復時だけ注意（本文の許容リスト＋コメント）",
+      "「全部重いデメリット」の一つ（コメント）",
+      "罰の茨持ち込み＋最大未満腐敗＋ストラゲス遺物で火力が異常に伸びる（耐久は捨てる）（コメント）"
+     ]
+    },
+    {
+     "topic": "出撃時の武器の魔術を「夜のつぶて」にする（7361200）",
+     "views": [
+      "本文: 「不可視の魔術を強化」3積みでようやく輝石のつぶてを少し上回る程度、おすすめ度は低い",
+      "コメント: 特化（持ち込み＋特化遺物）できているなら詠唱が速く火力も高く替え得",
+      "コメント: 遺物1枠を割くほどではない、必須効果を落としてまで積むべきではない"
+     ]
+    },
+    {
+     "topic": "【隠者】アーツ発動時、自身が出血状態になり、攻撃力上昇 は必須か",
+     "views": [
+      "アーツが最も強い要素なので外す理由がない／出血時強化の潜在・聖槍・タリスマンの起動トリガー（コメント多数）",
+      "持ち込み魔術のカテゴリ強化を優先して外すことはある／雨をアーツで凌ぐ場面で使えなくなる（コメント）"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-07-31",
+     "version": "App 1.02 / Regulation 1.02",
+     "kind": "fix",
+     "text": "一部の敵の属性攻撃を受けても属性痕が発生しなかった不具合を修正（属性痕を集める遺物効果に影響）"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "スキル「混成魔法」の攻撃魔法の攻撃力を上方修正（【補足】約1.5倍）、発動動作を調整。混成魔法を再び発動できる不具合は修正"
+    },
+    {
+     "date": "2025-12-03",
+     "version": "App 1.03 / Regulation 1.03.1",
+     "kind": "fix",
+     "text": "アビリティ「元素制御」で一部の敵の攻撃を受けても属性痕が発生しない不具合を修正"
+    }
+   ]
+  },
+  "執行者": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E5%9F%B7%E8%A1%8C%E8%80%85",
+    "last_updated": "2026-09-13"
+   },
+   "stats": {
+    "得意武器": "刀",
+    "能力値ランク": "HP B、FP D、スタミナ B、筋力 C、技量 S、知力 D、信仰 D、神秘 S",
+    "Lv15 の HP / FP / スタミナ": "1000 / 100 / 102",
+    "回避": "ローリング（抜刀中はステップ） 無敵 27F（全体 42F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 13.2%、魔力 0.0%、炎 7.4%、雷 0.0%、聖 11.5%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 7、冷気 7、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の補正ランク",
+     "value": "HP B / FP D / スタミナ B / 筋力 C / 技量 S / 知力 D / 信仰 D / 神秘 S"
+    },
+    {
+     "what": "HP・FP・スタミナ（Lv15）",
+     "value": "HP 1000 / FP 100 / スタミナ 102。前衛としてはHP・スタミナが高くない。最大FPが低い"
+    },
+    {
+     "what": "物理カット率",
+     "value": "全キャラ最高（無頼漢・守護者と同等の約13%）。HPさえ補強すれば耐久が伸びる"
+    },
+    {
+     "what": "属性カット率（相対値）",
+     "value": "物理13.2% / 魔力0.0% / 炎7.4% / 雷0.0% / 聖11.5%（魔力・雷は最低）"
+    },
+    {
+     "what": "状態異常耐性",
+     "value": "Lv15 で毒6回・腐敗7回・出血7回・冷気7回・睡眠6回・発狂6回・死8回の被弾で発症（「被ダメージ時、○○を蓄積」1つでの検証）。出血・冷気・死は高め、睡眠・発狂は Lv1-7/8 まで 4回と低め"
+    },
+    {
+     "what": "神秘と状態異常",
+     "value": "神秘で状態異常の蓄積量が上がる（神秘補正のない武器や冷気・腐敗も）。Lv15で他キャラの1.3倍。初期刀に出血付き"
+    },
+    {
+     "what": "アビリティ（不撓）",
+     "value": "状態異常から快復すると20秒間あらゆる攻撃力1.2倍・スタミナ回復+15/秒（累積する）。出血・睡眠・発狂は発症直後に発動。複数の異常をアーツで一気に治すと1回分"
+    },
+    {
+     "what": "スキル（妖刀・弾き）",
+     "value": "弾きに成功すると被ダメ100%カット、ほぼ全ての状態異常蓄積も無効。妖刀中は歩き固定・回避は全キャラ最低のステップ。妖刀は刀扱いではない（刀の攻撃でHP/FP回復は乗らない）。両手持ち扱い"
+    },
+    {
+     "what": "回避（無敵時間）",
+     "value": "妖刀中のステップは全キャラで最も低い性能（守護者のステップより移動距離・無敵が短い）。【執行者】生命力/持久力上昇、神秘低下 を付けると追跡者と同じ性能のローリング"
+    },
+    {
+     "what": "アーツ（獣化）",
+     "value": "最大HP2倍・HP全回復・毒/腐敗/凍傷を解除し変身中は状態異常が蓄積しない。無敵ではなく体勢値があり多段ヒットに弱い。救助・大技阻止に使う"
+    },
+    {
+     "what": "強靭度",
+     "value": "キャラの数値の記載なし。妖刀の解放戦技中はスーパーアーマー（状態異常発症の怯みも無効）"
+    },
+    {
+     "what": "得意武器・立ち回り",
+     "value": "刀（初期刀を最後まで使える）。技量武器・状態異常武器に適性。知力・信仰Dで魔術・祈祷・それらに依存する戦技は不向き"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "HP持続減少",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 1,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "執行者向けのデメリット tier 表の木で、2人とも最上位（どんなに良い遺物でも即売却）に置いた",
+     "keys": [
+      "continuousHPLoss"
+     ]
+    },
+    {
+     "name": "生命力と神秘が低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 8,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "神秘Sで状態異常を伸ばすキャラで、HPも前衛としては高くない。tier 表で A（1個だけなら）〜SS。「生命マイナスの方がヤバめ」",
+     "keys": [
+      "reducedVigorAndArcane"
+     ]
+    },
+    {
+     "name": "能力値低下（筋力と知力／技量と信仰／知力と技量／信仰と筋力）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 4,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "一律-3で、重ねなければ影響は少ない。技量Sのキャラだが技量-3程度のダメージ影響は誤差（序盤は出血メイン、終盤も1割も変わらない）",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedDexterityAndFaith",
+      "reducedIntelligenceAndDexterity",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒が蓄積／腐敗が蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 8,
+     "avoid_posts": 9,
+     "decision": null,
+     "tier": null,
+     "why": "執行者はアーツで快復でき、快復で不撓（攻撃力1.2倍）も発動するので踏み倒しやすい、むしろメリットという声。一方でラストスタンドや雨の移動で効いてくる・ストレスが勝る、と避ける声も多い。毒より腐敗の方が重いとする声",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "本文",
+     "verdict": "depends",
+     "accept_posts": 7,
+     "avoid_posts": 10,
+     "decision": null,
+     "tier": null,
+     "why": "3つでLv15でもあらゆる状態異常を即発症し、ミミズ顔では即瀕死（本文）。2つでも発狂湖沼・狂い火イベント（ハルモニア襲撃時）に行けない。一方で被ダメ蓄積系と組んで不撓を連発させる専用ビルドの素材になる",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "被ダメージ時、睡眠を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 4,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "執行者は睡眠でFPに20ダメージのみ。FPを使わない戦い方やFP回復手段があれば発症時の隙以外に悪影響はなく、隙も妖刀の解放戦技やジャンプで消せる（本文）。ただし一撃で睡眠する状態だとハメ殺される。コメントは「足が止まるので外す」と「カリゴや耐性低下と一緒でなければ普通に使う」…",
+     "keys": [
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂を蓄積",
+     "source": "本文",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "執行者はHP200＋FP20のダメージ。睡眠と違いジャンプで隙を消せない（本文）。発狂は発症直後に不撓が発動し、深層「周囲で発狂状態の発生時、攻撃力上昇」や魔の夜のFP持続回復の起動にも使える。足が止まるので避ける声",
+     "keys": [
+      "takingDamageCausesMadnessBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、出血を蓄積／冷気を蓄積",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 4,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "body",
+     "why": "執行者は出血・冷気の耐性が高め（Lv12-15で7回）。出血は225ダメージ・連続発症可で不撓や血の君主に、冷気は150ダメ＋被ダメ1.15倍で霞の夜（凍傷で姿を隠す）に使える（本文）。コメントでも「被ダメ出血冷気に状態異常低下重ねてますが問題ない」",
+     "keys": [
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesFrostBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒を蓄積／腐敗を蓄積",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "アーツの獣化で毒・腐敗は解除される。不撓目的には発症〜快復が遅く「活用困難」だが、デメリットとしては軽い。識の夜・腐敗眷属の歓喜・瓦礫の夜の起動にも使える",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "tier 表では S（基本採用しない）〜A。一方で「蓄積が低く6発以上連続被弾しないと発症しないので、2つでなければ実質ノーデメリット、カリゴでも画面を見ていれば発症しない」という反論",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下／回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 6,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "弾き（妖刀）で回避を置き換えられるので踏み倒しやすい・Ver.1.03.2 後は完全に踏み倒せる、という声と、弾きが使いにくい敵で窮屈になる（S〜SS）という声に割れる",
+     "keys": [
+      "moreDamageTakenAfterEvasion",
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "tier 表で B（立ち回りとビルド次第で許容）と SS（即売却）に割れた",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "執行者のアーツはばかばか使うものではなく主に救助用なのでそこまでデメリットではない、という声。ただし常夜カリゴで大技阻止をループするなら付けたくない。tier 表では A（1個だけなら）",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "tier 表で A〜S。一方で耐久を盛った構成で「ルーン減少とか未満毒とか付いてるけどそんなに気にならない」という報告",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    },
+    {
+     "name": "聖杯瓶使用時、カット率低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "聖杯瓶も疾走の納刀キャンセルができ、デバフ時間が短くなるうえ納刀弾きで保険をかけられる。tier 表でも C（基本採用）",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages"
+     ]
+    },
+    {
+     "name": "聖杯瓶の回復量低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "tier 表で C（基本採用）。被ダメ毒・腐敗と並べて「実質デメリットない」との声",
+     "keys": [
+      "reducedFlaskHPRestoration"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "どのビルドでも強力。深き夜では災域が必ず1つ出る",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader"
+     ]
+    },
+    {
+     "name": "最大HP上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "物理カット率が全キャラ最高なので、HPを補強すると耐久がぐっと伸びる。アーツ中のHPも伸びる",
+     "keys": [
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "出撃時の武器に○○（冷気/毒/出血）の状態異常を付加",
+     "level": "strong",
+     "source": "本文",
+     "why": "神秘が高く状態異常と相性が良い。初期刀の出血と複合。特に冷気が強力。状態異常・タンクビルドでは冷気が必須",
+     "keys": [
+      "startingArmamentInflictsFrost",
+      "startingArmamentInflictsPoison",
+      "startingArmamentInflictsBloodLoss"
+     ]
+    },
+    {
+     "name": "出撃時の武器の戦技を「血の刃」「霜踏み」「冷気の霧」「毒の霧」にする",
+     "level": "strong",
+     "source": "本文",
+     "why": "血の刃は神秘依存で低レベルから高火力・救助も速い。霜踏みは技量補正で冷気蓄積効率が高い。ただし血の刃は初段で自分のHPが減り「HP最大時」系が切れる",
+     "keys": [
+      "changesCompatibleArmamentsSkillToPoisonousMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "ガード成功時、アーツゲージを蓄積（+0と+1を重ねると約2.5%/回）",
+     "level": "strong",
+     "source": "本文",
+     "why": "弾きでもアーツゲージが溜まり、味方が2人とも瀕死でもアーツで救助できる。状態異常・タンクビルドの必須効果",
+     "keys": [
+      "artGaugeChargedFromSuccessfulGuardingPlus1",
+      "artGaugeChargedFromSuccessfulGuarding"
+     ]
+    },
+    {
+     "name": "【執行者】スキル中、妖刀が解放状態になるとHP回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "解放時に「100+最大HPの5%」回復。弾きを狙うならなるべく付けたい（ただし深き夜考察では通常のキャラ固有効果で考慮に値するのは咆哮HP回復だけ、とする）",
+     "keys": [
+      "executorUnlockingCursedSwordRestoresHP"
+     ]
+    },
+    {
+     "name": "【執行者】アーツ発動中、咆哮でHP回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "咆哮1回で最大HPの15%回復、味方も回復。3ゲージの味方2人の救助が確実になる。深き夜では通常のキャラ固有効果で唯一考慮に値するが、優先度は高くない",
+     "keys": [
+      "executorRoaringRestoresHPWhileArtActive"
+     ]
+    },
+    {
+     "name": "攻撃命中時、スタミナ回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "近接でスタミナ消費が激しくヒット数が多い執行者に最適",
+     "keys": [
+      "staminaRecoveryUponLandingAttacks",
+      "staminaRecoveryUponLandingAttacksPlus1"
+     ]
+    },
+    {
+     "name": "最大FP上昇／攻撃連続時、FP回復／魔術師塔の仕掛けが解除される度、最大FP上昇／刀の攻撃でFP回復",
+     "level": "nice",
+     "source": "本文",
+     "why": "最大FPが低い（D）ので、戦技を多用するなら必須級（刀・鎌など）。刀の攻撃でFP回復は初期刀・屍山血河前提（妖刀には乗らない）",
+     "keys": [
+      "fpRestorationUponSuccessiveAttacks",
+      "increasedMaximumFP",
+      "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
+      "fpRestorationUponKatanaAttacks"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "妖刀・アーツとも完全な物理攻撃。妖刀強化（7034400）と乗算",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4",
+      "physicalAttackUp",
+      "physicalAttackUpPlus1",
+      "physicalAttackUpPlus2"
+     ]
+    },
+    {
+     "name": "ダメージを受けた直後、攻撃によりHPの一部を回復 +1/+2（無印との併用は無意味）",
+     "level": "nice",
+     "source": "本文",
+     "why": "両刃剣・曲剣で「攻撃連続時、一度だけカット率上昇」を発動させながら戦う場合にぜひ。アーツのHP回復まで持ちこたえ聖杯瓶を節約",
+     "keys": [
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2"
+     ]
+    },
+    {
+     "name": "戦技攻撃力上昇／近接攻撃力上昇／致命の一撃強化",
+     "level": "nice",
+     "source": "本文",
+     "why": "妖刀を優先的に強化したい（妖刀の戦技にも戦技攻撃力上昇が乗る。妖刀の致命攻撃力150）。致命の一撃強化+1は2つ以上で重複しない",
+     "keys": [
+      "improvedMeleeAttackPower",
+      "improvedSkillAttackPower",
+      "improvedCriticalHits",
+      "improvedCriticalHitsPlus1"
+     ]
+    },
+    {
+     "name": "【執行者】アビリティ発動時、HPをゆっくりと回復（深層）",
+     "level": "nice",
+     "source": "本文",
+     "why": "不撓（状態異常から快復）で25秒HP回復。被ダメ蓄積系や未満毒腐敗・耐性低下で不撓を狙うビルド用",
+     "keys": [
+      "executorSlowlyRestoreHPUponAbilityActivation"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "攻撃連続時、攻撃力上昇（ガラスの首飾り）",
+     "source": "本文",
+     "why": "執行者のスキルやアーツとの相性が劣悪で立ち回りが制限される",
+     "keys": [
+      "successiveAttacksBoostAttackPower"
+     ]
+    },
+    {
+     "name": "刀の攻撃でHP回復／刀の攻撃でFP回復（妖刀に対して）",
+     "source": "本文",
+     "why": "妖刀は刀扱いではないので乗らない（右手の刀での攻撃には有効）",
+     "keys": [
+      "hpRestorationUponKatanaAttacks",
+      "fpRestorationUponKatanaAttacks"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "【執行者】生命力/持久力上昇、神秘低下（6647000）",
+     "views": [
+      "本文: Lv15でHP+100・スタミナ+12。神秘低下は低レベル時は小さく、状態異常が重要な序盤への悪影響は最小限。生命+3・持久+3と同時に付く店売り遺物が強力",
+      "コメント: 神秘低下でも倒すまでの状態異常発症回数はほぼ変わらない／妖刀・曲剣・サイス主体なら気にならない／連勝志向なら入れる",
+      "コメント: 神秘低下と血の刃のシナジーは最悪、HPだけなら深層の最大HP上昇（同じ10%）の方が良い／技神Sという最大の強みを失う",
+      "コメント: 低レベル帯で血の刃をこする時期はほぼ影響なし、高レベルでは乗り換えるのでノーリスク"
+     ]
+    },
+    {
+     "topic": "【執行者】技量/神秘上昇、生命力低下（6647100）",
+     "views": [
+      "コメント: 技神武器の火力と状態異常付与速度が上がり、遺物の効果枠を食わない火力上昇。生命低下は痛いが妖刀で弾く前提なら割り切れる",
+      "コメント: 生命低下デメリットと重なるとHP1000を割る、マリスなしではしんどい"
+     ]
+    },
+    {
+     "topic": "【執行者】スキル中の攻撃力上昇、攻撃時にカット率低下（7034400、組み込みデメリット）",
+     "views": [
+      "本文: 妖刀の攻撃1.35倍、ただし妖刀の攻撃を命中させた後5秒間被ダメ1.4倍。弾きの精度に自信があるなら採用",
+      "コメント: 解放戦技と致命だけに絞ればデメリットはほぼ踏み倒せる／カット率低下で赤ハルモニアの攻撃無効化が発動する／ソロなら絶対付ける",
+      "コメント: マルチなら全然いらない、連勝目的ならメリットなし／妖刀で殴るとカット率低下が痛すぎる"
+     ]
+    },
+    {
+     "topic": "被ダメ蓄積系＋状態異常耐性低下で不撓を連発させるビルド",
+     "views": [
+      "本文: 能動的な不撓の発動は実用性に乏しく、野良では相応の覚悟が要る",
+      "コメント: 被ダメ睡眠×3＋耐性低下×1などで一撃睡眠→夜巫女や不撓を多重発動、ただし道中はほぼワンパン／湖沼に入れない",
+      "コメント: 耐性低下3積み不撓で発狂・睡眠・出血だけでも被弾1回で物理12積みを超える打点、ただしオワタ式で非常に難しい"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-07-31",
+     "version": "App 1.02 / Regulation 1.02",
+     "kind": "change",
+     "text": "アーツ発動中、一部の攻撃に「咆哮とブレスの攻撃力を高める効果」が適用されるよう変更（効果名は明記なし。データの「咆哮とブレス強化」に対応すると見られる）"
+    },
+    {
+     "date": "2025-07-31",
+     "version": "App 1.02 / Regulation 1.02",
+     "kind": "fix",
+     "text": "アーツ発動時に虫に寄生された状態が解除されなかった不具合を修正（アーツで寄生が解除されるように）"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "buff",
+     "text": "スキル「妖刀」の攻撃力を上方修正（【補足】約1.17倍）、刀身解放状態の戦技の攻撃力を上方修正（【補足】約1.4倍）、アーツ「坩堝の諸相・獣」の一部攻撃を上方修正"
+    },
+    {
+     "date": "2025-09-10",
+     "version": "App 1.02.2 / Regulation 1.02.2",
+     "kind": "fix",
+     "text": "「刺突カウンター発生時、ＨＰ回復」が妖刀の攻撃に反映されない不具合を修正。致命の一撃ができない武器を右手に持つと妖刀中に致命が出せない不具合も修正"
+    },
+    {
+     "date": "2025-12-03",
+     "version": "App 1.03 / Regulation 1.03.1",
+     "kind": "fix",
+     "text": "一部の敵の攻撃を弾いた際に体勢を崩す力が発生していない不具合を修正"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "スキル「妖刀」中: 致命の一撃 1倍→1.5倍、ガード強度 1倍→約1.2倍、弾き成功時の体勢を崩す力 100→120、弾き成功時のスタミナ減少 1倍→0.5倍（いずれも【補足】）、弾きでスタミナ 0 になってもガードが崩れない"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "change",
+     "text": "スキル「妖刀」中の戦技に、遺物・付帯の「戦技攻撃力上昇」「近接攻撃力上昇」が適用されるよう変更"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "buff",
+     "text": "アーツ「坩堝の諸相・獣」: 咆哮以外の攻撃力を上方、戦技入力攻撃時のカット率を上方し攻撃時に HP0 でも瀕死にならない仕様を追加。深き夜では深度に応じて攻撃力とカット率を上方（【補足】深度5でカット率約55%）"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "fix",
+     "text": "アーツ「坩堝の諸相・獣」発動中に、状態異常の発動によるダメージを受ける場合がある不具合を修正。学者の「共感術」リンク中に獣を発動すると想定外の大ダメージが出る不具合も修正（実質の下方）"
+    }
+   ]
+  },
+  "学者": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E5%AD%A6%E8%80%85",
+    "last_updated": "2026-10-31"
+   },
+   "stats": {
+    "得意武器": "刺剣",
+    "能力値ランク": "HP B、FP B、スタミナ B、筋力 D、技量 C、知力 C、信仰 C、神秘 S",
+    "Lv15 の HP / FP / スタミナ": "900 / 145 / 98",
+    "回避": "ステップ 無敵 23F（全体 36F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 5.3%、魔力 17.6%、炎 11.1%、雷 8.7%、聖 0.0%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の補正ランク",
+     "value": "HP B / FP B / スタミナ B / 筋力 D / 技量 C / 知力 C / 信仰 C / 神秘 S"
+    },
+    {
+     "what": "Lv15 の能力値",
+     "value": "HP900 FP145 スタ98 筋14 技18 知28 信15 神秘50（神秘は Lv1 から 50 で、能力値変更遺物なしではレベルで変動しない）"
+    },
+    {
+     "what": "近接適性",
+     "value": "神秘以外の攻撃系能力値が低く回避も弱いので近接戦闘向きではない、支援型"
+    },
+    {
+     "what": "HP",
+     "value": "HP B。レディ・後衛よりは高いが、同じ HP B の執行者・葬儀屋より低め"
+    },
+    {
+     "what": "回避（無敵時間）",
+     "value": "ステップ回避。全体36F・無敵23F・後隙12F（ローリング組は無敵27F、守護者20F）。ロックオン中は方向で移動距離が変わる"
+    },
+    {
+     "what": "回避の弱さ・自衛",
+     "value": "無敵時間と移動距離がやや短く、スキルも自衛に向かない"
+    },
+    {
+     "what": "刺剣の斬り下がり",
+     "value": "学者の刺剣は通常攻撃でも斬り下がりができ、無敵時間 15F（60fps）がある"
+    },
+    {
+     "what": "強靭度",
+     "value": "低いグループ（高いのは守護者・無頼漢のみ）。コメントでは守護者・無頼漢 120、その他 40 とされる"
+    },
+    {
+     "what": "状態異常耐性（被ダメージ時蓄積の遺物で発症までの被弾回数）",
+     "value": "毒 Lv1-6:4回/7-11:5/12-15:6、腐敗 1-8:5/9-11:6/12-15:7、出血 1-10:5/11-15:6、冷気 1-10:5/11-15:6、睡眠 1-10:5/11-15:6、発狂 1-10:5/11-15:6、死 Lv1:6/2-10:7/11…"
+    },
+    {
+     "what": "状態異常の蓄積（攻め）",
+     "value": "神秘の高さで状態異常を起こしやすいのが強み"
+    },
+    {
+     "what": "アビリティ：携行知識",
+     "value": "使用アイテムを他キャラの2倍（投げ矢は1.5倍）所持でき、アイテムカテゴリごとにレベル（Lv3で追加効果）がある"
+    },
+    {
+     "what": "苔薬 Lv3",
+     "value": "リジェネ中、対応する状態異常の蓄積を半減（アイテム広域化で味方にも配れるとコメント）"
+    },
+    {
+     "what": "スキル：探究",
+     "value": "敵へ：攻撃力0.9倍→進捗50%以上で0.81倍、100%で一度だけ被ダメ1.6倍。自身へ：最大スタミナ1.2→1.44倍、100%で一度だけ被ダメージ無効＋衝撃波。探究中は攻撃できない"
+    },
+    {
+     "what": "アーツ：共感術（回復）",
+     "value": "リンクした敵を殴るとダメージの30%を自身と味方が回復。聖杯瓶が尽きた後の緊急回復にもなる"
+    },
+    {
+     "what": "アーツ：共感術（固有のデメリット）",
+     "value": "リンク中のプレイヤーはアーツゲージ蓄積が約0.5倍（大空洞の恩寵による蓄積も）"
+    },
+    {
+     "what": "役割",
+     "value": "火力は他キャラに劣りがちで、バフ・デバフ役"
+    },
+    {
+     "what": "救助",
+     "value": "救助が苦手"
+    },
+    {
+     "what": "ルーンの需要",
+     "value": "商人でアイテムを大量に買うのでルーンが多く要る"
+    },
+    {
+     "what": "FP の使い方",
+     "value": "FP 消費の激しい魔術・祈祷は基本的に使わない"
+    },
+    {
+     "what": "耐久の補い方（コメント）",
+     "value": "スキルの攻撃力低下デバフで、マリス（HP上昇系）なしでも最大カット1つで耐えられるとの声"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "能力値低下（筋力と知力／技量と信仰／知力と技量／信仰と筋力）",
+     "source": "本文",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "body",
+     "why": "神秘以外の能力値がもともと低いので、-3 の低下はほぼ影響しない（筋力低下×4 を技量武器で使う質問への回答）",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedDexterityAndFaith",
+      "reducedIntelligenceAndDexterity",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "生命力と神秘が低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "神秘は学者の主力（状態異常の蓄積）なので、能力値低下系の中でこれだけは別扱い",
+     "keys": [
+      "reducedVigorAndArcane"
+     ]
+    },
+    {
+     "name": "取得ルーン減少",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "学者は買い物（アイテム育成・壺）にルーンを多く使うので痛い、という声と、【学者】スキルによる標本が増える度、ルーンを取得（7036500）で補える、という声に分かれる",
+     "keys": [
+      "reducedRuneAcquisition"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 4,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "学者はアーツ（共感術）でファームするので回転が大事。一方で撃破アーツを2種積んでいればファーム中は気にならず、夜の王戦ではアーツが必須ではないので許容、という声もある。共感術自体にもリンク中のアーツ蓄積0.5倍がある",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 2,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "学者のステップは無敵時間が短い（23F）。回避連続時より重いとされ、売却する人もいる",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 3,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "回避回数を減らせる立ち回り（盾受け・位置避け・回避系戦技・刺剣の斬り下がり・中遠距離）なら使える、という声が多い。殴り火力を出す近接ビルドでは致命的という声や、ストレスで外した声もある",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "聖杯瓶の回復量低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "コメント2件がいずれも「きつい」。深海の夜（聖杯瓶の回復を周囲の味方に分配 7010200）と重なると回復が足りなくなったという報告",
+     "keys": [
+      "reducedFlaskHPRestoration"
+     ]
+    },
+    {
+     "name": "被ダメージ時、睡眠を蓄積",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 2,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "ステップの癖があるので、ヘイトを稼ぎすぎずサポートに回るならメリットのほうが大きい、という意見（睡眠と状態異常耐性低下が付いた遺物への回答）",
+     "keys": [
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 2,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "上と同じ回答で学者なら許容しうるとされる。さらに学者は苔薬 Lv3（リジェネ中の対応状態異常蓄積半減）をアイテム広域化で味方にも配れるので、マリスに睡眠苔、カリゴに凍傷苔を持ち込む対策が挙がっている",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "被ダメージ時、○○を蓄積（毒・腐敗・冷気・出血・発狂・死）",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 1,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "遠距離（鈴・魔力）ビルドでは「どうせ被弾したら死ぬキャラ」なので被弾トリガーのデメリットを多数抱えても気にしない、という声。死の蓄積付きでカリゴの氷鎧纏をスキルパリィしたくない、という声もある",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒/腐敗が蓄積・瀕死時、最大HP低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "技量ステ変付きの遺物に瀕死時最大HP低下が付いた相談で、ゆでカニ Lv3（最大HP1.3倍）で打ち消せるかの質問には答えがなく、「慣れる」という声が1件ある程度",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP",
+      "nearDeathReducesMaxHP"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "【学者】アーツでリンクした敵対象に、継続ダメージ",
+     "level": "strong",
+     "source": "本文",
+     "why": "アーツでのファームを快適にする。継続ダメージはリンクした敵に伝播し、味方も回復する（擬似リジェネ）。必要性はコメントで割れる（contested）",
+     "keys": [
+      "scholarContinuousDamageInflictedOnTargetsThreadedByUltimateArt"
+     ]
+    },
+    {
+     "name": "出撃時に「小さなポーチ」を持つ",
+     "level": "strong",
+     "source": "本文",
+     "why": "アイテムスロットが増え、長期戦の対応力が上がる。投げ矢や壺特化では必須",
+     "keys": [
+      "smallPouchInPossessionAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "【学者】持久力/技量上昇、知力/神秘低下",
+     "level": "must",
+     "source": "本文",
+     "why": "技量バッファー型・ハルハルサイス型の必須。常夜マリスではストームルーラーの威力のため装着必須。神秘は下がっても執行者よりわずかに高い（重さはコメントで割れる）",
+     "keys": [
+      "scholarImprovedEnduranceAndDexterityReducedIntelligenceAndArcane"
+     ]
+    },
+    {
+     "name": "アイテムの効果が周囲の味方にも発動",
+     "level": "must",
+     "source": "本文",
+     "why": "技量バッファー型の必須。Lv3 の追加バフも味方に配れる。食べ物の使用モーションが長くなる",
+     "keys": [
+      "itemsConferEffectToAllNearbyAllies"
+     ]
+    },
+    {
+     "name": "【学者】スキル使用時、対象に含まれた味方の攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "30秒間 物理1.2倍・属性1.15倍。レンズに敵も入っている必要があり、味方2人を入れる位置取りに手間がかかる",
+     "keys": [
+      "scholarAlliesTargetedByCharacterSkillGainBoostedAttack"
+     ]
+    },
+    {
+     "name": "【学者】スキルの進捗率の低下を抑制",
+     "level": "nice",
+     "source": "本文",
+     "why": "スキルのカウンター（進捗100%）用。カウンターを狙わなくても有用、ともある",
+     "keys": [
+      "scholarPreventSlowingOfCharacterSkillProgress"
+     ]
+    },
+    {
+     "name": "【学者】スキルによる標本が増える度、ルーンを取得／自身と味方の取得ルーン増加／ショップ割引",
+     "level": "nice",
+     "source": "本文",
+     "why": "標本1つで1300ルーン。学者は買い物が多いので、ルーン増加・割引も有用",
+     "keys": [
+      "scholarEarnRunesForEachAdditionalSpecimenAcquiredWithCharacterSkill",
+      "increasedRuneAcquisitionForSelfAndAllies",
+      "runeDiscountForShopPurchasesWhileOnExpedition",
+      "hugeRuneDiscountForShopPurchasesWhileOnExpedition"
+     ]
+    },
+    {
+     "name": "出撃時に「呪霊喚びの鈴」を持つ",
+     "level": "nice",
+     "source": "本文",
+     "why": "近接を避けたい場合。状態異常が効かない敵への攻撃手段にもなる",
+     "keys": [
+      "wraithCallingBellInPossessionAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "出撃時の武器の戦技を「霜踏み」「冷気の霧」「血の刃」にする",
+     "level": "nice",
+     "source": "本文",
+     "why": "冷気・出血の蓄積や血の刃の威力が神秘で伸びるので、学者の神秘と相性が良い",
+     "keys": [
+      "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
+      "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "出撃時の武器の戦技を「クイックステップ」にする",
+     "level": "nice",
+     "source": "本文",
+     "why": "回避性能の低さを補う。火力は別の遺物で確保すること",
+     "keys": [
+      "changesCompatibleArmamentsSkillToQuickstepAtStartOfExpedition"
+     ]
+    },
+    {
+     "name": "リゲイン・最大HP上昇など耐久系",
+     "level": "nice",
+     "source": "本文",
+     "why": "近接（技量バッファー）型は耐久系を積むと戦いやすい",
+     "keys": [
+      "partialHpRestorationUponPostDamageAttacks",
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2",
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（+0／+1）",
+     "level": "strong",
+     "source": "コメント",
+     "why": "拠点ごとに最初にアーツを撃つため。1つだけでは溜まらないので2つ積み、という声が多い",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1"
+     ]
+    },
+    {
+     "name": "投擲壺の攻撃力上昇（+0／+1）",
+     "level": "must",
+     "source": "本文",
+     "why": "壺特化学者の場合。深層の +1 は1.3倍で、3つ積みが必須",
+     "keys": [
+      "improvedThrowingPotDamage",
+      "improvedThrowingPotDamagePlus1"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "【学者】スキルを自身に使用時、消費FP軽減",
+     "source": "本文",
+     "why": "FP を激しく使う魔術・祈祷を基本使わないので優先度は低い（ハルハルサイス型では必須扱い。星光の欠片を味方に譲らないパーティなら不要）",
+     "keys": [
+      "scholarReducedFpConsumptionWhenUsingCharacterSkillOnSelf"
+     ]
+    },
+    {
+     "name": "【学者】精神力上昇、生命力低下",
+     "source": "本文",
+     "why": "FP を激しく使わないなら優先されない（コレクター版は生命力+3付きで実質デメリットなし）",
+     "keys": [
+      "scholarImprovedMindReducedVigor"
+     ]
+    },
+    {
+     "name": "状態異常ゲージがある時、徐々に攻撃力上昇（瓦礫の夜の遺物）",
+     "source": "コメント",
+     "why": "アーツ（共感術）で HP が回復するたびにバフがリセットされ、学者には合わないとの声。同じ遺物の被ダメ時の腐敗エンチャは強かったという声もある",
+     "keys": [
+      "statusAilmentGaugesSlowlyIncreaseAttackPower"
+     ]
+    },
+    {
+     "name": "【学者】アーツでリンクした敵対象に、継続ダメージ（壺特化の場合）",
+     "source": "コメント",
+     "why": "壺ビルドでは壺で雑魚が死ぬので切ってよい、という声（通常は strong。contested 参照）",
+     "keys": [
+      "scholarContinuousDamageInflictedOnTargetsThreadedByUltimateArt"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "【学者】アーツでリンクした敵対象に、継続ダメージ（7036400）の必要性",
+     "views": [
+      "積むべき（ファーム力が段違い、伝播で火力が跳ね上がる）",
+      "不要・最優先ではない（アーツ自体が強い、スキルバフを優先、壺なら不要）"
+     ]
+    },
+    {
+     "topic": "敵を倒した時、アーツゲージ増加を +0／+1 の2つ積むか",
+     "views": [
+      "2つ必要（拠点ごとに撃てる、1つではストレス）",
+      "+1 だけで足りる場面もある（中央砦や沼以外では微妙）"
+     ]
+    },
+    {
+     "topic": "【学者】持久力/技量上昇、知力/神秘低下（6647300）の神秘-20 の重さ",
+     "views": [
+      "本文：メリットが大きく上回る",
+      "罠：神秘低下が重く、夜の王に状態異常を2回入れるのがしんどい",
+      "数値上はあまり変わらない（ちいかわR1の出血が最大耐性で11回→13回程度）／技量遺物は逆に必須"
+     ]
+    },
+    {
+     "topic": "取得ルーン減少（6840000）を学者で許容できるか",
+     "views": [
+      "標本ルーンで相殺できる・壺でなければカバーできる",
+      "買い物が多い学者には痛い・減少幅が大きく絶対なし"
+     ]
+    },
+    {
+     "topic": "回避連続時、カット率低下（6850800）",
+     "views": [
+      "回避回数を抑える・盾受け・回避戦技・中遠距離なら使える",
+      "殴り火力を出すなら致命的・ストレスが大きい"
+     ]
+    },
+    {
+     "topic": "HP最大未満時、攻撃力低下（6851200）の評価（学者固有の理由ではない一般論）",
+     "views": [
+      "当たりのデメリット（深き夜は HP 満タンが基本）",
+      "近接は連続カット等で被弾しながら耐えるので付けない・大外れ"
+     ]
+    },
+    {
+     "topic": "【学者】スキル使用時、味方の攻撃力上昇（7036300/19001）",
+     "views": [
+      "1位：1つで味方2人の物理20%・属性15%",
+      "本文：位置取りの手間で非効率にもなる。近接学者は後衛にかけにくいので切ってもよい"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2025-12-17",
+     "version": "App 1.03.1 / Regulation 1.03.2",
+     "kind": "change",
+     "text": "執行者がアーツ「坩堝の諸相・獣」で姿を変えても、学者のアーツ「共感術」のリンクが切れないよう変更"
+    },
+    {
+     "date": "2025-12-17",
+     "version": "App 1.03.1 / Regulation 1.03.2",
+     "kind": "fix",
+     "text": "アーツ「共感術」: 対象がいない時に自身に効果が掛かり続ける（実質の下方）、瀕死時にダメージ／回復が伝播しない、複数ボス戦で回復が敵にダメージではなく回復になる、の各不具合を修正"
+    },
+    {
+     "date": "2025-12-17",
+     "version": "App 1.03.1 / Regulation 1.03.2",
+     "kind": "fix",
+     "text": "スキル「探究」: 進捗率最大で自身に使った時の衝撃波でアーツゲージが蓄積しない、3日目移行で標本数がリセットされる、の各不具合を修正"
+    },
+    {
+     "date": "2025-12-17",
+     "version": "App 1.03.1 / Regulation 1.03.2",
+     "kind": "fix",
+     "text": "アビリティ「携行知識」L3: 投げ矢系のカット率低下の効果時間が延長されない／「扇投暗器」でヒット数が反映されない／「聖水壺」の回復で王族の幽鬼にダメージが出ない、の各不具合を修正。累積数アイコンを追加"
+    },
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "change",
+     "text": "スキル「探究」で、大型の敵に対する進捗率に影響する距離の判定基準を調整。携行知識 L3「ぬくもり石」の瀕死ゲージ減少が使用者自身に適用されない不具合を修正"
+    }
+   ]
+  },
+  "葬儀屋": {
+   "page": {
+    "url": "https://kamikouryaku.net/nightreign_eldenring/?%E8%91%AC%E5%84%80%E5%B1%8B",
+    "last_updated": "2026-10-27"
+   },
+   "stats": {
+    "得意武器": "槌",
+    "能力値ランク": "HP B、FP C、スタミナ C、筋力 A、技量 D、知力 D、信仰 A、神秘 C",
+    "Lv15 の HP / FP / スタミナ": "1040 / 115 / 92",
+    "回避": "ローリング（スキル中はステップ） 無敵 27F（全体 42F）",
+    "強靭度": "低いグループ（その他のキャラクター）",
+    "カット率（相対値）": "物理(標準) 5.3%、魔力 5.9%、炎 3.7%、雷 4.3%、聖 15.4%",
+    "状態異常耐性（Lv15、発症までの被弾回数）": "毒 6、腐敗 7、出血 6、冷気 6、睡眠 6、発狂 6、死 8"
+   },
+   "traits": [
+    {
+     "what": "能力値の補正ランク",
+     "value": "HP B / FP C / スタミナ C / 筋力 A / 技量 D / 知力 D / 信仰 A / 神秘 C"
+    },
+    {
+     "what": "Lv15 の能力値",
+     "value": "HP1040 FP115 スタ92 筋50 技13 知5 信41 神秘10"
+    },
+    {
+     "what": "耐久",
+     "value": "もともと耐久がギリギリとされる（生命力低下は重い）"
+    },
+    {
+     "what": "スタミナ",
+     "value": "近接キャラで下から3番目（レディ・復讐者の次）"
+    },
+    {
+     "what": "FP",
+     "value": "信仰Aでも FP は普通の近接並みで、祈祷メインは厳しい"
+    },
+    {
+     "what": "回避（無敵時間）",
+     "value": "通常はローリング（全体42F・無敵27F・後隙14F）。トランス中はステップ（34F・無敵23F・後隙10F）に変わり、移動距離は長いが無敵は短い"
+    },
+    {
+     "what": "強靭度",
+     "value": "本文の区分では低いグループ（高いのは守護者・無頼漢のみ）。トランス中は強靭度上昇。守護者・無頼漢と同じ高いグループでは、というコメントもある"
+    },
+    {
+     "what": "状態異常耐性（被ダメージ時蓄積の遺物で発症までの被弾回数）",
+     "value": "毒 Lv1-7:4回/8-11:5/12-15:6、腐敗 1-8:5/9-11:6/12-15:7、出血 1-11:5/12-15:6、冷気 1-10:5/11-15:6、睡眠 1-9:4/10-13:5/14-15:6、発狂 1-5:4/6-11:5/12-15:6、死 1-…"
+    },
+    {
+     "what": "スキル：トランス",
+     "value": "8秒（CT14秒）：攻撃力+10%、カット率+35%、強靭度上昇、状態異常の蓄積約0.65倍、移動速度上昇、発動時スタミナ全回復、一定数命中で更に攻撃力+10%"
+    },
+    {
+     "what": "トランス中の状態異常蓄積（コメントの検証）",
+     "value": "HP最大未満時の毒蓄積の遺物で、スキルなし58秒で発症／スキルを使い続けると1分でゲージ1/4。腐敗も同様に遅い"
+    },
+    {
+     "what": "強化版のスキル",
+     "value": "アーツゲージ全消費で15秒間、全攻撃を自動回避（掴み、深海の夜、マリスの睡眠誘いは不可）"
+    },
+    {
+     "what": "アビリティ：力の感応",
+     "value": "味方のアーツ発動時や、掴み攻撃のジャスト回避時に、ゲージを使わずにアーツを撃てる"
+    },
+    {
+     "what": "アーツ：不吉の一撃",
+     "value": "物理（刺突）の突進。発動後もゲージが約3割残るので回転率が高い。他キャラと違いリゲインが発動する。宙返り中に無敵が切れる"
+    },
+    {
+     "what": "立ち回り",
+     "value": "筋力・信仰補正のある近接武器が主力で、トランスでスタミナと耐久の低さを補う。筋技のみの武器は追跡者・無頼漢に劣る"
+    },
+    {
+     "what": "深き夜での方針",
+     "value": "近接は必ず一撃耐える耐久を確保。表の固有効果はほぼ攻撃力上昇で、夜侵入と同じ遺物に収められる"
+    },
+    {
+     "what": "役割",
+     "value": "ファームでは怯ませ・致命で敵の攻勢を抑える。アーツでボスの危険行動を止める"
+    }
+   ],
+   "demerits": [
+    {
+     "name": "技量と信仰が低下／知力と技量が低下",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 0,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "生命力以外の能力値低下は「極薄」で即採用レベル、という声（知力・技量は葬儀屋の低い能力値）",
+     "keys": [
+      "reducedDexterityAndFaith",
+      "reducedIntelligenceAndDexterity"
+     ]
+    },
+    {
+     "name": "筋力と知力が低下／信仰と筋力が低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "筋力・信仰は葬儀屋の主力（A）。「大したことない」という声の一方、筋信低下はレア大槌で約5%下がるという指摘がある（HP最大未満時の攻撃力低下と同程度とする声も）",
+     "keys": [
+      "reducedStrengthAndIntelligence",
+      "reducedFaithAndStrength"
+     ]
+    },
+    {
+     "name": "生命力と神秘が低下",
+     "source": "本文",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 3,
+     "decision": "avoid",
+     "tier": "body",
+     "why": "葬儀屋はもともと耐久がギリギリで、生命力低下は重い（本文は技量ステ変の生命-5について）。コメントも生命低下だけは別扱い",
+     "keys": [
+      "reducedVigorAndArcane"
+     ]
+    },
+    {
+     "name": "被ダメージ時、毒／腐敗を蓄積",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 3,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "発症しても動きが止まらない。トランス中は状態異常の蓄積が約0.65倍で、毒・腐敗の進みはかなり遅い（コメントの検証）",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、出血／冷気を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "毒・腐敗の次に許容できる。ただ発症で怯み、リゲインで回復したいのに攻撃が止まる（凍傷はデバフも付く）",
+     "keys": [
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesFrostBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、発狂を蓄積",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 2,
+     "avoid_posts": 4,
+     "decision": "avoid",
+     "tier": "comment",
+     "why": "長く動きが止まり、トランス＋リゲインのゴリ押しが効かない。リブラ戦では被弾が許されなくなる（リブラ特化大槍型は発狂耐性上昇が必須）",
+     "keys": [
+      "takingDamageCausesMadnessBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、睡眠を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 2,
+     "decision": null,
+     "tier": null,
+     "why": "葬儀屋コメントでは発狂と並んで最も重い部類（動きが長く止まる）。一方で遺物効果ページのコメントは、葬儀屋はトランスの回避強化と状態異常耐性上昇があるので連続被弾に気をつければ問題ないとし、実際に被ダメ睡眠付きの深層遺物を使うビルド投稿も多い。耐性表では葬儀屋の睡眠は Lv1-9…",
+     "keys": [
+      "takingDamageCausesSleepBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時、死を蓄積",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 4,
+     "decision": null,
+     "tier": null,
+     "why": "被弾しながら殴り続ける葬儀屋は、死の蓄積が重いことがあるという声と、もともと溜まりにくく発症する頃には倒れている（カリゴ以外は重くない）という声がある。カリゴに持ち込むかでも割れる",
+     "keys": [
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "被ダメージ時の蓄積を複数（死・発狂・出血・腐敗）重ねる場合",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 5,
+     "avoid_posts": 2,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "トランスで多少ごまかせるので他キャラより許容できるか、という相談に、死だけ外せれば他は許容・カリゴ以外に出せばよい、と答えが割れた",
+     "keys": [
+      "takingDamageCausesPoisonBuildup",
+      "takingDamageCausesRotBuildup",
+      "takingDamageCausesFrostBuildup",
+      "takingDamageCausesBloodLossBuildup",
+      "takingDamageCausesMadnessBuildup",
+      "takingDamageCausesDeathBuildup"
+     ]
+    },
+    {
+     "name": "すべての状態異常耐性低下",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 2,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "遺物効果ページのコメントでは、葬儀屋はトランスの状態異常耐性上昇（蓄積0.65倍）と回避強化があるので連続被弾に気をつければあまり問題ないとされる。葬儀屋コメントの危険度ランキングは「状態耐性低下を付けていない前提」",
+     "keys": [
+      "allResistancesDown"
+     ]
+    },
+    {
+     "name": "アーツゲージ蓄積鈍化",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 2,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "力の感応（味方のアーツに便乗して無償アーツ）があるので他キャラより影響が少ない、撃破アーツを積めばファーム中は気にならない、という声。一方「俺なら付けない」「大槌出やすいにアーツ低下が付いているので付けたくない」という声。アーツ発動時の攻撃力上昇・アーツ後スキル再使用などアーツ…",
+     "keys": [
+      "ultimateArtChargingImpaired"
+     ]
+    },
+    {
+     "name": "回避連続時、カット率低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 3,
+     "avoid_posts": 3,
+     "decision": null,
+     "tier": null,
+     "why": "レディの回避連打でもなければ発動しない、という声と、トランス中は回避が連続しがち・ナメレスやフルゴールでは3連回避を強要される・連続の判定が思ったより厳しい、という声に分かれる",
+     "keys": [
+      "repeatedEvasionsLowerDamageNegation"
+     ]
+    },
+    {
+     "name": "回避直後、カット率低下",
+     "source": "コメント",
+     "verdict": "mixed",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "葬儀屋での評価は少ない。アーツ鈍化・信筋低下よりは回避直後のほうが良かった、という声が1件",
+     "keys": [
+      "moreDamageTakenAfterEvasion"
+     ]
+    },
+    {
+     "name": "HP最大未満時、攻撃力低下",
+     "source": "コメント",
+     "verdict": "depends",
+     "accept_posts": 4,
+     "avoid_posts": 1,
+     "decision": "accept",
+     "tier": "comment",
+     "why": "崩しが仕事なので致命的ではないが、HP全快でなければ物理攻撃力を積んでいないのとほぼ同じになる。85%以下で発動なので当たりの部類、という声もある。体力が減っても殴り続ける拳では付けたくないが、特大剣ならよい、という声",
+     "keys": [
+      "lowerAttackWhenBelowMaxHP"
+     ]
+    },
+    {
+     "name": "聖杯瓶のデメリット（使用時カット率低下／回復量低下）",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 1,
+     "avoid_posts": 0,
+     "decision": null,
+     "tier": null,
+     "why": "深層遺物を有効2枠にしてデメリットが聖杯瓶1つならアタリ、という声。どちらの聖杯瓶デメリットかは書かれていない",
+     "keys": [
+      "reducedDamageNegationForFlaskUsages",
+      "reducedFlaskHPRestoration"
+     ]
+    },
+    {
+     "name": "瀕死時、最大HP低下",
+     "source": "コメント",
+     "verdict": "avoid",
+     "accept_posts": 0,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "アーツ低下と並べて「付けたくない」理由に挙げられている（Wiki の表記は「最大HP低下」）",
+     "keys": [
+      "nearDeathReducesMaxHP"
+     ]
+    },
+    {
+     "name": "HP最大未満時、毒が蓄積／腐敗が蓄積",
+     "source": "コメント",
+     "verdict": "accept",
+     "accept_posts": 2,
+     "avoid_posts": 1,
+     "decision": null,
+     "tier": null,
+     "why": "",
+     "keys": [
+      "poisonBuildupWhenBelowMaxHP",
+      "rotBuildupWhenBelowMaxHP"
+     ]
+    }
+   ],
+   "important": [
+    {
+     "name": "【葬儀屋】アーツ発動時、攻撃力上昇",
+     "level": "must",
+     "source": "本文",
+     "why": "40秒間 約1.18倍（魔術・祈祷も）。力の感応で撃ったアーツも対象。大斧・大槌・大槍・拳型の必須（ガラスの首飾り）",
+     "keys": [
+      "undertakerActivatingUltimateArtIncreasesAttackPower"
+     ]
+    },
+    {
+     "name": "【葬儀屋】アーツ発動後、スキル再使用可能",
+     "level": "strong",
+     "source": "本文",
+     "why": "スキル→アーツの順で撃てばトランスの効果時間が実質2倍。汎用型では物理攻撃力上昇の方が優先。コメントでは深層の最優先の1つ",
+     "keys": [
+      "undertakerExecutingArtReadiesCharacterSkill"
+     ]
+    },
+    {
+     "name": "ダメージを受けた直後、攻撃によりHPの一部を回復",
+     "level": "must",
+     "source": "本文",
+     "why": "トランスの強靭度・カット率上昇と相性が良い。他キャラと違いアーツでも発動する。大斧・大槌・大槍・拳型の必須",
+     "keys": [
+      "partialHpRestorationUponPostDamageAttacks",
+      "partialHPRestorationUponPostDamageAttacksPlus1",
+      "partialHPRestorationUponPostDamageAttacksPlus2"
+     ]
+    },
+    {
+     "name": "【葬儀屋】連撃の最終攻撃命中時、攻撃力上昇",
+     "level": "must",
+     "source": "本文",
+     "why": "20秒間 1.16倍。槌の専用モーションは4段目が最終段。大斧型・大槌型の必須",
+     "keys": [
+      "undertakerAttackPowerIncreasedByLandingTheFinalBlowOfAChainAttack"
+     ]
+    },
+    {
+     "name": "攻撃連続時、攻撃力上昇（ガラスの首飾り）",
+     "level": "strong",
+     "source": "本文",
+     "why": "トランスの強靭度・カット率でゴリ押しして攻撃を続ける戦法と相性が良い（Ver.1.03.4 で約5%/12%/22% に下方）",
+     "keys": [
+      "successiveAttacksBoostAttackPower"
+     ]
+    },
+    {
+     "name": "物理攻撃力上昇+3／+4",
+     "level": "strong",
+     "source": "本文",
+     "why": "汎用型では深層すべてに+3～4が欲しい。+2以下での妥協は避けたい。耐久系の方が優先では、という反論もある（contested）",
+     "keys": [
+      "physicalAttackUpPlus3",
+      "physicalAttackUpPlus4"
+     ]
+    },
+    {
+     "name": "夜の侵入者を倒す度、攻撃力上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "優先度が高い。表の葬儀屋固有の攻撃力バフと同じ遺物に収められる",
+     "keys": [
+      "attackPowerUpAfterDefeatingANightInvader"
+     ]
+    },
+    {
+     "name": "最大HP上昇",
+     "level": "strong",
+     "source": "本文",
+     "why": "近接は一撃耐える耐久が必要。2つで HP1250 になる",
+     "keys": [
+      "increasedMaximumHP"
+     ]
+    },
+    {
+     "name": "最大スタミナ上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "スタミナの低さを補う。狩人の暗き夜（最大スタミナ＋属性攻撃力＋撃破アーツ）がおすすめ",
+     "keys": [
+      "increasedMaximumStamina"
+     ]
+    },
+    {
+     "name": "敵を倒した時、アーツゲージ増加（+0／+1）",
+     "level": "strong",
+     "source": "本文",
+     "why": "アーツの回転率を上げ、アーツ発動時の攻撃力上昇・スキル再使用につながる。リブラ特化大槍型では両方欲しい",
+     "keys": [
+      "defeatingEnemiesFillsMoreOfTheArtGauge",
+      "defeatingEnemiesFillsMoreOfTheArtGaugePlus1"
+     ]
+    },
+    {
+     "name": "ダメージで吹き飛ばされた時、強靭度とカット率上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "大斧・大槌・大槍・拳型の追加候補。腐らない効果なので妥協先にもなる",
+     "keys": [
+      "improvedPoiseDamageNegationWhenKnockedBackByDamage"
+     ]
+    },
+    {
+     "name": "発狂耐性上昇",
+     "level": "must",
+     "source": "本文",
+     "why": "リブラ討伐特化大槍型の必須",
+     "keys": [
+      "improvedMadnessResistance",
+      "improvedMadnessResistancePlus1"
+     ]
+    },
+    {
+     "name": "潜在する力から、大斧／大槌／大槍／拳を見つけやすくなる",
+     "level": "must",
+     "source": "本文",
+     "why": "各武器型の必須。レア大槌・大槍は筋力・信仰補正で葬儀屋と相性が良く、拳は連撃・トランスの接近と相性が良い",
+     "keys": [
+      "dormantPowerHelpsDiscoverGreataxes",
+      "dormantPowerHelpsDiscoverGreatHammers",
+      "dormantPowerHelpsDiscoverGreatSpears",
+      "dormantPowerHelpsDiscoverFists"
+     ]
+    },
+    {
+     "name": "【葬儀屋】祈祷による補助効果発生時、物理攻撃力上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "60秒間 物理1.19倍。補助祈祷付きの聖印を持ち続ける必要がある。物理のみの武器で使う",
+     "keys": [
+      "undertakerPhysicalAttacksBoostedWhileAssistEffectFromIncantationIsActiveForSelf"
+     ]
+    },
+    {
+     "name": "聖杯瓶の回復量上昇",
+     "level": "nice",
+     "source": "本文",
+     "why": "付帯効果「HP最大時、カット率上昇」を維持しやすい（汎用型の追加候補）",
+     "keys": [
+      "improvedFlaskHPRestoration"
+     ]
+    }
+   ],
+   "useless": [
+    {
+     "name": "【葬儀屋】技量上昇、生命力/信仰低下",
+     "source": "本文",
+     "why": "Lv15で技量+19・生命力-5・信仰-13。大斧・大槌は1.04倍、特大武器は1.00倍、信仰補正ありの大斧・大槌は0.99倍、特大武器は0.96倍と伸びず、生命力低下が重い。上級者向けで、拳・曲剣など上質武器向き（コレクター版の表遺物…",
+     "keys": [
+      "undertakerImprovedDexterityReducedVigorAndFaith"
+     ]
+    },
+    {
+     "name": "【葬儀屋】精神力/信仰上昇、筋力低下",
+     "source": "本文",
+     "why": "筋力-15 で槌など筋力武器は約12%下がる。FP と火力を同時に上げる遺物がなければ復讐者との差別化が難しい。筋力低下でアーツの威力も落ちる、というコメントもある",
+     "keys": [
+      "undertakerImprovedMindAndFaithReducedStrength"
+     ]
+    },
+    {
+     "name": "【葬儀屋】祈祷による補助効果発生時、物理攻撃力上昇（属性付き武器の場合）",
+     "source": "本文",
+     "why": "物理しか上がらないので、属性攻撃力を持つ近接武器では付帯効果「近接攻撃力上昇」（1.15倍）より伸びが小さい。拳型でも属性付きなら効果が半減",
+     "keys": [
+      "undertakerPhysicalAttacksBoostedWhileAssistEffectFromIncantationIsActiveForSelf"
+     ]
+    },
+    {
+     "name": "【葬儀屋】アーツ発動後、スキル再使用可能（使い方を誤った場合）",
+     "source": "本文",
+     "why": "スキルゲージが満タンのままアーツを撃つと全く意味がない",
+     "keys": [
+      "undertakerExecutingArtReadiesCharacterSkill"
+     ]
+    }
+   ],
+   "contested": [
+    {
+     "topic": "被ダメージ時の蓄積デメリットの重さの順位（葬儀屋で）",
+     "views": [
+      "腐敗・毒は問題なし＞出血＞凍傷＞発狂・睡眠＞死（ゴリ押しすると死ぬ）",
+      "発狂・睡眠が最悪＞＞＞出血・凍傷＞＞死＞毒・腐敗（死はカリゴ以外重くない）",
+      "死は葬儀屋や無頼漢では重い時もある"
+     ]
+    },
+    {
+     "topic": "被ダメージ時、睡眠（6820500）・すべての状態異常耐性低下（6850200）を葬儀屋で許容できるか",
+     "views": [
+      "葬儀屋はトランスの回避強化・状態異常耐性上昇があり、連続被弾に気をつければ問題ない",
+      "睡眠は発狂と並んで最悪（動きが長く止まる）。耐性表でも葬儀屋の睡眠は低レベル帯で低め"
+     ]
+    },
+    {
+     "topic": "【葬儀屋】技量上昇、生命力/信仰低下（6647400）の価値",
+     "views": [
+      "大槍・大槌・特大武器以外は基本ステ変推奨（特大剣もステ変した方が強い）",
+      "生命力低下に見合わない・技量武器を振るのでなければ釣り合わない・葬儀屋が死にまくる原因の一部",
+      "拳はコレクター版の表遺物で積めば生命が盛れてほぼデメリットなし"
+     ]
+    },
+    {
+     "topic": "物理攻撃力の盛り方：本文の「深層は全部物理+3～4」か、耐久・立ち回り系優先か",
+     "views": [
+      "本文：全ての深層遺物に物理+3～4。デメリットのない+2以下での妥協は避ける",
+      "コメント：リゲインや攻撃時スタミナ回復、耐久などの方が優先では。このページが「葬儀屋は脆い」と言われる一因では"
+     ]
+    },
+    {
+     "topic": "物理盛りか属性盛りか",
+     "views": [
+      "物理：大半の武器が純物理か物理と属性の複合で、アーツも純物理。腐らない",
+      "属性：葬儀屋の固有バフは補助祈祷以外は属性も上げる。炎聖の筋力武器で頂点を取れる能力値"
+     ]
+    },
+    {
+     "topic": "アーツゲージ蓄積鈍化（6840200）",
+     "views": [
+      "便乗アーツがあるので他キャラより影響が少ない・撃破アーツ併用なら気にならない",
+      "付けない"
+     ]
+    },
+    {
+     "topic": "回避連続時、カット率低下（6850800）",
+     "views": [
+      "回避連打しなければ発動しない",
+      "トランス中は連続回避しがち・ボスによっては強要される"
+     ]
+    }
+   ],
+   "changes": [
+    {
+     "date": "2026-01-15",
+     "version": "App 1.03.2 / Regulation 1.03.4",
+     "kind": "change",
+     "text": "槌の使用時、固定ターゲットに対する一部攻撃の移動距離を調整"
+    }
+   ]
+  }
+ }
+}

@@ -24,7 +24,8 @@ ERN_RelicForge/
 │   ├── items_data.json          # アイテムデータ (1003件, 日英名称付き)
 │   ├── effects_data.json        # エフェクトデータ (1117件, 日英名称・重複可否・備考付き)
 │   ├── vessels_data.json        # 献器データ (全10キャラ・4汎用献器)
-│   └── build_suggest.json       # ビルド提案の変換ルール (tools/build_suggest で生成)
+│   ├── build_suggest.json       # ビルド提案の変換ルール (tools/build_suggest で生成)
+│   └── character_profiles.json  # キャラ図鑑のデータ (tools/build_suggest で生成)
 │
 ├── gui/                         # Electron GUI アプリ (Python 不要)
 │   ├── package.json
@@ -37,6 +38,7 @@ ERN_RelicForge/
 │       ├── relic-optimizer.js   # JS 版最適化 (web/ と共通)
 │       ├── relic-share.js       # 共有リンク・QR コードの作成・読み込み (web/ と共通)
 │       ├── relic-suggest.js     # ビルド提案の条件の作成 (web/ と共通)
+│       ├── relic-guide.js       # キャラ図鑑の表示 (web/ と共通)
 │       ├── lib/
 │       │   ├── crypto-js.min.js # AES-CBC 復号化用
 │       │   ├── icons.js         # 画面のアイコン (Lucide)
@@ -50,6 +52,7 @@ ERN_RelicForge/
 │   ├── relic-optimizer.js       # JS 版最適化 (Web Worker 対応)
 │   ├── relic-share.js           # 共有リンク・QR コードの作成・読み込み
 │   ├── relic-suggest.js         # ビルド提案の条件の作成
+│   ├── relic-guide.js           # キャラ図鑑の表示
 │   ├── style.css                # ダークテーマスタイル
 │   └── lib/
 │       ├── crypto-js.min.js     # AES-CBC 復号化用
@@ -147,6 +150,13 @@ ERN_RelicForge/
 - 除外条件の指定（除外:必須 / 除外:推奨 / 除外:任意）
 - タブ形式の結果表示
 - スコア内訳の詳細表示（各効果の寄与、集中ボーナス、除外ペナルティ）
+
+### キャラ図鑑（Web 版・Electron 版）
+- キャラごとに、基本データ（得意武器・能力値ランク・Lv15 の HP/FP/スタミナ・回避の無敵時間・強靭度・カット率・状態異常耐性）と特性を表示
+- ビルド提案での扱い（出やすい武器種・定番の効果・深き夜で避けるデメリットと理由・提案に使わない効果）を表示
+- 定番のビルドの一覧（汎用／特定の相手向け。効果・献器・出典つき）。「このビルドで提案」でビルド提案をそのビルドから始められる
+- 調査の一覧（デメリットの評価と投稿数、必須・意味のない効果、意見が割れている点、性能変更の履歴）を折りたたみで表示
+- 出典は神攻略wiki のみ。内容は付録（[キャラ別の評価と数値](tools/build_suggest/catalog/characters.md)・[ビルド一覧](tools/build_suggest/catalog/builds.md)）と同じ
 
 ### 効果カタログ
 - セーブファイル内の所持効果をカテゴリ別タイルグリッドで一覧表示

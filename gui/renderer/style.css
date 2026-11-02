@@ -2847,3 +2847,237 @@ button:has(> .icon) {
   color: var(--text-muted);
   font-weight: 400;
 }
+
+/* === キャラ図鑑 (character guide tab) === */
+.guide-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.guide-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 20px 32px;
+}
+
+.guide-chars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.guide {
+  display: grid;
+  gap: 12px;
+  max-width: 980px;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.guide-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+}
+
+.guide-head h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.guide-card {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+}
+
+.guide-card h3 {
+  display: inline;
+  margin: 0;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+section.guide-card h3 {
+  display: block;
+  margin-bottom: 8px;
+}
+
+details.guide-card > summary {
+  cursor: pointer;
+}
+
+details.guide-card[open] > summary {
+  margin-bottom: 8px;
+}
+
+.guide-card h4 {
+  margin: 10px 0 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.guide-stats,
+.guide-rules {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 14px;
+  margin: 0;
+}
+
+.guide-stats dt,
+.guide-rules dt {
+  color: var(--text-secondary);
+}
+
+.guide-stats dd,
+.guide-rules dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.guide-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+.guide-list ul {
+  margin: 2px 0 0;
+  padding-left: 18px;
+  color: var(--text-secondary);
+}
+
+.guide-effs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.guide-eff {
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.guide-eff.guide-must { border-color: var(--warning); color: var(--warning); }
+.guide-eff.guide-rec { border-color: var(--accent); color: var(--accent); }
+.guide-eff.guide-opt { color: var(--text-secondary); }
+.guide-eff.guide-x { border-color: rgba(231, 76, 60, 0.5); color: var(--color-red); }
+
+.guide-tier {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.guide-tier-label {
+  flex-shrink: 0;
+  min-width: 3.5em;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.guide-tag {
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.guide-muted {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.guide-muted a {
+  color: var(--accent);
+}
+
+.guide-num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.guide-build {
+  border-top: 1px solid var(--border);
+  padding: 6px 0;
+}
+
+.guide-build > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  cursor: pointer;
+}
+
+.guide-build-name {
+  font-weight: 600;
+}
+
+.guide-build-body {
+  display: grid;
+  gap: 4px;
+  padding: 8px 0 4px 16px;
+}
+
+.guide-build-body p {
+  margin: 0;
+}
+
+.guide-suggest {
+  justify-self: start;
+  margin-top: 4px;
+}
+
+.guide-scroll {
+  overflow-x: auto;
+}
+
+.guide-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 640px;
+}
+
+.guide-table th,
+.guide-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.guide-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.guide-foot {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+  .guide-scroll-area { padding: 10px 12px 24px; }
+  .guide-stats, .guide-rules { grid-template-columns: 1fr; gap: 2px; }
+  .guide-stats dd, .guide-rules dd { margin-bottom: 6px; }
+  .guide-tier { flex-direction: column; gap: 2px; }
+}

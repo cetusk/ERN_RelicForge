@@ -39,6 +39,9 @@ let effectSelectCollapsed = new Set(); // collapsed categories in effect selecto
 
 // Catalog state
 let catalogTabOpen = false;
+let guideTabOpen = false;
+let guideCharacter = '';
+let profilesData = null;   // cached character_profiles.json (キャラ図鑑)
 let catalogCollapsedCategories = new Set();
 
 // Priority display labels
@@ -387,6 +390,7 @@ function renderMobileMenu() {
     [btnSuggest, 'lightbulb', ja ? '型や武器種から組み合わせを提案（試験的）' : 'Suggest from playstyles (beta)'],
     [btnOptimizer, 'wand-sparkles', ja ? '献器と遺物の組み合わせを探す' : 'Find vessel & relic sets'],
     [btnCatalog, 'book-open', ja ? '効果の一覧と重複の可否' : 'All effects & stacking'],
+    [btnGuide, 'book-user', ja ? 'キャラの数値・定番・ビルド一覧' : 'Character numbers, staples & builds'],
     [document.getElementById('btn-share'), 'share-2', ja ? '別の端末で開くリンク' : 'Open on another device'],
     [btnExportTable, 'file-down', ja ? '一覧を HTML で保存' : 'Save the list as HTML'],
   ].filter(([btn]) => !btn.classList.contains('hidden') && btn.style.display !== 'none');
@@ -698,6 +702,7 @@ function displayRelicData(record) {
   btnOptimizer.classList.remove('hidden');
   btnSuggest.classList.remove('hidden');
   btnCatalog.classList.remove('hidden');
+  btnGuide.classList.remove('hidden');
   btnExportTable.classList.remove('hidden');
   document.getElementById('btn-share').classList.remove('hidden');
   tabBar.classList.remove('hidden');
@@ -2783,6 +2788,29 @@ function renderTabBar() {
     tabBar.appendChild(tab);
   }
 
+  // Add the character guide tab if open
+  if (guideTabOpen) {
+    const ja = displayLang === 'ja';
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (activeTab === 'guide' ? ' active' : '');
+    tab.dataset.tab = 'guide';
+    tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('book-user', 14)}</span>`);
+    const label = document.createElement('span');
+    label.className = 'tab-label';
+    label.textContent = ja ? 'キャラ図鑑' : 'Characters';
+    tab.appendChild(label);
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'tab-close';
+    closeBtn.innerHTML = iconSvg('x', 12);
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeTab('guide');
+    });
+    tab.appendChild(closeBtn);
+    tab.addEventListener('click', () => switchTab('guide'));
+    tabBar.appendChild(tab);
+  }
+
   // Update main tab active state
   const mainTab = tabBar.querySelector('[data-tab="main"]');
   if (mainTab) mainTab.className = 'tab' + (activeTab === 'main' ? ' active' : '');
@@ -2797,6 +2825,7 @@ function switchTab(tabId) {
   // Toggle content visibility
   contentArea.classList.toggle('hidden', tabId !== 'main');
   catalogContent.classList.toggle('hidden', tabId !== 'catalog');
+  guideContent.classList.toggle('hidden', tabId !== 'guide');
 
   // Show/hide optimizer tab wrappers
   optimizerTabs.forEach((info, tid) => {
@@ -2821,6 +2850,7 @@ function switchTab(tabId) {
   if (tabId === 'catalog') {
     renderCatalog();
   }
+  if (tabId === 'guide') renderGuide();
 
   renderTabBar();
 }
@@ -2924,6 +2954,10 @@ function closeTab(tabId) {
 
   if (tabId === 'catalog') {
     closeCatalogTab();
+    return;
+  }
+  if (tabId === 'guide') {
+    closeGuideTab();
     return;
   }
 
@@ -3570,6 +3604,19 @@ async function loadSuggestData() {
   }
 }
 
+async function loadProfilesData() {
+  if (profilesData) return true;
+  try {
+    const resp = await fetch('../resources/character_profiles.json');
+    if (!resp.ok) throw new Error('Failed to load character_profiles.json');
+    profilesData = await resp.json();
+    return true;
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? 'キャラ図鑑のデータの読み込みに失敗' : 'Could not load the character guide data'}: ${err}`);
+    return false;
+  }
+}
+
 function charDisplayName(charJa, ja) {
   const c = vesselsData && vesselsData.characters[charJa];
   return ja || !c ? charJa : (c.nameEn || charJa);
@@ -3825,6 +3872,58 @@ async function openSuggest() {
   if (!(await loadVesselsData()) || !(await loadSuggestData())) return;
   renderSuggestPanel();
 }
+
+// === キャラ図鑑 (character guide tab) ===
+// One character's numbers, traits, how the build suggestion treats them and the known builds (relic-guide.js)
+const btnGuide = document.getElementById('btn-guide');
+const guideContent = document.getElementById('guide-content');
+
+function renderGuide() {
+  if (!profilesData || !suggestData) return;
+  const ja = displayLang === 'ja';
+  if (!guideCharacter) guideCharacter = (typeof optCharacter !== 'undefined' && optCharacter.value) || Object.keys(profilesData.characters)[0];
+  guideContent.innerHTML = `<div class="guide-scroll-area">${renderCharacterGuide({
+    character: guideCharacter, profiles: profilesData, suggest: suggestData, ja,
+    effectName: (key) => effectNameByKey(key, true), charName: (c) => charDisplayName(c, ja),
+  })}</div>`;
+}
+
+async function openGuideTab() {
+  if (!(await loadVesselsData()) || !(await loadSuggestData()) || !(await loadProfilesData())) return;
+  guideTabOpen = true;
+  switchTab('guide');
+}
+
+function closeGuideTab() {
+  guideTabOpen = false;
+  guideContent.classList.add('hidden');
+  if (activeTab === 'guide') switchTab('main');
+  else renderTabBar();
+}
+
+// Start the build suggestion from a known build picked in the guide
+async function suggestFromGuide(character, buildId) {
+  await openSuggest();
+  if (!suggestData || !vesselsData) return;
+  sgCharacter.value = character;
+  renderSuggestBuilds();
+  sgBuild.value = buildId;
+  renderSuggestBuildInfo();
+  updateSuggestPreview();
+}
+
+btnGuide.addEventListener('click', () => (guideTabOpen ? switchTab('guide') : openGuideTab()));
+guideContent.addEventListener('click', (e) => {
+  const chip = e.target.closest('.guide-char');
+  if (chip) {
+    guideCharacter = chip.dataset.character;
+    renderGuide();
+    guideContent.querySelector('.guide-scroll-area').scrollTop = 0;
+    return;
+  }
+  const btn = e.target.closest('.guide-suggest');
+  if (btn) suggestFromGuide(guideCharacter, btn.dataset.build);
+});
 
 function closeSuggest() {
   suggestBackdrop.classList.add('hidden');
@@ -5144,6 +5243,8 @@ updateLangUI = function() {
 
   // Catalog button & labels
   btnCatalogLabel.textContent = ja ? '効果カタログ' : 'Effect Catalog';
+  document.getElementById('btn-guide-label').textContent = ja ? 'キャラ図鑑' : 'Characters';
+  if (guideTabOpen && activeTab === 'guide') renderGuide();
   catalogSearch.placeholder = ja ? '効果名で検索...' : 'Search effects...';
   document.getElementById('catalog-label-category').textContent = ja ? 'カテゴリ:' : 'Category:';
   document.getElementById('catalog-label-deep').textContent = ja ? '通常/深層:' : 'Normal/Deep:';

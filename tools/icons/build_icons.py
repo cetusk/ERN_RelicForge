@@ -56,6 +56,7 @@ ICONS = [
     'qr-code',         # QR コードで渡す
     'scan-qr-code',    # QR コードを読み取る
     'lightbulb',       # ビルド提案
+    'book-user',       # キャラ図鑑
 ]
 
 HEADER = '''/**

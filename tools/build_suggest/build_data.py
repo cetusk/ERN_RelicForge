@@ -2,7 +2,7 @@
 """
 ビルド提案（試験的）のデータ resources/build_suggest.json を作る
 
-  python tools/build_suggest/build_data.py           # 作成
+  python tools/build_suggest/build_data.py           # 作成（build_suggest.json と、キャラ図鑑の character_profiles.json）
   python tools/build_suggest/build_data.py --check   # 作り直した結果が今のファイルと同じか確認（テスト用）
 
 入力（すべて神攻略wiki の調査を手で整理したもの）:
@@ -24,6 +24,7 @@ RESEARCH = os.path.join(HERE, 'research')
 EFFECTS_PATH = os.path.join(ROOT, 'resources', 'effects_data.json')
 VESSELS_PATH = os.path.join(ROOT, 'resources', 'vessels_data.json')
 OUT_PATH = os.path.join(ROOT, 'resources', 'build_suggest.json')
+PROFILES_PATH = os.path.join(ROOT, 'resources', 'character_profiles.json')
 FORMAT = 1
 
 effects = json.load(open(EFFECTS_PATH, encoding='utf-8'))['effects']
@@ -279,15 +280,54 @@ data = {
     'characters': character_rules,
 }
 text = json.dumps(data, ensure_ascii=False, indent=1) + '\n'
+
+# ---------------------------------------------------------------- キャラ図鑑 (character_profiles.json)
+# research/character_research.json (神攻略wiki の調査) から、アプリの「キャラ図鑑」に出す分だけ
+
+research = json.load(open(os.path.join(RESEARCH, 'character_research.json'), encoding='utf-8'))
+
+
+def research_keys(ids):
+    return list(dict.fromkeys(effects[str(i)]['key'] for i in ids if str(i) in effects and is_relic(i)
+                              and effects[str(i)]['key'] not in UNRELEASED_KEYS))
+
+
+profiles = {'format': 1, 'about': 'キャラ図鑑のデータ。出典は神攻略wiki。tools/build_suggest/build_data.py で生成（手で編集しない）',
+            'researched': research['researched'], 'pages': research['pages'], 'characters': {}}
+for ch, c in research['characters'].items():
+    if ch not in characters:
+        errors.append(f'character_research: unknown character {ch}')
+    profiles['characters'][ch] = {
+        'page': c['page'], 'stats': c['stats'], 'traits': c['traits'],
+        'demerits': [{**{k: x[k] for k in ('name', 'source', 'verdict', 'accept_posts', 'avoid_posts', 'decision', 'tier', 'why')},
+                      'keys': research_keys(x['ids'])} for x in c['demerits']],
+        'important': [{**{k: x[k] for k in ('name', 'level', 'source', 'why')}, 'keys': research_keys(x['ids'])} for x in c['important']],
+        'useless': [{**{k: x[k] for k in ('name', 'source', 'why')}, 'keys': research_keys(x['ids'])} for x in c['useless']],
+        'contested': c['contested'],
+        'changes': [{'date': v['date'], 'version': v['version'], 'kind': x['kind'], 'text': x['text']}
+                    for v in research['versions'] for x in v['changes'] if x['target'] == ch],
+    }
+profiles_text = json.dumps(profiles, ensure_ascii=False, indent=1) + '\n'
+for name in UNRELEASED_KEYS:
+    if f'"{NAME_BY_KEY[name]}"' in profiles_text:
+        errors.append(f'character_profiles: unreleased effect {NAME_BY_KEY[name]}')
+if errors:
+    print('\n'.join(errors), file=sys.stderr)
+    sys.exit(1)
+
 if '--check' in sys.argv:
-    with open(OUT_PATH, encoding='utf-8') as f:
-        if f.read() != text:
-            print(f'{OUT_PATH} is out of date: run python tools/build_suggest/build_data.py', file=sys.stderr)
-            sys.exit(1)
-    print(f'{OUT_PATH} is up to date')
+    stale = [p for p, t in ((OUT_PATH, text), (PROFILES_PATH, profiles_text))
+             if not os.path.exists(p) or open(p, encoding='utf-8').read() != t]
+    for p in stale:
+        print(f'{p} is out of date: run python tools/build_suggest/build_data.py', file=sys.stderr)
+    if stale:
+        sys.exit(1)
+    print(f'{OUT_PATH} and {PROFILES_PATH} are up to date')
     sys.exit(0)
 with open(OUT_PATH, 'w', encoding='utf-8', newline='\n') as f:
     f.write(text)
+with open(PROFILES_PATH, 'w', encoding='utf-8', newline='\n') as f:
+    f.write(profiles_text)
 axes = {}
 for t in types:
     axes[t['axis']] = axes.get(t['axis'], 0) + 1
