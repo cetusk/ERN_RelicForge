@@ -3643,12 +3643,12 @@ function renderSuggestText() {
   t('sg-mode-label', ja ? 'モード' : 'Mode');
   sgMode.options[0].textContent = suggestModeText('combined', ja);
   sgMode.options[1].textContent = suggestModeText('normal', ja);
-  t('sg-build-label', ja ? '定番のビルドから始める（任意）' : 'Start from a known build (optional)');
+  t('sg-build-label', ja ? 'ビルドのテンプレートから始める（任意）' : 'Start from a build template (optional)');
   t('sg-weapons-label', ja ? '武器種' : 'Weapon types');
   t('sg-focus-label', ja ? '重視すること' : 'Focus');
   t('sg-focus-keep', ja
-    ? '選んだ型や定番のビルドの効果は、つまみの位置に関係なく残ります。つまみは、それに足す汎用の効果を決めるだけです。'
-    : 'The effects of the playstyles and the known build you picked stay wherever the slider is. The slider only decides which general effects are added on top.');
+    ? '選んだ型やビルドのテンプレートの効果は、つまみの位置に関係なく残ります。つまみは、それに足す汎用の効果を決めるだけです。'
+    : 'The effects of the playstyles and the build template you picked stay wherever the slider is. The slider only decides which general effects are added on top.');
   t('sg-focus-guide-label', ja ? '選び方の目安' : 'How to choose');
   document.getElementById('sg-focus-guide').innerHTML = (ja ? [
     '夜の王や強敵に倒されることが多い → 生存側へ',
@@ -3762,7 +3762,7 @@ function renderSuggestBuildInfo() {
   const b = suggestData && suggestData.builds.find((x) => x.id === sgBuild.value);
   const el = document.getElementById('sg-build-info');
   if (!b) {
-    el.textContent = ja ? `${sgCharacter.value} の定番ビルド ${suggestData.builds.filter((x) => x.character === sgCharacter.value).length} 件から選べます。` : '';
+    el.textContent = ja ? `${sgCharacter.value} のビルドのテンプレート ${suggestData.builds.filter((x) => x.character === sgCharacter.value).length} 件から選べます。` : '';
     return;
   }
   el.innerHTML = [
@@ -3849,7 +3849,7 @@ function updateSuggestPreview() {
   const runBtn = document.getElementById('suggest-run');
   const picked = input.buildId || input.weapons.length || input.types.length;
   if (!picked) {
-    el.innerHTML = `<p class="suggest-hint">${ja ? '定番のビルド・武器種・型のどれかを選んでください。' : 'Pick a known build, a weapon type or a playstyle.'}</p>`;
+    el.innerHTML = `<p class="suggest-hint">${ja ? 'ビルドのテンプレート・武器種・型のどれかを選んでください。' : 'Pick a build template, a weapon type or a playstyle.'}</p>`;
     runBtn.disabled = true;
     return;
   }
@@ -3874,7 +3874,7 @@ async function openSuggest() {
 }
 
 // === キャラ図鑑 (character guide tab) ===
-// One character's numbers, traits, how the build suggestion treats them and the known builds (relic-guide.js)
+// One character's numbers, traits, how the build suggestion treats them and the build templates (relic-guide.js)
 const btnGuide = document.getElementById('btn-guide');
 const guideContent = document.getElementById('guide-content');
 
@@ -3901,7 +3901,7 @@ function closeGuideTab() {
   else renderTabBar();
 }
 
-// Start the build suggestion from a known build picked in the guide
+// Start the build suggestion from a build template picked in the guide
 async function suggestFromGuide(character, buildId) {
   await openSuggest();
   if (!suggestData || !vesselsData) return;
@@ -3919,6 +3919,11 @@ guideContent.addEventListener('click', (e) => {
     guideCharacter = chip.dataset.character;
     renderGuide();
     guideContent.querySelector('.guide-scroll-area').scrollTop = 0;
+    return;
+  }
+  const toggle = e.target.closest('.guide-toggle-builds');
+  if (toggle) {
+    guideContent.querySelectorAll('.guide-build').forEach((d) => { d.open = toggle.dataset.open === '1'; });
     return;
   }
   const btn = e.target.closest('.guide-suggest');
@@ -3969,7 +3974,7 @@ function renderSuggestionSummary(sug) {
     [ja ? 'キャラ' : 'Character', charDisplayName(input.character, ja)],
     [ja ? '献器' : 'Vessel', input.vessel ? vesselDisplayName(input.vessel, ja) : (ja ? 'おまかせ' : 'Any')],
     [ja ? 'モード' : 'Mode', suggestModeText(input.mode, ja)],
-    build && [ja ? '定番' : 'Build', `${build.name}${build.target ? `（${build.target}）` : ''}`],
+    build && [ja ? 'テンプレート' : 'Template', `${build.name}${build.target ? `（${build.target}）` : ''}`],
     input.weapons.length && [ja ? '武器種' : 'Weapons', input.weapons.join('・')],
     input.types.length && [ja ? '型' : 'Playstyles', input.types.join('・')],
     [ja ? '重視' : 'Focus', focusText],

@@ -1,5 +1,5 @@
 /**
- * キャラ図鑑 — one character's numbers, traits, how the build suggestion treats them, the known builds and
+ * キャラ図鑑 — one character's numbers, traits, how the build suggestion treats them, the build templates and
  * the research behind it (神攻略wiki). Pure rendering: returns HTML; app.js wires the tab and the clicks.
  *
  * Data: resources/character_profiles.json (stats, traits, demerit evaluations, version changes) and
@@ -9,24 +9,30 @@
 
 const GUIDE_TEXT = {
   ja: {
-    stats: '基本データ', traits: '特性', suggest: 'ビルド提案での扱い', builds: '定番のビルド', general: '汎用', targeted: '特定の相手向け',
+    stats: '基本データ', traits: '特性', suggest: 'ビルド提案での扱い', builds: 'ビルドのテンプレート', general: '汎用', targeted: '特定の相手向け',
     demerits: 'デメリットの評価（調査の一覧）', important: '必須・重要な効果（参考）', useless: '意味がない・合わない効果（参考）',
     contested: '意見が割れている点', changes: '性能変更の履歴', favored: '出やすい武器種', staples: '定番の効果',
     avoid: '深き夜で避けるデメリット', unused: '提案に使わない効果', none: 'なし', page: '神攻略wiki のページ',
     updated: '最終更新', aim: '狙い', mode: 'モード', target: '相手', vessel: '献器', source: '出典', suggestThis: 'このビルドで提案',
     must: '必須', rec: '推奨', opt: '任意', avoidTier: '避けたい', body: '本文', comment: 'コメント（一致）',
     effect: '効果', from: '出典', verdict: '評価', posts: '投稿（許容／避ける）', decision: '判定', why: '理由',
+    showDetail: '詳細を見る', hideDetail: '閉じる', openAll: 'すべて開く', closeAll: 'すべて閉じる', expand: '開く',
+    buildsLead: '神攻略wiki のキャラページとビルド投稿から集めた組み合わせの例です。行を押すと効果が開きます。',
+    traitGroups: { stats: '能力値', defense: '守り（回避・強靭度・カット率・耐性）', kit: 'スキル・アーツ・アビリティ', play: '立ち回り・役割' },
     foot: (d) => `出典は神攻略wiki のみ（${d} 調査）。評価の使い方: 本文を主に使い、コメント欄は同じ評価の投稿が 3 件以上かつ反対の 2 倍以上のときだけ使う。関係する性能変更より前の投稿は数えない。`,
     count: (n) => `${n} 件`,
   },
   en: {
-    stats: 'Numbers', traits: 'Traits', suggest: 'In Build Suggestion', builds: 'Known builds', general: 'General', targeted: 'For a specific boss',
+    stats: 'Numbers', traits: 'Traits', suggest: 'In Build Suggestion', builds: 'Build templates', general: 'General', targeted: 'For a specific boss',
     demerits: 'Demerit evaluations (research)', important: 'Important effects (reference)', useless: 'Effects that do not suit (reference)',
     contested: 'Split opinions', changes: 'Balance changes', favored: 'Weapon types found more often', staples: 'Staple effects',
     avoid: 'Demerits avoided in Deep of Night', unused: 'Effects not used', none: 'None', page: 'Wiki page',
     updated: 'updated', aim: 'Aim', mode: 'Mode', target: 'Target', vessel: 'Vessel', source: 'Source', suggestThis: 'Suggest with this build',
     must: 'Required', rec: 'Preferred', opt: 'Nice to have', avoidTier: 'Avoid', body: 'wiki text', comment: 'comments (agreed)',
     effect: 'Effect', from: 'From', verdict: 'Rating', posts: 'Posts (accept / avoid)', decision: 'Result', why: 'Why',
+    showDetail: 'Details', hideDetail: 'Close', openAll: 'Open all', closeAll: 'Close all', expand: 'Open',
+    buildsLead: 'Example sets from the wiki character pages and build posts. Click a row to see its effects.',
+    traitGroups: { stats: 'Stats', defense: 'Defense (dodge, poise, negation, resistance)', kit: 'Skill, Art & Ability', play: 'Playstyle & role' },
     foot: (d) => `From the Japanese Kamikouryaku wiki only (researched ${d}); the content is in Japanese.`,
     count: (n) => `${n}`,
   },
@@ -46,6 +52,19 @@ function guideWikiTitle(url) {
   } catch (e) {
     return url;
   }
+}
+
+function guideChevron() {
+  return typeof iconSvg === 'function' ? iconSvg('chevron-right', 14) : '▸';
+}
+
+// Trait headings vary per character; sort them into four groups by their wording
+function guideTraitGroup(what) {
+  const w = String(what || '');
+  if (/スキル|アーツ|アビリティ|トランス|探究|共感術|携行知識|苔薬|強化版/.test(w)) return 'kit';
+  if (/立ち回り|役割|救助|火力|ファーム|方針|ルーン|初期装備|出撃時の武器|得意武器|混成魔法|攻め|神秘と状態異常|使い方|生存力の位置づけ/.test(w)) return 'play';
+  if (/耐性|回避|強靭|カット|耐久|盾|その場回避|斬り下がり|自衛/.test(w)) return 'defense';
+  return 'stats';
 }
 
 function guideLink(url, text) {
@@ -68,7 +87,8 @@ function renderCharacterGuide(o) {
     : `<span class="guide-muted">${T.none}</span>`);
   const card = (title, body, open = true) => (open
     ? `<section class="guide-card"><h3>${title}</h3>${body}</section>`
-    : `<details class="guide-card"><summary><h3>${title}</h3></summary>${body}</details>`);
+    : `<details class="guide-card guide-fold"><summary><span class="guide-chevron">${guideChevron()}</span><h3>${title}</h3>
+        <span class="guide-hint"><span class="guide-hint-closed">${T.expand}</span><span class="guide-hint-open">${T.hideDetail}</span></span></summary>${body}</details>`);
 
   const selector = `<div class="guide-chars" role="group">${chars.map((c) => `<button type="button" class="suggest-chip guide-char" data-character="${guideEsc(c)}" aria-pressed="${c === ch}">${guideEsc(o.charName ? o.charName(c) : c)}</button>`).join('')}</div>`;
 
@@ -76,7 +96,12 @@ function renderCharacterGuide(o) {
     <span class="guide-muted">${guideLink(p.page.url, T.page)}${p.page.last_updated ? `（${T.updated} ${guideEsc(p.page.last_updated)}）` : ''}</span></div>`;
 
   const stats = card(T.stats, `<dl class="guide-stats">${Object.entries(p.stats).map(([k, v]) => `<dt>${guideEsc(k)}</dt><dd>${guideEsc(v)}</dd>`).join('')}</dl>`);
-  const traits = card(T.traits, `<ul class="guide-list">${p.traits.map((t) => `<li><b>${guideEsc(t.what)}</b>: ${guideEsc(t.value)}</li>`).join('')}</ul>`);
+  const groups = { stats: [], defense: [], kit: [], play: [] };
+  for (const t of p.traits) groups[guideTraitGroup(t.what)].push(t);
+  const traits = card(T.traits, `<div class="guide-traits">${Object.entries(groups).filter(([, items]) => items.length).map(([g, items]) => `
+    <div class="guide-trait-group guide-trait-${g}"><h4>${guideEsc(T.traitGroups[g])}</h4>
+      ${items.map((t) => `<div class="guide-trait"><div class="guide-trait-name">${guideEsc(t.what)}</div><div class="guide-trait-value">${guideEsc(t.value)}</div></div>`).join('')}
+    </div>`).join('')}</div>`);
 
   // How the build suggestion treats this character
   const st = (sg.staples || {})[ch] || { rec: [], opt: [], avoid: [] };
@@ -97,10 +122,13 @@ function renderCharacterGuide(o) {
     <dt>${T.avoid}</dt><dd>${avoidRows}</dd>
     <dt>${T.unused}</dt><dd>${unused}</dd></dl>`);
 
-  // Known builds
+  // Build templates
   const builds = (sg.builds || []).filter((b) => b.character === ch);
-  const buildHtml = (b) => `<details class="guide-build"><summary><span class="guide-build-name">${guideEsc(b.name)}</span>
-      <span class="guide-muted">${guideEsc([b.aim, b.mode, b.target].filter(Boolean).join(' ／ '))}</span></summary>
+  const buildHtml = (b) => `<details class="guide-build"><summary>
+      <span class="guide-chevron">${guideChevron()}</span>
+      <span class="guide-build-title"><span class="guide-build-name">${guideEsc(b.name)}</span>
+        <span class="guide-muted">${guideEsc([b.aim, b.mode, b.target].filter(Boolean).join(' ／ '))}</span></span>
+      <span class="guide-hint"><span class="guide-hint-closed">${T.showDetail}</span><span class="guide-hint-open">${T.hideDetail}</span></span></summary>
     <div class="guide-build-body">
       ${[['must', T.must, 'guide-must'], ['rec', T.rec, 'guide-rec'], ['opt', T.opt, 'guide-opt'], ['avoid', T.avoidTier, 'guide-x']]
         .filter(([k]) => b[k].length).map(([k, label, cls]) => `<div class="guide-tier"><span class="guide-tier-label">${label}</span>${effList(b[k], cls)}</div>`).join('')}
@@ -111,6 +139,9 @@ function renderCharacterGuide(o) {
   const general = builds.filter((b) => !b.target);
   const targeted = builds.filter((b) => b.target);
   const buildsCard = card(`${T.builds}（${T.count(builds.length)}）`,
+    `<div class="guide-builds-head"><p class="guide-muted">${T.buildsLead}</p>
+      <span class="guide-builds-actions"><button type="button" class="btn-secondary guide-toggle-builds" data-open="1">${T.openAll}</button>
+      <button type="button" class="btn-secondary guide-toggle-builds" data-open="0">${T.closeAll}</button></span></div>` +
     (general.length ? `<h4>${T.general}</h4>${general.map(buildHtml).join('')}` : '') +
     (targeted.length ? `<h4>${T.targeted}</h4>${targeted.map(buildHtml).join('')}` : ''));
 
