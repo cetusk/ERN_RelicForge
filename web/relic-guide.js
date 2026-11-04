@@ -16,10 +16,10 @@ const GUIDE_TEXT = {
     updated: '最終更新', aim: '狙い', mode: 'モード', target: '相手', vessel: '献器', source: '出典', suggestThis: 'このビルドで提案',
     must: '必須', rec: '推奨', opt: '任意', avoidTier: '避けたい', body: '本文', comment: 'コメント（一致）',
     effect: '効果', from: '出典', verdict: '評価', posts: '投稿（許容／避ける）', decision: '判定', why: '理由',
-    figLegend: '「n位/10」は全 10 キャラでの順位。棒にマウスを乗せると全キャラの値が出ます。', favoredWeapon: '得意武器',
+    figLegend: '「n位/10」は全 10 キャラでの順位。マウスを乗せると全キャラの値が順位順に出ます。', favoredWeapon: '得意武器',
     figRanks: '能力値の補正ランク', figLv15: 'Lv15 の HP・FP・スタミナ', figDodge: '回避の無敵時間（60fps）', figPoise: '強靭度',
     figCut: 'カット率（相対値）', figCutNote: '各属性で最も被ダメージが大きいキャラを 0% とした値', figResist: '状態異常耐性（Lv15、発症までの被弾回数）',
-    poise: { high: '高い', low: '低い' }, poiseNote: '高いのは守護者・無頼漢。キャラごとの数値は Wiki にない', rankOf: (n, total) => `${n}位/${total}`, single: '単発', most: '最多', least: '最少',
+    poise: { high: '高い', low: '低い' }, poiseNote: '高いのは守護者・無頼漢。キャラごとの数値は Wiki にない', rankOf: (n, total) => `${n}位/${total}`, rankLabel: (n) => `${n}位`, single: '単発', most: '最多', least: '最少',
     showDetail: '詳細を見る', hideDetail: '閉じる', openAll: 'すべて開く', closeAll: 'すべて閉じる', expand: '開く',
     buildsLead: '神攻略wiki のキャラページとビルド投稿から集めた組み合わせの例です。行を押すと効果が開きます。',
     traitGroups: { stats: '能力値', defense: '守り（回避・強靭度・カット率・耐性）', kit: 'スキル・アーツ・アビリティ', play: '立ち回り・役割' },
@@ -34,10 +34,10 @@ const GUIDE_TEXT = {
     updated: 'updated', aim: 'Aim', mode: 'Mode', target: 'Target', vessel: 'Vessel', source: 'Source', suggestThis: 'Suggest with this build',
     must: 'Required', rec: 'Preferred', opt: 'Nice to have', avoidTier: 'Avoid', body: 'wiki text', comment: 'comments (agreed)',
     effect: 'Effect', from: 'From', verdict: 'Rating', posts: 'Posts (accept / avoid)', decision: 'Result', why: 'Why',
-    figLegend: '"#n/10" is the rank among all 10 characters. Hover a bar for every character.', favoredWeapon: 'Favoured weapon',
+    figLegend: '"#n/10" is the rank among all 10 characters. Hover for every character in rank order.', favoredWeapon: 'Favoured weapon',
     figRanks: 'Stat scaling ranks', figLv15: 'HP / FP / Stamina at Lv15', figDodge: 'Dodge invincibility (60 fps)', figPoise: 'Poise',
     figCut: 'Damage negation (relative)', figCutNote: '0% = the character that takes the most damage of that type', figResist: 'Status resistance (Lv15, hits until it triggers)',
-    poise: { high: 'High', low: 'Low' }, poiseNote: 'High for Guardian and Raider; the wiki has no numbers per character', rankOf: (n, total) => `#${n}/${total}`, single: 'Single', most: 'most', least: 'least',
+    poise: { high: 'High', low: 'Low' }, poiseNote: 'High for Guardian and Raider; the wiki has no numbers per character', rankOf: (n, total) => `#${n}/${total}`, rankLabel: (n) => `#${n}`, single: 'Single', most: 'most', least: 'least',
     showDetail: 'Details', hideDetail: 'Close', openAll: 'Open all', closeAll: 'Close all', expand: 'Open',
     buildsLead: 'Example sets from the wiki character pages and build posts. Click a row to see its effects.',
     traitGroups: { stats: 'Stats', defense: 'Defense (dodge, poise, negation, resistance)', kit: 'Skill, Art & Ability', play: 'Playstyle & role' },
@@ -84,11 +84,14 @@ function guideFigures(ch, profiles, T) {
   const mine = fig(ch);
   if (!mine.lv15) return '';
   const fmt = (v, unit) => `${Number.isInteger(v) ? v : v.toFixed(1)}${unit || ''}`;
+  // hover text: every character in rank order (ties share the rank)
+  const rankedTip = (values, unit) => values.slice().sort((a, b) => b.v - a.v)
+    .map((x) => `${T.rankLabel(1 + values.filter((y) => y.v > x.v).length)} ${x.c} ${fmt(x.v, unit)}`).join('\n');
   // value: this character's; values: [{c, v}] for every character; scale: the bar's full length
   const bar = (label, value, values, unit, scale) => {
     const max = scale || Math.max(...values.map((x) => x.v));
     const rank = 1 + values.filter((x) => x.v > value).length;
-    const tip = values.slice().sort((a, b) => b.v - a.v).map((x) => `${x.c} ${fmt(x.v, unit)}`).join('\n');
+    const tip = rankedTip(values, unit);
     return `<div class="gf-row" title="${guideEsc(tip)}"><span class="gf-label">${guideEsc(label)}</span>
       <span class="gf-track" role="img" aria-label="${guideEsc(`${label} ${fmt(value, unit)}`)}"><span class="gf-fill" style="width:${(100 * value / max).toFixed(2)}%"></span></span>
       <span class="gf-value">${guideEsc(fmt(value, unit))}<small>${guideEsc(T.rankOf(rank, values.length))}</small></span></div>`;
@@ -112,7 +115,7 @@ function guideFigures(ch, profiles, T) {
   const pipMax = Math.max(...chars.flatMap((c) => Object.values(fig(c).resist || {})));
   const resist = Object.entries(mine.resist).map(([k, v]) => {
     const others = all((f) => f.resist && f.resist[k]).map((x) => x.v);
-    const tip = all((f) => f.resist && f.resist[k]).map((x) => `${x.c} ${x.v}`).join('\n');
+    const tip = rankedTip(all((f) => f.resist && f.resist[k]));
     const note = v === Math.max(...others) && v > Math.min(...others) ? T.most : v === Math.min(...others) && v < Math.max(...others) ? T.least : '';
     return `<div class="gf-row" title="${guideEsc(tip)}"><span class="gf-label">${guideEsc(k)}</span>
       <span class="gf-pips" role="img" aria-label="${guideEsc(`${k} ${v}`)}">${Array.from({ length: pipMax }, (_, i) => `<span class="gf-pip${i < v ? ' on' : ''}"></span>`).join('')}</span>
@@ -123,7 +126,8 @@ function guideFigures(ch, profiles, T) {
   return `<section class="guide-card"><h3>${T.stats}</h3>
     ${weapon ? `<dl class="guide-stats"><dt>${T.favoredWeapon}</dt><dd>${guideEsc(weapon)}</dd></dl>` : ''}
     <p class="guide-muted gf-legend">${T.figLegend}</p><div class="gf-grid">
-    ${block(T.figRanks, ranks)}${block(T.figLv15, lv15)}${block(T.figDodge, dodge)}${block(T.figPoise, poise, T.poiseNote)}${block(T.figCut, cut, T.figCutNote)}${block(T.figResist, resist)}
+    ${block(T.figRanks, ranks)}${block(T.figResist, resist)}${block(T.figPoise, poise, T.poiseNote)}
+    ${block(T.figLv15, lv15)}${block(T.figDodge, dodge)}${block(T.figCut, cut, T.figCutNote)}
   </div></section>`;
 }
 
