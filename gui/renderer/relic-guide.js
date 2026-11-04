@@ -16,7 +16,7 @@ const GUIDE_TEXT = {
     updated: '最終更新', aim: '狙い', mode: 'モード', target: '相手', vessel: '献器', source: '出典', suggestThis: 'このビルドで提案',
     must: '必須', rec: '推奨', opt: '任意', avoidTier: '避けたい', body: '本文', comment: 'コメント（一致）',
     effect: '効果', from: '出典', verdict: '評価', posts: '投稿（許容／避ける）', decision: '判定', why: '理由',
-    figures: '全キャラとの比較', figLegend: '太い棒がこのキャラ、細い線がほかのキャラ。「n位/10」は全 10 キャラでの順位。棒にマウスを乗せると全キャラの値が出ます。',
+    figLegend: '「n位/10」は全 10 キャラでの順位。棒にマウスを乗せると全キャラの値が出ます。', favoredWeapon: '得意武器',
     figRanks: '能力値の補正ランク', figLv15: 'Lv15 の HP・FP・スタミナ', figDodge: '回避の無敵時間（60fps）', figPoise: '強靭度',
     figCut: 'カット率（相対値）', figCutNote: '各属性で最も被ダメージが大きいキャラを 0% とした値', figResist: '状態異常耐性（Lv15、発症までの被弾回数）',
     poise: { high: '高い', low: '低い' }, rankOf: (n, total) => `${n}位/${total}`, single: '単発', most: '最多', least: '最少',
@@ -34,7 +34,7 @@ const GUIDE_TEXT = {
     updated: 'updated', aim: 'Aim', mode: 'Mode', target: 'Target', vessel: 'Vessel', source: 'Source', suggestThis: 'Suggest with this build',
     must: 'Required', rec: 'Preferred', opt: 'Nice to have', avoidTier: 'Avoid', body: 'wiki text', comment: 'comments (agreed)',
     effect: 'Effect', from: 'From', verdict: 'Rating', posts: 'Posts (accept / avoid)', decision: 'Result', why: 'Why',
-    figures: 'Compared with all characters', figLegend: 'The thick bar is this character, thin lines are the others. Hover a bar for every character.',
+    figLegend: '"#n/10" is the rank among all 10 characters. Hover a bar for every character.', favoredWeapon: 'Favoured weapon',
     figRanks: 'Stat scaling ranks', figLv15: 'HP / FP / Stamina at Lv15', figDodge: 'Dodge invincibility (60 fps)', figPoise: 'Poise',
     figCut: 'Damage negation (relative)', figCutNote: '0% = the character that takes the most damage of that type', figResist: 'Status resistance (Lv15, hits until it triggers)',
     poise: { high: 'High', low: 'Low' }, rankOf: (n, total) => `#${n}/${total}`, single: 'Single', most: 'most', least: 'least',
@@ -77,7 +77,7 @@ function guideTraitGroup(what) {
 
 const GUIDE_RANKS = ['D', 'C', 'B', 'A', 'S'];
 
-// Compare one character's numbers with all characters: bars with ticks for the others, rank bars, pips
+// 基本データ as charts: rank bars, value bars with the rank among all characters, pips. The favoured weapon stays text
 function guideFigures(ch, profiles, T) {
   const chars = Object.keys(profiles.characters);
   const fig = (c) => profiles.characters[c].figures || {};
@@ -89,9 +89,8 @@ function guideFigures(ch, profiles, T) {
     const max = scale || Math.max(...values.map((x) => x.v));
     const rank = 1 + values.filter((x) => x.v > value).length;
     const tip = values.slice().sort((a, b) => b.v - a.v).map((x) => `${x.c} ${fmt(x.v, unit)}`).join('\n');
-    const ticks = values.filter((x) => x.c !== ch).map((x) => `<span class="gf-tick" style="left:${(100 * x.v / max).toFixed(2)}%"></span>`).join('');
     return `<div class="gf-row" title="${guideEsc(tip)}"><span class="gf-label">${guideEsc(label)}</span>
-      <span class="gf-track" role="img" aria-label="${guideEsc(`${label} ${fmt(value, unit)}`)}"><span class="gf-fill" style="width:${(100 * value / max).toFixed(2)}%"></span>${ticks}</span>
+      <span class="gf-track" role="img" aria-label="${guideEsc(`${label} ${fmt(value, unit)}`)}"><span class="gf-fill" style="width:${(100 * value / max).toFixed(2)}%"></span></span>
       <span class="gf-value">${guideEsc(fmt(value, unit))}<small>${guideEsc(T.rankOf(rank, values.length))}</small></span></div>`;
   };
   const all = (get) => chars.map((c) => ({ c, v: get(fig(c)) })).filter((x) => typeof x.v === 'number');
@@ -120,7 +119,10 @@ function guideFigures(ch, profiles, T) {
       <span class="gf-value">${v}${note ? `<small>${note}</small>` : ''}</span></div>`;
   }).join('');
   const block = (title, body, note) => `<div class="gf-block"><h4>${title}</h4>${note ? `<p class="guide-muted">${note}</p>` : ''}${body}</div>`;
-  return `<section class="guide-card"><h3>${T.figures}</h3><p class="guide-muted">${T.figLegend}</p><div class="gf-grid">
+  const weapon = profiles.characters[ch].stats['得意武器'];
+  return `<section class="guide-card"><h3>${T.stats}</h3>
+    ${weapon ? `<dl class="guide-stats"><dt>${T.favoredWeapon}</dt><dd>${guideEsc(weapon)}</dd></dl>` : ''}
+    <p class="guide-muted gf-legend">${T.figLegend}</p><div class="gf-grid">
     ${block(T.figRanks, ranks)}${block(T.figLv15, lv15)}${block(T.figDodge, dodge + poise)}${block(T.figCut, cut, T.figCutNote)}${block(T.figResist, resist)}
   </div></section>`;
 }
@@ -153,7 +155,9 @@ function renderCharacterGuide(o) {
   const head = `<div class="guide-head"><h2>${guideEsc(o.charName ? o.charName(ch) : ch)}</h2>
     <span class="guide-muted">${guideLink(p.page.url, T.page)}${p.page.last_updated ? `（${T.updated} ${guideEsc(p.page.last_updated)}）` : ''}</span></div>`;
 
-  const stats = card(T.stats, `<dl class="guide-stats">${Object.entries(p.stats).map(([k, v]) => `<dt>${guideEsc(k)}</dt><dd>${guideEsc(v)}</dd>`).join('')}</dl>`);
+  // charts when the numbers are there; otherwise the text list
+  const stats = guideFigures(ch, o.profiles, T) ||
+    card(T.stats, `<dl class="guide-stats">${Object.entries(p.stats).map(([k, v]) => `<dt>${guideEsc(k)}</dt><dd>${guideEsc(v)}</dd>`).join('')}</dl>`);
   const groups = { stats: [], defense: [], kit: [], play: [] };
   for (const t of p.traits) groups[guideTraitGroup(t.what)].push(t);
   const traits = card(T.traits, `<div class="guide-traits">${Object.entries(groups).filter(([, items]) => items.length).map(([g, items]) => `
@@ -213,6 +217,6 @@ function renderCharacterGuide(o) {
   const contested = p.contested.length ? card(T.contested, `<ul class="guide-list">${p.contested.map((x) => `<li><b>${guideEsc(x.topic)}</b><ul>${x.views.map((v) => `<li>${guideEsc(v)}</li>`).join('')}</ul></li>`).join('')}</ul>`, false) : '';
   const changes = p.changes.length ? card(T.changes, `<ul class="guide-list">${p.changes.map((x) => `<li><span class="guide-num">${guideEsc(x.date)}</span> <span class="guide-tag">${guideEsc(GUIDE_KIND[x.kind] || x.kind)}</span> ${guideEsc(x.text)}</li>`).join('')}</ul>`, false) : '';
 
-  return `${selector}<div class="guide">${head}${stats}${guideFigures(ch, o.profiles, T)}${traits}${suggest}${buildsCard}${demerits}${important}${useless}${contested}${changes}
+  return `${selector}<div class="guide">${head}${stats}${traits}${suggest}${buildsCard}${demerits}${important}${useless}${contested}${changes}
     <p class="guide-foot">${guideEsc(T.foot(o.profiles.researched))}</p></div>`;
 }

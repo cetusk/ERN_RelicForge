@@ -3212,7 +3212,11 @@ details:not([open]) > summary .guide-hint-open {
   .guide-traits { grid-template-columns: 1fr; }
 }
 
-/* キャラ図鑑: 全キャラとの比較 (bars: this character = accent fill, other characters = thin ticks) */
+/* キャラ図鑑: 基本データの図 (bars with the rank among all characters, rank steps, pips) */
+.gf-legend {
+  margin: 6px 0 0;
+}
+
 .gf-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -3263,17 +3267,6 @@ details:not([open]) > summary .guide-hint-open {
   inset: 0 auto 0 0;
   border-radius: 0 4px 4px 0;
   background: var(--accent);
-}
-
-.gf-tick {
-  position: absolute;
-  top: -3px;
-  bottom: -3px;
-  width: 2px;
-  margin-left: -1px;
-  border-radius: 1px;
-  background: var(--text-primary);
-  opacity: 0.35;
 }
 
 .gf-value {
