@@ -26,6 +26,10 @@ for (const dir of APP_DIRS) {
       assert.ok(html.includes('class="gf-grid"'), `${ch} has the comparison charts`);
       assert.ok((html.match(/class="gf-row"/g) || []).length >= 8 + 3 + 1 + 5 + 7, `${ch} chart rows`);
       assert.ok(!/NaN|undefined|Infinity/.test(html), `${ch}: no broken numbers`);
+      // 特性: the same 8 items for every character, one in each of the four groups at least
+      assert.deepEqual(profiles.characters[ch].traits.map((t) => t.what.split('：')[0]),
+        ['能力値の特徴', '回避', '耐久', 'アビリティ', 'スキル', 'アーツ', '立ち回り', '役割'], ch);
+      for (const g of ['stats', 'defense', 'kit', 'play']) assert.ok(html.includes(`guide-trait-${g}`), `${ch}: group ${g}`);
       for (const n of unreleasedNames) assert.ok(!html.includes(`>${n}<`), `${ch}: unreleased effect ${n}`);
     }
   });
