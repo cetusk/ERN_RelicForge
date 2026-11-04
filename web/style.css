@@ -109,6 +109,55 @@ body {
   color: var(--accent);
 }
 
+/* Header text: file info on the first line, version / updated / author / source on a small second line,
+   so the bar stays on one row of buttons when the window is narrow (e.g. half of a PC screen) */
+#app-header h1 {
+  white-space: nowrap;
+}
+
+.header-left {
+  min-width: 0;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.header-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-width: 0;
+}
+
+.header-meta {
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+
+.header-meta-item {
+  white-space: nowrap;
+}
+
+#app-header {
+  gap: 16px;
+}
+
+/* Narrow PC windows (e.g. half of the screen): the Steam button shows its icon only, leaving room for the text */
+@media (min-width: 769px) and (max-width: 1100px) {
+  #btn-steam-header-label {
+    display: none;
+  }
+  #btn-steam-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
 /* === Buttons === */
 .btn-primary {
   background: #5b9bd5;
@@ -3112,6 +3161,10 @@ button:has(> .icon) {
   .header-cache,
   .header-meta {
     display: none !important;   /* shown in the menu sheet */
+  }
+  .header-text,
+  .header-status {
+    display: contents;   /* phone: the header keeps its title + warning row */
   }
   #btn-open {
     padding: 8px 12px;

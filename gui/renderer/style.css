@@ -108,6 +108,44 @@ body {
   color: var(--accent);
 }
 
+/* Header text: file info on the first line, version / updated / author / source on a small second line,
+   so the bar stays on one row of buttons when the window is narrow (e.g. half of a PC screen) */
+#app-header h1 {
+  white-space: nowrap;
+}
+
+.header-left {
+  min-width: 0;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.header-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-width: 0;
+}
+
+.header-meta {
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+
+.header-meta-item {
+  white-space: nowrap;
+}
+
+#app-header {
+  gap: 16px;
+}
+
 /* === Buttons === */
 .btn-primary {
   background: #5b9bd5;

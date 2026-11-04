@@ -534,6 +534,7 @@ function renderSteamGuideText() {
   document.querySelector('#steam-guide-open .btn-label').textContent = ja ? 'Steam のページを開く' : 'Open Steam page';
   document.querySelector('#steam-guide-pick .btn-label').textContent = ja ? 'ダウンロードしたファイルを選択' : 'Select downloaded file';
   document.getElementById('btn-steam-header-label').textContent = ja ? 'Steam クラウド' : 'Steam Cloud';
+  document.getElementById('btn-steam-header').title = ja ? 'Steam クラウド' : 'Steam Cloud';   // label hidden on narrow windows
   // Welcome screen: phones / tablets (PCs get the save-folder hint instead)
   const hint = document.getElementById('download-file-hint');
   hint.hidden = DEVICE_KIND === 'pc';
