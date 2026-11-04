@@ -4066,3 +4066,136 @@ details:not([open]) > summary .guide-hint-open {
   .guide-build-body { padding-left: 12px; }
   .guide-traits { grid-template-columns: 1fr; }
 }
+
+/* キャラ図鑑: 全キャラとの比較 (bars: this character = accent fill, other characters = thin ticks) */
+.gf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px 24px;
+  margin-top: 8px;
+}
+
+.gf-block {
+  min-width: 0;
+}
+
+.gf-block h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.gf-block > p {
+  margin: -2px 0 6px;
+  font-size: 11px;
+}
+
+.gf-row {
+  display: grid;
+  grid-template-columns: 5.5em 1fr 7.5em;
+  align-items: center;
+  gap: 8px;
+  min-height: 22px;
+  font-size: 12px;
+}
+
+.gf-label {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gf-track {
+  position: relative;
+  height: 10px;
+  border-radius: 4px;
+  background: var(--bg-tertiary);
+}
+
+.gf-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 0 4px 4px 0;
+  background: var(--accent);
+}
+
+.gf-tick {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: var(--text-primary);
+  opacity: 0.35;
+}
+
+.gf-value {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.gf-value small {
+  margin-left: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.gf-letter {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.gf-steps,
+.gf-pips {
+  display: flex;
+  gap: 3px;
+}
+
+.gf-step {
+  flex: 1;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--bg-tertiary);
+}
+
+.gf-step.on {
+  background: var(--accent);
+}
+
+.gf-pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+.gf-pip.on {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.gf-pill {
+  justify-self: start;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+.gf-pill.gf-high {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.gf-pill.gf-low {
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+  .gf-grid { grid-template-columns: 1fr; }
+  .gf-row { grid-template-columns: 4.5em 1fr 7em; }
+}

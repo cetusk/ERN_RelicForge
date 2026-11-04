@@ -22,6 +22,10 @@ for (const dir of APP_DIRS) {
       const builds = suggest.builds.filter((b) => b.character === ch);
       assert.equal((html.match(/class="guide-build"/g) || []).length, builds.length, ch);
       assert.ok(html.includes(`aria-pressed="true">${ch}<`), `${ch} is selected`);
+      // comparison charts: 8 rank bars, 3 Lv15 bars, dodge, 5 negation bars, 7 resistance rows
+      assert.ok(html.includes('class="gf-grid"'), `${ch} has the comparison charts`);
+      assert.ok((html.match(/class="gf-row"/g) || []).length >= 8 + 3 + 2 + 5 + 7, `${ch} chart rows`);
+      assert.ok(!/NaN|undefined|Infinity/.test(html), `${ch}: no broken numbers`);
       for (const n of unreleasedNames) assert.ok(!html.includes(`>${n}<`), `${ch}: unreleased effect ${n}`);
     }
   });

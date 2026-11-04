@@ -298,7 +298,7 @@ for ch, c in research['characters'].items():
     if ch not in characters:
         errors.append(f'character_research: unknown character {ch}')
     profiles['characters'][ch] = {
-        'page': c['page'], 'stats': c['stats'], 'traits': c['traits'],
+        'page': c['page'], 'stats': c['stats'], 'figures': c['figures'], 'traits': c['traits'],
         'demerits': [{**{k: x[k] for k in ('name', 'source', 'verdict', 'accept_posts', 'avoid_posts', 'decision', 'tier', 'why')},
                       'keys': research_keys(x['ids'])} for x in c['demerits']],
         'important': [{**{k: x[k] for k in ('name', 'level', 'source', 'why')}, 'keys': research_keys(x['ids'])} for x in c['important']],
