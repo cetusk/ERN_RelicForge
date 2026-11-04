@@ -38,7 +38,7 @@ python tools/build_suggest/research/characters_gen.py    # → research/characte
 | `research/archetypes_content.py` | **型ごとの効果の対応**（中核／相性良／任意／避けたい）、別名、説明、出典 |
 | `research/archetypes_gen.py` | 型のレポートを作る（効果のまとまり `PHYS` などの定義もここ） |
 | `research/characters_gen.py` | **キャラ別のビルド**（174 件）、**キャラごとの定番の効果**、深層デメリットの全キャラ共通の評価 |
-| `research/character_effects.py` | **キャラごとのデメリットの評価**（ビルド提案で使うもの。共通の評価と違うものだけ）、そのキャラでは働かない効果、**オーナーが確認した事実**（`OWNER_NOTES`。調査の値を上書きし、［オーナーの確認］と表示） |
+| `research/character_effects.py` | **キャラごとのデメリットの評価**（ビルド提案で使うもの。共通の評価と違うものだけ）、そのキャラでは働かない効果、**オーナーが確認した事実**（`OWNER_NOTES`。調査の値を上書きする） |
 | `research/character_research.json` | キャラ別の調査結果（評価と投稿数・キャラの数値・版ごとの性能変更）。付録 `catalog/characters.md` の元データ |
 | `catalog.py` | 付録のカタログを作る |
 | `research/*_changes.md` | 調査の経緯（第1版からの変更点） |
