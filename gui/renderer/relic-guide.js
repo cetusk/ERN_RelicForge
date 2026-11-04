@@ -69,7 +69,7 @@ function guideTraitGroup(what) {
   const w = String(what || '');
   if (/スキル|アーツ|アビリティ|トランス|探究|共感術|携行知識|苔薬|強化版/.test(w)) return 'kit';
   if (/立ち回り|役割|救助|火力|ファーム|方針|ルーン|初期装備|出撃時の武器|得意武器|混成魔法|攻め|神秘と状態異常|使い方|生存力の位置づけ/.test(w)) return 'play';
-  if (/耐性|回避|強靭|カット|耐久|盾|その場回避|斬り下がり|自衛/.test(w)) return 'defense';
+  if (/耐性|回避|強靭|カット|耐久|盾|その場回避|斬り下がり|自衛|ガード強度/.test(w)) return 'defense';
   return 'stats';
 }
 
