@@ -81,7 +81,9 @@ def builds_md():
     return '\n'.join(lines).rstrip() + '\n'
 
 
-RESEARCH = json.load(open(os.path.join(HERE, 'research', 'character_research.json'), encoding='utf-8'))
+import character_effects as ce  # noqa: E402
+
+RESEARCH = ce.apply_owner_notes(json.load(open(os.path.join(HERE, 'research', 'character_research.json'), encoding='utf-8')))
 VERDICT = {'accept': '許容', 'avoid': '避けたい', 'mixed': '割れる', 'depends': '条件次第', 'must': '必須', 'strong': '重要', 'nice': 'あると良い'}
 TIER = {'body': '本文', 'comment': 'コメント（一致）', 'body-contested': '本文（最近のコメントが反対）',
         'comment-over-body-mixed': 'コメント（一致。本文は割れる）'}

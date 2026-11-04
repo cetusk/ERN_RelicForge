@@ -67,3 +67,33 @@ USELESS = {
         dict(ids=[10000, 7036000], why='魔術では発動しない'),
     ],
 }
+
+# オーナーが確認した事実で、調査（character_research.json、神攻略wiki）の値を上書きするもの。
+# キャラ図鑑と付録 catalog/characters.md に使う。stats は基本データの項目名、traits は特性の項目名で指定する
+OWNER_NOTES = {
+    'レディ': {
+        'stats': {
+            '回避': 'ステップ（2段まで）。1段目のみ: 無敵 27F／2段目も入力: 1段目から無敵が続き、入力の時機により合計 43〜50F'
+                    '（全体Fは未確認）［オーナーの確認］',
+        },
+        'traits': {
+            '回避（ステップ）': '他キャラと違い2段目までの回避モーションがある。1段目のみなら無敵 27F。2段目も入力すると、1段目から'
+                             '無敵を保ったまま2段目のモーションになり、入力の時機により合計 43〜50F の無敵（全体Fは未確認）'
+                             '［オーナーの確認。Wiki の計測は単発 全体28F・無敵27F、連続 全体59F・無敵43F］',
+        },
+    },
+}
+
+
+def apply_owner_notes(research):
+    """Overwrite research values with OWNER_NOTES (in place); returns the research dict"""
+    for ch, notes in OWNER_NOTES.items():
+        c = research['characters'][ch]
+        c['stats'].update(notes.get('stats', {}))
+        for t in c['traits']:
+            if t['what'] in notes.get('traits', {}):
+                t['value'] = notes['traits'][t['what']]
+        missing = set(notes.get('traits', {})) - {t['what'] for t in c['traits']}
+        if missing:
+            raise KeyError(f'OWNER_NOTES {ch}: unknown traits {sorted(missing)}')
+    return research

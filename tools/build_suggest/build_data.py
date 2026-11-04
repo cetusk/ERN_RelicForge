@@ -284,7 +284,7 @@ text = json.dumps(data, ensure_ascii=False, indent=1) + '\n'
 # ---------------------------------------------------------------- キャラ図鑑 (character_profiles.json)
 # research/character_research.json (神攻略wiki の調査) から、アプリの「キャラ図鑑」に出す分だけ
 
-research = json.load(open(os.path.join(RESEARCH, 'character_research.json'), encoding='utf-8'))
+research = ce.apply_owner_notes(json.load(open(os.path.join(RESEARCH, 'character_research.json'), encoding='utf-8')))
 
 
 def research_keys(ids):
