@@ -12,6 +12,9 @@ function escapeHtml(str) {
 // === Resource Data ===
 let itemsData = null;
 let effectsData = null;
+// Data files are fetched with revalidation: some are loaded only when a screen opens, after the page itself,
+// so a hard reload does not refresh them and the browser could keep using an older copy after an update
+const RESOURCE_FETCH = { cache: 'no-cache' };
 
 // === State ===
 let relicData = null;       // Full parsed data
@@ -201,8 +204,8 @@ let searchTerms = [];       // cached suggestion candidates
 // === Resource Loading ===
 async function loadResources() {
   const [itemsResp, effectsResp] = await Promise.all([
-    fetch('../resources/items_data.json'),
-    fetch('../resources/effects_data.json'),
+    fetch('../resources/items_data.json', RESOURCE_FETCH),
+    fetch('../resources/effects_data.json', RESOURCE_FETCH),
   ]);
   if (!itemsResp.ok) throw new Error('Failed to load items_data.json');
   if (!effectsResp.ok) throw new Error('Failed to load effects_data.json');
@@ -3581,7 +3584,7 @@ function effectNameByKey(key, ja) {
 async function loadVesselsData() {
   if (vesselsData) return true;
   try {
-    const resp = await fetch('../resources/vessels_data.json');
+    const resp = await fetch('../resources/vessels_data.json', RESOURCE_FETCH);
     if (!resp.ok) throw new Error('Failed to load vessels_data.json');
     vesselsData = await resp.json();
     return true;
@@ -3594,7 +3597,7 @@ async function loadVesselsData() {
 async function loadSuggestData() {
   if (suggestData) return true;
   try {
-    const resp = await fetch('../resources/build_suggest.json');
+    const resp = await fetch('../resources/build_suggest.json', RESOURCE_FETCH);
     if (!resp.ok) throw new Error('Failed to load build_suggest.json');
     suggestData = await resp.json();
     return true;
@@ -3607,7 +3610,7 @@ async function loadSuggestData() {
 async function loadProfilesData() {
   if (profilesData) return true;
   try {
-    const resp = await fetch('../resources/character_profiles.json');
+    const resp = await fetch('../resources/character_profiles.json', RESOURCE_FETCH);
     if (!resp.ok) throw new Error('Failed to load character_profiles.json');
     profilesData = await resp.json();
     return true;
