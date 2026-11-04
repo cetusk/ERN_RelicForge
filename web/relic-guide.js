@@ -12,8 +12,7 @@ const GUIDE_TEXT = {
     stats: '基本データ', traits: '特性', suggest: 'ビルド提案での扱い', builds: 'ビルドのテンプレート', general: '汎用', targeted: '特定の相手向け',
     demerits: 'デメリットの評価（調査の一覧）', important: '必須・重要な効果（参考）', useless: '意味がない・合わない効果（参考）',
     contested: '意見が割れている点', changes: '性能変更の履歴', favored: '出やすい武器種', staples: '定番の効果',
-    avoid: '深き夜で避けるデメリット', unused: '提案に使わない効果', none: 'なし', page: '神攻略wiki のページ',
-    updated: '最終更新', aim: '狙い', mode: 'モード', target: '相手', vessel: '献器', source: '出典', suggestThis: 'このビルドで提案',
+    avoid: '深き夜で避けるデメリット', unused: '提案に使わない効果', none: 'なし', aim: '狙い', mode: 'モード', target: '相手', vessel: '献器', source: '出典', suggestThis: 'このビルドで提案',
     must: '必須', rec: '推奨', opt: '任意', avoidTier: '避けたい', body: '本文', comment: 'コメント（一致）',
     effect: '効果', from: '出典', verdict: '評価', posts: '投稿（許容／避ける）', decision: '判定', why: '理由',
     figLegend: '「n位/10」は全 10 キャラでの順位。マウスを乗せると全キャラの値が順位順に出ます。', favoredWeapon: '得意武器',
@@ -23,15 +22,14 @@ const GUIDE_TEXT = {
     showDetail: '詳細を見る', hideDetail: '閉じる', openAll: 'すべて開く', closeAll: 'すべて閉じる', expand: '開く',
     buildsLead: '神攻略wiki のキャラページとビルド投稿から集めた組み合わせの例です。行を押すと効果が開きます。',
     traitGroups: { stats: '能力値', defense: '守り（回避・強靭度・カット率・耐性）', kit: 'スキル・アーツ・アビリティ', play: '立ち回り・役割' },
-    foot: (d) => `出典は神攻略wiki のみ（${d} 調査）。評価の使い方: 本文を主に使い、コメント欄は同じ評価の投稿が 3 件以上かつ反対の 2 倍以上のときだけ使う。関係する性能変更より前の投稿は数えない。`,
+    foot: (d) => `${d} 時点の調査。評価の使い方: 本文を主に使い、コメント欄は同じ評価の投稿が 3 件以上かつ反対の 2 倍以上のときだけ使う。関係する性能変更より前の投稿は数えない。`,
     count: (n) => `${n} 件`,
   },
   en: {
     stats: 'Numbers', traits: 'Traits', suggest: 'In Build Suggestion', builds: 'Build templates', general: 'General', targeted: 'For a specific boss',
     demerits: 'Demerit evaluations (research)', important: 'Important effects (reference)', useless: 'Effects that do not suit (reference)',
     contested: 'Split opinions', changes: 'Balance changes', favored: 'Weapon types found more often', staples: 'Staple effects',
-    avoid: 'Demerits avoided in Deep of Night', unused: 'Effects not used', none: 'None', page: 'Wiki page',
-    updated: 'updated', aim: 'Aim', mode: 'Mode', target: 'Target', vessel: 'Vessel', source: 'Source', suggestThis: 'Suggest with this build',
+    avoid: 'Demerits avoided in Deep of Night', unused: 'Effects not used', none: 'None', aim: 'Aim', mode: 'Mode', target: 'Target', vessel: 'Vessel', source: 'Source', suggestThis: 'Suggest with this build',
     must: 'Required', rec: 'Preferred', opt: 'Nice to have', avoidTier: 'Avoid', body: 'wiki text', comment: 'comments (agreed)',
     effect: 'Effect', from: 'From', verdict: 'Rating', posts: 'Posts (accept / avoid)', decision: 'Result', why: 'Why',
     figLegend: '"#n/10" is the rank among all 10 characters. Hover for every character in rank order.', favoredWeapon: 'Favoured weapon',
@@ -41,7 +39,7 @@ const GUIDE_TEXT = {
     showDetail: 'Details', hideDetail: 'Close', openAll: 'Open all', closeAll: 'Close all', expand: 'Open',
     buildsLead: 'Example sets from the wiki character pages and build posts. Click a row to see its effects.',
     traitGroups: { stats: 'Stats', defense: 'Defense (dodge, poise, negation, resistance)', kit: 'Skill, Art & Ability', play: 'Playstyle & role' },
-    foot: (d) => `From the Japanese Kamikouryaku wiki only (researched ${d}); the content is in Japanese.`,
+    foot: (d) => `Researched ${d}; the content is in Japanese (from the wiki linked at the top).`,
     count: (n) => `${n}`,
   },
 };
@@ -156,8 +154,7 @@ function renderCharacterGuide(o) {
 
   const selector = `<div class="guide-chars" role="group">${chars.map((c) => `<button type="button" class="suggest-chip guide-char" data-character="${guideEsc(c)}" aria-pressed="${c === ch}">${guideEsc(o.charName ? o.charName(c) : c)}</button>`).join('')}</div>`;
 
-  const head = `<div class="guide-head"><h2>${guideEsc(o.charName ? o.charName(ch) : ch)}</h2>
-    <span class="guide-muted">${guideLink(p.page.url, T.page)}${p.page.last_updated ? `（${T.updated} ${guideEsc(p.page.last_updated)}）` : ''}</span></div>`;
+  const head = `<div class="guide-head"><h2>${guideEsc(o.charName ? o.charName(ch) : ch)}</h2></div>`;
 
   // charts when the numbers are there; otherwise the text list
   const stats = guideFigures(ch, o.profiles, T) ||

@@ -102,6 +102,7 @@ body {
   text-underline-offset: 2px;
   cursor: pointer;
   transition: color 0.15s;
+  white-space: nowrap;
 }
 .header-meta-link:hover {
   color: var(--accent);

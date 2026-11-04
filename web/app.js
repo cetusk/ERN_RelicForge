@@ -446,7 +446,8 @@ function renderMobileMenu() {
   document.getElementById('mm-footer').innerHTML =
     `${escapeHtml(document.getElementById('header-meta-version').textContent)} · ` +
     `${escapeHtml(document.getElementById('header-meta-updated').textContent)} · ` +
-    `by cetusk (<a href="https://github.com/cetusk/ERN_RelicForge" target="_blank" rel="noopener noreferrer">GitHub</a>)`;
+    `by cetusk (<a href="https://github.com/cetusk/ERN_RelicForge" target="_blank" rel="noopener noreferrer">GitHub</a>) · ` +
+    `${displayLang === 'ja' ? '参照' : 'Source'}: <a href="https://kamikouryaku.net/nightreign_eldenring/" target="_blank" rel="noopener noreferrer">神攻略wiki</a>`;
 }
 
 function onMenuChip(id, handler) {
@@ -1505,6 +1506,7 @@ function updateLangUI() {
   document.getElementById('header-meta-version').textContent = ja
     ? `${APP_NIGHTREIGN_VERSION} 対応`
     : `${APP_NIGHTREIGN_VERSION}`;
+  document.getElementById('header-meta-source-label').textContent = ja ? '参照' : 'Source';
   document.getElementById('header-meta-updated').textContent = ja
     ? `最終更新: ${APP_LAST_UPDATED}`
     : `Updated: ${APP_LAST_UPDATED}`;
