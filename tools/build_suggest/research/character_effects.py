@@ -18,43 +18,43 @@ character_research.json（付録 catalog/characters.md の元データ）。
 
 DEMERITS = {
     '追跡者': [
-        dict(ids=[6840200], verdict='avoid', tier='comment', why='カリゴなどの大技阻止にアーツが要る'),
+        dict(ids=[6840200], verdict='avoid', tier='comment', why='カリゴなどの大技を止めるのにアーツが要るので、溜まりが遅いと困る'),
     ],
     '守護者': [
-        dict(ids=[6850700], verdict='avoid', tier='body', why='ステップの無敵が全キャラで最短（20F）'),
-        dict(ids=[6820400, 6820500], verdict='avoid', tier='body', why='発症すると隙が大きい'),
-        dict(ids=[6840200], verdict='avoid', tier='body', why='回復のアーツが必要な時に溜まっていない'),
-        dict(ids=[6851700], verdict='avoid', tier='body', why='HPが減るとガードカウンターも弱まる'),
-        dict(ids=[6851200, 6851300, 6851400], verdict='avoid', tier='comment', why='ガードの貫通でHPが削れたまま戦いやすい'),
+        dict(ids=[6850700], verdict='avoid', tier='body', why='ステップの無敵が全キャラで最短（20F）で、回避が難しく被弾しやすい'),
+        dict(ids=[6820400, 6820500], verdict='avoid', tier='body', why='発症すると隙が大きく危険'),
+        dict(ids=[6840200], verdict='avoid', tier='body', why='回復のアーツが必要な時に溜まっていないことになりやすい'),
+        dict(ids=[6851700], verdict='avoid', tier='body', why='最大HPが減るとガードカウンター（現在HPを加える）も弱まる'),
+        dict(ids=[6851200, 6851300, 6851400], verdict='avoid', tier='comment', why='ガードの貫通ダメージでHPが最大を下回ったまま戦うことが多く、発動しやすい'),
     ],
     'レディ': [
-        dict(ids=[6851300], verdict='avoid', tier='comment', why='リブラなどの長期戦で重い'),
+        dict(ids=[6851300], verdict='avoid', tier='comment', why='リブラなどの長期戦で発症しやすく重い'),
     ],
     '無頼漢': [
-        dict(ids=[6850700], verdict='avoid', tier='body', why='回避の無敵が短く（25F）体が大きい'),
-        dict(ids=[6851200], verdict='avoid', tier='comment', why='被弾しながら殴るので常に発動しやすい'),
-        dict(ids=[6820400, 6820500], verdict='avoid', tier='comment', why='発症するとスキル受けのカットが剥がれる'),
+        dict(ids=[6850700], verdict='avoid', tier='body', why='回避の無敵が短く（25F）体も大きいので、回避後に被弾しやすい'),
+        dict(ids=[6851200], verdict='avoid', tier='comment', why='被弾しながら殴るので、ほぼ常に発動してしまう'),
+        dict(ids=[6820400, 6820500], verdict='avoid', tier='comment', why='スキルで受けていても発症するとカットが剥がれる'),
     ],
     '復讐者': [
-        dict(ids=[6840100, 6850300], verdict='avoid', tier='body', why='HP最大時の付帯が戻るまでが長くなる'),
-        dict(ids=[6820400], verdict='avoid', tier='body', why='狂い火の祈祷を使いにくくなる'),
-        dict(ids=[6820600], verdict='avoid', tier='body', why='夜の王戦でアーツの回転が落ちる'),
+        dict(ids=[6840100, 6850300], verdict='avoid', tier='body', why='「HP最大時」の付帯効果が戻るまでが長くなる'),
+        dict(ids=[6820400], verdict='avoid', tier='body', why='狂い火の祈祷（自分も発狂が溜まる）を使いにくくなる'),
+        dict(ids=[6820600], verdict='avoid', tier='body', why='アーツ中以外は蓄積し、夜の王戦でアーツの回転が落ちる'),
         dict(ids=[6850200], verdict='avoid', tier='body', why='狂い火のタメ2回で発狂するようになる'),
-        dict(ids=[6850800], verdict='avoid', tier='body', why='ローリングが主な守り'),
-        dict(ids=[6840000], verdict='avoid', tier='body', why='星光の欠片などを買いたい'),
-        dict(ids=[6851700], verdict='avoid', tier='body', why='一撃死の線を簡単に下回る'),
-        dict(ids=[6850500], verdict='avoid', tier='body', why='HP最大時の付帯が生命線'),
+        dict(ids=[6850800], verdict='avoid', tier='body', why='ローリングが主な守りなので、連続回避のたびにカット率が下がるのは重い'),
+        dict(ids=[6840000], verdict='avoid', tier='body', why='星光の欠片などを買うのにルーンが要る'),
+        dict(ids=[6851700], verdict='avoid', tier='body', why='最大HPが減り、一撃で倒される線を簡単に下回る'),
+        dict(ids=[6850500], verdict='avoid', tier='body', why='生命線の「HP最大時」の付帯効果が剥がれる'),
     ],
     '隠者': [
-        dict(ids=[6840200], verdict='avoid', tier='body', why='アーツの高回転が立ち回りの軸'),
-        dict(ids=[6850500], verdict='avoid', tier='body', why='HP最大時の付帯が剥がれる'),
+        dict(ids=[6840200], verdict='avoid', tier='body', why='アーツの高回転が立ち回りの軸なので影響が大きい'),
+        dict(ids=[6850500], verdict='avoid', tier='body', why='「HP最大時」の付帯効果が剥がれる'),
     ],
     '執行者': [
-        dict(ids=[6830400], verdict='avoid', tier='comment', why='神秘で状態異常を伸ばし、HPも高くない'),
+        dict(ids=[6830400], verdict='avoid', tier='comment', why='神秘で状態異常を伸ばすキャラで、HPも高くないので影響が大きい'),
     ],
     '葬儀屋': [
-        dict(ids=[6830400], verdict='avoid', tier='body', why='もともと耐久がぎりぎり'),
-        dict(ids=[6820400], verdict='avoid', tier='comment', why='長く止まり、トランスでの押し切りが効かない'),
+        dict(ids=[6830400], verdict='avoid', tier='body', why='もともと耐久がぎりぎりで、生命力の低下が重い'),
+        dict(ids=[6820400], verdict='avoid', tier='comment', why='発症すると長く止まり、トランスでの押し切りが効かない'),
     ],
 }
 

@@ -2831,15 +2831,15 @@ function suggestNoteText(n, input, ja) {
   }
   if (n.kind === 'character') {
     // why texts are short Japanese notes from the wiki research; the English UI keeps the effect names only
-    if (!ja) return `Avoided for this character: ${n.items.map((x) => q(x.key)).join(', ')}`;
+    if (!ja) return `Effects you may want to avoid with this character (added as exclusions): ${n.items.map((x) => q(x.key)).join(', ')}`;
     const groups = new Map();   // effects with the same reason share one note
     for (const x of n.items) {
-      const why = `${x.why}${x.tier === 'comment' ? '、コメント欄より' : ''}`;
+      const why = `${x.why}${x.tier === 'comment' ? '、コメント欄の多数意見' : ''}`;
       if (!groups.has(why)) groups.set(why, []);
       groups.get(why).push(q(x.key));
     }
     const list = [...groups].map(([why, names]) => `${names.join('')}（${why}）`);
-    return `${n.character}の特性に合わせて避ける効果: ${list.join('、')}`;
+    return `${n.character}の特性で避けたい効果（除外に入れました）: ${list.join('、')}`;
   }
   if (n.kind === 'mode') {
     const why = input.mode === 'normal'

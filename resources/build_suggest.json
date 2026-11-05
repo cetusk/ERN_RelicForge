@@ -10309,7 +10309,7 @@
      "key": "ultimateArtChargingImpaired",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "カリゴなどの大技阻止にアーツが要る"
+     "why": "カリゴなどの大技を止めるのにアーツが要るので、溜まりが遅いと困る"
     }
    ],
    "useless": []
@@ -10320,49 +10320,49 @@
      "key": "moreDamageTakenAfterEvasion",
      "priority": "preferred",
      "tier": "body",
-     "why": "ステップの無敵が全キャラで最短（20F）"
+     "why": "ステップの無敵が全キャラで最短（20F）で、回避が難しく被弾しやすい"
     },
     {
      "key": "takingDamageCausesMadnessBuildup",
      "priority": "preferred",
      "tier": "body",
-     "why": "発症すると隙が大きい"
+     "why": "発症すると隙が大きく危険"
     },
     {
      "key": "takingDamageCausesSleepBuildup",
      "priority": "preferred",
      "tier": "body",
-     "why": "発症すると隙が大きい"
+     "why": "発症すると隙が大きく危険"
     },
     {
      "key": "ultimateArtChargingImpaired",
      "priority": "preferred",
      "tier": "body",
-     "why": "回復のアーツが必要な時に溜まっていない"
+     "why": "回復のアーツが必要な時に溜まっていないことになりやすい"
     },
     {
      "key": "nearDeathReducesMaxHP",
      "priority": "preferred",
      "tier": "body",
-     "why": "HPが減るとガードカウンターも弱まる"
+     "why": "最大HPが減るとガードカウンター（現在HPを加える）も弱まる"
     },
     {
      "key": "lowerAttackWhenBelowMaxHP",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "ガードの貫通でHPが削れたまま戦いやすい"
+     "why": "ガードの貫通ダメージでHPが最大を下回ったまま戦うことが多く、発動しやすい"
     },
     {
      "key": "poisonBuildupWhenBelowMaxHP",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "ガードの貫通でHPが削れたまま戦いやすい"
+     "why": "ガードの貫通ダメージでHPが最大を下回ったまま戦うことが多く、発動しやすい"
     },
     {
      "key": "rotBuildupWhenBelowMaxHP",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "ガードの貫通でHPが削れたまま戦いやすい"
+     "why": "ガードの貫通ダメージでHPが最大を下回ったまま戦うことが多く、発動しやすい"
     }
    ],
    "useless": []
@@ -10373,7 +10373,7 @@
      "key": "poisonBuildupWhenBelowMaxHP",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "リブラなどの長期戦で重い"
+     "why": "リブラなどの長期戦で発症しやすく重い"
     }
    ],
    "useless": []
@@ -10384,25 +10384,25 @@
      "key": "moreDamageTakenAfterEvasion",
      "priority": "preferred",
      "tier": "body",
-     "why": "回避の無敵が短く（25F）体が大きい"
+     "why": "回避の無敵が短く（25F）体も大きいので、回避後に被弾しやすい"
     },
     {
      "key": "lowerAttackWhenBelowMaxHP",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "被弾しながら殴るので常に発動しやすい"
+     "why": "被弾しながら殴るので、ほぼ常に発動してしまう"
     },
     {
      "key": "takingDamageCausesMadnessBuildup",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "発症するとスキル受けのカットが剥がれる"
+     "why": "スキルで受けていても発症するとカットが剥がれる"
     },
     {
      "key": "takingDamageCausesSleepBuildup",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "発症するとスキル受けのカットが剥がれる"
+     "why": "スキルで受けていても発症するとカットが剥がれる"
     }
    ],
    "useless": []
@@ -10413,19 +10413,19 @@
      "key": "reducedFlaskHPRestoration",
      "priority": "preferred",
      "tier": "body",
-     "why": "HP最大時の付帯が戻るまでが長くなる"
+     "why": "「HP最大時」の付帯効果が戻るまでが長くなる"
     },
     {
      "key": "takingDamageCausesMadnessBuildup",
      "priority": "preferred",
      "tier": "body",
-     "why": "狂い火の祈祷を使いにくくなる"
+     "why": "狂い火の祈祷（自分も発狂が溜まる）を使いにくくなる"
     },
     {
      "key": "takingDamageCausesDeathBuildup",
      "priority": "preferred",
      "tier": "body",
-     "why": "夜の王戦でアーツの回転が落ちる"
+     "why": "アーツ中以外は蓄積し、夜の王戦でアーツの回転が落ちる"
     },
     {
      "key": "allResistancesDown",
@@ -10437,25 +10437,25 @@
      "key": "repeatedEvasionsLowerDamageNegation",
      "priority": "preferred",
      "tier": "body",
-     "why": "ローリングが主な守り"
+     "why": "ローリングが主な守りなので、連続回避のたびにカット率が下がるのは重い"
     },
     {
      "key": "reducedRuneAcquisition",
      "priority": "preferred",
      "tier": "body",
-     "why": "星光の欠片などを買いたい"
+     "why": "星光の欠片などを買うのにルーンが要る"
     },
     {
      "key": "nearDeathReducesMaxHP",
      "priority": "preferred",
      "tier": "body",
-     "why": "一撃死の線を簡単に下回る"
+     "why": "最大HPが減り、一撃で倒される線を簡単に下回る"
     },
     {
      "key": "continuousHPLoss",
      "priority": "preferred",
      "tier": "body",
-     "why": "HP最大時の付帯が生命線"
+     "why": "生命線の「HP最大時」の付帯効果が剥がれる"
     }
    ],
    "useless": []
@@ -10466,13 +10466,13 @@
      "key": "ultimateArtChargingImpaired",
      "priority": "preferred",
      "tier": "body",
-     "why": "アーツの高回転が立ち回りの軸"
+     "why": "アーツの高回転が立ち回りの軸なので影響が大きい"
     },
     {
      "key": "continuousHPLoss",
      "priority": "preferred",
      "tier": "body",
-     "why": "HP最大時の付帯が剥がれる"
+     "why": "「HP最大時」の付帯効果が剥がれる"
     }
    ],
    "useless": [
@@ -10568,7 +10568,7 @@
      "key": "reducedVigorAndArcane",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "神秘で状態異常を伸ばし、HPも高くない"
+     "why": "神秘で状態異常を伸ばすキャラで、HPも高くないので影響が大きい"
     }
    ],
    "useless": []
@@ -10579,13 +10579,13 @@
      "key": "reducedVigorAndArcane",
      "priority": "preferred",
      "tier": "body",
-     "why": "もともと耐久がぎりぎり"
+     "why": "もともと耐久がぎりぎりで、生命力の低下が重い"
     },
     {
      "key": "takingDamageCausesMadnessBuildup",
      "priority": "nice_to_have",
      "tier": "comment",
-     "why": "長く止まり、トランスでの押し切りが効かない"
+     "why": "発症すると長く止まり、トランスでの押し切りが効かない"
     }
    ],
    "useless": []

@@ -85,8 +85,8 @@ import character_effects as ce  # noqa: E402
 
 RESEARCH = ce.apply_owner_notes(json.load(open(os.path.join(HERE, 'research', 'character_research.json'), encoding='utf-8')))
 VERDICT = {'accept': '許容', 'avoid': '避けたい', 'mixed': '割れる', 'depends': '条件次第', 'must': '必須', 'strong': '重要', 'nice': 'あると良い'}
-TIER = {'body': '本文', 'comment': 'コメント（一致）', 'body-contested': '本文（最近のコメントが反対）',
-        'comment-over-body-mixed': 'コメント（一致。本文は割れる）'}
+TIER = {'body': '本文', 'comment': 'コメントの多数意見', 'body-contested': '本文（最近のコメントが反対）',
+        'comment-over-body-mixed': 'コメントの多数意見（本文は割れる）'}
 KIND = {'buff': '上方', 'nerf': '下方', 'fix': '不具合修正', 'change': '変更', 'add': '追加'}
 
 
@@ -116,7 +116,7 @@ def characters_md():
             continue
         for x in r['avoid']:
             lines.append(f'| {ch} | {NAME.get(x["key"], x["key"])} | 除外（{"推奨" if x["priority"] == "preferred" else "任意"}） | '
-                         f'{"本文" if x["tier"] == "body" else "コメント（一致）"} | {cell(x["why"])} |')
+                         f'{"本文" if x["tier"] == "body" else "コメントの多数意見"} | {cell(x["why"])} |')
         by_why = {}
         for x in r['useless']:
             by_why.setdefault(x['why'], []).append(NAME.get(x['key'], x['key']))
@@ -137,7 +137,7 @@ def characters_md():
         lines += ['', '### 特性', '']
         lines += [f'- {t["what"]}: {t["value"]}' for t in c['traits']]
         lines += ['', '### デメリットの評価', '',
-                  '| 効果 | 出典 | 評価 | 投稿（許容／避ける） | 集計開始 | 判定 | 理由 |', '|---|---|---|---|---|---|---|']
+                  '| 効果 | 出典 | 評価 | 投稿（許容／避けたい） | 集計開始 | 判定 | 理由 |', '|---|---|---|---|---|---|---|']
         for x in c['demerits']:
             decision = {'accept': '許容', 'avoid': '避けたい', 'mixed': '割れる（変えない）'}.get(x['decision'], '使わない（一致なし）')
             tier = f'（{TIER.get(x["tier"], x["tier"])}）' if x['tier'] else ''
