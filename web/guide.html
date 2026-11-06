@@ -23,12 +23,6 @@
         </div>
       </div>
     </div>
-    <div class="header-actions">
-      <select id="gp-lang" class="opt-select" aria-label="言語 / Language">
-        <option value="ja">日本語</option>
-        <option value="en">English</option>
-      </select>
-    </div>
   </header>
 
   <nav id="tab-bar" class="tab-bar gp-tabs" aria-label="ページ">
@@ -44,8 +38,10 @@
     <section id="gp-effects" class="catalog-content gp-view" hidden>
       <div class="catalog-toolbar">
         <div class="catalog-search-wrapper">
-          <input type="text" id="gp-effects-search" class="catalog-search-input" placeholder="効果名で検索 (日本語 / English)..." aria-label="効果名で検索">
+          <input type="text" id="gp-effects-search" class="catalog-search-input" placeholder="効果名で検索..." aria-label="効果名で検索">
         </div>
+        <!-- Phones: the filters fold away behind this button (same as the app) -->
+        <button id="gp-effects-filter-toggle" class="catalog-filter-toggle" type="button" aria-expanded="false"><span class="icon" data-icon="list-filter" data-size="16"></span><span>絞り込み</span><span id="gp-effects-filter-badge" class="menu-badge" hidden></span></button>
         <div class="catalog-filters gp-effects-filters">
           <div class="catalog-filter-group">
             <label for="gp-effects-category" id="gp-effects-category-label">カテゴリ:</label>

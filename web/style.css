@@ -4287,10 +4287,6 @@ details:not([open]) > summary .guide-hint-open {
   display: none !important;
 }
 
-.guide-page #gp-lang {
-  width: auto;
-}
-
 .guide-page .gp-tabs .tab {
   text-decoration: none;
 }
