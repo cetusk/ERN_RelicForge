@@ -34,3 +34,35 @@ for (const dir of APP_DIRS) {
     }
   });
 }
+
+// 公開ページ (web/guide.html): the effect catalog and the appendix never show an unreleased effect (spoilers)
+const fs = require('fs');
+const path = require('path');
+const { ROOT_DIR } = require('./helpers');
+
+for (const dir of APP_DIRS) {
+  test(`${dir}: releasedRelicEffects lists released relic effects only`, () => {
+    const ctx = runScripts({}, dir, ['relic-effects.js']);
+    ctx.__e = loadResource('effects_data.json');
+    const list = JSON.parse(JSON.stringify(vm.runInContext('releasedRelicEffects(__e)', ctx)));
+    const relic = (id) => Number(id) < 200000 || (Number(id) >= 6000000 && Number(id) < 7400000);
+    const releasedKeys = new Set(Object.entries(effects).filter(([id, e]) => relic(id) && !e.unreleased).map(([, e]) => e.key));
+    assert.deepEqual(list.map((e) => e.key).sort(), [...releasedKeys].sort());
+    const shown = new Set(list.flatMap((e) => [e.name_ja, e.name_en]));
+    for (const [id, e] of Object.entries(effects)) {
+      // an unreleased id's name may only appear when another, released relic id has the same name
+      if (e.unreleased && relic(id) && shown.has(e.name_ja)) {
+        assert.ok(Object.entries(effects).some(([j, x]) => j !== id && relic(j) && !x.unreleased && x.name_ja === e.name_ja), `${id} ${e.name_ja}`);
+      }
+    }
+  });
+}
+
+test('appendix HTML (shown on the public page) has no unreleased effect', () => {
+  const released = new Set(Object.values(effects).filter((e) => !e.unreleased).map((e) => e.name_ja));
+  const hidden = unreleasedNames.filter((n) => !released.has(n));
+  for (const f of ['builds.html', 'characters.html']) {
+    const html = fs.readFileSync(path.join(ROOT_DIR, 'tools', 'build_suggest', 'catalog', f), 'utf8');
+    for (const n of hidden) assert.ok(!html.includes(`「${n}」`) && !html.includes(`>${n}<`) && !html.includes(`| ${n} |`), `${f}: ${n}`);
+  }
+});

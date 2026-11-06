@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERN RelicForge キャラ図鑑・カタログ</title>
+  <meta name="description" content="ELDEN RING NIGHTREIGN のキャラ図鑑・効果カタログ・ビルド一覧（セーブファイル不要）">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="guide-page">
+  <!-- Public guide page: キャラ図鑑, 効果カタログ and the appendix, without a save file (web/guide-page.js) -->
+  <header id="app-header">
+    <div class="header-left">
+      <h1>ERN RelicForge</h1>
+      <div class="header-text">
+        <div class="header-status">
+          <span id="gp-subtitle" class="header-info">キャラ図鑑・カタログ</span>
+        </div>
+        <div class="header-meta">
+          <span class="header-meta-item">by cetusk (<a href="https://github.com/cetusk/ERN_RelicForge" class="header-meta-link" target="_blank" rel="noopener noreferrer">GitHub</a>)</span>
+          <span class="header-meta-sep">|</span>
+          <span class="header-meta-item"><span id="gp-source-label">参照</span>: <a href="https://kamikouryaku.net/nightreign_eldenring/" class="header-meta-link" target="_blank" rel="noopener noreferrer">神攻略wiki</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <select id="gp-lang" class="opt-select" aria-label="言語 / Language">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+      </select>
+      <a id="gp-open-app" class="btn-primary gp-open-app" href="index.html"><span class="icon" data-icon="swords"></span><span id="gp-open-app-label">アプリを開く</span></a>
+    </div>
+  </header>
+
+  <nav id="tab-bar" class="tab-bar gp-tabs" aria-label="ページ">
+    <a class="tab" data-tab="characters" href="#characters"><span class="icon" data-icon="book-user" data-size="14"></span><span class="tab-label" id="gp-tab-characters">キャラ図鑑</span></a>
+    <a class="tab" data-tab="effects" href="#effects"><span class="icon" data-icon="book-open" data-size="14"></span><span class="tab-label" id="gp-tab-effects">効果カタログ</span></a>
+    <a class="tab" data-tab="builds" href="#builds"><span class="icon" data-icon="table" data-size="14"></span><span class="tab-label" id="gp-tab-builds">ビルド一覧</span></a>
+    <a class="tab" data-tab="evaluations" href="#evaluations"><span class="icon" data-icon="file-text" data-size="14"></span><span class="tab-label" id="gp-tab-evaluations">キャラ別の評価と数値</span></a>
+  </nav>
+
+  <main class="gp-main">
+    <section id="gp-characters" class="guide-content gp-view" hidden></section>
+
+    <section id="gp-effects" class="catalog-content gp-view" hidden>
+      <div class="catalog-toolbar">
+        <div class="catalog-search-wrapper">
+          <input type="text" id="gp-effects-search" class="catalog-search-input" placeholder="効果名で検索 (日本語 / English)..." aria-label="効果名で検索">
+        </div>
+        <div class="catalog-filters gp-effects-filters">
+          <div class="catalog-filter-group">
+            <label for="gp-effects-category" id="gp-effects-category-label">カテゴリ:</label>
+            <select id="gp-effects-category"></select>
+          </div>
+          <div class="catalog-filter-group">
+            <label for="gp-effects-deep" id="gp-effects-deep-label">通常/深層:</label>
+            <select id="gp-effects-deep">
+              <option value="">すべて</option>
+              <option value="no">通常の遺物にも付く</option>
+              <option value="yes">深層のみ</option>
+            </select>
+          </div>
+          <div class="catalog-filter-group">
+            <label for="gp-effects-stack" id="gp-effects-stack-label">重複:</label>
+            <select id="gp-effects-stack">
+              <option value="">すべて</option>
+              <option value="yes">○ 重複可</option>
+              <option value="no">× 重複不可</option>
+              <option value="conditional">△ 条件付き</option>
+            </select>
+          </div>
+        </div>
+        <span id="gp-effects-count" class="result-count"></span>
+        <span id="gp-effects-note" class="catalog-owned-note">公開済みの遺物効果のみ（未公開の効果は載せていません）</span>
+      </div>
+      <div id="gp-effects-list" class="catalog-list"></div>
+    </section>
+
+    <section id="gp-builds" class="gp-view gp-appendix" hidden></section>
+    <section id="gp-evaluations" class="gp-view gp-appendix" hidden></section>
+  </main>
+
+  <script src="lib/icons.js"></script>
+  <script src="relic-effects.js"></script>
+  <script src="relic-guide.js"></script>
+  <script src="guide-page.js"></script>
+</body>
+</html>

@@ -5,6 +5,7 @@ CLI パーサー、遺物組み合わせ最適化ツール、Electron ベース�
 
 - 最新版: v1.1.0（ゲームデータは Regulation 1.03.5 に対応）
 - Web 版: https://cetusk.github.io/ERN_RelicForge/web/index.html （スマートフォンでも利用可能）
+- キャラ図鑑・効果カタログ・ビルド一覧（セーブファイル不要）: https://cetusk.github.io/ERN_RelicForge/web/guide.html
 - Electron 版: [Releases](https://github.com/cetusk/ERN_RelicForge/releases) から各 OS 用をダウンロード
 
 ## Folder Structure
@@ -39,6 +40,7 @@ ERN_RelicForge/
 │       ├── relic-share.js       # 共有リンク・QR コードの作成・読み込み (web/ と共通)
 │       ├── relic-suggest.js     # ビルド提案の条件の作成 (web/ と共通)
 │       ├── relic-guide.js       # キャラ図鑑の表示 (web/ と共通)
+│       ├── relic-effects.js     # 効果の分類と公開済みの遺物効果の一覧 (web/ と共通)
 │       ├── lib/
 │       │   ├── crypto-js.min.js # AES-CBC 復号化用
 │       │   ├── icons.js         # 画面のアイコン (Lucide)
@@ -53,6 +55,8 @@ ERN_RelicForge/
 │   ├── relic-share.js           # 共有リンク・QR コードの作成・読み込み
 │   ├── relic-suggest.js         # ビルド提案の条件の作成
 │   ├── relic-guide.js           # キャラ図鑑の表示
+│   ├── relic-effects.js         # 効果の分類と公開済みの遺物効果の一覧
+│   ├── guide.html, guide-page.js # 公開ページ（キャラ図鑑・効果カタログ・付録。セーブファイル不要）
 │   ├── style.css                # ダークテーマスタイル
 │   └── lib/
 │       ├── crypto-js.min.js     # AES-CBC 復号化用
@@ -150,6 +154,12 @@ ERN_RelicForge/
 - 除外条件の指定（除外:必須 / 除外:推奨 / 除外:任意）
 - タブ形式の結果表示
 - スコア内訳の詳細表示（各効果の寄与、集中ボーナス、除外ペナルティ）
+
+### 公開ページ（キャラ図鑑・効果カタログ・付録）
+- `web/guide.html`: セーブファイルなしで見られるページ。アプリのようこそ画面からも開ける
+- タブ: キャラ図鑑 ／ 効果カタログ ／ ビルド一覧 ／ キャラ別の評価と数値（タブごとに `#characters` などの URL）
+- 効果カタログは**公開済みの遺物効果のみ**（`effects_data.json` の `"unreleased"` を除く。テストで未公開の効果が出ないことを確認）
+- ビルド一覧・キャラ別の評価と数値は、付録 `tools/build_suggest/catalog/*.html`（`catalog.py` が Markdown と一緒に作る）を表示
 
 ### キャラ図鑑（Web 版・Electron 版）
 - キャラごとに、基本データ（得意武器・能力値ランク・Lv15 の HP/FP/スタミナ・回避の無敵時間・強靭度・カット率・状態異常耐性）と特性を表示

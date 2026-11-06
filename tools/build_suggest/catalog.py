@@ -7,10 +7,13 @@
 
   catalog/builds.md      キャラ別のビルド一覧（定番の効果と、神攻略wiki のビルド 174 件）
   catalog/characters.md  キャラ別の評価と数値（デメリットの評価・キャラの数値・版ごとの性能変更）
+  catalog/*.html         上の 2 つの HTML 版（公開ページ web/guide.html が読み込む。GitHub Pages は .md を変換してしまうため）
 """
 
+import html
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -100,7 +103,7 @@ def characters_md():
              f'キャラの特性（能力値・HP・回避・強靭度・カット率・状態異常耐性・スキルとアーツ・立ち回り）によって変わる遺物効果の評価。'
              f'神攻略wiki のキャラページ（本文とコメント欄）と、キャラクター・ステータス・強靭度・基本アクション・遺物効果・'
              f'アップデート情報のページから集めた（{RESEARCH["researched"]} 調査）。未公開の効果は含まない。', '',
-             '## 評価の使い方（オーナーの方針）', '',
+             '## 評価の使い方', '',
              '- 本文の評価を主に使う。ビルド提案では除外の重みを「推奨」にする',
              '- コメント欄の評価は、同じ評価の投稿が 3 件以上かつ反対の 2 倍以上あるときだけ使う（同じ人の連投は 1 件）。除外の重みは「任意」',
              '- 本文の評価でも、最近のコメントがはっきり反対していれば（3 件以上かつ 2 倍以上）「割れる」として扱いを変えない',
@@ -164,7 +167,71 @@ def characters_md():
     return '\n'.join(lines).rstrip() + '\n'
 
 
-FILES = {'builds.md': builds_md, 'characters.md': characters_md}
+def inline(text):
+    """Escape, then the few inline forms the catalog uses: [text](url) and `code`"""
+    t = html.escape(text, quote=True)
+    t = re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)', lambda m: (f'<a href="{m.group(2)}" target="_blank" rel="noopener noreferrer">{m.group(1)}</a>'
+                                                       if not m.group(2).startswith('#') else f'<a href="{m.group(2)}">{m.group(1)}</a>'), t)
+    return re.sub(r'`([^`]+)`', r'<code>\1</code>', t)
+
+
+def md_to_html(md):
+    """The Markdown subset this file writes (headings, lists two levels deep, tables, paragraphs) as an HTML fragment"""
+    out, para, lines, i = [], [], md.split('\n'), 0
+
+    def flush():
+        if para:
+            out.append(f'<p>{inline(" ".join(para))}</p>')
+            para.clear()
+    while i < len(lines):
+        line = lines[i]
+        if not line.strip() or line.startswith('<!--'):
+            flush()
+            i += 1
+            continue
+        m = re.match(r'^(#{1,4}) (.*)$', line)
+        if m:
+            flush()
+            n, text = len(m.group(1)), m.group(2)
+            out.append(f'<h{n} id="{html.escape(anchor(text), quote=True)}">{inline(text)}</h{n}>')
+            i += 1
+            continue
+        if line.startswith('|'):
+            flush()
+            rows = []
+            while i < len(lines) and lines[i].startswith('|'):
+                rows.append([c.strip() for c in lines[i].strip().strip('|').split('|')])
+                i += 1
+            head, body = rows[0], [r for r in rows[2:]]
+            out.append('<div class="appendix-table"><table><thead><tr>' + ''.join(f'<th>{inline(c)}</th>' for c in head) +
+                       '</tr></thead><tbody>' + ''.join('<tr>' + ''.join(f'<td>{inline(c)}</td>' for c in r) + '</tr>' for r in body) +
+                       '</tbody></table></div>')
+            continue
+        if line.startswith('- '):
+            flush()
+            items = []
+            while i < len(lines) and (lines[i].startswith('- ') or lines[i].startswith('  - ')):
+                if lines[i].startswith('- '):
+                    items.append([lines[i][2:], []])
+                else:
+                    items[-1][1].append(lines[i][4:])
+                i += 1
+            out.append('<ul>' + ''.join(f'<li>{inline(t)}' + (f'<ul>{"".join(f"<li>{inline(c)}</li>" for c in sub)}</ul>' if sub else '') + '</li>'
+                                        for t, sub in items) + '</ul>')
+            continue
+        para.append(line.strip())
+        i += 1
+    flush()
+    return '\n'.join(out)
+
+
+def html_fragment(make_md):
+    return lambda: ('<!-- tools/build_suggest/catalog.py で生成（手で編集しない） -->\n<div class="appendix">\n'
+                    + md_to_html(make_md()) + '\n</div>\n')
+
+
+FILES = {'builds.md': builds_md, 'characters.md': characters_md,
+         'builds.html': html_fragment(builds_md), 'characters.html': html_fragment(characters_md)}
 
 if __name__ == '__main__':
     stale = []

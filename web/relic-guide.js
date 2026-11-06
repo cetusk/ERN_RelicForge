@@ -134,7 +134,8 @@ function guideLink(url, text) {
 }
 
 /**
- * @param {object} o  { character, profiles, suggest, effectName(key) -> name, ja }
+ * @param {object} o  { character, profiles, suggest, effectName(key) -> name, ja, charName, suggestButton }
+ *   suggestButton: false hides 「このビルドで提案」 (the public guide page has no build suggestion)
  * @returns {string} HTML of the character selector and the selected character's page
  */
 function renderCharacterGuide(o) {
@@ -197,7 +198,7 @@ function renderCharacterGuide(o) {
         .filter(([k]) => b[k].length).map(([k, label, cls]) => `<div class="guide-tier"><span class="guide-tier-label">${label}</span>${effList(b[k], cls)}</div>`).join('')}
       ${b.vessel ? `<p class="guide-muted">${T.vessel}: ${guideEsc(b.vessel)}</p>` : ''}
       ${b.sources.length ? `<p class="guide-muted">${T.source}: ${b.sources.map((u) => guideLink(u, guideWikiTitle(u))).join('、')}</p>` : ''}
-      <button type="button" class="btn-secondary guide-suggest" data-build="${guideEsc(b.id)}">${T.suggestThis}</button>
+      ${o.suggestButton === false ? '' : `<button type="button" class="btn-secondary guide-suggest" data-build="${guideEsc(b.id)}">${T.suggestThis}</button>`}
     </div></details>`;
   const general = builds.filter((b) => !b.target);
   const targeted = builds.filter((b) => b.target);
