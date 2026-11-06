@@ -63,7 +63,7 @@ for (const dir of APP_DIRS) {
     const ctx = runScripts({}, dir, ['relic-guide.js']);
     const ch = Object.keys(profiles.characters)[0];
     const render = (sections) => {
-      ctx.__o = { character: ch, profiles, suggest, ja: true, effectName: (k) => names[k] || k, suggestButton: false, sections };
+      ctx.__o = { character: ch, profiles, suggest, ja: true, effectName: (k) => names[k] || k, standalone: true, sections };
       return vm.runInContext('renderCharacterGuide(__o)', ctx);
     };
     const builds = render(['builds']);
@@ -71,6 +71,8 @@ for (const dir of APP_DIRS) {
     assert.ok(!builds.includes('gf-grid') && !builds.includes('guide-suggest'));
     const evals = render(['stats', 'suggest', 'demerits']);
     assert.ok(evals.includes('gf-grid') && evals.includes('guide-table') && !evals.includes('guide-build"'));
+    // a reference page: nothing about the app's build suggestion
+    for (const html of [builds, evals, render(undefined)]) assert.ok(!html.includes('提案') && !html.includes('guide-suggest'), 'no 提案');
   });
 
   test(`${dir}: deep-only kinds and the effect card`, () => {

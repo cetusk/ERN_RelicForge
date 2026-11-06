@@ -43,8 +43,14 @@ const GUIDE_TEXT = {
     count: (n) => `${n}`,
   },
 };
+// The public guide page (standalone) is a reference page without the app: no wording about the build suggestion
+const GUIDE_TEXT_STANDALONE = {
+  ja: { suggest: '合う効果・避けたい効果', unused: 'このキャラでは働かない効果' },
+  en: { suggest: 'Effects that suit / to avoid', unused: 'Effects that do not work for this character' },
+};
 const GUIDE_VERDICT = { accept: '許容', avoid: '避けたい', mixed: '割れる', depends: '条件次第', must: '必須', strong: '重要', nice: 'あると良い' };
 const GUIDE_DECISION = { accept: '許容', avoid: '避けたい', mixed: '割れる（変えない）' };
+const GUIDE_DECISION_STANDALONE = { ...GUIDE_DECISION, mixed: '割れる' };
 const GUIDE_KIND = { buff: '上方', nerf: '下方', fix: '不具合修正', change: '変更', add: '追加' };
 
 function guideEsc(s) {
@@ -136,13 +142,15 @@ function guideLink(url, text) {
 }
 
 /**
- * @param {object} o  { character, profiles, suggest, effectName(key) -> name, ja, charName, suggestButton, sections }
- *   suggestButton: false hides 「このビルドで提案」 (the public guide page has no build suggestion)
+ * @param {object} o  { character, profiles, suggest, effectName(key) -> name, ja, charName, standalone, sections }
+ *   standalone: the public guide page — no 「このビルドで提案」 button and no wording about the build suggestion
  *   sections: the parts to show, in this order (default: all of GUIDE_SECTIONS)
  * @returns {string} HTML of the character selector and the selected character's page
  */
 function renderCharacterGuide(o) {
-  const T = o.ja ? GUIDE_TEXT.ja : GUIDE_TEXT.en;
+  const lang = o.ja ? 'ja' : 'en';
+  const T = o.standalone ? { ...GUIDE_TEXT[lang], ...GUIDE_TEXT_STANDALONE[lang] } : GUIDE_TEXT[lang];
+  const decision = o.standalone ? GUIDE_DECISION_STANDALONE : GUIDE_DECISION;
   const chars = Object.keys(o.profiles.characters);
   const ch = chars.includes(o.character) ? o.character : chars[0];
   const p = o.profiles.characters[ch];
@@ -201,7 +209,7 @@ function renderCharacterGuide(o) {
         .filter(([k]) => b[k].length).map(([k, label, cls]) => `<div class="guide-tier"><span class="guide-tier-label">${label}</span>${effList(b[k], cls)}</div>`).join('')}
       ${b.vessel ? `<p class="guide-muted">${T.vessel}: ${guideEsc(b.vessel)}</p>` : ''}
       ${b.sources.length ? `<p class="guide-muted">${T.source}: ${b.sources.map((u) => guideLink(u, guideWikiTitle(u))).join('、')}</p>` : ''}
-      ${o.suggestButton === false ? '' : `<button type="button" class="btn-secondary guide-suggest" data-build="${guideEsc(b.id)}">${T.suggestThis}</button>`}
+      ${o.standalone ? '' : `<button type="button" class="btn-secondary guide-suggest" data-build="${guideEsc(b.id)}">${T.suggestThis}</button>`}
     </div></details>`;
   const general = builds.filter((b) => !b.target);
   const targeted = builds.filter((b) => b.target);
@@ -214,7 +222,7 @@ function renderCharacterGuide(o) {
 
   // Research (collapsed)
   const demRows = p.demerits.map((x) => `<tr><td>${guideEsc(x.name)}</td><td>${guideEsc(x.source)}</td><td>${guideEsc(GUIDE_VERDICT[x.verdict] || x.verdict || '—')}</td>
-    <td class="guide-num">${x.accept_posts}／${x.avoid_posts}</td><td>${guideEsc(GUIDE_DECISION[x.decision] || '—')}</td><td>${guideEsc(x.why)}</td></tr>`).join('');
+    <td class="guide-num">${x.accept_posts}／${x.avoid_posts}</td><td>${guideEsc(decision[x.decision] || '—')}</td><td>${guideEsc(x.why)}</td></tr>`).join('');
   const demerits = card(T.demerits, `<div class="guide-scroll"><table class="guide-table"><thead><tr><th>${T.effect}</th><th>${T.from}</th><th>${T.verdict}</th><th>${T.posts}</th><th>${T.decision}</th><th>${T.why}</th></tr></thead><tbody>${demRows}</tbody></table></div>`, false);
   const refList = (items) => `<ul class="guide-list">${items.map((x) => `<li>${x.level ? `<span class="guide-tag">${guideEsc(GUIDE_VERDICT[x.level] || x.level)}</span> ` : ''}<b>${guideEsc(x.name)}</b>（${guideEsc(x.source)}）: ${guideEsc(x.why)}</li>`).join('')}</ul>`;
   const important = p.important.length ? card(T.important, refList(p.important), false) : '';

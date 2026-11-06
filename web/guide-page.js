@@ -55,7 +55,7 @@ function gpRenderCharacters(tab) {
   // only released effects have a name here; the guide data never refers to unreleased ones (checked by tests)
   const effectName = (key) => (GP.names[key] ? (ja ? GP.names[key].name_ja : GP.names[key].name_en) : key);
   el.innerHTML = `<div class="guide-scroll-area">${renderCharacterGuide({
-    character: GP.character, profiles: GP.data.profiles, suggest: GP.data.suggest, ja, effectName, suggestButton: false,
+    character: GP.character, profiles: GP.data.profiles, suggest: GP.data.suggest, ja, effectName, standalone: true,
     sections: GP_SECTIONS[tab],
   })}</div>`;
 }
@@ -153,7 +153,6 @@ function gpApplyLang() {
   const t = (id, text) => { document.getElementById(id).textContent = text; };
   t('gp-subtitle', gpText('キャラ図鑑・カタログ', 'Characters & catalogs'));
   t('gp-source-label', gpText('参照', 'Source'));
-  t('gp-open-app-label', gpText('アプリを開く', 'Open the app'));
   t('gp-tab-characters', gpText('キャラ図鑑', 'Characters'));
   t('gp-tab-effects', gpText('効果カタログ', 'Effect Catalog'));
   t('gp-tab-builds', gpText('ビルド一覧', 'Build Templates'));

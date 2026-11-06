@@ -4287,13 +4287,6 @@ details:not([open]) > summary .guide-hint-open {
   display: none !important;
 }
 
-.guide-page .gp-open-app {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-}
-
 .guide-page #gp-lang {
   width: auto;
 }
@@ -4310,7 +4303,6 @@ details:not([open]) > summary .guide-hint-open {
 @media (max-width: 768px) {
   .guide-page .header-text { display: flex; }
   .guide-page .header-info { display: block !important; font-size: 12px; }
-  .guide-page #gp-open-app-label { display: none; }
   .gp-appendix { padding: 10px 12px 24px; }
 }
 
