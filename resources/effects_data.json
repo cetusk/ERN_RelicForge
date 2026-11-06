@@ -679,16 +679,17 @@
       "name_en": "Physical Attack Up Plus 3",
       "name_ja": "物理攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": "+10.5%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%"
+      "stackNotes": "10.5%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
+      "deepOnly": true
     },
     "6001401": {
       "key": "physicalAttackUpPlus4",
       "name_en": "Physical Attack Up Plus 4",
       "name_ja": "物理攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "12%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001500": {
@@ -696,8 +697,8 @@
       "name_en": "Magic Attack Power Up Plus 3",
       "name_ja": "魔力攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": "+10.5%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "10.5%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001501": {
@@ -705,8 +706,8 @@
       "name_en": "Magic Attack Power Up Plus 4",
       "name_ja": "魔力攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "12%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001600": {
@@ -714,8 +715,8 @@
       "name_en": "Fire Attack Power Up Plus 3",
       "name_ja": "炎攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": "+10.5%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "10.5%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001601": {
@@ -723,8 +724,8 @@
       "name_en": "Fire Attack Power Up Plus 4",
       "name_ja": "炎攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "12%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001700": {
@@ -732,8 +733,8 @@
       "name_en": "Lightning Attack Power Up Plus 3",
       "name_ja": "雷攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": "+10.5%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "10.5%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001701": {
@@ -741,8 +742,8 @@
       "name_en": "Lightning Attack Power Up Plus 4",
       "name_ja": "雷攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "12%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001800": {
@@ -750,8 +751,8 @@
       "name_en": "Holy Attack Power Up Plus 3",
       "name_ja": "聖攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": "+10.5%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "10.5%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6001801": {
@@ -759,8 +760,8 @@
       "name_en": "Holy Attack Power Up Plus 4",
       "name_ja": "聖攻撃力上昇+4",
       "stackable": true,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%",
+      "stackNotes": "12%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
       "deepOnly": true
     },
     "6002600": {
@@ -769,7 +770,7 @@
       "name_ja": "魔力カット率上昇+1",
       "stackable": true,
       "stackNotes": "16%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002601": {
@@ -778,7 +779,7 @@
       "name_ja": "魔力カット率上昇+2",
       "stackable": true,
       "stackNotes": "18%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002700": {
@@ -787,7 +788,7 @@
       "name_ja": "炎カット率上昇+1",
       "stackable": true,
       "stackNotes": "16%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002701": {
@@ -796,7 +797,7 @@
       "name_ja": "炎カット率上昇+2",
       "stackable": true,
       "stackNotes": "18%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002800": {
@@ -805,7 +806,7 @@
       "name_ja": "雷カット率上昇+1",
       "stackable": true,
       "stackNotes": "16%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002801": {
@@ -814,7 +815,7 @@
       "name_ja": "雷カット率上昇+2",
       "stackable": true,
       "stackNotes": "18%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002900": {
@@ -823,7 +824,7 @@
       "name_ja": "聖カット率上昇+1",
       "stackable": true,
       "stackNotes": "16%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6002901": {
@@ -832,7 +833,7 @@
       "name_ja": "聖カット率上昇+2",
       "stackable": true,
       "stackNotes": "18%",
-      "stackNotesFull": "約10%/16%/18%",
+      "stackNotesFull": "10%/16%/18%",
       "deepOnly": true
     },
     "6003000": {
@@ -984,32 +985,32 @@
       "name_en": "Improved Stance Breaking When Two Handing",
       "name_ja": "両手持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
     },
     "6006001": {
       "key": "improvedStanceBreakingWhenTwoHanding",
       "name_en": "Improved Stance Breaking When Two Handing",
       "name_ja": "両手持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
     },
     "6006100": {
       "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
       "name_en": "Improved Stance Breaking When Wielding Two Armaments",
       "name_ja": "二刀持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
     },
     "6006101": {
       "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
       "name_en": "Improved Stance Breaking When Wielding Two Armaments",
       "name_ja": "二刀持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
     },
     "6012300": {
       "key": "improvedDamageNegationAtLowHP",
@@ -1017,7 +1018,7 @@
       "name_ja": "HP低下時、カット率上昇",
       "stackable": true,
       "stackNotes": "約15%カット、HP40%未満で発動、永続",
-      "stackNotesFull": "約15%カット(特殊効果には「物理カット率上昇」と出るが、実際には全属性のカット率が上昇している) / HP40%未満の状態でのみ発動 / HP40%未満である限り永続 / 約15%"
+      "stackNotesFull": "15%(特殊効果には「物理カット率上昇」と出るが、実際には全属性のカット率が上昇している) / HP40%未満の状態でのみ発動 / HP40%未満である限り永続"
     },
     "6012301": {
       "key": "improvedDamageNegationAtLowHP",
@@ -1025,7 +1026,7 @@
       "name_ja": "HP低下時、カット率上昇",
       "stackable": true,
       "stackNotes": "約15%カット、HP40%未満で発動、永続",
-      "stackNotesFull": "約15%カット(特殊効果には「物理カット率上昇」と出るが、実際には全属性のカット率が上昇している) / HP40%未満の状態でのみ発動 / HP40%未満である限り永続 / 約15%"
+      "stackNotesFull": "15%(特殊効果には「物理カット率上昇」と出るが、実際には全属性のカット率が上昇している) / HP40%未満の状態でのみ発動 / HP40%未満である限り永続"
     },
     "6030200": {
       "key": "hpRestoredWhenUsingMedicinalBolusesEtcPlus1",
@@ -1086,8 +1087,8 @@
       "name_en": "Physical Attack Power Increases After Using Grease Items Plus 1",
       "name_ja": "脂アイテム使用時、追加で攻撃力上昇+1",
       "stackable": false,
-      "stackNotes": "+17%",
-      "stackNotesFull": "+10%/+17%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "17%",
+      "stackNotesFull": "10%/17%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6030901": {
@@ -1095,8 +1096,8 @@
       "name_en": "Physical Attack Power Increases After Using Grease Items Plus 2",
       "name_ja": "脂アイテム使用時、追加で攻撃力上昇+2",
       "stackable": false,
-      "stackNotes": "+20%",
-      "stackNotesFull": "+10%/+17%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "20%",
+      "stackNotesFull": "10%/17%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6031900": {
@@ -1153,24 +1154,24 @@
       "name_en": "Improved Initial Standard Attack",
       "name_ja": "通常攻撃の1段目強化",
       "stackable": true,
-      "stackNotes": "約1.15倍",
-      "stackNotesFull": "約1.15倍 / 通常攻撃、二刀攻撃の1段目が対象 / 弓の通常攻撃も対象 / 対象外：強攻撃、タメ攻撃、ガード攻撃、大弓、クロスボウ、バリスタ / 約1.15倍"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 通常攻撃、二刀攻撃の1段目が対象 / 弓の通常攻撃も対象 / 対象外：強攻撃、タメ攻撃、ガード攻撃、大弓、クロスボウ、バリスタ"
     },
     "6040001": {
       "key": "improvedInitialStandardAttack",
       "name_en": "Improved Initial Standard Attack",
       "name_ja": "通常攻撃の1段目強化",
       "stackable": true,
-      "stackNotes": "約1.15倍",
-      "stackNotesFull": "約1.15倍 / 通常攻撃、二刀攻撃の1段目が対象 / 弓の通常攻撃も対象 / 対象外：強攻撃、タメ攻撃、ガード攻撃、大弓、クロスボウ、バリスタ / 約1.15倍"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 通常攻撃、二刀攻撃の1段目が対象 / 弓の通常攻撃も対象 / 対象外：強攻撃、タメ攻撃、ガード攻撃、大弓、クロスボウ、バリスタ"
     },
     "6040100": {
       "key": "improvedGuardCountersPlus1",
       "name_en": "Improved Guard Counters Plus 1",
       "name_ja": "ガードカウンター強化+1",
       "stackable": true,
-      "stackNotes": "+25%",
-      "stackNotesFull": "+17%/+25%/+29%",
+      "stackNotes": "25%",
+      "stackNotesFull": "17%/25%/29%",
       "deepOnly": true
     },
     "6040101": {
@@ -1178,8 +1179,8 @@
       "name_en": "Improved Guard Counters Plus 2",
       "name_ja": "ガードカウンター強化+2",
       "stackable": true,
-      "stackNotes": "+29%",
-      "stackNotesFull": "+17%/+25%/+29%",
+      "stackNotes": "29%",
+      "stackNotesFull": "17%/25%/29%",
       "deepOnly": true
     },
     "6040300": {
@@ -1187,8 +1188,8 @@
       "name_en": "Improved Throwing Pot Damage Plus 1",
       "name_ja": "投擲壺の攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "1.3倍",
-      "stackNotesFull": "約1.15倍/1.3倍",
+      "stackNotes": "30%",
+      "stackNotesFull": "15%/30%",
       "deepOnly": true
     },
     "6040301": {
@@ -1205,8 +1206,8 @@
       "name_en": "Improved Throwing Knife Damage Plus 1",
       "name_ja": "投擲ナイフの攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "1.3倍",
-      "stackNotesFull": "約1.14倍/1.3倍",
+      "stackNotes": "30%",
+      "stackNotesFull": "14%/30%",
       "deepOnly": true
     },
     "6040401": {
@@ -1223,8 +1224,8 @@
       "name_en": "Improved Glintstone And Gravity Stone Damage Plus 1",
       "name_ja": "輝石、重力石アイテムの攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "1.3倍",
-      "stackNotesFull": "約1.15倍/1.3倍",
+      "stackNotes": "30%",
+      "stackNotesFull": "15%/30%",
       "deepOnly": true
     },
     "6040501": {
@@ -1259,8 +1260,8 @@
       "name_en": "Improved Perfuming Arts Plus 1",
       "name_ja": "調香術強化+1",
       "stackable": true,
-      "stackNotes": "1.3倍",
-      "stackNotesFull": "約1.14倍/1.3倍",
+      "stackNotes": "30%",
+      "stackNotesFull": "14%/30%",
       "deepOnly": true
     },
     "6043101": {
@@ -1347,8 +1348,8 @@
       "name_en": "Attack Power Up When Facing Poison Afflicted Enemy Plus 1",
       "name_ja": "毒状態の敵に対する攻撃を強化+1",
       "stackable": false,
-      "stackNotes": "+16%",
-      "stackNotesFull": "+10%/+16%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "16%",
+      "stackNotesFull": "10%/16%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6260001": {
@@ -1356,8 +1357,8 @@
       "name_en": "Attack Power Up When Facing Poison Afflicted Enemy Plus 2",
       "name_ja": "毒状態の敵に対する攻撃を強化+2",
       "stackable": false,
-      "stackNotes": "+20%",
-      "stackNotesFull": "+10%/+16%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "20%",
+      "stackNotesFull": "10%/16%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6260300": {
@@ -1365,8 +1366,8 @@
       "name_en": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy Plus 1",
       "name_ja": "腐敗状態の敵に対する攻撃を強化+1",
       "stackable": false,
-      "stackNotes": "+16%",
-      "stackNotesFull": "+10%/+16%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "16%",
+      "stackNotesFull": "10%/16%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6260301": {
@@ -1374,8 +1375,8 @@
       "name_en": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy Plus 2",
       "name_ja": "腐敗状態の敵に対する攻撃を強化+2",
       "stackable": false,
-      "stackNotes": "+20%",
-      "stackNotesFull": "+10%/+16%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "20%",
+      "stackNotesFull": "10%/16%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6260400": {
@@ -1383,8 +1384,8 @@
       "name_en": "Attack Power Up When Facing Frostbite Afflicted Enemy Plus 1",
       "name_ja": "凍傷状態の敵に対する攻撃を強化+1",
       "stackable": false,
-      "stackNotes": "+16%",
-      "stackNotesFull": "+10%/+16%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "16%",
+      "stackNotesFull": "10%/16%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6260401": {
@@ -1392,8 +1393,8 @@
       "name_en": "Attack Power Up When Facing Frostbite Afflicted Enemy Plus 2",
       "name_ja": "凍傷状態の敵に対する攻撃を強化+2",
       "stackable": false,
-      "stackNotes": "+20%",
-      "stackNotesFull": "+10%/+16%/+20% / ※+値が違えば重ね掛け可",
+      "stackNotes": "20%",
+      "stackNotesFull": "10%/16%/20% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6500000": {
@@ -1402,7 +1403,8 @@
       "name_ja": "【追跡者】スキルに、出血の状態異常を付加",
       "stackable": false,
       "stackNotes": "出血の蓄積量は当て60、引っ張り55",
-      "stackNotesFull": "出血の蓄積量は当て60、引っ張り55 / 素のダメージに影響はない"
+      "stackNotesFull": "出血の蓄積量は当て60、引っ張り55 / 素のダメージに影響はない",
+      "deepOnly": true
     },
     "6500100": {
       "key": "guardianCharacterSkillBoostsDamageNegationOfNearbyAllies",
@@ -1490,8 +1492,8 @@
       "name_en": "Sleep In Vicinity Improves Attack Power",
       "name_ja": "周囲で睡眠状態の発生時、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+12%/+22% / ※+値が違えば重ね掛け可",
+      "stackNotes": "12%",
+      "stackNotesFull": "12%/22% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6600001": {
@@ -1499,8 +1501,8 @@
       "name_en": "Sleep In Vicinity Improves Attack Power Plus 1",
       "name_ja": "周囲で睡眠状態の発生時、攻撃力上昇+1",
       "stackable": false,
-      "stackNotes": "+22%",
-      "stackNotesFull": "+12%/+22% / ※+値が違えば重ね掛け可",
+      "stackNotes": "22%",
+      "stackNotesFull": "12%/22% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6600002": {
@@ -1517,8 +1519,8 @@
       "name_en": "Madness In Vicinity Improves Attack Power",
       "name_ja": "周囲で発狂状態の発生時、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "+12%",
-      "stackNotesFull": "+12%/+22% / ※+値が違えば重ね掛け可",
+      "stackNotes": "12%",
+      "stackNotesFull": "12%/22% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6600101": {
@@ -1526,8 +1528,8 @@
       "name_en": "Madness In Vicinity Improves Attack Power Plus 1",
       "name_ja": "周囲で発狂状態の発生時、攻撃力上昇+1",
       "stackable": false,
-      "stackNotes": "+22%",
-      "stackNotesFull": "+12%/+22% / ※+値が違えば重ね掛け可",
+      "stackNotes": "22%",
+      "stackNotesFull": "12%/22% / ※+値が違えば重ね掛け可",
       "deepOnly": true
     },
     "6600102": {
@@ -1545,7 +1547,8 @@
       "name_ja": "最大HP上昇",
       "stackable": true,
       "stackNotes": "+10%",
-      "stackNotesFull": "+10%"
+      "stackNotesFull": "+10%",
+      "deepOnly": true
     },
     "6610500": {
       "key": "increasedMaximumFP",
@@ -1553,7 +1556,8 @@
       "name_ja": "最大FP上昇",
       "stackable": true,
       "stackNotes": "+15%",
-      "stackNotesFull": "+15%"
+      "stackNotesFull": "+15%",
+      "deepOnly": true
     },
     "6610600": {
       "key": "increasedMaximumStamina",
@@ -1561,7 +1565,8 @@
       "name_ja": "最大スタミナ上昇",
       "stackable": true,
       "stackNotes": "+12%",
-      "stackNotesFull": "+12%"
+      "stackNotesFull": "+12%",
+      "deepOnly": true
     },
     "6610700": {
       "key": "reducedFPConsumption",
@@ -1569,7 +1574,8 @@
       "name_ja": "消費FP軽減",
       "stackable": true,
       "stackNotes": "-7%、重ね掛け時0.93倍乗算",
-      "stackNotesFull": "-7% / 重ね掛けた分だけ消費量に0.93を乗算 / 小数点以下が0.23以上なら繰り上げ(0.23未満なら切り捨て)"
+      "stackNotesFull": "-7% / 重ね掛けた分だけ消費量に0.93を乗算 / 小数点以下が0.23以上なら繰り上げ(0.23未満なら切り捨て)",
+      "deepOnly": true
     },
     "6610701": {
       "key": "reducedFPConsumptionPlus1",
@@ -1594,8 +1600,8 @@
       "name_en": "Improved Affinity Attack Power",
       "name_ja": "属性攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+5%/+8%/+10%",
+      "stackNotes": "5%",
+      "stackNotesFull": "5%/8%/10%",
       "deepOnly": true
     },
     "6610801": {
@@ -1603,8 +1609,8 @@
       "name_en": "Improved Affinity Attack Power Plus 1",
       "name_ja": "属性攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "+8%",
-      "stackNotesFull": "+5%/+8%/+10%",
+      "stackNotes": "8%",
+      "stackNotesFull": "5%/8%/10%",
       "deepOnly": true
     },
     "6610802": {
@@ -1612,8 +1618,8 @@
       "name_en": "Improved Affinity Attack Power Plus 2",
       "name_ja": "属性攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "+10%",
-      "stackNotesFull": "+5%/+8%/+10%",
+      "stackNotes": "10%",
+      "stackNotesFull": "5%/8%/10%",
       "deepOnly": true
     },
     "6611000": {
@@ -1622,15 +1628,15 @@
       "name_ja": "物理カット率上昇",
       "stackable": "conditional",
       "stackNotes": "約8%（重複は未検証）",
-      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 約8%カット"
+      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 8%"
     },
     "6611001": {
       "key": "improvedPhysicalDamageNegationPlus1",
       "name_en": "Improved Physical Damage Negation Plus 1",
       "name_ja": "物理カット率上昇+1",
       "stackable": true,
-      "stackNotes": "約10%",
-      "stackNotesFull": "約10%/13% / +0は「霞の暗き夜」遺物限定で約8%",
+      "stackNotes": "10%",
+      "stackNotesFull": "10%/13% / +0は「霞の暗き夜」遺物限定のためランダム入手の遺物にはつかない",
       "deepOnly": true
     },
     "6611002": {
@@ -1639,7 +1645,7 @@
       "name_ja": "物理カット率上昇+2",
       "stackable": true,
       "stackNotes": "13%",
-      "stackNotesFull": "約10%/13% / +0は「霞の暗き夜」遺物限定で約8%",
+      "stackNotesFull": "10%/13% / +0は「霞の暗き夜」遺物限定のためランダム入手の遺物にはつかない",
       "deepOnly": true
     },
     "6611100": {
@@ -1647,8 +1653,9 @@
       "name_en": "Improved Affinity Damage Negation",
       "name_ja": "属性カット率上昇",
       "stackable": true,
-      "stackNotes": "約7%",
-      "stackNotesFull": "約7%/12%/14%"
+      "stackNotes": "7%",
+      "stackNotesFull": "7%/12%/14%",
+      "deepOnly": true
     },
     "6611101": {
       "key": "improvedAffinityDamageNegationPlus1",
@@ -1656,7 +1663,7 @@
       "name_ja": "属性カット率上昇+1",
       "stackable": true,
       "stackNotes": "12%",
-      "stackNotesFull": "約7%/12%/14%",
+      "stackNotesFull": "7%/12%/14%",
       "deepOnly": true
     },
     "6611102": {
@@ -1665,7 +1672,7 @@
       "name_ja": "属性カット率上昇+2",
       "stackable": true,
       "stackNotes": "14%",
-      "stackNotesFull": "約7%/12%/14%",
+      "stackNotesFull": "7%/12%/14%",
       "deepOnly": true
     },
     "6611200": {
@@ -1673,16 +1680,17 @@
       "name_en": "Improved Sorceries",
       "name_ja": "魔術強化",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+5%/+8.5%/+10% / 攻撃魔術の威力のみ強化 / エンチャント・バフ等の効果量・効果時間には影響なし / 隠者の混成魔法にも効果がある"
+      "stackNotes": "5%",
+      "stackNotesFull": "5%/8.5%/10% / 攻撃魔術の威力のみ強化 / エンチャント・バフ等の効果量・効果時間には影響なし / 隠者の混成魔法にも効果がある",
+      "deepOnly": true
     },
     "6611201": {
       "key": "improvedSorceriesPlus1",
       "name_en": "Improved Sorceries Plus 1",
       "name_ja": "魔術強化+1",
       "stackable": true,
-      "stackNotes": "+8.5%",
-      "stackNotesFull": "+5%/+8.5%/+10% / 攻撃魔術の威力のみ強化 / エンチャント・バフ等の効果量・効果時間には影響なし / 隠者の混成魔法にも効果がある",
+      "stackNotes": "8.5%",
+      "stackNotesFull": "5%/8.5%/10% / 攻撃魔術の威力のみ強化 / エンチャント・バフ等の効果量・効果時間には影響なし / 隠者の混成魔法にも効果がある",
       "deepOnly": true
     },
     "6611202": {
@@ -1690,8 +1698,8 @@
       "name_en": "Improved Sorceries Plus 2",
       "name_ja": "魔術強化+2",
       "stackable": true,
-      "stackNotes": "+10%",
-      "stackNotesFull": "+5%/+8.5%/+10% / 攻撃魔術の威力のみ強化 / エンチャント・バフ等の効果量・効果時間には影響なし / 隠者の混成魔法にも効果がある",
+      "stackNotes": "10%",
+      "stackNotesFull": "5%/8.5%/10% / 攻撃魔術の威力のみ強化 / エンチャント・バフ等の効果量・効果時間には影響なし / 隠者の混成魔法にも効果がある",
       "deepOnly": true
     },
     "6611300": {
@@ -1699,16 +1707,17 @@
       "name_en": "Improved Incantations",
       "name_ja": "祈祷強化",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+5%/+8.5%/+10% / 攻撃祈祷の威力のみ強化 / エンチャント・バフ・回復等の効果量・効果時間には影響なし"
+      "stackNotes": "5%",
+      "stackNotesFull": "5%/8.5%/10% / 攻撃祈祷の威力のみ強化 / エンチャント・バフ・回復等の効果量・効果時間には影響なし",
+      "deepOnly": true
     },
     "6611301": {
       "key": "improvedIncantationsPlus1",
       "name_en": "Improved Incantations Plus 1",
       "name_ja": "祈祷強化+1",
       "stackable": true,
-      "stackNotes": "+8.5%",
-      "stackNotesFull": "+5%/+8.5%/+10% / 攻撃祈祷の威力のみ強化 / エンチャント・バフ・回復等の効果量・効果時間には影響なし",
+      "stackNotes": "8.5%",
+      "stackNotesFull": "5%/8.5%/10% / 攻撃祈祷の威力のみ強化 / エンチャント・バフ・回復等の効果量・効果時間には影響なし",
       "deepOnly": true
     },
     "6611302": {
@@ -1716,8 +1725,8 @@
       "name_en": "Improved Incantations Plus 2",
       "name_ja": "祈祷強化+2",
       "stackable": true,
-      "stackNotes": "+10%",
-      "stackNotesFull": "+5%/+8.5%/+10% / 攻撃祈祷の威力のみ強化 / エンチャント・バフ・回復等の効果量・効果時間には影響なし",
+      "stackNotes": "10%",
+      "stackNotesFull": "5%/8.5%/10% / 攻撃祈祷の威力のみ強化 / エンチャント・バフ・回復等の効果量・効果時間には影響なし",
       "deepOnly": true
     },
     "6611400": {
@@ -1726,7 +1735,8 @@
       "name_ja": "聖杯瓶の回復量上昇",
       "stackable": true,
       "stackNotes": "+10%",
-      "stackNotesFull": "+10%(乗算)"
+      "stackNotesFull": "+10%(乗算)",
+      "deepOnly": true
     },
     "6621000": {
       "key": "crimsonspillCrystalTearInPossessionAtStartOfExpedition",
@@ -1973,7 +1983,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6630100": {
@@ -2046,7 +2055,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6630900": {
@@ -2065,7 +2073,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6631100": {
@@ -2084,7 +2091,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6631300": {
@@ -2130,7 +2136,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6631800": {
@@ -2199,11 +2204,10 @@
     "6632500": {
       "key": "dormantPowerHelpsDiscoverCrossbows",
       "name_en": "Dormant Power Helps Discover Crossbows",
-      "name_ja": "潜在する力から、ボウガンを見つけやすくなる",
+      "name_ja": "潜在する力から、クロスボウを見つけやすくなる",
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6632600": {
@@ -2213,7 +2217,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6632700": {
@@ -2232,7 +2235,6 @@
       "stackable": false,
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
-      "deepOnly": true,
       "leftmost": "find"
     },
     "6632900": {
@@ -2270,7 +2272,8 @@
       "stackNotes": "献器の最も左の遺物の効果のみ発動",
       "stackNotesFull": "本効果を複数付けた場合、通常の遺物も含め、左に付けたものが優先され、優先された武器種のみ見つけやすくなる / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓・大弓・クロスボウ・バリスタ・小盾・中盾・大盾・杖・聖印 / ※松明を除く全ての武器種",
       "deepOnly": true,
-      "leftmost": "find"
+      "leftmost": "find",
+      "unreleased": true
     },
     "6640000": {
       "key": "wylderImprovedMindReducedVigor",
@@ -2581,7 +2584,8 @@
       "name_ja": "聖杯瓶の回復量低下",
       "stackable": true,
       "stackNotes": "0.85倍(乗算)",
-      "stackNotesFull": "0.85倍(乗算) / 潜在する力「聖杯瓶の回復が、ゆっくりになる」を取得した場合、回復量補正は即時回復部分にかかる(要検証)"
+      "stackNotesFull": "0.85倍(乗算) / 潜在する力「聖杯瓶の回復が、ゆっくりになる」を取得した場合、回復量補正は即時回復部分にかかる(要検証)",
+      "deepOnly": true
     },
     "6840200": {
       "key": "ultimateArtChargingImpaired",
@@ -2614,7 +2618,8 @@
       "name_ja": "すべての状態異常耐性低下",
       "stackable": true,
       "stackNotes": "-80",
-      "stackNotesFull": "-80"
+      "stackNotesFull": "-80",
+      "deepOnly": true
     },
     "6850300": {
       "key": "reducedFlaskHPRestoration",
@@ -2622,7 +2627,8 @@
       "name_ja": "聖杯瓶の回復量低下",
       "stackable": true,
       "stackNotes": "0.85倍(乗算)",
-      "stackNotesFull": "0.85倍(乗算) / 潜在する力「聖杯瓶の回復が、ゆっくりになる」を取得した場合、回復量補正は即時回復部分にかかる(要検証)"
+      "stackNotesFull": "0.85倍(乗算) / 潜在する力「聖杯瓶の回復が、ゆっくりになる」を取得した場合、回復量補正は即時回復部分にかかる(要検証)",
+      "deepOnly": true
     },
     "6850400": {
       "key": "surgeSprintingDrainsMoreStamina",
@@ -2639,7 +2645,8 @@
       "name_ja": "HP持続減少",
       "stackable": true,
       "stackNotes": "2/秒の持続ダメージ",
-      "stackNotesFull": "2/秒の持続ダメージ / 同量以上の持続回復で相殺可能 / 相殺した場合、付帯効果の「HP最大時、○○」は維持可能 / 付帯効果のHP持続減少は武器スロットにセットした瞬間を起点とするため発生タイミングが異なる"
+      "stackNotesFull": "2/秒の持続ダメージ / 同量以上の持続回復で相殺可能 / 相殺した場合、付帯効果の「HP最大時、○○」は維持可能 / 付帯効果のHP持続減少は武器スロットにセットした瞬間を起点とするため発生タイミングが異なる",
+      "deepOnly": true
     },
     "6850600": {
       "key": "increasedDrainOnStaminaForEvasion",
@@ -2656,7 +2663,8 @@
       "name_ja": "回避直後、カット率低下",
       "stackable": true,
       "stackNotes": "カット率-45%",
-      "stackNotesFull": "カット率-45% / 回避モーションの全体フレームが該当 / 守護者のハイガード発動時のステップは適用されない"
+      "stackNotesFull": "カット率-45% / 回避モーションの全体フレームが該当 / 守護者のハイガード発動時のステップは適用されない",
+      "deepOnly": true
     },
     "6850800": {
       "key": "repeatedEvasionsLowerDamageNegation",
@@ -2664,7 +2672,8 @@
       "name_ja": "回避連続時、カット率低下",
       "stackable": true,
       "stackNotes": "カット率-35%、15秒間持続",
-      "stackNotesFull": "カット率-35% / 発動条件は「攻撃連続時、一度だけカット率上昇」に似る（発動までに最低でも3回の回避が必要） / 効果時間15秒 / バックステップは回避に認定されるが、守護者のハイガード発動時のステップは認定されない / スタック数に上限はない / スタック毎の効果時間は別々にカウントされている"
+      "stackNotesFull": "カット率-35% / 発動条件は「攻撃連続時、一度だけカット率上昇」に似る（発動までに最低でも3回の回避が必要） / 効果時間15秒 / バックステップは回避に認定されるが、守護者のハイガード発動時のステップは認定されない / スタック数に上限はない / スタック毎の効果時間は別々にカウントされている",
+      "deepOnly": true
     },
     "6850900": {
       "key": "reducedDamageNegationForFlaskUsages",
@@ -2672,7 +2681,8 @@
       "name_ja": "聖杯瓶使用時、カット率低下",
       "stackable": true,
       "stackNotes": "カット率-45%",
-      "stackNotesFull": "カット率-45% / 聖杯瓶を取り出して飲み終わるまでのモーション中が対象 / 聖杯瓶がないときの失敗モーションにも適用される"
+      "stackNotesFull": "カット率-45% / 聖杯瓶を取り出して飲み終わるまでのモーション中が対象 / 聖杯瓶がないときの失敗モーションにも適用される",
+      "deepOnly": true
     },
     "6851000": {
       "key": "sleepBuildupForFlaskUsages",
@@ -2698,7 +2708,8 @@
       "name_ja": "HP最大未満時、攻撃力低下",
       "stackable": true,
       "stackNotes": "最大HPの85%以下で発動、与ダメージ0.9倍",
-      "stackNotesFull": "最大HPの85%以下で発動 / 与ダメージ0.9倍ほどに低下"
+      "stackNotesFull": "最大HPの85%以下で発動 / 与ダメージ0.9倍ほどに低下",
+      "deepOnly": true
     },
     "6851300": {
       "key": "poisonBuildupWhenBelowMaxHP",
@@ -2706,7 +2717,8 @@
       "name_ja": "HP最大未満時、毒が蓄積",
       "stackable": true,
       "stackNotes": "最大HPの85%以下で発動",
-      "stackNotesFull": "最大HPの85%以下で発動 / 2/秒"
+      "stackNotesFull": "最大HPの85%以下で発動 / 2/秒",
+      "deepOnly": true
     },
     "6851400": {
       "key": "rotBuildupWhenBelowMaxHP",
@@ -2714,7 +2726,8 @@
       "name_ja": "HP最大未満時、腐敗が蓄積",
       "stackable": true,
       "stackNotes": "最大HPの85%以下で発動",
-      "stackNotesFull": "最大HPの85%以下で発動 / 2/秒"
+      "stackNotesFull": "最大HPの85%以下で発動 / 2/秒",
+      "deepOnly": true
     },
     "6851500": {
       "key": "maxHPReducesAttackPower",
@@ -2740,7 +2753,8 @@
       "name_ja": "瀕死時、最大HP低下",
       "stackable": true,
       "stackNotes": "救助後60秒間、最大HP-25%",
-      "stackNotesFull": "瀕死時 = 瀕死ゲージが表示された時点 / 救助後60秒間、最大HP-25% / 瀕死と救助を繰り返すと累積し、更に最大HPが減る / 累積時は個々に効果時間をカウントする / 最大HP低下の効果は時間経過以外で解除不可 / 最大HPが低下した状態でも、HPを最大にしていれば「HP最大時」の条件は満たせる / 効果の解除後は現在HPが維持される（効果解除時にHPは回復しない）"
+      "stackNotesFull": "瀕死時 = 瀕死ゲージが表示された時点 / 救助後60秒間、最大HP-25% / 瀕死と救助を繰り返すと累積し、更に最大HPが減る / 累積時は個々に効果時間をカウントする / 最大HP低下の効果は時間経過以外で解除不可 / 最大HPが低下した状態でも、HPを最大にしていれば「HP最大時」の条件は満たせる / 効果の解除後は現在HPが維持される（効果解除時にHPは回復しない）",
+      "deepOnly": true
     },
     "7000000": {
       "key": "vigorPlus1",
@@ -3028,136 +3042,137 @@
       "name_en": "Physical Attack Up",
       "name_ja": "物理攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+4%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "4%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001401": {
       "key": "physicalAttackUpPlus1",
       "name_en": "Physical Attack Up Plus 1",
       "name_ja": "物理攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "5%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001402": {
       "key": "physicalAttackUpPlus2",
       "name_en": "Physical Attack Up Plus 2",
       "name_ja": "物理攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "+6%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "6%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001403": {
       "key": "physicalAttackUpPlus3",
       "name_en": "Physical Attack Up Plus 3",
       "name_ja": "物理攻撃力上昇+3",
       "stackable": true,
-      "stackNotes": "+10.5%",
-      "stackNotesFull": "+4%/+5%/+6%/+10.5%/+12%"
+      "stackNotes": "10.5%",
+      "stackNotesFull": "4%/5%/6%/10.5%/12%",
+      "deepOnly": true
     },
     "7001409": {
       "key": "physicalAttackUp",
       "name_en": "Physical Attack Up",
       "name_ja": "物理攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+4%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "4%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001500": {
       "key": "magicAttackPowerUp",
       "name_en": "Magic Attack Power Up",
       "name_ja": "魔力攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+4%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "4%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001501": {
       "key": "magicAttackPowerUpPlus1",
       "name_en": "Magic Attack Power Up Plus 1",
       "name_ja": "魔力攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "5%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001502": {
       "key": "magicAttackPowerUpPlus2",
       "name_en": "Magic Attack Power Up Plus 2",
       "name_ja": "魔力攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "+6%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "6%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001600": {
       "key": "fireAttackPowerUp",
       "name_en": "Fire Attack Power Up",
       "name_ja": "炎攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+4%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "4%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001601": {
       "key": "fireAttackPowerUpPlus1",
       "name_en": "Fire Attack Power Up Plus 1",
       "name_ja": "炎攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "5%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001602": {
       "key": "fireAttackPowerUpPlus2",
       "name_en": "Fire Attack Power Up Plus 2",
       "name_ja": "炎攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "+6%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "6%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001700": {
       "key": "lightningAttackPowerUp",
       "name_en": "Lightning Attack Power Up",
       "name_ja": "雷攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+4%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "4%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001701": {
       "key": "lightningAttackPowerUpPlus1",
       "name_en": "Lightning Attack Power Up Plus 1",
       "name_ja": "雷攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "5%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001702": {
       "key": "lightningAttackPowerUpPlus2",
       "name_en": "Lightning Attack Power Up Plus 2",
       "name_ja": "雷攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "+6%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "6%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001800": {
       "key": "holyAttackPowerUp",
       "name_en": "Holy Attack Power Up",
       "name_ja": "聖攻撃力上昇",
       "stackable": true,
-      "stackNotes": "+4%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "4%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001801": {
       "key": "holyAttackPowerUpPlus1",
       "name_en": "Holy Attack Power Up Plus 1",
       "name_ja": "聖攻撃力上昇+1",
       "stackable": true,
-      "stackNotes": "+5%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "5%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001802": {
       "key": "holyAttackPowerUpPlus2",
       "name_en": "Holy Attack Power Up Plus 2",
       "name_ja": "聖攻撃力上昇+2",
       "stackable": true,
-      "stackNotes": "+6%",
-      "stackNotesFull": "+4%/+5%/+6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "6%",
+      "stackNotesFull": "4%/5%/6%/ / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7001900": {
       "key": "attacksInflictPoison",
@@ -3317,7 +3332,7 @@
       "name_ja": "魔力カット率上昇",
       "stackable": true,
       "stackNotes": "約10%カット",
-      "stackNotesFull": "約10%カット"
+      "stackNotesFull": "10%"
     },
     "7002700": {
       "key": "fireDamageNegationUp",
@@ -3325,7 +3340,7 @@
       "name_ja": "炎カット率上昇",
       "stackable": true,
       "stackNotes": "約10%カット",
-      "stackNotesFull": "約10%カット"
+      "stackNotesFull": "10%"
     },
     "7002800": {
       "key": "lightningDamageNegationUp",
@@ -3333,7 +3348,7 @@
       "name_ja": "雷カット率上昇",
       "stackable": true,
       "stackNotes": "約10%カット",
-      "stackNotesFull": "約10%カット"
+      "stackNotesFull": "10%"
     },
     "7002900": {
       "key": "holyDamageNegationUp",
@@ -3341,7 +3356,7 @@
       "name_ja": "聖カット率上昇",
       "stackable": true,
       "stackNotes": "約10%カット",
-      "stackNotesFull": "約10%カット"
+      "stackNotesFull": "10%"
     },
     "7003000": {
       "key": "improvedPoisonResistance",
@@ -3412,32 +3427,32 @@
       "name_en": "Improved Stance Breaking When Two Handing",
       "name_ja": "両手持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
     },
     "7006001": {
       "key": "improvedStanceBreakingWhenTwoHanding",
       "name_en": "Improved Stance Breaking When Two Handing",
       "name_ja": "両手持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器には無効 / 射撃・魔術・祈祷全般無効 / 【執行者】スキルの「妖刀」にも有効だが、弾きには無効"
     },
     "7006100": {
       "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
       "name_en": "Improved Stance Breaking When Wielding Two Armaments",
       "name_ja": "二刀持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
     },
     "7006101": {
       "key": "improvedStanceBreakingWhenWieldingTwoArmaments",
       "name_en": "Improved Stance Breaking When Wielding Two Armaments",
       "name_ja": "二刀持ちの、体勢を崩す力上昇",
       "stackable": true,
-      "stackNotes": "約1.05倍",
-      "stackNotesFull": "約1.05倍 / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 両手持ち操作で二刀持ちになる武器にも有効 / 射撃・魔術・祈祷全般無効"
     },
     "7006200": {
       "key": "improvedPhysicalDamageNegation",
@@ -3445,15 +3460,15 @@
       "name_ja": "物理カット率上昇",
       "stackable": "conditional",
       "stackNotes": "約8%（重複は未検証）",
-      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 約8%カット"
+      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 8%"
     },
     "7006300": {
       "key": "improvedAffinityDamageNegation",
       "name_en": "Improved Affinity Damage Negation",
       "name_ja": "属性カット率上昇",
       "stackable": true,
-      "stackNotes": "約7%",
-      "stackNotesFull": "約7%/12%/14%"
+      "stackNotes": "7%",
+      "stackNotesFull": "7%/12%/14%"
     },
     "7006400": {
       "key": "extendedSpellDuration",
@@ -3476,16 +3491,16 @@
       "name_en": "Improved Melee Attack Power",
       "name_ja": "近接攻撃力上昇",
       "stackable": true,
-      "stackNotes": "1.05倍",
-      "stackNotesFull": "1.05倍 / 近接武器と盾の戦技や執行者のスキルにも乗る / 条件が複雑なため、Wikiの検証結果や安寧者の遺志を参照"
+      "stackNotes": "5%",
+      "stackNotesFull": "5% / 近接武器と盾の戦技や執行者のスキルにも乗る / 条件が複雑なため、Wikiの検証結果や安寧者の遺志を参照"
     },
     "7006700": {
       "key": "improvedSkillAttackPower",
       "name_en": "Improved Skill Attack Power",
       "name_ja": "戦技攻撃力上昇",
       "stackable": true,
-      "stackNotes": "1.15倍",
-      "stackNotesFull": "1.15倍 / 執行者のスキルによる戦技も対象"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 執行者のスキルによる戦技も対象"
     },
     "7010000": {
       "key": "guardianImprovedCharacterSkillRange",
@@ -3572,7 +3587,8 @@
       "name_ja": "【追跡者】スキルに、出血の状態異常を付加",
       "stackable": false,
       "stackNotes": "出血の蓄積量は当て60、引っ張り55",
-      "stackNotesFull": "出血の蓄積量は当て60、引っ張り55 / 素のダメージに影響はない"
+      "stackNotesFull": "出血の蓄積量は当て60、引っ張り55 / 素のダメージに影響はない",
+      "deepOnly": true
     },
     "7011600": {
       "key": "guardianCreatesWhirlwindWhenChargingHalberd",
@@ -3619,7 +3635,7 @@
       "name_ja": "HP低下時、カット率上昇",
       "stackable": true,
       "stackNotes": "約15%カット、HP40%未満で発動、永続",
-      "stackNotesFull": "約15%カット(特殊効果には「物理カット率上昇」と出るが、実際には全属性のカット率が上昇している) / HP40%未満の状態でのみ発動 / HP40%未満である限り永続"
+      "stackNotesFull": "15%(特殊効果には「物理カット率上昇」と出るが、実際には全属性のカット率が上昇している) / HP40%未満の状態でのみ発動 / HP40%未満である限り永続"
     },
     "7012400": {
       "key": "strongAttackCreatesWideWaveOfHeat",
@@ -3714,8 +3730,8 @@
       "name_en": "Attack Power Increases After Using Grease Items",
       "name_ja": "脂アイテム使用時、追加で物理攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約30秒間1.1倍",
-      "stackNotesFull": "約1.1倍　約30秒 / キャラクター自体に物理攻撃力上昇(魔術・祈祷には適用されない)のバフが掛かる / 脂のエンチャントとは別の独立したバフなので、武器を切り替えたりして脂の効果が切れても継続する / 脂アイテムであれば良いので盾脂でも発動する / 効果時間の長い竜傷脂・盾脂では遺物効果の方が先に切れる"
+      "stackNotes": "10%、約30秒",
+      "stackNotesFull": "10%　約30秒 / キャラクター自体に物理攻撃力上昇(魔術・祈祷には適用されない)のバフが掛かる / 脂のエンチャントとは別の独立したバフなので、武器を切り替えたりして脂の効果が切れても継続する / 脂アイテムであれば良いので盾脂でも発動する / 効果時間の長い竜傷脂・盾脂では遺物効果の方が先に切れる"
     },
     "7031200": {
       "key": "revenantStrengthensFamilyAndAlliesWhenUltimateArtActivated",
@@ -4146,7 +4162,7 @@
       "name_ja": "攻撃連続時、攻撃力上昇",
       "stackable": "conditional",
       "stackNotes": "最大3段階、累計約22%（重複は未検証）",
-      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 攻撃が連続するにつれ、最大3段階上昇 / それぞれ約5%、6.5%(累計12%)、9%(累計22%)上昇 / 必要回数は武器種による。効果時間は約4秒。"
+      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 攻撃が連続するにつれ、最大3段階上昇 / それぞれ5%、6.5%(累計12%)、9%(累計22%)上昇 / 必要回数は武器種による。効果時間は約4秒。"
     },
     "7037700": {
       "key": "statusAilmentGaugesSlowlyIncreaseAttackPower",
@@ -4169,136 +4185,136 @@
       "name_en": "Improved Initial Standard Attack",
       "name_ja": "通常攻撃の1段目強化",
       "stackable": true,
-      "stackNotes": "約1.15倍",
-      "stackNotesFull": "約1.15倍 / 通常攻撃、二刀攻撃の1段目が対象 / 弓の通常攻撃も対象 / 対象外：強攻撃、タメ攻撃、ガード攻撃、大弓、クロスボウ、バリスタ"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 通常攻撃、二刀攻撃の1段目が対象 / 弓の通常攻撃も対象 / 対象外：強攻撃、タメ攻撃、ガード攻撃、大弓、クロスボウ、バリスタ"
     },
     "7040100": {
       "key": "improvedGuardCounters",
       "name_en": "Improved Guard Counters",
       "name_ja": "ガードカウンター強化",
       "stackable": true,
-      "stackNotes": "約1.17倍",
-      "stackNotesFull": "約1.17倍"
+      "stackNotes": "17%",
+      "stackNotesFull": "17%"
     },
     "7040200": {
       "key": "improvedCriticalHits",
       "name_en": "Improved Critical Hits",
       "name_ja": "致命の一撃強化",
       "stackable": true,
-      "stackNotes": "約1.17倍",
-      "stackNotesFull": "約1.17倍"
+      "stackNotes": "17%",
+      "stackNotesFull": "17%"
     },
     "7040201": {
       "key": "improvedCriticalHitsPlus1",
       "name_en": "Improved Critical Hits Plus 1",
       "name_ja": "致命の一撃強化+1",
       "stackable": false,
-      "stackNotes": "約1.24倍",
-      "stackNotesFull": "約1.24倍"
+      "stackNotes": "24%",
+      "stackNotesFull": "24%"
     },
     "7040290": {
       "key": "improvedCriticalHitsPlus1",
       "name_en": "Improved Critical Hits Plus 1",
       "name_ja": "致命の一撃強化+1",
       "stackable": false,
-      "stackNotes": "約1.24倍",
-      "stackNotesFull": "約1.24倍"
+      "stackNotes": "24%",
+      "stackNotesFull": "24%"
     },
     "7040300": {
       "key": "improvedThrowingPotDamage",
       "name_en": "Improved Throwing Pot Damage",
       "name_ja": "投擲壺の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.15倍",
-      "stackNotesFull": "約1.15倍 / 対象は毒壺、腐敗壺、眠り壺、誘い壺、獣誘いの壺以外の投擲壺"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 対象は毒壺、腐敗壺、眠り壺、誘い壺、獣誘いの壺以外の投擲壺"
     },
     "7040400": {
       "key": "improvedThrowingKnifeDamage",
       "name_en": "Improved Throwing Knife Damage",
       "name_ja": "投擲ナイフの攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.14倍",
-      "stackNotesFull": "約1.14倍 / 対象は骨の毒投げ矢、結晶投げ矢、スローイングダガー、ククリ、扇投暗器"
+      "stackNotes": "14%",
+      "stackNotesFull": "14% / 対象は骨の毒投げ矢、結晶投げ矢、スローイングダガー、ククリ、扇投暗器"
     },
     "7040500": {
       "key": "improvedGlintstoneAndGravityStoneDamage",
       "name_en": "Improved Glintstone And Gravity Stone Damage",
       "name_ja": "輝石、重力石アイテムの攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.15倍",
-      "stackNotesFull": "約1.15倍 / 対象は屑輝石、大きな屑輝石、カッコウの輝石、扇の重力石、塊の重力石"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 対象は屑輝石、大きな屑輝石、カッコウの輝石、扇の重力石、塊の重力石"
     },
     "7043000": {
       "key": "improvedRoarAndBreathAttacks",
       "name_en": "Improved Roar And Breath Attacks",
       "name_ja": "咆哮とブレス強化",
       "stackable": true,
-      "stackNotes": "約1.15倍",
-      "stackNotesFull": "約1.15倍 / 隠者の混成魔法、執行者のアーツによる咆哮も対象（Ver. 1.02から） / 無頼漢、復讐者のアーツでの咆哮は対象外"
+      "stackNotes": "15%",
+      "stackNotesFull": "15% / 隠者の混成魔法、執行者のアーツによる咆哮も対象（Ver. 1.02から）"
     },
     "7043100": {
       "key": "improvedPerfumingArts",
       "name_en": "Improved Perfuming Arts",
       "name_ja": "調香術強化",
       "stackable": true,
-      "stackNotes": "約1.14倍",
-      "stackNotesFull": "約1.14倍 / 対象は火花の香りのみ"
+      "stackNotes": "14%",
+      "stackNotesFull": "14% / 対象は火花の香りのみ"
     },
     "7043200": {
       "key": "improvedStonediggerSorcery",
       "name_en": "Improved Stonedigger Sorcery",
       "name_ja": "石掘りの魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043300": {
       "key": "improvedCarianSwordSorcery",
       "name_en": "Improved Carian Sword Sorcery",
       "name_ja": "カーリアの剣の魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043400": {
       "key": "improvedGlintbladeSorcery",
       "name_en": "Improved Glintblade Sorcery",
       "name_ja": "輝剣の魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043500": {
       "key": "improvedInvisibilitySorcery",
       "name_en": "Improved Invisibility Sorcery",
       "name_ja": "不可視の魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043600": {
       "key": "improvedCrystalianSorcery",
       "name_en": "Improved Crystalian Sorcery",
       "name_ja": "結晶人の魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043700": {
       "key": "improvedGravitySorcery",
       "name_en": "Improved Gravity Sorcery",
       "name_ja": "重力の魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043800": {
       "key": "improvedThornSorcery",
       "name_en": "Improved Thorn Sorcery",
       "name_ja": "茨の魔術強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 輝剣・石掘り・カーリアの剣・不可視・結晶人・重力・茨 / 該当する魔術は魔術の一覧の「分類」の列を参照"
     },
     "7043900": {
       "key": "improvedNightSorcery",
@@ -4314,56 +4330,56 @@
       "name_en": "Improved Fundamentalist Incantations",
       "name_ja": "黄金律原理主義の祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7044100": {
       "key": "improvedDragonCultIncantations",
       "name_en": "Improved Dragon Cult Incantations",
       "name_ja": "王都古竜信仰の祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7044200": {
       "key": "improvedGiantsFlameIncantations",
       "name_en": "Improved Giants Flame Incantations",
       "name_ja": "巨人の火の祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7044300": {
       "key": "improvedGodslayerIncantations",
       "name_en": "Improved Godslayer Incantations",
       "name_ja": "神狩りの祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7044400": {
       "key": "improvedBestialIncantations",
       "name_en": "Improved Bestial Incantations",
       "name_ja": "獣の祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7044500": {
       "key": "improvedFrenziedFlameIncantations",
       "name_en": "Improved Frenzied Flame Incantations",
       "name_ja": "狂い火の祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7044600": {
       "key": "improvedDragonCommunionIncantations",
       "name_en": "Improved Dragon Communion Incantations",
       "name_ja": "竜餐の祈祷強化",
       "stackable": true,
-      "stackNotes": "約1.12倍",
-      "stackNotesFull": "約1.12倍 / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
+      "stackNotes": "12%",
+      "stackNotesFull": "12% / 黄金律原理主義・王都古竜信仰・巨人の火・神狩り・獣・狂い火・竜餐 / 神狩りの祈祷のスリップダメージには反映されない / 該当する祈祷は祈祷の一覧の「分類」の列を参照"
     },
     "7050000": {
       "key": "raisedStaminaRecoveryForNearbyAlliesButNotForSelf",
@@ -4386,8 +4402,8 @@
       "name_en": "Attack Power Permanently Increased For Each Evergaol Prisoner Defeated",
       "name_ja": "封牢の囚を倒す度、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "1.05倍、永続",
-      "stackNotesFull": "封牢ごとに1.05倍　永続 / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "封牢ごとに5%",
+      "stackNotesFull": "封牢ごとに5% / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7060100": {
       "key": "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
@@ -4402,8 +4418,8 @@
       "name_en": "Attack Power Up After Defeating Anight Invader",
       "name_ja": "夜の侵入者を倒す度、攻撃力上昇",
       "stackable": false,
-      "stackNotes": "1体あたり約1.07倍",
-      "stackNotesFull": "災域の罪人1体につき約1.07倍　永続 / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
+      "stackNotes": "災域の罪人1体につき7%",
+      "stackNotesFull": "災域の罪人1体につき7% / 魔術・祈祷・アイテムにも効果あり（杖の魔術補正・聖印の祈祷補正には反映されない）"
     },
     "7070000": {
       "key": "treasureMarkedUponMap",
@@ -4418,192 +4434,192 @@
       "name_en": "Improved Attack Power With 3Plus Daggers Equipped",
       "name_ja": "短剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080100": {
       "key": "improvedAttackPowerWith3PlusStraightSwordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Straight Swords Equipped",
       "name_ja": "直剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080200": {
       "key": "improvedAttackPowerWith3PlusGreatswordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Greatswords Equipped",
       "name_ja": "大剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080300": {
       "key": "improvedAttackPowerWith3PlusColossalSwordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Colossal Swords Equipped",
       "name_ja": "特大剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080400": {
       "key": "improvedAttackPowerWith3PlusCurvedSwordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Curved Swords Equipped",
       "name_ja": "曲剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080500": {
       "key": "improvedAttackPowerWith3PlusCurvedGreatswordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Curved Greatswords Equipped",
       "name_ja": "大曲剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080600": {
       "key": "improvedAttackPowerWith3PlusKatanaEquipped",
       "name_en": "Improved Attack Power With 3Plus Katana Equipped",
       "name_ja": "刀を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080700": {
       "key": "improvedAttackPowerWith3PlusTwinbladesEquipped",
       "name_en": "Improved Attack Power With 3Plus Twinblades Equipped",
       "name_ja": "両刃剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080800": {
       "key": "improvedAttackPowerWith3PlusThrustingSwordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Thrusting Swords Equipped",
       "name_ja": "刺剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7080900": {
       "key": "improvedAttackPowerWith3PlusHeavyThrustingSwordsEquipped",
       "name_en": "Improved Attack Power With 3Plus Heavy Thrusting Swords Equipped",
       "name_ja": "重刺剣を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081000": {
       "key": "improvedAttackPowerWith3PlusAxesEquipped",
       "name_en": "Improved Attack Power With 3Plus Axes Equipped",
       "name_ja": "斧を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081100": {
       "key": "improvedAttackPowerWith3PlusGreataxesEquipped",
       "name_en": "Improved Attack Power With 3Plus Greataxes Equipped",
       "name_ja": "大斧を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081200": {
       "key": "improvedAttackPowerWith3PlusHammersEquipped",
       "name_en": "Improved Attack Power With 3Plus Hammers Equipped",
       "name_ja": "槌を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081300": {
       "key": "improvedAttackPowerWith3PlusGreatHammersEquipped",
       "name_en": "Improved Attack Power With 3Plus Great Hammers Equipped",
       "name_ja": "大槌を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081400": {
       "key": "improvedAttackPowerWith3PlusFlailsEquipped",
       "name_en": "Improved Attack Power With 3Plus Flails Equipped",
       "name_ja": "フレイルを3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081500": {
       "key": "improvedAttackPowerWith3PlusSpearsEquipped",
       "name_en": "Improved Attack Power With 3Plus Spears Equipped",
       "name_ja": "槍を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081700": {
       "key": "improvedAttackPowerWith3PlusGreatSpearsEquipped",
       "name_en": "Improved Attack Power With 3Plus Great Spears Equipped",
       "name_ja": "大槍を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081800": {
       "key": "improvedAttackPowerWith3PlusHalberdsEquipped",
       "name_en": "Improved Attack Power With 3Plus Halberds Equipped",
       "name_ja": "斧槍を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7081900": {
       "key": "improvedAttackPowerWith3PlusReapersEquipped",
       "name_en": "Improved Attack Power With 3Plus Reapers Equipped",
       "name_ja": "鎌を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7082000": {
       "key": "improvedAttackPowerWith3PlusFistsEquipped",
       "name_en": "Improved Attack Power With 3Plus Fists Equipped",
       "name_ja": "拳を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7082100": {
       "key": "improvedAttackPowerWith3PlusClawsEquipped",
       "name_en": "Improved Attack Power With 3Plus Claws Equipped",
       "name_ja": "爪を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7082200": {
       "key": "improvedAttackPowerWith3PlusWhipsEquipped",
       "name_en": "Improved Attack Power With 3Plus Whips Equipped",
       "name_ja": "鞭を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7082300": {
       "key": "improvedAttackPowerWith3PlusColossalWeaponsEquipped",
       "name_en": "Improved Attack Power With 3Plus Colossal Weapons Equipped",
       "name_ja": "特大武器を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7082400": {
       "key": "improvedAttackPowerWith3PlusBowsEquipped",
       "name_en": "Improved Attack Power With 3Plus Bows Equipped",
       "name_ja": "弓を3つ以上装備していると攻撃力上昇",
       "stackable": false,
-      "stackNotes": "約1.2倍",
-      "stackNotesFull": "約1.2倍。弓のみ約1.1倍 / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
+      "stackNotes": "20%",
+      "stackNotesFull": "20%。弓のみ10% / 条件の武器種以外の攻撃力も上昇する / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓 / ※異なる武器種は重ね掛け可能"
     },
     "7082500": {
       "key": "maxFpUpWith3PlusStavesEquipped",
@@ -5216,15 +5232,15 @@
       "name_ja": "ダメージで吹き飛ばされた時、強靭度とカット率上昇",
       "stackable": false,
       "stackNotes": "20秒間約20%",
-      "stackNotesFull": "約20%カット、強靭度約20%上昇、効果時間20秒 / 吹き飛ばし効果のある攻撃を受けても、戦技「我慢」などを使用して吹き飛ばなかった場合は効果が発動しない / 無頼漢のスキル使用時のみ、吹き飛ばし効果のある攻撃を受けて吹き飛ばなかった場合にも発動する / ダメージの有無に関わらず盾受け時の吹き飛びでは発動しない"
+      "stackNotesFull": "強靭度カット率ともに20%上昇、効果時間20秒 / 吹き飛ばし効果のある攻撃を受けても、戦技「我慢」などを使用して吹き飛ばなかった場合は効果が発動しない / 無頼漢のスキル使用時のみ、吹き飛ばし効果のある攻撃を受けて吹き飛ばなかった場合にも発動する / ダメージの有無に関わらず盾受け時の吹き飛びでは発動しない"
     },
     "7260000": {
       "key": "attackPowerUpWhenFacingPoisonAfflictedEnemy",
       "name_en": "Attack Power Up When Facing Poison Afflicted Enemy",
       "name_ja": "毒状態の敵に対する攻撃を強化",
       "stackable": false,
-      "stackNotes": "約1.1倍",
-      "stackNotesFull": "約1.1倍 / 魔術/祈祷や属性攻撃も対象"
+      "stackNotes": "10%",
+      "stackNotesFull": "10% / 魔術/祈祷や属性攻撃も対象"
     },
     "7260200": {
       "key": "attackPowerUpWhenFacingSleepAfflictedEnemy",
@@ -5239,16 +5255,16 @@
       "name_en": "Attack Power Up When Facing Scarlet Rot Afflicted Enemy",
       "name_ja": "腐敗状態の敵に対する攻撃を強化",
       "stackable": false,
-      "stackNotes": "約1.1倍",
-      "stackNotesFull": "約1.1倍 / 魔術/祈祷や属性攻撃も対象"
+      "stackNotes": "10%",
+      "stackNotesFull": "10% / 魔術/祈祷や属性攻撃も対象"
     },
     "7260400": {
       "key": "attackPowerUpWhenFacingFrostbiteAfflictedEnemy",
       "name_en": "Attack Power Up When Facing Frostbite Afflicted Enemy",
       "name_ja": "凍傷状態の敵に対する攻撃を強化",
       "stackable": false,
-      "stackNotes": "約1.1倍",
-      "stackNotesFull": "約1.1倍 / 魔術/祈祷や属性攻撃も対象"
+      "stackNotes": "10%",
+      "stackNotesFull": "10% / 魔術/祈祷や属性攻撃も対象"
     },
     "7260600": {
       "key": "attacksCreateMagicBurstsVersusSleepingEnemies",
@@ -5272,7 +5288,7 @@
       "name_ja": "周囲で毒/腐敗状態の発生時、攻撃力上昇",
       "stackable": "conditional",
       "stackNotes": "重ね掛けの可否は Wiki で未検証（重複は未検証）",
-      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 約1.12倍、効果時間20秒"
+      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 12%、効果時間20秒"
     },
     "7260800": {
       "key": "poisonAndRotInVicinityIncreasesAttackPower",
@@ -5280,7 +5296,7 @@
       "name_ja": "周囲で毒/腐敗状態の発生時、攻撃力上昇",
       "stackable": "conditional",
       "stackNotes": "重ね掛けの可否は Wiki で未検証（重複は未検証）",
-      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 約1.12倍、効果時間20秒"
+      "stackNotesFull": "重ね掛けの可否は Wiki で未検証 / 12%、効果時間20秒"
     },
     "7260900": {
       "key": "rotInVicinityCausesContinuousHpRecovery",
@@ -5343,128 +5359,128 @@
       "name_en": "Improved Dagger Attack Power",
       "name_ja": "短剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330100": {
       "key": "improvedStraightSwordAttackPower",
       "name_en": "Improved Straight Sword Attack Power",
       "name_ja": "直剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330200": {
       "key": "improvedGreatswordAttackPower",
       "name_en": "Improved Greatsword Attack Power",
       "name_ja": "大剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330300": {
       "key": "improvedColossalSwordAttackPower",
       "name_en": "Improved Colossal Sword Attack Power",
       "name_ja": "特大剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330400": {
       "key": "improvedCurvedSwordAttackPower",
       "name_en": "Improved Curved Sword Attack Power",
       "name_ja": "曲剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330500": {
       "key": "improvedCurvedGreatswordAttackPower",
       "name_en": "Improved Curved Greatsword Attack Power",
       "name_ja": "大曲剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330600": {
       "key": "improvedKatanaAttackPower",
       "name_en": "Improved Katana Attack Power",
       "name_ja": "刀の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330700": {
       "key": "improvedTwinbladeAttackPower",
       "name_en": "Improved Twinblade Attack Power",
       "name_ja": "両刃剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330800": {
       "key": "improvedThrustingSwordAttackPower",
       "name_en": "Improved Thrusting Sword Attack Power",
       "name_ja": "刺剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7330900": {
       "key": "improvedHeavyThrustingSwordAttackPower",
       "name_en": "Improved Heavy Thrusting Sword Attack Power",
       "name_ja": "重刺剣の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331000": {
       "key": "improvedAxeAttackPower",
       "name_en": "Improved Axe Attack Power",
       "name_ja": "斧の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331100": {
       "key": "improvedGreataxeAttackPower",
       "name_en": "Improved Greataxe Attack Power",
       "name_ja": "大斧の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331200": {
       "key": "improvedHammerAttackPower",
       "name_en": "Improved Hammer Attack Power",
       "name_ja": "槌の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331300": {
       "key": "improvedGreatHammerAttackPower",
       "name_en": "Improved Great Hammer Attack Power",
       "name_ja": "大槌の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331400": {
       "key": "improvedFlailAttackPower",
       "name_en": "Improved Flail Attack Power",
       "name_ja": "フレイルの攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331500": {
       "key": "improvedSpearAttackPower",
       "name_en": "Improved Spear Attack Power",
       "name_ja": "槍の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331600": {
       "key": "improvedPikeAttackPower",
@@ -5472,71 +5488,72 @@
       "name_ja": "パイクの攻撃力上昇",
       "stackable": true,
       "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7331700": {
       "key": "improvedGreatSpearAttackPower",
       "name_en": "Improved Great Spear Attack Power",
       "name_ja": "大槍の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331800": {
       "key": "improvedHalberdAttackPower",
       "name_en": "Improved Halberd Attack Power",
       "name_ja": "斧槍の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7331900": {
       "key": "improvedReaperAttackPower",
       "name_en": "Improved Reaper Attack Power",
       "name_ja": "鎌の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7332000": {
       "key": "improvedFistAttackPower",
       "name_en": "Improved Fist Attack Power",
       "name_ja": "拳の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7332100": {
       "key": "improvedClawAttackPower",
       "name_en": "Improved Claw Attack Power",
       "name_ja": "爪の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7332200": {
       "key": "improvedWhipAttackPower",
       "name_en": "Improved Whip Attack Power",
       "name_ja": "鞭の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7332300": {
       "key": "improvedColossalWeaponAttackPower",
       "name_en": "Improved Colossal Weapon Attack Power",
       "name_ja": "特大武器の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7332400": {
       "key": "improvedBowAttackPower",
       "name_en": "Improved Bow Attack Power",
       "name_ja": "弓の攻撃力上昇",
       "stackable": true,
-      "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotes": "9%",
+      "stackNotesFull": "9%。弓のみ6% / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
     },
     "7332500": {
       "key": "improvedGreatbowAttackPower",
@@ -5544,7 +5561,8 @@
       "name_ja": "大弓の攻撃力上昇",
       "stackable": true,
       "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7332600": {
       "key": "improvedCrossbowAttackPower",
@@ -5552,7 +5570,8 @@
       "name_ja": "ボウガンの攻撃力上昇",
       "stackable": true,
       "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7332700": {
       "key": "improvedBallistaAttackPower",
@@ -5560,7 +5579,8 @@
       "name_ja": "バリスタの攻撃力上昇",
       "stackable": true,
       "stackNotes": "約1.09倍",
-      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "約1.09倍。弓のみ約1.06倍 / 物理・属性攻撃力ではなく与ダメージが上昇 / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7340000": {
       "key": "hpRestorationUponDaggerAttacks",
@@ -5696,7 +5716,8 @@
       "name_ja": "パイクの攻撃でHP回復",
       "stackable": false,
       "stackNotes": "回復量15",
-      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7341700": {
       "key": "hpRestorationUponGreatSpearAttacks",
@@ -5768,7 +5789,8 @@
       "name_ja": "大弓の攻撃でHP回復",
       "stackable": false,
       "stackNotes": "回復量15",
-      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7342600": {
       "key": "hpRestorationUponCrossbowAttacks",
@@ -5776,7 +5798,8 @@
       "name_ja": "ボウガンの攻撃でHP回復",
       "stackable": false,
       "stackNotes": "回復量15",
-      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7342700": {
       "key": "hpRestorationUponBallistaAttacks",
@@ -5784,7 +5807,8 @@
       "name_ja": "バリスタの攻撃でHP回復",
       "stackable": false,
       "stackNotes": "回復量15",
-      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は15 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7350000": {
       "key": "fpRestorationUponDaggerAttacks",
@@ -5920,7 +5944,8 @@
       "name_ja": "パイクの攻撃でFP回復",
       "stackable": false,
       "stackNotes": "回復量2",
-      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7351700": {
       "key": "fpRestorationUponGreatSpearAttacks",
@@ -5992,7 +6017,8 @@
       "name_ja": "大弓の攻撃でFP回復",
       "stackable": false,
       "stackNotes": "回復量2",
-      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7352600": {
       "key": "fpRestorationUponCrossbowAttacks",
@@ -6000,7 +6026,8 @@
       "name_ja": "ボウガンの攻撃でFP回復",
       "stackable": false,
       "stackNotes": "回復量2",
-      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7352700": {
       "key": "fpRestorationUponBallistaAttacks",
@@ -6008,7 +6035,8 @@
       "name_ja": "バリスタの攻撃でFP回復",
       "stackable": false,
       "stackNotes": "回復量2",
-      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓"
+      "stackNotesFull": "回復量は2 / クールタイムが1秒程度ある / 短剣・直剣・大剣・特大剣・刺剣・重刺剣・曲剣・大曲剣・刀・両刃剣・斧・大斧・槌・フレイル・大槌・特大武器・槍・大槍・斧槍・鎌・鞭・拳・爪・弓",
+      "unreleased": true
     },
     "7360600": {
       "key": "changesCompatibleArmamentsSorceryToMagicGlintbladeAtStartOfExpedition",

@@ -9,17 +9,17 @@
   },
   "effects": [
    {
-    "key": "gestureCrossedLegsBuildsUpMadness",
+    "key": "madnessContinuallyRecoversFP",
     "priority": "required",
     "rank": 0
    },
    {
-    "key": "attacksInflictSleepPlus1",
+    "key": "attacksInflictSleepPlus2",
     "priority": "required",
     "rank": 1
    },
    {
-    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "key": "gestureCrossedLegsBuildsUpMadness",
     "priority": "preferred",
     "rank": 0
    },
@@ -50,17 +50,17 @@
   },
   "effects": [
    {
-    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "key": "gestureCrossedLegsBuildsUpMadness",
     "priority": "required",
     "rank": 0
    },
    {
-    "key": "starlightShardsInPossessionAtStartOfExpedition",
+    "key": "maxHpUpWith3PlusMediumShieldsEquipped",
     "priority": "required",
     "rank": 1
    },
    {
-    "key": "guardianDamageNegationForAlliesImproved",
+    "key": "smallPouchInPossessionAtStartOfExpedition",
     "priority": "preferred",
     "rank": 0
    },
@@ -93,7 +93,7 @@
     "rank": 1
    },
    {
-    "key": "improvedAttackPowerWith3PlusHalberdsEquipped",
+    "key": "hpRestorationUponCurvedGreatswordAttacks",
     "priority": "nice_to_have",
     "exclude": true,
     "rank": 0
@@ -110,32 +110,32 @@
   },
   "effects": [
    {
-    "key": "attacksInflictSleepPlus1",
+    "key": "attacksInflictSleepPlus2",
     "priority": "required",
     "rank": 0
    },
    {
-    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "key": "gestureCrossedLegsBuildsUpMadness",
     "priority": "required",
     "rank": 1
    },
    {
-    "key": "starlightShardsInPossessionAtStartOfExpedition",
+    "key": "maxHpUpWith3PlusMediumShieldsEquipped",
     "priority": "preferred",
     "rank": 0
    },
    {
-    "key": "guardianDamageNegationForAlliesImproved",
+    "key": "smallPouchInPossessionAtStartOfExpedition",
     "priority": "preferred",
     "rank": 1
    },
    {
-    "key": "hpRestorationUponAxeAttacks",
+    "key": "criticalHitHPRestoration",
     "priority": "nice_to_have",
     "rank": 0
    },
    {
-    "key": "hpRestorationUponReaperAttacks",
+    "key": "hpRestorationUponClawAttacks",
     "priority": "nice_to_have",
     "rank": 1
    }
@@ -156,7 +156,7 @@
     "rank": 0
    },
    {
-    "key": "gestureCrossedLegsBuildsUpMadness",
+    "key": "madnessContinuallyRecoversFP",
     "priority": "preferred",
     "rank": 0
    },
@@ -179,12 +179,12 @@
   },
   "effects": [
    {
-    "key": "gestureCrossedLegsBuildsUpMadness",
+    "key": "madnessContinuallyRecoversFP",
     "priority": "preferred",
     "rank": 0
    },
    {
-    "key": "attacksInflictSleepPlus1",
+    "key": "attacksInflictSleepPlus2",
     "priority": "preferred",
     "rank": 1
    },

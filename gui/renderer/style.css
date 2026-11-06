@@ -2313,6 +2313,29 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   color: #b080ff;
 }
 
+.catalog-demerit-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(231, 76, 60, 0.18);
+  color: var(--color-red);
+}
+.catalog-card.demerit { border-left: 3px solid var(--color-red); }
+
+/* Normal and deep values of one kind (e.g. 最大HP上昇: 通常 +100 / 深層 +10%) */
+.catalog-card-variants {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.catalog-card-variants dt { color: var(--text-muted); }
+.catalog-card-variants dd { margin: 0; color: var(--text-secondary); }
+
 .catalog-card-notes {
   font-size: 11px;
   color: var(--text-secondary);

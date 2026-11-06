@@ -150,6 +150,7 @@ ipcMain.handle('load-stacking-data', async () => {
         name_ja: entry.name_ja || '',
         name_en: entry.name_en || '',
         deepOnly: entry.deepOnly || false,
+        unreleased: entry.unreleased || false,
       };
     }
     return lookup;

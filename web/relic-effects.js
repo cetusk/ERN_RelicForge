@@ -106,30 +106,68 @@ function isRelicEffectId(id) {
 }
 
 /**
+ * Effect kinds (keys) that only appear on deep relics: every released relic id of the kind is marked deepOnly.
+ * A kind with a normal version (e.g. 属性カット率上昇: deep 6611100 and the fixed effect 7006300 of a relic) is not.
+ * @param {object} effects  id -> { key, deepOnly, unreleased } (effects_data.json "effects", or the app's lookup)
+ */
+function deepOnlyKeys(effects) {
+  const deep = new Map();   // key -> every released relic id so far is deep-only
+  for (const [id, e] of Object.entries(effects || {})) {
+    if (!e.key || !isRelicEffectId(id) || e.unreleased) continue;
+    deep.set(e.key, (deep.has(e.key) ? deep.get(e.key) : true) && !!e.deepOnly);
+  }
+  return new Set([...deep].filter(([, d]) => d).map(([k]) => k));
+}
+
+/**
+ * The notes of a kind's normal and deep versions when they differ (e.g. 最大HP上昇: 通常 +100 / 深層 +10%):
+ * key -> [{ deep, stackNotes, stackNotesFull }], only for kinds whose released relic ids have different notes.
+ */
+function effectVariants(effects) {
+  const byKey = new Map();
+  const ids = Object.keys(effects || {}).sort((a, b) => Number(a) - Number(b));
+  for (const id of ids) {
+    const e = effects[id];
+    if (!e.key || !isRelicEffectId(id) || e.unreleased) continue;
+    const list = byKey.get(e.key) || [];
+    const v = { deep: !!e.deepOnly, stackNotes: e.stackNotes || '', stackNotesFull: e.stackNotesFull || '' };
+    if (!list.some((x) => x.deep === v.deep && x.stackNotes === v.stackNotes)) list.push(v);
+    byKey.set(e.key, list);
+  }
+  const out = new Map();
+  for (const [k, list] of byKey) {
+    if (new Set(list.map((x) => x.stackNotes)).size > 1 && list.some((x) => x.deep) && list.some((x) => !x.deep)) {
+      out.set(k, list.sort((a, b) => a.deep - b.deep));
+    }
+  }
+  return out;
+}
+
+/**
  * One entry per effect kind (key) that has at least one released relic id:
- * [{ key, name_ja, name_en, category, deepOnly, stackable, stackNotes, stackNotesFull }], sorted by name.
- * Names and notes come from a released id; deepOnly is set if any released id of the kind is deep-only.
+ * [{ key, name_ja, name_en, category, deepOnly, stackable, stackNotes, stackNotesFull, variants }], sorted by name.
+ * Names and notes come from a released id; deepOnly when every released id is deep-only; variants when the normal
+ * and deep versions have different notes (see effectVariants).
  */
 function releasedRelicEffects(effectsData) {
+  const effects = (effectsData && effectsData.effects) || {};
+  const deepKeys = deepOnlyKeys(effects);
+  const variants = effectVariants(effects);
   const byKey = new Map();
-  const ids = Object.keys((effectsData && effectsData.effects) || {}).sort((a, b) => Number(a) - Number(b));
+  const ids = Object.keys(effects).sort((a, b) => Number(a) - Number(b));
   for (const id of ids) {
-    const e = effectsData.effects[id];
-    if (!e.key || !isRelicEffectId(id) || e.unreleased) continue;
-    const cur = byKey.get(e.key);
-    if (cur) {
-      if (e.deepOnly) cur.deepOnly = true;
-      continue;
-    }
+    const e = effects[id];
+    if (!e.key || !isRelicEffectId(id) || e.unreleased || byKey.has(e.key)) continue;
     byKey.set(e.key, {
       key: e.key,
       name_ja: e.name_ja || e.name_en || e.key,
       name_en: e.name_en || e.key,
       category: classifyEffect(e.name_ja, e.name_en, e.key),
-      deepOnly: !!e.deepOnly,
+      deepOnly: deepKeys.has(e.key),
       stackable: e.stackable,
       stackNotes: e.stackNotes || '',
       stackNotesFull: e.stackNotesFull || '',
+      variants: variants.get(e.key) || null,
     });
   }
   return [...byKey.values()].sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));

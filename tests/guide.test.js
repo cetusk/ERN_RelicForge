@@ -58,11 +58,52 @@ for (const dir of APP_DIRS) {
   });
 }
 
-test('appendix HTML (shown on the public page) has no unreleased effect', () => {
+for (const dir of APP_DIRS) {
+  test(`${dir}: the public page's ビルド一覧 / キャラ別の評価 tabs show only their sections`, () => {
+    const ctx = runScripts({}, dir, ['relic-guide.js']);
+    const ch = Object.keys(profiles.characters)[0];
+    const render = (sections) => {
+      ctx.__o = { character: ch, profiles, suggest, ja: true, effectName: (k) => names[k] || k, suggestButton: false, sections };
+      return vm.runInContext('renderCharacterGuide(__o)', ctx);
+    };
+    const builds = render(['builds']);
+    assert.equal((builds.match(/class="guide-build"/g) || []).length, suggest.builds.filter((b) => b.character === ch).length);
+    assert.ok(!builds.includes('gf-grid') && !builds.includes('guide-suggest'));
+    const evals = render(['stats', 'suggest', 'demerits']);
+    assert.ok(evals.includes('gf-grid') && evals.includes('guide-table') && !evals.includes('guide-build"'));
+  });
+
+  test(`${dir}: deep-only kinds and the effect card`, () => {
+    const ctx = runScripts({}, dir, ['relic-effects.js', 'relic-guide.js']);
+    ctx.__e = loadResource('effects_data.json');
+    const list = JSON.parse(JSON.stringify(vm.runInContext('releasedRelicEffects(__e)', ctx)));
+    const byKey = Object.fromEntries(list.map((e) => [e.key, e]));
+    // deep-only only when every released relic id is: 属性カット率上昇 is also a relic's fixed (normal) effect
+    assert.equal(byKey.physicalAttackUpPlus3.deepOnly, true);
+    assert.equal(byKey.improvedAffinityDamageNegation.deepOnly, false);
+    assert.equal(byKey.increasedMaximumHP.deepOnly, false);
+    // a kind with different normal and deep values lists both
+    assert.deepEqual(byKey.increasedMaximumHP.variants.map((v) => [v.deep, v.stackNotes]),
+      [[false, effects['7000090'].stackNotes], [true, effects['6610400'].stackNotes]]);
+    assert.equal(byKey.improvedAffinityDamageNegation.variants, null);
+    ctx.__x = byKey.increasedMaximumHP;
+    const hp = vm.runInContext('renderEffectCard(__x, { ja: true })', ctx);
+    assert.ok(hp.includes('catalog-card-variants') && hp.includes('<dt>通常</dt>') && hp.includes('<dt>深層</dt>'));
+    const demerits = list.filter((e) => e.category === 'demerit');
+    assert.ok(demerits.length > 0);
+    for (const e of demerits) {
+      ctx.__x = e;
+      const html = vm.runInContext('renderEffectCard(__x, { ja: true })', ctx);
+      assert.ok(html.includes('catalog-demerit-badge') && html.includes('深層のみ'), e.name_ja);
+    }
+  });
+}
+
+test('appendix (catalog/*.md, public in the repository) has no unreleased effect', () => {
   const released = new Set(Object.values(effects).filter((e) => !e.unreleased).map((e) => e.name_ja));
   const hidden = unreleasedNames.filter((n) => !released.has(n));
-  for (const f of ['builds.html', 'characters.html']) {
-    const html = fs.readFileSync(path.join(ROOT_DIR, 'tools', 'build_suggest', 'catalog', f), 'utf8');
-    for (const n of hidden) assert.ok(!html.includes(`「${n}」`) && !html.includes(`>${n}<`) && !html.includes(`| ${n} |`), `${f}: ${n}`);
+  for (const f of ['builds.md', 'characters.md']) {
+    const md = fs.readFileSync(path.join(ROOT_DIR, 'tools', 'build_suggest', 'catalog', f), 'utf8');
+    for (const n of hidden) assert.ok(!md.includes(`「${n}」`) && !md.includes(`- ${n} `) && !md.includes(`| ${n} |`), `${f}: ${n}`);
   }
 });

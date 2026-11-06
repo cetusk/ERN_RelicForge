@@ -74,6 +74,8 @@ function guideTraitGroup(what) {
 }
 
 const GUIDE_RANKS = ['D', 'C', 'B', 'A', 'S'];
+// The parts of a character's page, in display order (renderCharacterGuide's sections option picks from these)
+const GUIDE_SECTIONS = ['stats', 'traits', 'suggest', 'builds', 'demerits', 'important', 'useless', 'contested', 'changes'];
 
 // 基本データ as charts: rank bars, value bars with the rank among all characters, pips. The favoured weapon stays text
 function guideFigures(ch, profiles, T) {
@@ -134,8 +136,9 @@ function guideLink(url, text) {
 }
 
 /**
- * @param {object} o  { character, profiles, suggest, effectName(key) -> name, ja, charName, suggestButton }
+ * @param {object} o  { character, profiles, suggest, effectName(key) -> name, ja, charName, suggestButton, sections }
  *   suggestButton: false hides 「このビルドで提案」 (the public guide page has no build suggestion)
+ *   sections: the parts to show, in this order (default: all of GUIDE_SECTIONS)
  * @returns {string} HTML of the character selector and the selected character's page
  */
 function renderCharacterGuide(o) {
@@ -219,6 +222,39 @@ function renderCharacterGuide(o) {
   const contested = p.contested.length ? card(T.contested, `<ul class="guide-list">${p.contested.map((x) => `<li><b>${guideEsc(x.topic)}</b><ul>${x.views.map((v) => `<li>${guideEsc(v)}</li>`).join('')}</ul></li>`).join('')}</ul>`, false) : '';
   const changes = p.changes.length ? card(T.changes, `<ul class="guide-list">${p.changes.map((x) => `<li><span class="guide-num">${guideEsc(x.date)}</span> <span class="guide-tag">${guideEsc(GUIDE_KIND[x.kind] || x.kind)}</span> ${guideEsc(x.text)}</li>`).join('')}</ul>`, false) : '';
 
-  return `${selector}<div class="guide">${head}${stats}${traits}${suggest}${buildsCard}${demerits}${important}${useless}${contested}${changes}
+  const parts = { stats, traits, suggest, builds: buildsCard, demerits, important, useless, contested, changes };
+  return `${selector}<div class="guide">${head}${(o.sections || GUIDE_SECTIONS).map((k) => parts[k]).join('')}
     <p class="guide-foot">${guideEsc(T.foot(o.profiles.researched))}</p></div>`;
+}
+
+/**
+ * One effect of the effect catalog as a card: name, stacking, 深層のみ and デメリット badges, notes.
+ * A kind whose normal and deep versions have different values (e.g. 最大HP上昇) lists both.
+ * @param {object} e  an entry of releasedRelicEffects / the app's catalog list
+ * @param {object} o  { ja, count } count: shown as 所持数 when a number (the app with a save file)
+ */
+function renderEffectCard(e, o) {
+  const ja = o.ja;
+  const t = (a, b) => (ja ? a : b);
+  const demerit = e.category === 'demerit';
+  const stack = e.stackable === true ? `<span class="catalog-stack-badge yes">${t('○ 重複可', '○ Stackable')}</span>`
+    : e.stackable === false ? `<span class="catalog-stack-badge no">${t('× 重複不可', '× No Stack')}</span>`
+      : e.stackable === 'conditional' ? `<span class="catalog-stack-badge conditional">${t('△ 条件付き', '△ Conditional')}</span>` : '';
+  const badges = stack +
+    (e.deepOnly ? `<span class="catalog-deep-badge">${t('深層のみ', 'Deep only')}</span>` : '') +
+    (demerit ? `<span class="catalog-demerit-badge">${t('デメリット', 'Demerit')}</span>` : '');
+  let notes = '';
+  if (e.variants) {
+    notes = `<dl class="catalog-card-variants">${e.variants.map((v) => `<dt>${v.deep ? t('深層', 'Deep') : t('通常', 'Normal')}</dt><dd>${guideEsc(v.stackNotes || '—')}</dd>`).join('')}</dl>`;
+  } else if (e.stackNotes) {
+    notes = `<div class="catalog-card-notes">${guideEsc(e.stackNotes)}</div>`;
+  }
+  const fulls = (e.variants || [e]).filter((v) => v.stackNotesFull && v.stackNotesFull !== v.stackNotes);
+  const full = fulls.length ? `<div class="catalog-card-notes-full" hidden>${fulls.map((v) => (e.variants ? `<b>${v.deep ? t('深層', 'Deep') : t('通常', 'Normal')}</b><br>` : '') +
+    v.stackNotesFull.split(' / ').map(guideEsc).join('<br>')).join('<br>')}</div><div class="catalog-card-more">${t('詳細', 'Details')}</div>` : '';
+  const title = fulls.length ? ` title="${guideEsc(fulls.map((v) => v.stackNotesFull.split(' / ').join('\n')).join('\n'))}"` : '';
+  return `<div class="catalog-card${e.deepOnly ? ' deep-only' : ''}${demerit ? ' demerit' : ''}${fulls.length ? ' has-full' : ''}"${title}>
+    <div class="catalog-card-name">${guideEsc(ja ? e.name_ja : e.name_en)}</div>
+    <div class="catalog-card-meta">${badges}</div>${notes}${full}
+    ${typeof o.count === 'number' ? `<div class="catalog-card-count">${t('所持数', 'Owned')}: ${o.count}</div>` : ''}</div>`;
 }

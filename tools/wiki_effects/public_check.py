@@ -8,11 +8,16 @@
 公開ページの効果カタログは、遺物効果（固有遺物 ID < 200000、通常・深層 6000000〜7399999）のうち、
 effects_data.json で "unreleased" の印が付いていない ID を 1 つでも持つ効果（key）を表示する（web/relic-effects.js の
 releasedRelicEffects と同じ規則）。このページはその一覧と、出さない（未公開の）効果を並べ、それぞれの根拠
-（Wiki の行に対応したか、手元のセーブに出てきたか）を示す。Wiki のまとめ行だけに当てはまり、セーブにも
+（Wiki の行に対応したか、手元のセーブのどの遺物に出てきたか）を示す。Wiki のまとめ行だけに当てはまり、セーブにも
 出てこない効果は「要確認」として先頭に出す（実在しないのにまとめ行に当てはまってしまう効果の見落とし防止）。
+ゲーム内で確認できたもの（rules.CONFIRMED_IN_GAME）は「確認済み」として要確認から外す。
+
+同じ名前の効果が複数の ID を持つことがある（深層 6xxxxxx・通常 7xxxxxx・固有遺物 < 200000）。カタログでは 1 枚にまとめ、
+「深層のみ」はすべての ID が深層のみのとき、値が通常と深層で違うときは両方を出す。
 """
 
 import argparse
+import glob
 import html
 import json
 import os
@@ -22,7 +27,9 @@ TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(TOOL_DIR, '..', '..'))
 sys.path.insert(0, TOOL_DIR)
 import rules  # noqa: E402
+import sync  # noqa: E402  (effects_in_saves: the relic kinds each effect id was on)
 
+KIND = {'normal': '通常', 'deep': '深層'}
 HOW = {'exact': 'Wiki に同じ名前の行', 'alias': 'Wiki の別名の行（rules.NAME_ALIASES）', 'pattern': 'Wiki のまとめ行（「○○」など）に当てはまる',
        'section-rule': 'Wiki の節の説明（rules.SECTION_RULES）', 'none': 'Wiki に対応する行なし'}
 
@@ -36,10 +43,12 @@ def main():
     if not os.path.exists(proposal_path):
         sys.exit(f'{proposal_path} がありません。先に python tools/wiki_effects/sync.py を実行してください')
     proposal = json.load(open(proposal_path, encoding='utf-8'))
+    saves = sorted(glob.glob(os.path.join(ROOT_DIR, 'debugs', '*.sl2')))
     match = {x['id']: x for x in proposal['items']}
     effects = json.load(open(os.path.join(ROOT_DIR, 'resources', 'effects_data.json'), encoding='utf-8'))['effects']
 
     relic = {int(i): e for i, e in effects.items() if rules.in_scope(int(i))}
+    kinds = sync.effects_in_saves(saves, effects) if saves else {}
     by_key = {}
     for i in sorted(relic):
         by_key.setdefault(relic[i]['key'], []).append(i)
@@ -53,15 +62,22 @@ def main():
     for i, e in sorted(relic.items()):
         how, seen, w_name = evidence(i)
         row = {'id': i, 'name': e['name_ja'], 'key': e['key'], 'how': how, 'seen': seen, 'w_name': w_name,
-               'deep': bool(e.get('deepOnly')), 'override': i in rules.UNRELEASED_OVERRIDES}
+               'deep': bool(e.get('deepOnly')), 'override': i in rules.UNRELEASED_OVERRIDES,
+               'where': '・'.join(KIND[k] for k in ('normal', 'deep') if k in kinds.get(i, ())),
+               'demerit': 'デメリット' in (match.get(i, {}).get('w_section') or ''),
+               'confirmed': rules.CONFIRMED_IN_GAME.get(i, ''), 'stack': e.get('stackNotes') or ''}
         if e.get('unreleased'):
             row['same_name_shown'] = e['key'] in shown_keys
             hidden.append(row)
         else:
             # needs a look: matched only through a generic wiki row and never seen in the saves
-            row['check'] = how == 'pattern' and not seen
+            row['check'] = how == 'pattern' and not seen and not row['confirmed']
             shown.append(row)
-    shown.sort(key=lambda r: (not r['check'], r['name']))
+    shown.sort(key=lambda r: (not r['check'], r['name'], r['id']))
+    ids_of = {}
+    for r in shown:
+        ids_of.setdefault(r['key'], []).append(r)
+    deep_keys = {k for k, rs in ids_of.items() if all(r['deep'] for r in rs)}
     # mismatch the owner must see: an effect marked unreleased that the saves contain, or shown without any evidence
     problems = [r for r in hidden if r['seen']] + [r for r in shown if r['how'] == 'none' and not r['seen']]
 
@@ -81,10 +97,17 @@ def main():
         out = []
         for r in shown:
             tag = '<span class="tag">要確認</span> ' if r['check'] else ''
-            out.append(f'<tr class="{"check" if r["check"] else ""}"><td class="num">{r["id"]}</td><td>{tag}{esc(r["name"])}'
-                       f'{" <small>深層</small>" if r["deep"] else ""}</td><td>{esc(HOW.get(r["how"], r["how"]))}'
+            if r['confirmed']:
+                tag = '<span class="tag ok">ゲーム内で確認済み</span> '
+            n = len(ids_of[r['key']])
+            badges = ('<span class="b deep">深層のみ</span>' if r['key'] in deep_keys else '') + \
+                     ('<span class="b dem">デメリット</span>' if r['demerit'] else '')
+            out.append(f'<tr class="{"check" if r["check"] else ""}" data-deep="{int(r["key"] in deep_keys)}" data-dem="{int(r["demerit"])}">'
+                       f'<td class="num">{r["id"]}</td><td>{tag}{esc(r["name"])}{f" <small>（同名 {n} 件）</small>" if n > 1 else ""}</td>'
+                       f'<td>{badges}</td><td>{"深層のみ" if r["deep"] else "通常にも付く"}</td>'
+                       f'<td>{esc(HOW.get(r["how"], r["how"]))}'
                        f'{f"<br><small>{esc(r["w_name"])}</small>" if r["how"] in ("pattern", "alias") and r["w_name"] else ""}</td>'
-                       f'<td>{"○" if r["seen"] else "—"}</td></tr>')
+                       f'<td>{esc(r["where"]) or "—"}</td><td><small>{esc(r["stack"])}</small></td></tr>')
         return ''.join(out)
 
     n_check = sum(r['check'] for r in shown)
@@ -97,7 +120,8 @@ body {{ margin: 0; padding: 20px max(16px, env(safe-area-inset-left)); backgroun
 h1 {{ font-size: 20px; color: #4cc9b0; }} h2 {{ font-size: 16px; margin-top: 28px; border-bottom: 1px solid #3a3a3a; }}
 p, li {{ color: #c8c8c8; }} small {{ color: #909090; }}
 table {{ border-collapse: collapse; font-size: 13px; }} th, td {{ border: 1px solid #3a3a3a; padding: 4px 8px; text-align: left; vertical-align: top; }}
-th {{ background: #242424; position: sticky; top: 0; }} .num {{ font-variant-numeric: tabular-nums; }}
+th {{ background: #242424; position: sticky; top: 0; }} .b {{ display: inline-block; margin: 1px 2px; padding: 0 6px; border-radius: 3px; font-size: 11px; white-space: nowrap; }}
+.b.deep {{ background: #3a2a55; color: #c8a8ff; }} .b.dem {{ background: #552a2a; color: #ff9a8a; }} .tag.ok {{ background: #4cc9b0; }} .num {{ font-variant-numeric: tabular-nums; }}
 .wrap {{ overflow-x: auto; }} tr.check td {{ background: #3a3020; }} .tag {{ color: #1a1a1a; background: #f0a830; border-radius: 3px; padding: 0 5px; font-size: 11px; }}
 .bad {{ color: #ff8a7a; font-weight: 600; }} label {{ display: inline-flex; gap: 6px; align-items: center; margin: 8px 0; }}
 </style></head><body>
@@ -119,13 +143,23 @@ th {{ background: #242424; position: sticky; top: 0; }} .num {{ font-variant-num
 <tbody>{hidden_rows()}</tbody></table></div>
 
 <h2>出す効果 ID {len(shown)} 件（要確認を先頭に）</h2>
-<label><input type="checkbox" id="only-check"> 要確認だけ表示</label>
-<div class="wrap"><table id="shown"><thead><tr><th>ID</th><th>効果名</th><th>Wiki の根拠</th><th>セーブ</th></tr></thead>
+<p>「深層のみ」「デメリット」は効果の種類としての印（同名の ID をまとめた結果。カタログと同じ）。「この ID」はその ID 自体の印。
+「セーブ」はその ID が手元のセーブのどの遺物（通常・深層）に付いていたか。</p>
+<label><input type="checkbox" id="only-check"> 要確認だけ</label>
+<label><input type="checkbox" id="only-deep"> 深層のみだけ</label>
+<label><input type="checkbox" id="only-dem"> デメリットだけ</label>
+<label><input type="checkbox" id="only-dup"> 同名が複数あるものだけ</label>
+<div class="wrap"><table id="shown"><thead><tr><th>ID</th><th>効果名</th><th>種類の印</th><th>この ID</th><th>Wiki の根拠</th><th>セーブ</th><th>重ね掛けの備考</th></tr></thead>
 <tbody>{shown_rows()}</tbody></table></div>
 <script>
-document.getElementById('only-check').addEventListener('change', (e) => {{
-  document.querySelectorAll('#shown tbody tr').forEach((tr) => {{ tr.hidden = e.target.checked && !tr.classList.contains('check'); }});
-}});
+const only = (id) => document.getElementById(id).checked;
+function filter() {{
+  document.querySelectorAll('#shown tbody tr').forEach((tr) => {{
+    tr.hidden = (only('only-check') && !tr.classList.contains('check')) || (only('only-deep') && tr.dataset.deep !== '1') ||
+      (only('only-dem') && tr.dataset.dem !== '1') || (only('only-dup') && !tr.textContent.includes('同名'));
+  }});
+}}
+['only-check', 'only-deep', 'only-dem', 'only-dup'].forEach((id) => document.getElementById(id).addEventListener('change', filter));
 </script>
 </body></html>
 """

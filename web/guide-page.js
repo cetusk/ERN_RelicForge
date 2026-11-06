@@ -1,22 +1,26 @@
 /**
- * Public guide page (web/guide.html): キャラ図鑑, 効果カタログ and the appendix, without a save file.
+ * Public guide page (web/guide.html): キャラ図鑑, 効果カタログ, ビルド一覧 and キャラ別の評価と数値, without a save file.
  *
- * The effect catalog lists released relic effects only (releasedRelicEffects in relic-effects.js drops every
- * id marked "unreleased"), so the page never shows an unreleased effect. The appendix is the HTML that
- * tools/build_suggest/catalog.py writes next to the Markdown (GitHub Pages would convert the .md files).
+ * Every tab uses the app's rendering (relic-guide.js): ビルド一覧 and キャラ別の評価と数値 are parts of the
+ * キャラ図鑑 page. The effect catalog lists released relic effects only (releasedRelicEffects in relic-effects.js
+ * drops every id marked "unreleased").
  */
 
 const GP = {
   lang: 'ja',
   tab: 'characters',
   character: '',
-  data: null,          // { effects, profiles, suggest }
-  appendix: {},        // tab -> HTML (fetched once)
+  data: null,          // { effects, profiles, suggest, released }
 };
 // Data files are fetched with revalidation (same as the app), so an update shows without a hard reload
 const GP_FETCH = { cache: 'no-cache' };
 const GP_TABS = ['characters', 'effects', 'builds', 'evaluations'];
-const GP_APPENDIX = { builds: '../tools/build_suggest/catalog/builds.html', evaluations: '../tools/build_suggest/catalog/characters.html' };
+// The parts of the キャラ図鑑 page each character tab shows (GUIDE_SECTIONS in relic-guide.js)
+const GP_SECTIONS = {
+  characters: GUIDE_SECTIONS,
+  builds: ['builds'],
+  evaluations: ['stats', 'suggest', 'demerits', 'important', 'useless', 'contested', 'changes'],
+};
 
 const gpEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const gpText = (ja, en) => (GP.lang === 'ja' ? ja : en);
@@ -41,10 +45,10 @@ async function gpLoad() {
   for (const e of GP.data.released) GP.names[e.key] = e;
 }
 
-// ---------------------------------------------------------------- キャラ図鑑
+// ---------------------------------------------------------------- キャラ図鑑, ビルド一覧, キャラ別の評価と数値
 
-function gpRenderCharacters() {
-  const el = document.getElementById('gp-characters');
+function gpRenderCharacters(tab) {
+  const el = document.getElementById(`gp-${tab}`);
   const ja = GP.lang === 'ja';
   const chars = Object.keys(GP.data.profiles.characters);
   if (!chars.includes(GP.character)) GP.character = chars[0];
@@ -52,19 +56,23 @@ function gpRenderCharacters() {
   const effectName = (key) => (GP.names[key] ? (ja ? GP.names[key].name_ja : GP.names[key].name_en) : key);
   el.innerHTML = `<div class="guide-scroll-area">${renderCharacterGuide({
     character: GP.character, profiles: GP.data.profiles, suggest: GP.data.suggest, ja, effectName, suggestButton: false,
+    sections: GP_SECTIONS[tab],
   })}</div>`;
 }
 
-document.getElementById('gp-characters').addEventListener('click', (e) => {
-  const chip = e.target.closest('.guide-char');
-  if (chip) {
-    GP.character = chip.dataset.character;
-    gpStorage('gp-character', GP.character);
-    gpRenderCharacters();
-    return;
-  }
-  const toggle = e.target.closest('.guide-toggle-builds');
-  if (toggle) document.querySelectorAll('#gp-characters .guide-build').forEach((d) => { d.open = toggle.dataset.open === '1'; });
+Object.keys(GP_SECTIONS).forEach((tab) => {
+  const el = document.getElementById(`gp-${tab}`);
+  el.addEventListener('click', (e) => {
+    const chip = e.target.closest('.guide-char');
+    if (chip) {
+      GP.character = chip.dataset.character;   // the same character stays selected across the tabs
+      gpStorage('gp-character', GP.character);
+      gpRenderCharacters(tab);
+      return;
+    }
+    const toggle = e.target.closest('.guide-toggle-builds');
+    if (toggle) el.querySelectorAll('.guide-build').forEach((d) => { d.open = toggle.dataset.open === '1'; });
+  });
 });
 
 // ---------------------------------------------------------------- 効果カタログ
@@ -99,24 +107,13 @@ function gpRenderEffects() {
   document.getElementById('gp-effects-count').textContent = ja ? `${list.length} / ${all.length} 件` : `${list.length} / ${all.length}`;
   const groups = new Map(EFFECT_CATEGORIES.map((c) => [c.id, []]));
   for (const e of list) (groups.get(e.category) || groups.get('other')).push(e);
-  const stackBadge = (s) => (s === true ? `<span class="catalog-stack-badge yes">${gpText('○ 重複可', '○ Stackable')}</span>`
-    : s === false ? `<span class="catalog-stack-badge no">${gpText('× 重複不可', '× No Stack')}</span>`
-      : s === 'conditional' ? `<span class="catalog-stack-badge conditional">${gpText('△ 条件付き', '△ Conditional')}</span>` : '');
   document.getElementById('gp-effects-list').innerHTML = EFFECT_CATEGORIES.map((c) => {
     const items = groups.get(c.id);
     if (!items.length) return '';
     const closed = gpCollapsed.has(c.id);
     return `<div class="catalog-group-header${closed ? ' collapsed' : ''}" data-cat="${c.id}"><span class="catalog-group-arrow">&#9660;</span>
         <span>${gpEsc(ja ? c.ja : c.en)}</span><span class="catalog-group-count">(${items.length})</span></div>
-      <div class="catalog-group-tiles gp-tiles${closed ? ' collapsed' : ''}" data-cat="${c.id}">${items.map((e) => {
-        const full = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
-        return `<div class="catalog-card${e.deepOnly ? ' deep-only' : ''}${full ? ' has-full' : ''}">
-          <div class="catalog-card-name">${gpEsc(ja ? e.name_ja : e.name_en)}</div>
-          <div class="catalog-card-meta">${stackBadge(e.stackable)}${e.deepOnly ? `<span class="catalog-deep-badge">${gpText('深層', 'Deep')}</span>` : ''}</div>
-          ${e.stackNotes ? `<div class="catalog-card-notes">${gpEsc(e.stackNotes)}</div>` : ''}
-          ${full ? `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(gpEsc).join('<br>')}</div><div class="catalog-card-more">${gpText('詳細', 'Details')}</div>` : ''}
-        </div>`;
-      }).join('')}</div>`;
+      <div class="catalog-group-tiles gp-tiles${closed ? ' collapsed' : ''}" data-cat="${c.id}">${items.map((e) => renderEffectCard(e, { ja })).join('')}</div>`;
   }).join('');
 }
 
@@ -140,32 +137,6 @@ document.getElementById('gp-effects-list').addEventListener('click', (e) => {
   }
 });
 
-// ---------------------------------------------------------------- 付録 (appendix HTML)
-
-async function gpRenderAppendix(tab) {
-  const el = document.getElementById(`gp-${tab}`);
-  if (!GP.appendix[tab]) {
-    el.innerHTML = `<p class="gp-loading">${gpText('読み込み中…', 'Loading…')}</p>`;
-    try {
-      const r = await fetch(GP_APPENDIX[tab], GP_FETCH);
-      if (!r.ok) throw new Error(r.status);
-      GP.appendix[tab] = await r.text();
-    } catch (err) {
-      el.innerHTML = `<p class="gp-loading">${gpText('読み込めませんでした', 'Could not load')}: ${gpEsc(err.message || err)}</p>`;
-      return;
-    }
-  }
-  el.innerHTML = `<div class="gp-appendix-body">${GP.appendix[tab]}</div>`;
-  // in-page links (#追跡者 etc.) scroll inside the appendix instead of changing the tab
-  el.querySelectorAll('a[href^="#"]').forEach((a) => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = el.querySelector(`[id="${CSS.escape(decodeURIComponent(a.getAttribute('href').slice(1)))}"]`);
-      if (target) target.scrollIntoView({ block: 'start' });
-    });
-  });
-}
-
 // ---------------------------------------------------------------- tabs, language
 
 function gpShow(tab) {
@@ -173,9 +144,8 @@ function gpShow(tab) {
   document.querySelectorAll('.gp-tabs .tab').forEach((t) => t.classList.toggle('active', t.dataset.tab === GP.tab));
   GP_TABS.forEach((t) => { document.getElementById(`gp-${t}`).hidden = t !== GP.tab; });
   if (!GP.data) return;
-  if (GP.tab === 'characters') gpRenderCharacters();
-  else if (GP.tab === 'effects') gpRenderEffects();
-  else gpRenderAppendix(GP.tab);
+  if (GP.tab === 'effects') gpRenderEffects();
+  else gpRenderCharacters(GP.tab);
 }
 
 function gpApplyLang() {
@@ -191,7 +161,6 @@ function gpApplyLang() {
   t('gp-effects-category-label', gpText('カテゴリ:', 'Category:'));
   t('gp-effects-deep-label', gpText('通常/深層:', 'Normal/Deep:'));
   t('gp-effects-stack-label', gpText('重複:', 'Stacking:'));
-  t('gp-effects-note', gpText('公開済みの遺物効果のみ（未公開の効果は載せていません）', 'Released relic effects only (unreleased effects are not listed)'));
   document.getElementById('gp-effects-search').placeholder = gpText('効果名で検索 (日本語 / English)...', 'Search effects (Japanese / English)...');
   const deep = document.getElementById('gp-effects-deep').options;
   deep[0].textContent = gpText('すべて', 'All'); deep[1].textContent = gpText('通常の遺物にも付く', 'Also on normal relics'); deep[2].textContent = gpText('深層のみ', 'Deep only');

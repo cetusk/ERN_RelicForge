@@ -132,7 +132,7 @@ for a in archetypes:
 
 WEAPON_ORDER = ['短剣', '直剣', '大剣', '特大剣', '刺剣', '重刺剣', '曲剣', '大曲剣', '刀', '両刃剣', '斧', '大斧',
                 '槌', 'フレイル', '大槌', '特大武器', '槍', '大槍', '斧槍', '鎌', '鞭', '拳', '爪', '弓', '大弓',
-                'ボウガン', 'バリスタ', '杖', '聖印', '小盾', '中盾', '大盾', '松明']
+                'クロスボウ', 'バリスタ', '杖', '聖印', '小盾', '中盾', '大盾']
 weapons = {}
 for k, name in NAME_BY_KEY.items():
     if k in UNRELEASED_KEYS:
@@ -196,6 +196,16 @@ def entry_keys(entries, where):
     return keys_of(keys, where)
 
 
+def by_tier(tiers):
+    """Keep each key only in its first (highest) tier: the same key can come from two ids, e.g. 最大HP上昇 on deep
+    relics (+10%) and the fixed +100 of a unique relic, which would show one effect name twice"""
+    seen = set()
+    for t, keys in tiers.items():
+        tiers[t] = [k for k in keys if k not in seen]
+        seen.update(keys)
+    return tiers
+
+
 def char_id(label):
     name = label.split(' (')[0]
     if name not in characters:
@@ -215,8 +225,7 @@ for label, items in cg.CH:
         builds.append({
             'id': f'{ch}-{n:02d}', 'character': ch, 'name': b['name'], 'aim': b.get('aim', ''),
             'mode': b.get('mode', ''), 'target': b.get('target', ''), 'vessel': b.get('vessel', ''),
-            'must': entry_keys(b.get('must', []), where), 'rec': entry_keys(b.get('rec', []), where),
-            'opt': entry_keys(b.get('opt', []), where), 'avoid': entry_keys(b.get('avoid', []), where),
+            **by_tier({t: entry_keys(b.get(t, []), where) for t in ('must', 'rec', 'opt', 'avoid')}),
             'sources': src_urls(b.get('src', [])),
         })
 
@@ -224,8 +233,7 @@ staples = {}
 for label, v in cg.STAPLES.items():
     ch = char_id(label)
     where = f'{ch} の定番'
-    staples[ch] = {'rec': entry_keys(v.get('rec', []), where), 'opt': entry_keys(v.get('opt', []), where),
-                   'avoid': entry_keys(v.get('avoid', []), where)}
+    staples[ch] = by_tier({t: entry_keys(v.get(t, []), where) for t in ('rec', 'opt', 'avoid')})
 
 # 深層デメリットのうち、神攻略wiki の考察で「避ける」とされるもの（全体で除外: 任意）
 demerits = {'avoid': entry_keys(cg.AVOID_COMMON, '避けたい深層デメリット')}

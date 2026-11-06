@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="guide-page">
-  <!-- Public guide page: キャラ図鑑, 効果カタログ and the appendix, without a save file (web/guide-page.js) -->
+  <!-- Public guide page: キャラ図鑑, 効果カタログ, ビルド一覧 and キャラ別の評価, without a save file (web/guide-page.js) -->
   <header id="app-header">
     <div class="header-left">
       <h1>ERN RelicForge</h1>
@@ -71,13 +71,12 @@
           </div>
         </div>
         <span id="gp-effects-count" class="result-count"></span>
-        <span id="gp-effects-note" class="catalog-owned-note">公開済みの遺物効果のみ（未公開の効果は載せていません）</span>
       </div>
       <div id="gp-effects-list" class="catalog-list"></div>
     </section>
 
-    <section id="gp-builds" class="gp-view gp-appendix" hidden></section>
-    <section id="gp-evaluations" class="gp-view gp-appendix" hidden></section>
+    <section id="gp-builds" class="guide-content gp-view" hidden></section>
+    <section id="gp-evaluations" class="guide-content gp-view" hidden></section>
   </main>
 
   <script src="lib/icons.js"></script>

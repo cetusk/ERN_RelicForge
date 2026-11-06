@@ -1133,11 +1133,8 @@ window.addEventListener('resize', () => {
 
 function buildUniqueEffects() {
   if (!relicData) { allUniqueEffects = []; return; }
-  // Build deepOnly lookup: effectKey -> boolean (from stackingLookup)
-  const deepOnlyByKey = {};
-  for (const [id, info] of Object.entries(stackingLookup)) {
-    if (info.deepOnly && info.key) deepOnlyByKey[info.key] = true;
-  }
+  // Kinds that only appear on deep relics (every released id deep-only; relic-effects.js)
+  const deepKeys = deepOnlyKeys(stackingLookup);
   const effectMap = new Map(); // key -> { key, id, name_ja, name_en, count, category, deepOnly }
   // 1. Count effects from loaded relic data
   relicData.relics.forEach(r => {
@@ -1155,7 +1152,7 @@ function buildUniqueEffects() {
           name_en: e.name_en || e.key,
           count: 1,
           category: classifyEffect(e.name_ja, e.name_en, e.key),
-          deepOnly: !!deepOnlyByKey[e.key],
+          deepOnly: deepKeys.has(e.key),
         });
       }
     });
@@ -1176,14 +1173,11 @@ function buildCatalogEffects() {
     for (const [id, entry] of Object.entries(stackingLookup)) {
       const k = entry.key;
       if (!k) continue;
-      if (!metaByKey.has(k)) {
-        metaByKey.set(k, entry);
-      } else if (entry.deepOnly) {
-        const existing = metaByKey.get(k);
-        metaByKey.set(k, { ...existing, deepOnly: true });
-      }
+      if (!metaByKey.has(k) && !entry.unreleased && isRelicEffectId(id)) metaByKey.set(k, entry);
     }
   }
+  const deepKeys = deepOnlyKeys(stackingLookup || {});
+  const variants = effectVariants(stackingLookup || {});
   // Only include effects that the player owns
   const effectsByKey = new Map();
   for (const ue of allUniqueEffects) {
@@ -1195,7 +1189,8 @@ function buildCatalogEffects() {
       name_ja: meta ? (meta.name_ja || meta.name_en || k) : (ue.name_ja || k),
       name_en: meta ? (meta.name_en || k) : (ue.name_en || k),
       category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
-      deepOnly: meta ? !!meta.deepOnly : false,
+      deepOnly: deepKeys.has(k),
+      variants: variants.get(k) || null,
       stackable: meta ? meta.stackable : undefined,
       stackNotes: meta ? (meta.stackNotes || '') : '',
       stackNotesFull: meta ? (meta.stackNotesFull || '') : '',
@@ -1270,43 +1265,9 @@ function renderCatalog() {
     html += `</div>`;
     html += `<div class="catalog-group-tiles${isCollapsed ? ' collapsed' : ''}" data-cat="${cat.id}" style="${isCollapsed ? '' : `max-height: ${items.length * 100 + 200}px`}">`;
 
+    // Card: name, stacking / 深層のみ / デメリット badges, notes (normal and deep values when they differ); relic-guide.js
     items.forEach(e => {
-      const name = ja ? e.name_ja : e.name_en;
-      const deepClass = e.deepOnly ? ' deep-only' : '';
-      html += `<div class="catalog-card${deepClass}">`;
-      html += `<div class="catalog-card-name">${escapeHtml(name)}</div>`;
-      html += `<div class="catalog-card-meta">`;
-
-      if (e.stackable === true) {
-        html += `<span class="catalog-stack-badge yes">${ja ? '○ 重複可' : '○ Stackable'}</span>`;
-      } else if (e.stackable === false) {
-        html += `<span class="catalog-stack-badge no">${ja ? '× 重複不可' : '× No Stack'}</span>`;
-      } else if (e.stackable === 'conditional') {
-        html += `<span class="catalog-stack-badge conditional">${ja ? '△ 条件付き' : '△ Conditional'}</span>`;
-      }
-
-      if (e.deepOnly) {
-        html += `<span class="catalog-deep-badge">${ja ? '深層' : 'Deep'}</span>`;
-      }
-
-      html += `</div>`;
-
-      // Stack notes (summary); full remarks open on hover (title) or tap / click
-      const hasFull = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
-      if (e.stackNotes) {
-        const title = hasFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
-        html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
-      }
-      if (hasFull) {
-        html += `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`;
-        html += `<div class="catalog-card-more">${ja ? '詳細' : 'Details'}</div>`;
-      }
-
-      if (hasSaveData) {
-        html += `<div class="catalog-card-count">${ja ? '所持数' : 'Owned'}: ${e.count}</div>`;
-      }
-
-      html += `</div>`;
+      html += renderEffectCard(e, { ja, count: hasSaveData ? e.count : null });
     });
 
     html += `</div>`;
@@ -1317,7 +1278,6 @@ function renderCatalog() {
   // Tap / click a card to show or hide its full remarks
   catalogList.querySelectorAll('.catalog-card-notes-full').forEach(full => {
     const card = full.closest('.catalog-card');
-    card.classList.add('has-full');
     card.addEventListener('click', () => {
       full.hidden = !full.hidden;
       card.classList.toggle('expanded', !full.hidden);

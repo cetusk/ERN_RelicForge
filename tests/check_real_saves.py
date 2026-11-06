@@ -51,16 +51,16 @@ def parse_js(app_dir, save, tmp):
 
 
 def deep_only_on_normal(py):
-    """deepOnly kinds (any id of the key marked) found on normal relics.
+    """Effect ids marked deepOnly found on normal relics.
 
     The ID range does not tell whether an effect is deep-only (6xxxxxx effects also appear
     on normal relics), so the flag is checked against what real saves contain.
     """
     with open(os.path.join(ROOT_DIR, 'resources', 'effects_data.json'), encoding='utf-8') as f:
         effects = json.load(f)['effects']
-    deep_keys = {v['key'] for v in effects.values() if v.get('deepOnly')}
-    return sorted({e['name_ja'] for r in py['relics'] if r['itemType'] == 'Relic'
-                   for g in r['effects'] for e in g if e.get('key') in deep_keys})
+    deep_ids = {int(i) for i, v in effects.items() if v.get('deepOnly')}
+    return sorted({f"{e['id']} {e['name_ja']}" for r in py['relics'] if r['itemType'] in ('Relic', 'UniqueRelic')
+                   for g in r['effects'] for e in g if e.get('id') in deep_ids})
 
 
 def unreleased_in_save(py):

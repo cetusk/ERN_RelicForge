@@ -2415,6 +2415,29 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   color: #b080ff;
 }
 
+.catalog-demerit-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(231, 76, 60, 0.18);
+  color: var(--color-red);
+}
+.catalog-card.demerit { border-left: 3px solid var(--color-red); }
+
+/* Normal and deep values of one kind (e.g. 最大HP上昇: 通常 +100 / 深層 +10%) */
+.catalog-card-variants {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.catalog-card-variants dt { color: var(--text-muted); }
+.catalog-card-variants dd { margin: 0; color: var(--text-secondary); }
+
 .catalog-card-notes {
   font-size: 11px;
   color: var(--text-secondary);
@@ -4247,7 +4270,7 @@ details:not([open]) > summary .guide-hint-open {
   .gf-row { grid-template-columns: 4.5em 1fr 7em; }
 }
 
-/* === Public guide page (guide.html): キャラ図鑑・効果カタログ・付録, no save file === */
+/* === Public guide page (guide.html): キャラ図鑑・効果カタログ・ビルド一覧・キャラ別の評価, no save file === */
 .guide-page .gp-main {
   flex: 1;
   min-height: 0;
@@ -4279,56 +4302,9 @@ details:not([open]) > summary .guide-hint-open {
   text-decoration: none;
 }
 
-.gp-appendix {
-  overflow-y: auto;
-  padding: 12px 20px 32px;
-}
-
 .gp-loading {
   padding: 16px 20px;
   color: var(--text-muted);
-}
-
-/* Appendix (catalog/*.html written by tools/build_suggest/catalog.py) */
-.appendix {
-  max-width: 1100px;
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text-primary);
-}
-
-.appendix h1 { margin: 4px 0 10px; font-size: 20px; color: var(--accent); }
-.appendix h2 { margin: 26px 0 8px; padding-bottom: 4px; font-size: 17px; border-bottom: 1px solid var(--border); }
-.appendix h3 { margin: 18px 0 6px; font-size: 14px; color: var(--accent); }
-.appendix h4 { margin: 12px 0 4px; font-size: 13px; }
-.appendix p { margin: 6px 0; color: var(--text-secondary); }
-.appendix ul { margin: 4px 0 8px; padding-left: 20px; }
-.appendix li { margin: 2px 0; }
-.appendix a { color: var(--accent); }
-.appendix code { padding: 0 4px; border-radius: 3px; background: var(--bg-tertiary); font-size: 12px; }
-
-.appendix-table {
-  overflow-x: auto;
-  margin: 6px 0 12px;
-}
-
-.appendix table {
-  border-collapse: collapse;
-  font-size: 12px;
-}
-
-.appendix th,
-.appendix td {
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-}
-
-.appendix th {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  white-space: nowrap;
 }
 
 @media (max-width: 768px) {

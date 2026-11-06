@@ -471,8 +471,6 @@
    "core": [
     "improvedBowAttackPower",
     "improvedAttackPowerWith3PlusBowsEquipped",
-    "improvedGreatbowAttackPower",
-    "improvedCrossbowAttackPower",
     "physicalAttackUp",
     "physicalAttackUpPlus1",
     "physicalAttackUpPlus2",
@@ -492,11 +490,10 @@
    "opt": [
     "hpRestorationUponBowAttacks",
     "fpRestorationUponBowAttacks",
-    "hpRestorationUponGreatbowAttacks",
     "dormantPowerHelpsDiscoverBows",
     "dormantPowerHelpsDiscoverGreatbows",
     "dormantPowerHelpsDiscoverCrossbows",
-    "improvedBallistaAttackPower",
+    "dormantPowerHelpsDiscoverBallistas",
     "attackPowerUpAfterDefeatingANightInvader",
     "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated",
     "defeatingEnemiesFillsMoreOfTheArtGauge",
@@ -2940,19 +2937,15 @@
   },
   {
    "id": "大弓",
-   "attack": [
-    "improvedGreatbowAttackPower"
-   ],
+   "attack": [],
    "three": [],
    "find": [
     "dormantPowerHelpsDiscoverGreatbows"
    ]
   },
   {
-   "id": "ボウガン",
-   "attack": [
-    "improvedCrossbowAttackPower"
-   ],
+   "id": "クロスボウ",
+   "attack": [],
    "three": [],
    "find": [
     "dormantPowerHelpsDiscoverCrossbows"
@@ -2960,9 +2953,7 @@
   },
   {
    "id": "バリスタ",
-   "attack": [
-    "improvedBallistaAttackPower"
-   ],
+   "attack": [],
    "three": [],
    "find": [
     "dormantPowerHelpsDiscoverBallistas"
@@ -3006,14 +2997,6 @@
    "three": [],
    "find": [
     "dormantPowerHelpsDiscoverGreatshields"
-   ]
-  },
-  {
-   "id": "松明",
-   "attack": [],
-   "three": [],
-   "find": [
-    "dormantPowerHelpsDiscoverTorches"
    ]
   }
  ],
@@ -3115,7 +3098,6 @@
    ],
    "rec": [
     "wylderArtActivationSpreadsFireInArea",
-    "changesCompatibleArmamentsSkillToFlamingStrikeAtStartOfExpedition",
     "fireAttackPowerUpPlus2",
     "wylderAdditionalCharacterSkillUse",
     "staminaRecoveryUponLandingAttacks"
@@ -3344,7 +3326,7 @@
    "id": "追跡者-08",
    "character": "追跡者",
    "name": "クロスボウ（滑車の弩＋刺突回復）",
-   "aim": "ボウガン・刺突カウンター回復（近接・戦技併用）",
+   "aim": "クロスボウ・刺突カウンター回復（近接・戦技併用）",
    "mode": "深層",
    "target": "",
    "vessel": "記載なし",
@@ -3882,7 +3864,6 @@
     "maxHPIncreasedForEachGreatEnemyDefeatedAtAGreatChurch",
     "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
     "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "defeatingEnemiesFillsMoreOfTheArtGauge",
@@ -3969,8 +3950,6 @@
    "opt": [
     "guardianCharacterSkillBoostsDamageNegationOfNearbyAllies",
     "guardianIncreasedDurationForCharacterSkill",
-    "improvedMeleeAttackPower",
-    "improvedSkillAttackPower",
     "continuousFpRecovery",
     "guardianImprovedStrengthAndDexterityReducedVigor"
    ],
@@ -4146,7 +4125,6 @@
    "opt": [
     "guardianIncreasedDurationForCharacterSkill",
     "guardianCharacterSkillBoostsDamageNegationOfNearbyAllies",
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
@@ -4324,7 +4302,6 @@
     "partialHpRestorationUponPostDamageAttacks"
    ],
    "opt": [
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "guardianIncreasedDurationForCharacterSkill",
@@ -4579,7 +4556,6 @@
     "improvedAffinityDamageNegationPlus2"
    ],
    "opt": [
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
@@ -4614,7 +4590,6 @@
     "increasedMaximumHP"
    ],
    "opt": [
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
@@ -4646,8 +4621,6 @@
     "guardianSlowlyRestoresNearbyAlliesHP",
     "guardianSuccessfulGuardsSendOutShockwaves",
     "increasedMaximumHP",
-    "improvedMeleeAttackPower",
-    "improvedSkillAttackPower",
     "occasionallyNullifyAttacksWhenDamageNegationsIsLowered",
     "dormantPowerHelpsDiscoverGreatshields",
     "ultimateArtAutoChargePlus1",
@@ -4750,11 +4723,8 @@
    ],
    "rec": [
     "ironeyeCharacterSkillInflictsHeavyPoisonDamageOnPoisonedEnemies",
-    "ironeyeArtChargeActivationAddsPoisonEffect",
-    "attackPowerUpWhenFacingPoisonAfflictedEnemy",
     "ultimateArtAutoChargePlus3",
     "increasedMaximumFP",
-    "startingArmamentInflictsPoison",
     "poisonAndRotInVicinityIncreasesAttackPower",
     "ironeyeAdditionalCharacterSkillUse",
     "defeatingEnemiesFillsMoreOfTheArtGauge",
@@ -5357,7 +5327,6 @@
     "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
    ],
    "rec": [
-    "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated",
     "treasureMarkedUponMap",
     "stoneswordKeyInPossessionAtStartOfExpedition",
     "increasedMaximumFP",
@@ -5515,8 +5484,6 @@
     "partialHpRestorationUponPostDamageAttacks",
     "staminaRecoveryUponLandingAttacks",
     "improvedPhysicalDamageNegationPlus1",
-    "improvedMeleeAttackPower",
-    "improvedSkillAttackPower",
     "continuousFpRecovery"
    ],
    "avoid": [],
@@ -5559,7 +5526,6 @@
    "opt": [
     "wraithCallingBellInPossessionAtStartOfExpedition",
     "duchessDefeatingEnemiesWhileArtActiveUpsAttack",
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "improvedCriticalHits",
@@ -5606,7 +5572,6 @@
     "changesCompatibleArmamentsSkillToChillingMistAtStartOfExpedition",
     "changesCompatibleArmamentsSkillToLightningSlashAtStartOfExpedition",
     "changesCompatibleArmamentsSkillToFlamingStrikeAtStartOfExpedition",
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "duchessImprovedCharacterSkillAttackPower",
@@ -5806,9 +5771,7 @@
     "staminaRecoveryUponLandingAttacksPlus1"
    ],
    "rec": [
-    "staminaRecoveryUponLandingAttacksPlus1",
     "startingArmamentDealsFireDamage",
-    "duchessDaggerChainAttackReprises",
     "improvedDaggerAttackPower",
     "fireAttackPowerUpPlus2",
     "fireAttackPowerUpPlus4",
@@ -5896,8 +5859,6 @@
     "artGaugeFillsModeratelyUponCriticalHitPlus1"
    ],
    "rec": [
-    "improvedCriticalHitsPlus1",
-    "improvedCriticalHits",
     "criticalHitsEarnRunes",
     "duchessDefeatingEnemiesWhileArtActiveUpsAttack",
     "duchessImprovedCharacterSkillAttackPower",
@@ -5957,7 +5918,6 @@
    ],
    "rec": [
     "switchingWeaponsAddsAnAffinityAttack",
-    "boostsAttackPowerOfAddedAffinityAttacks",
     "switchingWeaponsBoostsAttackPower",
     "increasedMaximumStamina",
     "defeatingEnemiesFillsMoreOfTheArtGauge",
@@ -7007,16 +6967,13 @@
     "attackPowerPermanentlyIncreasedForEachEvergaolPrisonerDefeated"
    ],
    "opt": [
-    "increasedMaximumHP",
     "improvedPoiseDamageNegationWhenKnockedBackByDamage",
     "upliftingAromaticInPossessionAtStartOfExpedition",
     "recluseCollectingAffinityResidueActivatesTerraMagica",
-    "magicAttackPowerUpPlus2",
     "flaskAlsoHealsAllies",
     "itemsConferEffectToAllNearbyAllies",
     "maxFpUpWith3PlusStavesEquipped",
     "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
-    "magicAttackPowerUp",
     "increasedMaximumFP",
     "fpRestorationUponSuccessiveAttacks"
    ],
@@ -7069,8 +7026,7 @@
     "changesCompatibleArmamentsSorceryToCarianGreatswordAtStartOfExpedition",
     "increasedMaximumFP",
     "fpRestorationUponSuccessiveAttacks",
-    "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism",
-    "increasedMaximumHP"
+    "maxFpPermanentlyIncreasedAfterReleasingSorcerersRiseMechanism"
    ],
    "avoid": [],
    "sources": [
@@ -7118,9 +7074,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [
     "reducedIntelligenceAndDexterity",
     "reducedDexterityAndFaith"
@@ -7168,8 +7122,7 @@
    ],
    "opt": [
     "recluseImprovedVigorEnduranceAndDexterityReducedIntelligenceAndFaith",
-    "recluseImprovedIntelligenceAndFaithReducedMind",
-    "increasedMaximumHP"
+    "recluseImprovedIntelligenceAndFaithReducedMind"
    ],
    "avoid": [],
    "sources": [
@@ -7218,8 +7171,7 @@
     "recluseImprovedVigorEnduranceAndDexterityReducedIntelligenceAndFaith",
     "recluseImprovedIntelligenceAndFaithReducedMind",
     "changesCompatibleArmamentsSorceryToMagicGlintbladeAtStartOfExpedition",
-    "improvedGravitySorcery",
-    "increasedMaximumHP"
+    "improvedGravitySorcery"
    ],
    "avoid": [],
    "sources": [
@@ -7265,8 +7217,7 @@
    ],
    "opt": [
     "changesCompatibleArmamentsSorceryToNightShardAtStartOfExpedition",
-    "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus1",
-    "increasedMaximumHP"
+    "attackPowerUpWhenFacingFrostbiteAfflictedEnemyPlus1"
    ],
    "avoid": [],
    "sources": [
@@ -7293,7 +7244,6 @@
    "rec": [
     "recluseActivatingUltimateArtRaisesMaxHP",
     "recluseSufferBloodLossAndIncreaseAttackPower",
-    "intelligencePlus3",
     "magicAttackPowerUpPlus4",
     "magicAttackPowerUpPlus3",
     "improvedAffinityAttackPowerPlus2",
@@ -7374,9 +7324,7 @@
     "attackPowerUpAfterDefeatingANightInvader",
     "vigorPlus3"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E9%9A%A0%E8%80%85"
@@ -7426,8 +7374,7 @@
     "recluseCollectAffinityResiduesToNegateAffinity",
     "artGaugeFillsModeratelyUponCriticalHitPlus1",
     "improvedHolyDamageNegationPlus1",
-    "improvedHolyDamageNegationPlus2",
-    "increasedMaximumHP"
+    "improvedHolyDamageNegationPlus2"
    ],
    "avoid": [],
    "sources": [
@@ -7464,9 +7411,7 @@
     "improvedAffinityDamageNegationPlus2",
     "vigorPlus3"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E9%9A%A0%E8%80%85"
@@ -7514,9 +7459,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E9%9A%A0%E8%80%85"
@@ -7566,8 +7509,7 @@
     "improvedIncantations",
     "improvedIncantationsPlus1",
     "improvedIncantationsPlus2",
-    "changesCompatibleArmamentsSorceryToMagmaShotAtStartOfExpedition",
-    "increasedMaximumHP"
+    "changesCompatibleArmamentsSorceryToMagmaShotAtStartOfExpedition"
    ],
    "avoid": [],
    "sources": [
@@ -7613,8 +7555,7 @@
    "opt": [
     "mindPlus1",
     "improvedFireDamageNegationPlus1",
-    "hpRestorationUponThrustingCounterattackPlus1",
-    "increasedMaximumHP"
+    "hpRestorationUponThrustingCounterattackPlus1"
    ],
    "avoid": [],
    "sources": [
@@ -7658,9 +7599,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E6%97%A7%E3%83%93%E3%83%AB%E3%83%89%E6%8A%95%E7%A8%BF"
@@ -7707,9 +7646,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E9%9A%A0%E8%80%85"
@@ -7750,9 +7687,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E6%97%A7%E3%83%93%E3%83%AB%E3%83%89%E6%8A%95%E7%A8%BF"
@@ -7801,9 +7736,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E9%9A%A0%E8%80%85"
@@ -7858,9 +7791,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E3%83%93%E3%83%AB%E3%83%89%E6%8A%95%E7%A8%BF/%E8%BF%91%E6%8E%A5%E9%9A%A0%E8%80%85"
@@ -7898,9 +7829,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E6%97%A7%E3%83%93%E3%83%AB%E3%83%89%E6%8A%95%E7%A8%BF"
@@ -7946,9 +7875,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E3%83%93%E3%83%AB%E3%83%89%E6%8A%95%E7%A8%BF/%E7%93%A6%E7%A4%AB%E8%8C%A8%E9%9A%A0%E8%80%85"
@@ -7993,9 +7920,7 @@
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
-   "opt": [
-    "increasedMaximumHP"
-   ],
+   "opt": [],
    "avoid": [],
    "sources": [
     "https://kamikouryaku.net/nightreign_eldenring/?%E6%97%A7%E3%83%93%E3%83%AB%E3%83%89%E6%8A%95%E7%A8%BF"
@@ -8652,8 +8577,7 @@
     "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
     "attackPowerUpAfterDefeatingANightInvader",
     "increasedMaximumHP",
-    "flaskAlsoHealsAllies",
-    "itemsConferEffectToAllNearbyAllies"
+    "flaskAlsoHealsAllies"
    ],
    "opt": [
     "scholarAlliesTargetedByCharacterSkillGainBoostedAttack",
@@ -8747,7 +8671,6 @@
    ],
    "opt": [
     "scholarAlliesTargetedByCharacterSkillGainBoostedAttack",
-    "itemsConferEffectToAllNearbyAllies",
     "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
     "changesCompatibleArmamentsSkillToBloodBladeAtStartOfExpedition",
     "wraithCallingBellInPossessionAtStartOfExpedition",
@@ -9025,7 +8948,6 @@
     "attackPowerUpAfterDefeatingANightInvader",
     "increasedMaximumHP",
     "flaskAlsoHealsAllies",
-    "itemsConferEffectToAllNearbyAllies",
     "startingArmamentInflictsFrost",
     "physicalAttackUpPlus3",
     "physicalAttackUpPlus4",
@@ -9375,7 +9297,6 @@
    ],
    "rec": [
     "undertakerActivatingUltimateArtIncreasesAttackPower",
-    "successiveAttacksBoostAttackPower",
     "ultimateArtAutoChargePlus3",
     "undertakerExecutingArtReadiesCharacterSkill",
     "defeatingEnemiesFillsMoreOfTheArtGauge",
@@ -9698,7 +9619,6 @@
    ],
    "opt": [
     "undertakerPhysicalAttacksBoostedWhileAssistEffectFromIncantationIsActiveForSelf",
-    "improvedPoiseDamageNegationWhenKnockedBackByDamage",
     "physicalAttackUpPlus3",
     "physicalAttackUpPlus4",
     "improvedFistAttackPower"
@@ -9742,7 +9662,6 @@
     "physicalAttackUpPlus4"
    ],
    "opt": [
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "improvedRotResistancePlus1"
@@ -10066,7 +9985,6 @@
     "defeatingEnemiesFillsMoreOfTheArtGaugePlus1",
     "guardianIncreasedDurationForCharacterSkill",
     "guardianCharacterSkillBoostsDamageNegationOfNearbyAllies",
-    "increasedMaximumHP",
     "continuousHpRecovery",
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
     "changesCompatibleArmamentsSkillToHoarfrostStompAtStartOfExpedition",
@@ -10230,7 +10148,6 @@
     "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow"
    ],
    "opt": [
-    "increasedMaximumHP",
     "improvedPoiseDamageNegationWhenKnockedBackByDamage",
     "upliftingAromaticInPossessionAtStartOfExpedition"
    ],

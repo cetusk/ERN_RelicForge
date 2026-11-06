@@ -194,7 +194,8 @@ function suggestConditions(data, input, effectInfo) {
 
 /**
  * effect key -> { unreleased, deepOnly, character }
- *   unreleased: every relic id of the key is marked; deepOnly: any id is marked (same rule as the app's lists);
+ *   unreleased: every relic id of the key is marked; deepOnly: every released relic id is marked (same rule as the
+ *   app's lists: a kind with a normal version, e.g. a relic's fixed effect, is usable in normal-only mode);
  *   character: the character in 「【キャラ名】…」 for character-specific effects
  */
 function suggestEffectInfo(effectsData) {
@@ -204,11 +205,16 @@ function suggestEffectInfo(effectsData) {
     if (!(n < 200000 || (n >= 6000000 && n < 7400000))) continue;   // relic effects only
     const cur = info[e.key];
     const m = /^【(.+?)】/.exec(e.name_ja || '');
-    if (!cur) info[e.key] = { unreleased: !!e.unreleased, deepOnly: !!e.deepOnly, character: m ? m[1] : '' };
-    else {
+    if (!cur) {
+      info[e.key] = { unreleased: !!e.unreleased, deepOnly: !e.unreleased && !!e.deepOnly, character: m ? m[1] : '', _released: !e.unreleased };
+    } else {
       cur.unreleased = cur.unreleased && !!e.unreleased;
-      cur.deepOnly = cur.deepOnly || !!e.deepOnly;   // the app treats a kind as deep-only if any id is marked
+      if (!e.unreleased) {
+        cur.deepOnly = (cur._released ? cur.deepOnly : true) && !!e.deepOnly;
+        cur._released = true;
+      }
     }
   }
+  for (const v of Object.values(info)) delete v._released;
   return info;
 }

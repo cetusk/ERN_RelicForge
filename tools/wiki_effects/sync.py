@@ -31,21 +31,44 @@ DEFAULT_OUT = os.path.join(ROOT_DIR, 'debugs', 'effects_review')
 
 
 def effects_in_saves(save_paths, effects):
-    """Effect IDs that actually appear on relics in the given save files (via src/relic_parser.py)."""
+    """Effect IDs that actually appear on relics in the given save files (via src/relic_parser.py):
+    id -> the kinds of relic it was on ('normal' for normal and unique relics, 'deep' for deep relics)."""
     if not save_paths:
-        return set()
+        return {}
     sys.path.insert(0, os.path.join(ROOT_DIR, 'src'))
     from relic_parser import RelicParser, SaveFileDecryptor
     with open(os.path.join(ROOT_DIR, 'resources', 'items_data.json'), encoding='utf-8') as f:
-        valid_items = {int(k) for k in json.load(f)['items']}
+        items = json.load(f)['items']
+    valid_items = {int(k) for k in items}
     valid_effects = {int(k) for k in effects}
-    seen = set()
+    seen = collections.defaultdict(set)
     for path in save_paths:
         entries = SaveFileDecryptor.decrypt_save_file(path)
         for relic in RelicParser.parse_relics_from_entry(entries[0].clean_data, valid_items, valid_effects):
+            kind = 'deep' if items.get(str(relic['item_id']), {}).get('type') == 'DeepRelic' else 'normal'
             for group in relic['effects']:
-                seen.update(group)
+                for eid in group:
+                    seen[eid].add(kind)
     return seen
+
+
+def deep_only_proposal(eid, entry, matcher, kinds, have_saves):
+    """Deep-only from evidence: on a normal relic in a save, or in the wiki's normal table -> no; only on deep relics
+    in the saves, or only in the wiki's deep table -> yes; neither -> unchanged. A normal-table row that says the deep
+    effect of the same name is different (「深層の遺物の同名効果とは別物」, e.g. 最大HP上昇 +100 / +10%) is no
+    evidence for the deep id."""
+    cur = bool(entry.get('deepOnly'))
+    if not have_saves:
+        return cur
+    cand, _ = matcher.match(entry['name_ja'])
+    rows = [matcher.rows[c] for c in cand]
+    wiki_normal = any(not r['deep'] and not ('別物' in r['notes'] and rules.is_deep_id(eid)) for r in rows)
+    wiki_deep = any(r['deep'] for r in rows)
+    if 'normal' in kinds or wiki_normal:
+        return False
+    if 'deep' in kinds or wiki_deep:
+        return True
+    return cur
 
 
 def leftmost_group(name_ja):
@@ -97,6 +120,8 @@ def main():
             continue
         p = match.propose(eid, entry, matcher)
         p['seen'] = eid in seen
+        p['cur_deep'] = bool(entry.get('deepOnly'))
+        p['deep_only'] = deep_only_proposal(eid, entry, matcher, seen.get(eid, set()), bool(saves))
         p['cur_unreleased'] = bool(entry.get('unreleased'))
         if saves:
             p['unreleased'] = (p['how'] == 'none' and not p['seen']) or eid in rules.UNRELEASED_OVERRIDES
@@ -111,6 +136,8 @@ def main():
             status.append('全文変更')
         if p['unreleased'] != p['cur_unreleased']:
             status.append('公開状況変更')
+        if p['deep_only'] != p['cur_deep']:
+            status.append('深層のみ変更')
         p['status'] = status or ['変更なし']
         items.append(p)
 
@@ -144,6 +171,12 @@ def main():
                     entry['unreleased'] = True
                 else:
                     entry.pop('unreleased', None)
+                updated = True
+            if p['deep_only'] != bool(entry.get('deepOnly')):
+                if p['deep_only']:
+                    entry['deepOnly'] = True
+                else:
+                    entry.pop('deepOnly', None)
                 updated = True
             group = leftmost_group(entry.get('name_ja'))
             if group != entry.get('leftmost'):
