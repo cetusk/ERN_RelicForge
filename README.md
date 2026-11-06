@@ -5,7 +5,7 @@ CLI パーサー、遺物組み合わせ最適化ツール、Electron ベース�
 
 - 最新版: v1.1.0（ゲームデータは Regulation 1.03.5 に対応）
 - Web 版: https://cetusk.github.io/ERN_RelicForge/web/index.html （スマートフォンでも利用可能）
-- キャラ図鑑・効果カタログ・ビルド一覧（セーブファイル不要）: https://cetusk.github.io/ERN_RelicForge/web/guide.html
+- キャラ図鑑・効果カタログ・ビルド一覧: https://cetusk.github.io/ERN_RelicForge/web/guide.html
 - Electron 版: [Releases](https://github.com/cetusk/ERN_RelicForge/releases) から各 OS 用をダウンロード
 
 ## Folder Structure
@@ -56,7 +56,7 @@ ERN_RelicForge/
 │   ├── relic-suggest.js         # ビルド提案の条件の作成
 │   ├── relic-guide.js           # キャラ図鑑の表示
 │   ├── relic-effects.js         # 効果の分類と公開済みの遺物効果の一覧
-│   ├── guide.html, guide-page.js # 公開ページ（キャラ図鑑・効果カタログ・付録。セーブファイル不要）
+│   ├── guide.html, guide-page.js # 公開ページ（キャラ図鑑・効果カタログ・付録）
 │   ├── style.css                # ダークテーマスタイル
 │   └── lib/
 │       ├── crypto-js.min.js     # AES-CBC 復号化用

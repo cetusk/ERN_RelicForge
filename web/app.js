@@ -1490,7 +1490,7 @@ function updateLangUI() {
   const ja = displayLang === 'ja';
   // Welcome screen
   document.getElementById('welcome-guide-label').textContent = ja
-    ? 'キャラ図鑑・効果カタログ・ビルド一覧（セーブファイル不要）' : 'Characters, effect catalog & build templates (no save file needed)';
+    ? 'キャラ図鑑・効果カタログ・ビルド一覧' : 'Characters, effect catalog & build templates';
   document.getElementById('welcome-msg').textContent = ja
     ? 'セーブファイル (.sl2 / .bak) を選択して遺物を確認'
     : 'Open a save file (.sl2 / .bak) to view relics';

@@ -181,7 +181,7 @@ function gpShow(tab) {
 function gpApplyLang() {
   document.documentElement.lang = GP.lang;
   const t = (id, text) => { document.getElementById(id).textContent = text; };
-  t('gp-subtitle', gpText('キャラ図鑑・カタログ（セーブファイル不要）', 'Characters & catalogs (no save file needed)'));
+  t('gp-subtitle', gpText('キャラ図鑑・カタログ', 'Characters & catalogs'));
   t('gp-source-label', gpText('参照', 'Source'));
   t('gp-open-app-label', gpText('アプリを開く', 'Open the app'));
   t('gp-tab-characters', gpText('キャラ図鑑', 'Characters'));

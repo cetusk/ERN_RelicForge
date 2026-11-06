@@ -74,6 +74,20 @@ python tools/wiki_effects/sync.py --offline --apply
   遺物のものしか発動しない（遺物効果ページ「出撃時の武器」と「潜在する力から、○○を見つけやすくなる」の備考）。ビルド探索が使う
 - 名前のパターンは `rules.py` の `LEFTMOST_GROUPS`。`--apply` で付け直す
 
+## 公開ページに出す効果の確認
+
+公開ページ（`web/guide.html`）の効果カタログは、未公開の印がない遺物効果だけを表示する。出す効果・出さない効果を根拠つきで
+確認するページを作れる（Git 管理外）。
+
+```bash
+python tools/wiki_effects/sync.py           # 照合（データは変更しない）
+python tools/wiki_effects/public_check.py   # → debugs/effects_review/public_check.html
+```
+
+- 「要確認」: Wiki のまとめ行（「○○の攻撃力上昇」など）だけに当てはまり、セーブにも出てこない効果。実在しない武器種などが
+  まとめ行に当てはまって公開扱いになっていないかを確認する（実在しなければ `rules.py` の `UNRELEASED_OVERRIDES` に足して `--apply`）
+- 「食い違い」: 未公開の印があるのにセーブに出てきた効果、または根拠のないまま出している効果。0 件であること
+
 ## 照合できない効果が出たとき
 
 実行時に `WARNING: ... effects seen in saves have no wiki row` が出た場合は、
