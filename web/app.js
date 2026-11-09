@@ -59,9 +59,9 @@ const PRIORITY_LABELS = {
 // PRIORITY_WEIGHTS and CONCENTRATION_BONUS are defined in relic-optimizer.js (loaded before app.js)
 
 // App metadata
-const APP_VERSION = '1.1.0';                        // same as gui/package.json (checked by tests)
+const APP_VERSION = '1.2.0';                        // same as gui/package.json (checked by tests)
 const APP_NIGHTREIGN_VERSION = 'Regulation 1.03.5';  // game data the relic data is checked against
-const APP_LAST_UPDATED = '2026-10-15';
+const APP_LAST_UPDATED = '2026-11-09';
 
 // === Type Display Names ===
 const TYPE_LABELS = {

@@ -67,9 +67,9 @@ const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
 const CONCENTRATION_BONUS = 5;
 
 // App metadata
-const APP_VERSION = '1.1.0';                        // same as gui/package.json (checked by tests)
+const APP_VERSION = '1.2.0';                        // same as gui/package.json (checked by tests)
 const APP_NIGHTREIGN_VERSION = 'Regulation 1.03.5';  // game data the relic data is checked against
-const APP_LAST_UPDATED = '2026-10-15';
+const APP_LAST_UPDATED = '2026-11-09';
 
 // === Type Display Names ===
 const TYPE_LABELS = {

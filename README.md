@@ -3,7 +3,7 @@
 Elden Ring: Nightreign のセーブファイル (.sl2) から遺物情報を抽出・閲覧・最適化するツール。
 CLI パーサー、遺物組み合わせ最適化ツール、Electron ベースの GUI ビューアー、および GitHub Pages 対応の Web 版を提供。
 
-- 最新版: v1.1.0（ゲームデータは Regulation 1.03.5 に対応）
+- 最新版: v1.2.0（ゲームデータは Regulation 1.03.5 に対応）
 - Web 版: https://cetusk.github.io/ERN_RelicForge/web/index.html （スマートフォンでも利用可能）
 - キャラ図鑑・効果カタログ・ビルド一覧: https://cetusk.github.io/ERN_RelicForge/web/guide.html
 - Electron 版: [Releases](https://github.com/cetusk/ERN_RelicForge/releases) から各 OS 用をダウンロード
