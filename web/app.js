@@ -2102,11 +2102,17 @@ function buildUniqueEffects() {
 // === Effect Catalog ===
 // ============================================================
 
+// The released effect list only changes with the effect data (not on each search keystroke)
+let releasedEffectsCache = { lookup: null, list: [] };
+
 function buildCatalogEffects() {
   // Same list as the public page (guide.html): every released relic effect (relic-effects.js);
   // the loaded save adds how many of each you own
+  if (releasedEffectsCache.lookup !== stackingLookup) {
+    releasedEffectsCache = { lookup: stackingLookup, list: releasedRelicEffects({ effects: stackingLookup || {} }) };
+  }
   const owned = new Map((allUniqueEffects || []).map(ue => [ue.key, ue]));
-  const effects = releasedRelicEffects({ effects: stackingLookup || {} })
+  const effects = releasedEffectsCache.list
     .map(e => ({ ...e, count: owned.has(e.key) ? (owned.get(e.key).count || 0) : 0 }));
   // an owned effect is released even if the data has no released relic id for it
   const listed = new Set(effects.map(e => e.key));

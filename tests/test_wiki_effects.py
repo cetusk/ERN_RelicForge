@@ -155,13 +155,13 @@ class TestListedPatterns(unittest.TestCase):
     def test_only_listed_values(self):
         self.assertEqual(self.m.match('直剣の攻撃力上昇')[1], 'pattern')
         self.assertEqual(self.m.match('クロスボウの攻撃力上昇')[1], 'pattern')
-        self.assertEqual(self.m.match('ボウガンの攻撃力上昇')[0], [])   # not in the list
-        self.assertEqual(self.m.match('パイクの攻撃力上昇')[0], [])
+        self.assertEqual(self.m.match('架空武器の攻撃力上昇')[0], [])   # not in the list
+        self.assertEqual(self.m.match('槍の攻撃力上昇')[0], [])
 
     def test_row_without_list_uses_the_other_tables_list(self):
         rows = [self.m.rows[i] for i in self.m.match('大剣の攻撃力上昇')[0]]
         self.assertTrue(any(r['deep'] for r in rows), 'the deep row (no list) matches listed values')
-        self.assertFalse(any(self.m.rows[i]['deep'] for i in self.m.match('ボウガンの攻撃力上昇')[0]))
+        self.assertFalse(any(self.m.rows[i]['deep'] for i in self.m.match('架空武器の攻撃力上昇')[0]))
 
     def test_row_that_lists_nothing_matches_any_value(self):
         self.assertEqual(self.m.match('出撃時の武器の戦技を「我慢」にする')[1], 'pattern')

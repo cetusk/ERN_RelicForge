@@ -120,6 +120,11 @@ class TestLeftmostSharedGroup(unittest.TestCase):
             best = opt.optimize_combined(['Red', 'Red', 'Blue'], [], deep_types=[], character=character, top_n=1)[0]
             self.assertEqual(best['score'], score, character)
             self.assertEqual(len(best['inactive']), 0 if character == '追跡者' else 1, character)
+        # one optimizer for both characters: the second run must not reuse the first one's phase combos
+        opt = RelicOptimizer(relics, specs, None, load_stacking_data(path), load_leftmost_data(path))
+        scores = [opt.optimize_combined(['Red', 'Red', 'Blue'], [], deep_types=[], character=c, top_n=1)[0]['score']
+                  for c in ('追跡者', '復讐者')]
+        self.assertEqual(scores, [30, 20])
 
 
 class TestEffectsConfigLoader(unittest.TestCase):

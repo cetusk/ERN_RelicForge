@@ -122,6 +122,16 @@ for (const dir of APP_DIRS) {
     assert.ok(!charReason(wylder, '追跡者') && !charReason(wylder, '守護者'), 'not for a character without the evaluation');
     const normal = suggest(ctx, { character: '守護者', mode: 'normal', types: ['タンク'], weapons: [], focus: 0 });
     assert.ok(!charReason(normal, '守護者'), 'deep demerits only in deep mode');
+    assert.ok(guardian.notes.some((n) => n.kind === 'character'), 'the note in deep mode');
+    // normal mode does not apply them, so no note even when another rule excludes the same (not deep-only) effect
+    const key = 'criticalHitsEarnRunes';   // not deep-only, not in the slider's effects
+    const d2 = JSON.parse(JSON.stringify(data));
+    d2.staples['守護者'].avoid = [key];
+    d2.characters['守護者'].avoid = [{ key, why: 'test', tier: 'body', priority: 'preferred' }];
+    ctx.__args = [d2, { character: '守護者', mode: 'normal', types: [], weapons: [], focus: 0 }, vm.runInContext('suggestEffectInfo', ctx)(effectsData)];
+    const n2 = JSON.parse(JSON.stringify(vm.runInContext('suggestConditions(...__args)', ctx)));
+    assert.ok(n2.effects.some((x) => x.key === key && x.exclude), 'excluded by the staples');
+    assert.ok(!n2.notes.some((n) => n.kind === 'character'), 'but not reported as the character evaluation');
     // a comment-only evaluation adds the weaker exclusion
     const rc = data.characters['無頼漢'].avoid.find((x) => x.tier === 'comment');
     const raider = suggest(ctx, { character: '無頼漢', mode: 'combined', types: ['タンク'], weapons: [], focus: 0 });

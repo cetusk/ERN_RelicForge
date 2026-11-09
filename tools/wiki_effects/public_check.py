@@ -100,13 +100,14 @@ def main():
             if r['confirmed']:
                 tag = '<span class="tag ok">ゲーム内で確認済み</span> '
             n = len(ids_of[r['key']])
+            w_small = f'<br><small>{esc(r["w_name"])}</small>' if r['how'] in ('pattern', 'alias') and r['w_name'] else ''
             badges = ('<span class="b deep">深層のみ</span>' if r['key'] in deep_keys else '') + \
                      ('<span class="b dem">デメリット</span>' if r['demerit'] else '')
             out.append(f'<tr class="{"check" if r["check"] else ""}" data-deep="{int(r["key"] in deep_keys)}" data-dem="{int(r["demerit"])}">'
                        f'<td class="num">{r["id"]}</td><td>{tag}{esc(r["name"])}{f" <small>（同名 {n} 件）</small>" if n > 1 else ""}</td>'
                        f'<td>{badges}</td><td>{"深層のみ" if r["deep"] else "通常にも付く"}</td>'
                        f'<td>{esc(HOW.get(r["how"], r["how"]))}'
-                       f'{f"<br><small>{esc(r["w_name"])}</small>" if r["how"] in ("pattern", "alias") and r["w_name"] else ""}</td>'
+                       f'{w_small}</td>'
                        f'<td>{esc(r["where"]) or "—"}</td><td><small>{esc(r["stack"])}</small></td></tr>')
         return ''.join(out)
 

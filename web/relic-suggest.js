@@ -178,8 +178,9 @@ function suggestConditions(data, input, effectInfo) {
     }
   }
   effects.sort((x, y) => x._l - y._l || x._o - y._o);
-  // per-character exclusions that made it into the conditions (the screen explains them briefly)
-  const charAvoided = charRules.avoid.filter((x) => avoided.has(x.key) && !wanted.has(x.key));
+  // per-character exclusions that made it into the conditions (the screen explains them briefly); none in
+  // normal mode, where they are not applied (a key avoided there came from another rule)
+  const charAvoided = input.mode === 'normal' ? [] : charRules.avoid.filter((x) => avoided.has(x.key) && !wanted.has(x.key));
   if (charAvoided.length) notes.push({ kind: 'character', character: input.character, items: charAvoided.map((x) => ({ key: x.key, why: x.why, tier: x.tier })) });
   for (const e of effects) { delete e._l; delete e._o; }
 

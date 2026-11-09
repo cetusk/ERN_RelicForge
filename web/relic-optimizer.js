@@ -332,6 +332,7 @@ class RelicOptimizer {
     }
     for (let i = 0; i < this._nSpec; i++) this._specBit[i] = this._keyBit[this._specKeyList[i]] || 0;
     this._relicGroupsCache = {};
+    this._phaseCache = {};   // cached combos depend on the groups (復讐者 shares skill and spell)
   }
 
   // [[bit, key], ...]: the relic's leftmost-only effects, the first one of each group

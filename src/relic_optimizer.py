@@ -296,6 +296,7 @@ class RelicOptimizer:
                          if shared.get(g, g) in LEFTMOST_BITS}
         self._spec_bit = [self._key_bit.get(k, 0) for k in self._spec_key_list]
         self._relic_groups_cache = {}
+        self._phase_cache = {}  # cached combos depend on the groups (復讐者 shares skill and spell)
 
     def _relic_groups(self, rid) -> Tuple:
         """((bit, key), ...): the relic's leftmost-only effects, the first one of each group"""

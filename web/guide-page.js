@@ -21,7 +21,6 @@ const GP_SECTIONS = {
   evaluations: ['stats', 'suggest', 'demerits', 'important', 'useless', 'contested', 'changes'],
 };
 
-const gpEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 function gpStorage(key, value) {
   try {
@@ -80,7 +79,7 @@ function gpRenderEffectFilters() {
   const sel = document.getElementById('gp-effects-category');
   const cur = sel.value;
   sel.innerHTML = '<option value="">すべて</option>' +
-    EFFECT_CATEGORIES.map((c) => `<option value="${c.id}">${gpEsc(c.ja)}</option>`).join('');
+    EFFECT_CATEGORIES.map((c) => `<option value="${c.id}">${guideEsc(c.ja)}</option>`).join('');
   sel.value = cur;
 }
 
@@ -109,7 +108,7 @@ function gpRenderEffects() {
     if (!items.length) return '';
     const closed = gpCollapsed.has(c.id);
     return `<div class="catalog-group-header${closed ? ' collapsed' : ''}" data-cat="${c.id}"><span class="catalog-group-arrow">&#9660;</span>
-        <span>${gpEsc(c.ja)}</span><span class="catalog-group-count">(${items.length})</span></div>
+        <span>${guideEsc(c.ja)}</span><span class="catalog-group-count">(${items.length})</span></div>
       <div class="catalog-group-tiles gp-tiles${closed ? ' collapsed' : ''}" data-cat="${c.id}">${items.map((e) => renderEffectCard(e, { ja: true })).join('')}</div>`;
   }).join('');
 }
@@ -159,7 +158,7 @@ window.addEventListener('hashchange', () => gpShow(location.hash.slice(1)));
     await gpLoad();
   } catch (err) {
     document.querySelector('.gp-main').insertAdjacentHTML('afterbegin',
-      `<p class="gp-loading">データの読み込みに失敗しました: ${gpEsc(err.message || err)}</p>`);
+      `<p class="gp-loading">データの読み込みに失敗しました: ${guideEsc(err.message || err)}</p>`);
     return;
   }
   gpShow(GP.tab);
