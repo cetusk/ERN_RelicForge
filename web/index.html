@@ -231,8 +231,8 @@
           <span class="icon" data-icon="layers"></span><label id="catalog-label-deep">通常/深層:</label>
           <select id="catalog-filter-deep">
             <option value="">すべて</option>
-            <option value="yes">深層</option>
-            <option value="no">通常</option>
+            <option value="no">通常の遺物にも付く</option>
+            <option value="yes">深層のみ</option>
           </select>
         </div>
         <div class="catalog-filter-group">
@@ -244,9 +244,16 @@
             <option value="conditional">△ 条件付き</option>
           </select>
         </div>
+        <div class="catalog-filter-group">
+          <span class="icon" data-icon="circle-check"></span><label id="catalog-label-owned">所持:</label>
+          <select id="catalog-filter-owned">
+            <option value="">すべて</option>
+            <option value="yes">所持している</option>
+            <option value="no">所持していない</option>
+          </select>
+        </div>
         </div>
         <span id="catalog-result-count" class="result-count"></span>
-        <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
       </div>
       <div id="catalog-list" class="catalog-list"></div>
     </div>

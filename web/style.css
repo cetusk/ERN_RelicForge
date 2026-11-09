@@ -2290,13 +2290,6 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
   display: none;
 }
 
-.catalog-owned-note {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
 .catalog-list {
   flex: 1;
   overflow-y: auto;
@@ -3703,12 +3696,8 @@ button:has(> .icon) {
   .catalog-filters .catalog-filter-group select {
     width: 100%;
   }
-  #catalog-result-count,
-  .catalog-owned-note {
+  #catalog-result-count {
     font-size: 11px;
-  }
-  .catalog-owned-note {
-    margin-left: 0;
   }
   .catalog-list {
     padding: 10px 12px;

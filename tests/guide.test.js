@@ -101,6 +101,21 @@ for (const dir of APP_DIRS) {
   });
 }
 
+for (const dir of APP_DIRS) {
+  // The app's effect catalog is releasedRelicEffects over this lookup: it must carry the "unreleased" flag
+  test(`${dir}/app.js: the effect lookup keeps unreleased (the catalog never shows those effects)`, () => {
+    const src = fs.readFileSync(path.join(ROOT_DIR, dir, 'app.js'), 'utf8');
+    const fn = src.match(/function buildStackingLookup\(effectsData\) \{[\s\S]*?\n\}/);
+    assert.ok(fn, 'buildStackingLookup');
+    const ctx = runScripts({}, dir, ['relic-effects.js']);
+    vm.runInContext(fn[0], ctx);
+    ctx.__e = loadResource('effects_data.json');
+    const viaLookup = vm.runInContext('releasedRelicEffects({ effects: buildStackingLookup(__e) })', ctx).map((e) => e.key);
+    const direct = vm.runInContext('releasedRelicEffects(__e)', ctx).map((e) => e.key);
+    assert.deepEqual([...viaLookup], [...direct]);
+  });
+}
+
 test('appendix (catalog/*.md, public in the repository) has no unreleased effect', () => {
   const released = new Set(Object.values(effects).filter((e) => !e.unreleased).map((e) => e.name_ja));
   const hidden = unreleasedNames.filter((n) => !released.has(n));

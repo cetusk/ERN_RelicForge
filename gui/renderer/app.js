@@ -14,6 +14,7 @@ function buildStackingLookup(effectsData) {
       name_ja: entry.name_ja || '',
       name_en: entry.name_en || '',
       deepOnly: entry.deepOnly || false,
+      unreleased: entry.unreleased || false,
     };
   }
   return lookup;
@@ -153,6 +154,7 @@ const catalogSearch = document.getElementById('catalog-search');
 const catalogSearchClear = document.getElementById('catalog-search-clear');
 const catalogFilterCategory = document.getElementById('catalog-filter-category');
 const catalogFilterDeep = document.getElementById('catalog-filter-deep');
+const catalogFilterOwned = document.getElementById('catalog-filter-owned');
 const catalogFilterStack = document.getElementById('catalog-filter-stack');
 const catalogResultCount = document.getElementById('catalog-result-count');
 
@@ -1166,39 +1168,21 @@ function buildUniqueEffects() {
 // ============================================================
 
 function buildCatalogEffects() {
-  if (!allUniqueEffects || allUniqueEffects.length === 0) return [];
-  // Build a key->metadata map from stackingLookup for enrichment
-  const metaByKey = new Map();
-  if (stackingLookup) {
-    for (const [id, entry] of Object.entries(stackingLookup)) {
-      const k = entry.key;
-      if (!k) continue;
-      if (!metaByKey.has(k) && !entry.unreleased && isRelicEffectId(id)) metaByKey.set(k, entry);
-    }
-  }
-  const deepKeys = deepOnlyKeys(stackingLookup || {});
-  const variants = effectVariants(stackingLookup || {});
-  // Only include effects that the player owns
-  const effectsByKey = new Map();
-  for (const ue of allUniqueEffects) {
-    const k = ue.key;
-    if (!k || effectsByKey.has(k)) continue;
-    const meta = metaByKey.get(k);
-    effectsByKey.set(k, {
-      key: k,
-      name_ja: meta ? (meta.name_ja || meta.name_en || k) : (ue.name_ja || k),
-      name_en: meta ? (meta.name_en || k) : (ue.name_en || k),
-      category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
-      deepOnly: deepKeys.has(k),
-      variants: variants.get(k) || null,
-      stackable: meta ? meta.stackable : undefined,
-      stackNotes: meta ? (meta.stackNotes || '') : '',
-      stackNotesFull: meta ? (meta.stackNotesFull || '') : '',
-      count: ue.count || 0,
+  // Same list as the public page (guide.html): every released relic effect (relic-effects.js);
+  // the loaded save adds how many of each you own
+  const owned = new Map((allUniqueEffects || []).map(ue => [ue.key, ue]));
+  const effects = releasedRelicEffects({ effects: stackingLookup || {} })
+    .map(e => ({ ...e, count: owned.has(e.key) ? (owned.get(e.key).count || 0) : 0 }));
+  // an owned effect is released even if the data has no released relic id for it
+  const listed = new Set(effects.map(e => e.key));
+  for (const ue of owned.values()) {
+    if (!ue.key || listed.has(ue.key)) continue;
+    effects.push({
+      key: ue.key, name_ja: ue.name_ja || ue.key, name_en: ue.name_en || ue.key, category: ue.category,
+      deepOnly: !!ue.deepOnly, stackable: undefined, stackNotes: '', stackNotesFull: '', variants: null, count: ue.count || 0,
     });
   }
-  return Array.from(effectsByKey.values())
-    .sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));
+  return effects.sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));
 }
 
 function populateCatalogCategoryFilter() {
@@ -1224,6 +1208,7 @@ function renderCatalog() {
   const catFilter = catalogFilterCategory.value;
   const deepFilter = catalogFilterDeep.value;
   const stackFilter = catalogFilterStack.value;
+  const ownedFilter = catalogFilterOwned.value;
 
   const filtered = effects.filter(e => {
     if (searchTerm) {
@@ -1237,6 +1222,9 @@ function renderCatalog() {
     if (stackFilter === 'yes' && e.stackable !== true) return false;
     if (stackFilter === 'no' && e.stackable !== false) return false;
     if (stackFilter === 'conditional' && e.stackable !== 'conditional') return false;
+    // Owned
+    if (ownedFilter === 'yes' && !e.count) return false;
+    if (ownedFilter === 'no' && e.count) return false;
     return true;
   });
 
@@ -1556,6 +1544,7 @@ catalogSearchClear.addEventListener('click', () => {
 catalogFilterCategory.addEventListener('change', renderCatalog);
 catalogFilterDeep.addEventListener('change', renderCatalog);
 catalogFilterStack.addEventListener('change', renderCatalog);
+catalogFilterOwned.addEventListener('change', renderCatalog);
 
 // Inspector event listeners
 btnInspector.addEventListener('click', openInspector);
@@ -4111,11 +4100,15 @@ updateLangUI = function() {
   document.getElementById('catalog-label-category').textContent = ja ? 'カテゴリ:' : 'Category:';
   document.getElementById('catalog-label-deep').textContent = ja ? '通常/深層:' : 'Normal/Deep:';
   document.getElementById('catalog-label-stack').textContent = ja ? '重複:' : 'Stack:';
-  document.getElementById('catalog-owned-note').textContent = ja ? '※ 所持効果のみ表示' : '* Owned effects only';
+  document.getElementById('catalog-label-owned').textContent = ja ? '所持:' : 'Owned:';
   const deepOpts = catalogFilterDeep.options;
   deepOpts[0].textContent = ja ? 'すべて' : 'All';
-  deepOpts[1].textContent = ja ? '深層' : 'Deep';
-  deepOpts[2].textContent = ja ? '通常' : 'Normal';
+  deepOpts[1].textContent = ja ? '通常の遺物にも付く' : 'Also on normal relics';
+  deepOpts[2].textContent = ja ? '深層のみ' : 'Deep only';
+  const ownedOpts = catalogFilterOwned.options;
+  ownedOpts[0].textContent = ja ? 'すべて' : 'All';
+  ownedOpts[1].textContent = ja ? '所持している' : 'Owned';
+  ownedOpts[2].textContent = ja ? '所持していない' : 'Not owned';
   const stackOpts = catalogFilterStack.options;
   stackOpts[0].textContent = ja ? 'すべて' : 'All';
   stackOpts[1].textContent = ja ? '○ 重複可' : '○ Stackable';

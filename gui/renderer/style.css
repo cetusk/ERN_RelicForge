@@ -2188,13 +2188,6 @@ th.sort-desc::after { content: ' \25BC'; font-size: 10px; }
 }
 .catalog-filter-group select:focus { border-color: var(--accent); }
 
-.catalog-owned-note {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
 .catalog-list {
   flex: 1;
   overflow-y: auto;
