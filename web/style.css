@@ -4297,17 +4297,7 @@ details:not([open]) > summary .guide-hint-open {
 }
 
 @media (max-width: 768px) {
-  .guide-page .header-text { display: flex; }
-  .guide-page .header-info { display: block !important; font-size: 12px; }
-  .gp-appendix { padding: 10px 12px 24px; }
-}
-
-.appendix td {
-  max-width: 26em;
-}
-
-.appendix td:last-child {
-  min-width: 16em;
+  .guide-page .header-meta { display: flex !important; }   /* no menu sheet on this page */
 }
 
 /* Welcome screen: link to the public guide page */
