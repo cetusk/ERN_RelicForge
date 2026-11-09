@@ -23,7 +23,7 @@ th{background:var(--bg3);position:sticky;top:46px;font-weight:600;color:var(--tx
 <div class="w">対象: 遺物に付く効果。「セーブ出現」= 照合に使ったセーブファイルに実際に出現した効果。提案値は Wiki の「重ね掛け」「備考」から作成。</div>
 <div class="sum" id="sum"></div></header>
 <div class="bar">
-<label>表示: <select id="fStatus"><option value="">すべて</option><option value="重複変更">重複が変わる</option><option value="要約変更">要約が変わる</option><option value="全文変更">全文が変わる</option><option value="変更なし">変更なし</option><option value="flag">要確認の印あり</option></select></label>
+<label>表示: <select id="fStatus"><option value="">すべて</option><option value="重複変更">重複が変わる</option><option value="要約変更">要約が変わる</option><option value="全文変更">全文が変わる</option><option value="公開状況変更">公開状況が変わる</option><option value="unreleased">未公開</option><option value="変更なし">変更なし</option><option value="flag">要確認の印あり</option></select></label>
 <label>出現: <select id="fSeen"><option value="seen">セーブに出現した効果のみ</option><option value="">すべて</option><option value="unseen">出現しない効果のみ</option></select></label>
 <input id="q" placeholder="効果名で絞り込み" size="24"><span class="w" id="cnt"></span></div>
 <table><thead><tr><th>効果</th><th class="st">重複（現在→提案）</th><th>要約（現在 → 提案）</th><th>全文（詳細パネル用）</th><th>Wiki の対応行</th><th>メモ</th></tr></thead><tbody id="tb"></tbody></table>
@@ -33,9 +33,9 @@ const D=__DATA__;
 const sym=v=>v===true?'○':v===false?'×':v==='conditional'?'△':String(v);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function summary(){const seen=D.items.filter(x=>x.seen);const c=(a,f)=>a.filter(f).length;
- document.getElementById('sum').innerHTML=[['対象の効果（同名は1行）',D.items.length],['セーブに出現',seen.length],['うち重複が変わる',c(seen,x=>x.status.includes('重複変更'))],['うち要約が変わる',c(seen,x=>x.status.includes('要約変更'))],['うち要確認の印',c(seen,x=>x.flags.length)],['Wikiに無い（出現なし）',c(D.items,x=>!x.seen&&x.flags.includes('Wikiに無し'))]].map(([k,v])=>`<div class="tile"><b>${v}</b>${k}</div>`).join('');}
+ document.getElementById('sum').innerHTML=[['対象の効果（同名は1行）',D.items.length],['セーブに出現',seen.length],['うち重複が変わる',c(seen,x=>x.status.includes('重複変更'))],['うち要約が変わる',c(seen,x=>x.status.includes('要約変更'))],['うち要確認の印',c(seen,x=>x.flags.length)],['Wikiに無い（出現なし）',c(D.items,x=>!x.seen&&x.flags.includes('Wikiに無し'))],['未公開',c(D.items,x=>x.unreleased)]].map(([k,v])=>`<div class="tile"><b>${v}</b>${k}</div>`).join('');}
 function render(){const fs=fStatus.value,fe=fSeen.value,q=document.getElementById('q').value.trim();
- const rows=D.items.filter(x=>(!fe||(fe==='seen')===x.seen)&&(!fs||(fs==='flag'?x.flags.length:x.status.includes(fs)))&&(!q||x.name_ja.includes(q)));
+ const rows=D.items.filter(x=>(!fe||(fe==='seen')===x.seen)&&(!fs||(fs==='flag'?x.flags.length:fs==='unreleased'?x.unreleased:x.status.includes(fs)))&&(!q||x.name_ja.includes(q)));
  cnt.textContent=rows.length+' 件';
  tb.innerHTML=rows.map(x=>{const sc=x.status.includes('重複変更'),nc=x.status.includes('要約変更');
   return `<tr><td>${esc(x.name_ja)}<div class="id">ID ${x.ids.join(', ')} ${x.deep_id?'深層':'通常'}${x.seen?' / セーブ出現':''}${x.ids.length>1?' / 同名の効果が'+x.ids.length+'つ（固有遺物用など）':''}</div></td>

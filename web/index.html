@@ -11,19 +11,25 @@
   <header id="app-header">
     <div class="header-left">
       <h1>ERN RelicForge</h1>
-      <span id="header-info" class="header-info"></span>
-      <span id="header-warning" class="header-warning" hidden></span>
-      <span id="header-cache" class="header-cache" hidden><span class="icon" data-icon="smartphone" data-size="13"></span><span class="header-cache-text"></span><button id="header-cache-save" class="header-cache-save" type="button" hidden><span class="icon" data-icon="save" data-size="13"></span><span id="header-cache-save-label">この端末に記録</span></button><button id="header-cache-delete" class="header-cache-delete" type="button"><span id="header-cache-delete-label">記録を消す</span></button></span>
-    </div>
-    <div class="header-meta">
-      <span id="header-meta-version" class="header-meta-item">Regulation 1.03.5 対応</span>
-      <span class="header-meta-sep">|</span>
-      <span id="header-meta-updated" class="header-meta-item">最終更新: 2026-10-15</span>
-      <span class="header-meta-sep">|</span>
-      <span class="header-meta-item">by cetusk (<a href="https://github.com/cetusk" class="header-meta-link" target="_blank" rel="noopener noreferrer">GitHub</a>)</span>
+      <div class="header-text">
+        <div class="header-status">
+          <span id="header-info" class="header-info"></span>
+          <span id="header-warning" class="header-warning" hidden></span>
+          <span id="header-cache" class="header-cache" hidden><span class="icon" data-icon="smartphone" data-size="13"></span><span class="header-cache-text"></span><button id="header-cache-save" class="header-cache-save" type="button" hidden><span class="icon" data-icon="save" data-size="13"></span><span id="header-cache-save-label">この端末に記録</span></button><button id="header-cache-delete" class="header-cache-delete" type="button"><span id="header-cache-delete-label">記録を消す</span></button></span>
+        </div>
+        <div class="header-meta">
+          <span id="header-meta-version" class="header-meta-item">Regulation 1.03.5 対応</span>
+          <span class="header-meta-sep">|</span>
+          <span id="header-meta-updated" class="header-meta-item">最終更新: 2026-11-09</span>
+          <span class="header-meta-sep">|</span>
+          <span class="header-meta-item">by cetusk (<a href="https://github.com/cetusk" class="header-meta-link" target="_blank" rel="noopener noreferrer">GitHub</a>)</span>
+          <span class="header-meta-sep">|</span>
+          <span class="header-meta-item"><span id="header-meta-source-label">参照</span>: <a href="https://kamikouryaku.net/nightreign_eldenring/" class="header-meta-link" target="_blank" rel="noopener noreferrer">神攻略wiki</a></span>
+        </div>
+      </div>
     </div>
     <div class="header-actions">
-      <button id="btn-steam-header" class="btn-secondary btn-steam"><span class="icon" data-icon="cloud-download"></span><span id="btn-steam-header-label">Steam クラウド</span></button>
+      <button id="btn-steam-header" class="btn-secondary btn-steam" title="Steam クラウド"><span class="icon" data-icon="cloud-download"></span><span id="btn-steam-header-label">Steam クラウド</span></button>
       <button id="btn-open" class="btn-primary">
         <span class="icon" data-icon="folder-open"></span><span id="btn-open-label">ファイルを開く</span>
       </button>
@@ -78,7 +84,9 @@
     <div class="toolbar-actions">
     <button id="btn-inspector" class="btn-inspector hidden"><span class="icon" data-icon="list-filter"></span><span id="btn-inspector-label">高度な検索</span></button>
     <button id="btn-optimizer" class="btn-inspector hidden"><span class="icon" data-icon="wand-sparkles"></span><span id="btn-optimizer-label">ビルド探索</span></button>
+    <button id="btn-suggest" class="btn-inspector hidden"><span class="icon" data-icon="lightbulb"></span><span id="btn-suggest-label">ビルド提案</span><span class="experimental-badge" id="btn-suggest-badge">試験的</span></button>
     <button id="btn-catalog" class="btn-inspector hidden"><span class="icon" data-icon="book-open"></span><span id="btn-catalog-label">効果カタログ</span></button>
+    <button id="btn-guide" class="btn-inspector hidden"><span class="icon" data-icon="book-user"></span><span id="btn-guide-label">キャラ図鑑</span></button>
     <button id="btn-export-table" class="btn-inspector hidden"><span class="icon" data-icon="file-down"></span><span id="btn-export-table-label">エクスポート</span></button>
     <button id="btn-share" class="btn-inspector hidden"><span class="icon" data-icon="share-2"></span><span id="btn-share-label">共有</span></button>
     </div>
@@ -160,6 +168,7 @@
       <div id="drop-zone" class="drop-zone">
         <p id="drop-zone-msg">.sl2 / .bak ファイルをここにドロップ</p>
       </div>
+      <p class="welcome-guide"><a id="welcome-guide-link" href="guide.html"><span class="icon" data-icon="book-user" data-size="16"></span><span id="welcome-guide-label">キャラ図鑑・効果カタログ・ビルド一覧</span></a></p>
     </div>
 
     <!-- Loading -->
@@ -222,8 +231,8 @@
           <span class="icon" data-icon="layers"></span><label id="catalog-label-deep">通常/深層:</label>
           <select id="catalog-filter-deep">
             <option value="">すべて</option>
-            <option value="yes">深層</option>
-            <option value="no">通常</option>
+            <option value="no">通常の遺物にも付く</option>
+            <option value="yes">深層のみ</option>
           </select>
         </div>
         <div class="catalog-filter-group">
@@ -235,12 +244,20 @@
             <option value="conditional">△ 条件付き</option>
           </select>
         </div>
+        <div class="catalog-filter-group">
+          <span class="icon" data-icon="circle-check"></span><label id="catalog-label-owned">所持:</label>
+          <select id="catalog-filter-owned">
+            <option value="">すべて</option>
+            <option value="yes">所持している</option>
+            <option value="no">所持していない</option>
+          </select>
+        </div>
         </div>
         <span id="catalog-result-count" class="result-count"></span>
-        <span id="catalog-owned-note" class="catalog-owned-note">※ 所持効果のみ表示</span>
       </div>
       <div id="catalog-list" class="catalog-list"></div>
     </div>
+    <div id="guide-content" class="guide-content hidden"></div>
   </div>
 
   <!-- Steam Cloud guide -->
@@ -417,6 +434,56 @@
     </div>
   </div>
 
+  <!-- Build suggestion (experimental): choose what you want, get build-search conditions -->
+  <div id="suggest-backdrop" class="inspector-backdrop hidden"></div>
+  <div id="suggest-inspector" class="inspector suggest-inspector">
+    <div class="inspector-resize-handle"></div>
+    <div class="inspector-header">
+      <span class="icon" data-icon="lightbulb" data-size="18"></span><h3 id="suggest-title">ビルド提案</h3>
+      <span class="experimental-badge" id="suggest-badge">試験的</span>
+      <button id="suggest-close" class="btn-close" aria-label="close"><span class="icon" data-icon="x" data-size="18"></span></button>
+    </div>
+    <div class="inspector-body">
+      <p id="suggest-lead" class="suggest-lead"></p>
+      <div class="inspector-section suggest-basics">
+        <label class="suggest-field"><span id="sg-character-label">キャラクター</span><select id="sg-character" class="opt-select"></select></label>
+        <label class="suggest-field"><span id="sg-vessel-label">献器</span><select id="sg-vessel" class="opt-select"></select></label>
+        <label class="suggest-field"><span id="sg-mode-label">モード</span><select id="sg-mode" class="opt-select"><option value="combined">深き夜（通常+深層の遺物）</option><option value="normal">通常モード（通常の遺物のみ）</option></select></label>
+      </div>
+      <div class="inspector-section">
+        <h4 id="sg-build-label">ビルドのテンプレートから始める（任意）</h4>
+        <select id="sg-build" class="opt-select"></select>
+        <p id="sg-build-info" class="suggest-hint"></p>
+      </div>
+      <div class="inspector-section">
+        <h4 id="sg-weapons-label">武器種</h4>
+        <div id="sg-weapons" class="suggest-chips"></div>
+      </div>
+      <div class="inspector-section" id="sg-types"></div>
+      <div class="inspector-section">
+        <h4 id="sg-focus-label">重視すること</h4>
+        <div class="suggest-focus">
+          <input type="range" id="sg-focus" min="-2" max="2" step="1" value="0" aria-describedby="sg-focus-desc">
+          <div id="sg-focus-steps" class="suggest-focus-steps"></div>
+        </div>
+        <p id="sg-focus-desc" class="suggest-focus-desc"></p>
+        <p id="sg-focus-keep" class="suggest-hint"></p>
+        <details class="suggest-focus-guide">
+          <summary id="sg-focus-guide-label">選び方の目安</summary>
+          <ul id="sg-focus-guide"></ul>
+        </details>
+      </div>
+      <div class="inspector-section">
+        <h4 id="sg-preview-label">探索する条件</h4>
+        <div id="sg-preview" class="suggest-preview"></div>
+      </div>
+    </div>
+    <div class="inspector-footer">
+      <button id="suggest-clear" class="btn-secondary"><span class="icon" data-icon="eraser" data-size="14"></span><span id="suggest-clear-label">クリア</span></button>
+      <button id="suggest-run" class="btn-primary"><span class="icon" data-icon="play" data-size="14"></span><span id="suggest-run-label">提案を探す</span></button>
+    </div>
+  </div>
+
   <!-- Effect Selection Inspector Panel -->
   <div id="effect-select-backdrop" class="inspector-backdrop hidden"></div>
   <div id="effect-select-inspector" class="inspector effect-select-inspector">
@@ -445,6 +512,9 @@
   <script src="relic-parser.js"></script>
   <script src="relic-optimizer.js"></script>
   <script src="relic-share.js"></script>
+  <script src="relic-effects.js"></script>
+  <script src="relic-suggest.js"></script>
+  <script src="relic-guide.js"></script>
   <script src="lib/qrcode.js"></script>
   <script src="app.js"></script>
 </body>

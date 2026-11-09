@@ -14,6 +14,7 @@ function buildStackingLookup(effectsData) {
       name_ja: entry.name_ja || '',
       name_en: entry.name_en || '',
       deepOnly: entry.deepOnly || false,
+      unreleased: entry.unreleased || false,
     };
   }
   return lookup;
@@ -48,6 +49,9 @@ let effectSelectCollapsed = new Set(); // collapsed categories in effect selecto
 
 // Catalog state
 let catalogTabOpen = false;
+let guideTabOpen = false;
+let guideCharacter = '';
+let profilesData = null;   // cached character_profiles.json (キャラ図鑑)
 let catalogCollapsedCategories = new Set();
 
 // Priority display labels
@@ -63,9 +67,9 @@ const PRIORITY_WEIGHTS = { required: 100, preferred: 10, nice_to_have: 1 };
 const CONCENTRATION_BONUS = 5;
 
 // App metadata
-const APP_VERSION = '1.1.0';                        // same as gui/package.json (checked by tests)
+const APP_VERSION = '1.2.0';                        // same as gui/package.json (checked by tests)
 const APP_NIGHTREIGN_VERSION = 'Regulation 1.03.5';  // game data the relic data is checked against
-const APP_LAST_UPDATED = '2026-10-15';
+const APP_LAST_UPDATED = '2026-11-09';
 
 // === Type Display Names ===
 const TYPE_LABELS = {
@@ -150,6 +154,7 @@ const catalogSearch = document.getElementById('catalog-search');
 const catalogSearchClear = document.getElementById('catalog-search-clear');
 const catalogFilterCategory = document.getElementById('catalog-filter-category');
 const catalogFilterDeep = document.getElementById('catalog-filter-deep');
+const catalogFilterOwned = document.getElementById('catalog-filter-owned');
 const catalogFilterStack = document.getElementById('catalog-filter-stack');
 const catalogResultCount = document.getElementById('catalog-result-count');
 
@@ -217,6 +222,8 @@ filterLang.addEventListener('change', () => {
   updateLangUI();
   renderTabBar();   // tab labels (catalog etc.) follow the language
   renderShareDialogText();
+  renderSuggestText();
+  if (suggestInspector.classList.contains('open')) renderSuggestPanel();
   renderTable();
   updateHeaderInfo();
   updateResultCount();
@@ -270,7 +277,9 @@ async function loadAndDisplay(filePath) {
     toolbar.classList.remove('hidden');
     btnInspector.classList.remove('hidden');
     btnOptimizer.classList.remove('hidden');
+    btnSuggest.classList.remove('hidden');
     btnCatalog.classList.remove('hidden');
+    btnGuide.classList.remove('hidden');
     btnExportTable.classList.remove('hidden');
     document.getElementById('btn-share').classList.remove('hidden');
     tabBar.classList.remove('hidden');
@@ -573,6 +582,7 @@ function updateLangUI() {
   document.getElementById('header-meta-version').textContent = ja
     ? `${APP_NIGHTREIGN_VERSION} 対応`
     : `${APP_NIGHTREIGN_VERSION}`;
+  document.getElementById('header-meta-source-label').textContent = ja ? '参照' : 'Source';
   document.getElementById('header-meta-updated').textContent = ja
     ? `最終更新: ${APP_LAST_UPDATED}`
     : `Updated: ${APP_LAST_UPDATED}`;
@@ -1121,106 +1131,12 @@ window.addEventListener('resize', () => {
 
 // === Inspector ===
 // Category definitions based on kamikouryaku.net wiki
-const EFFECT_CATEGORIES = [
-  { id: 'character',     ja: 'キャラクター固有',           en: 'Character-Specific' },
-  { id: 'stats',         ja: '能力値',                    en: 'Stats' },
-  { id: 'attack',        ja: '攻撃力',                    en: 'Attack Power' },
-  { id: 'skill',         ja: 'スキル／アーツ',             en: 'Skill / Arts' },
-  { id: 'magic',         ja: '魔術／祈祷',                en: 'Sorcery / Incantation' },
-  { id: 'cutrate',       ja: 'カット率',                  en: 'Damage Negation' },
-  { id: 'resist',        ja: '状態異常耐性',               en: 'Status Resistance' },
-  { id: 'recovery',      ja: '回復',                      en: 'Recovery' },
-  { id: 'action',        ja: 'アクション',                 en: 'Action' },
-  { id: 'start_skill',   ja: '出撃時の武器（戦技）',       en: 'Sortie Weapon (Skill)' },
-  { id: 'start_enchant', ja: '出撃時の武器（付加）',       en: 'Sortie Weapon (Enchant)' },
-  { id: 'start_magic',   ja: '出撃時の武器（魔術／祈祷）', en: 'Sortie Weapon (Magic)' },
-  { id: 'start_item',    ja: '出撃時のアイテム',           en: 'Starting Items' },
-  { id: 'start_tear',    ja: '出撃時のアイテム（結晶の雫）', en: 'Starting Items (Crystal Tears)' },
-  { id: 'mapenv',        ja: 'マップ環境',                 en: 'Map / Environment' },
-  { id: 'team',          ja: 'チームメンバー',              en: 'Team Member' },
-  { id: 'night',         ja: '夜の力',                     en: 'Night Power' },
-  { id: 'demerit',       ja: 'デメリット',                  en: 'Demerits' },
-  { id: 'other',         ja: 'その他',                     en: 'Other' },
-];
-
-function classifyEffect(name_ja, name_en, key) {
-  const ja = name_ja || '';
-  const en = (name_en || '').toLowerCase();
-  // 1. Character-specific (【追跡者】etc.) or トーテム・ステラ (無頼漢固有)
-  if (/【.+?】/.test(ja) || /トーテム・ステラ/.test(ja)) return 'character';
-  // 2. Demerit: specific patterns first (before recovery catches 回復)
-  if (/回復量低下/.test(ja)) return 'demerit';
-  if (/低下|減少|悪化|持続減少|喪失|鈍化/.test(ja) && !/上昇|強化|回復|軽減|付加|全回復|なし|無効化|生成/.test(ja)) return 'demerit';
-  if (/被ダメージ時.*蓄積|HP最大未満時.*蓄積|消費増加|被ダメージ増加/.test(ja)) return 'demerit';
-  if (/impaired|reduced|continuous\s*loss/i.test(en) && !/improved|increased|restoration|discover|inflict|activat|consumption|cost|drop.*off/i.test(en)) return 'demerit';
-  // 3. Night Power
-  if (/^.+の力$/.test(ja) && !/攻撃力|の力を/.test(ja) || /の悲嘆/.test(ja) || /^power\s*of/i.test(en) || /grief/i.test(en)) return 'night';
-  // 4. Sortie weapon / item subcategories (wiki: 出撃時の武器, 出撃時のアイテム)
-  if (/出撃時の武器の戦技を/.test(ja)) return 'start_skill';
-  if (/出撃時の武器に.*付加/.test(ja)) return 'start_enchant';
-  if (/出撃時の武器の魔術を|出撃時の武器の祈祷を/.test(ja)) return 'start_magic';
-  if (/出撃時に.*雫.*を持つ/.test(ja)) return 'start_tear';
-  if (/出撃時に.*を持つ/.test(ja)) return 'start_item';
-  // 5. Team member (BEFORE recovery — ally-focused effects)
-  // 味方を含め = includes allies as secondary benefit → not team (let recovery handle)
-  if (!/味方を含め/.test(ja) && (/味方/.test(ja) || /allies/i.test(en))) return 'team';
-  // 6. Specific action patterns (before stats/attack/mapenv catch them)
-  if (/致命の一撃で.*ルーン/.test(ja)) return 'action';
-  if (/武器の持ち替え時.*付加/.test(ja)) return 'action';
-  if (/被ダメージ時.*付加/.test(ja)) return 'action';
-  if (/ガード中.*狙われ/.test(ja)) return 'action';
-  if (/周囲で.*状態.*発生時/.test(ja) && !/回復/.test(ja)) return 'action';
-  if (/カット率低下時.*無効化/.test(ja) || /nullify.*attack/i.test(en)) return 'action';
-  if (/状態の敵に対する攻撃/.test(ja)) return 'action';
-  if (/ジェスチャー/.test(ja) || /gesture/i.test(en)) return 'action';
-  // 7. Specific cutrate (before stats catches 強靭度)
-  if (/ダメージで吹き飛ばされた時.*カット率/.test(ja)) return 'cutrate';
-  // 7b. Specific spell type enhancement → magic (before stats catches 信仰 in 王都古竜信仰)
-  if (/の魔術を強化|の祈祷を強化|の祈祷強化/.test(ja)) return 'magic';
-  // 8. Specific stats (before mapenv catches 発見力/ルーン)
-  if (/小砦の強敵|大教会の強敵|大野営地の強敵|遺跡の強敵/.test(ja)) return 'stats';
-  // 9. Stats
-  if (/最大HP|最大FP|最大スタミナ|生命力|精神力|持久力|筋力|技量|知力|信仰|神秘|強靭度/.test(ja)) return 'stats';
-  if (/vigor|mind\b|endurance|\bstrength\b|dexterity|intelligence|faith|arcane|poise|maximum\s*(hp|fp|stamina)/i.test(en)) return 'stats';
-  // 10. Skill attack power → attack (before skill check)
-  if (/スキル攻撃力|戦技攻撃力|スキルの攻撃力/.test(ja) || /skill\s*attack\s*power/i.test(en)) return 'attack';
-  // 11. Skill / Arts
-  if (/スキル|アーツ|クールタイム/.test(ja) || /skill|art\s*gauge|cooldown/i.test(en)) return 'skill';
-  // 12. General sorcery/incantation enhancement → attack (wiki: 攻撃力)
-  if (/^魔術強化|^祈祷強化/.test(ja)) return 'attack';
-  // 12b. Sorcery / Incantation
-  if (/魔術|祈祷|詠唱|ソウル/.test(ja) || /sorcery|sorceries|incantation|spell|casting/i.test(en)) return 'magic';
-  // 13. Specific attack enhancements (wiki: 攻撃力 category)
-  if (/ガードカウンター/.test(ja) || /guard\s*counter/i.test(en)) return 'attack';
-  if (/投擲壺強化/.test(ja)) return 'attack';
-  if (/調香術強化/.test(ja)) return 'attack';
-  if (/咆哮.*強化|ブレス.*強化/.test(ja)) return 'attack';
-  if (/体勢を崩す力/.test(ja) || /stance.*break.*power/i.test(en)) return 'attack';
-  // 14. Damage Negation
-  if (/カット率|ガード性能/.test(ja) || /damage\s*negation/i.test(en)) return 'cutrate';
-  // 15. Status Resistance
-  if (/耐性/.test(ja) || /resistance/i.test(en)) return 'resist';
-  // 16. Recovery
-  if (/回復|リゲイン|聖杯瓶|消費FP/.test(ja) || /restoration|recovery|restore|flask|reduced.*fp.*consumption/i.test(en)) return 'recovery';
-  // 17. Attack Power
-  if (/攻撃力|致命の一撃強化|通常攻撃の1段目/.test(ja) || /attack\s*power|critical.*damage/i.test(en)) return 'attack';
-  // 18. Map / Environment
-  if (/埋もれ宝|地図|発見力|ルーン|見つけやすくなる|死亡時/.test(ja) || /item\s*discovery|rune/i.test(en)) return 'mapenv';
-  // 19. Action (broad)
-  if (/ローリング|回避|二刀|両手持ち|タメ攻撃|連撃|遠距離|武器の持ち替え|刺突|ジャンプ|ガード崩し|波動ダッシュ|ガード成功|ガード連続|ガード中|致命の一撃|パリィ|歩行中|集団撃破|精密射撃|シールド|体勢が崩れ|竜餐|定期的に|状態になると|スタミナ消費|咆哮|ブレス|調香術|投擲/.test(ja)
-    || /throwing|perfum|roar|breath|dodge|evasion|two.*hand|dual|charge|ranged|switch.*weapon|thrust|jump|stance.*break|critical.*hit/i.test(en)) return 'action';
-  // 20. Broad attack-related
-  if (/攻撃/.test(ja) || /attack/i.test(en)) return 'attack';
-  return 'other';
-}
+// EFFECT_CATEGORIES, classifyEffect: relic-effects.js
 
 function buildUniqueEffects() {
   if (!relicData) { allUniqueEffects = []; return; }
-  // Build deepOnly lookup: effectKey -> boolean (from stackingLookup)
-  const deepOnlyByKey = {};
-  for (const [id, info] of Object.entries(stackingLookup)) {
-    if (info.deepOnly && info.key) deepOnlyByKey[info.key] = true;
-  }
+  // Kinds that only appear on deep relics (every released id deep-only; relic-effects.js)
+  const deepKeys = deepOnlyKeys(stackingLookup);
   const effectMap = new Map(); // key -> { key, id, name_ja, name_en, count, category, deepOnly }
   // 1. Count effects from loaded relic data
   relicData.relics.forEach(r => {
@@ -1238,7 +1154,7 @@ function buildUniqueEffects() {
           name_en: e.name_en || e.key,
           count: 1,
           category: classifyEffect(e.name_ja, e.name_en, e.key),
-          deepOnly: !!deepOnlyByKey[e.key],
+          deepOnly: deepKeys.has(e.key),
         });
       }
     });
@@ -1251,42 +1167,28 @@ function buildUniqueEffects() {
 // === Effect Catalog ===
 // ============================================================
 
+// The released effect list only changes with the effect data (not on each search keystroke)
+let releasedEffectsCache = { lookup: null, list: [] };
+
 function buildCatalogEffects() {
-  if (!allUniqueEffects || allUniqueEffects.length === 0) return [];
-  // Build a key->metadata map from stackingLookup for enrichment
-  const metaByKey = new Map();
-  if (stackingLookup) {
-    for (const [id, entry] of Object.entries(stackingLookup)) {
-      const k = entry.key;
-      if (!k) continue;
-      if (!metaByKey.has(k)) {
-        metaByKey.set(k, entry);
-      } else if (entry.deepOnly) {
-        const existing = metaByKey.get(k);
-        metaByKey.set(k, { ...existing, deepOnly: true });
-      }
-    }
+  // Same list as the public page (guide.html): every released relic effect (relic-effects.js);
+  // the loaded save adds how many of each you own
+  if (releasedEffectsCache.lookup !== stackingLookup) {
+    releasedEffectsCache = { lookup: stackingLookup, list: releasedRelicEffects({ effects: stackingLookup || {} }) };
   }
-  // Only include effects that the player owns
-  const effectsByKey = new Map();
-  for (const ue of allUniqueEffects) {
-    const k = ue.key;
-    if (!k || effectsByKey.has(k)) continue;
-    const meta = metaByKey.get(k);
-    effectsByKey.set(k, {
-      key: k,
-      name_ja: meta ? (meta.name_ja || meta.name_en || k) : (ue.name_ja || k),
-      name_en: meta ? (meta.name_en || k) : (ue.name_en || k),
-      category: classifyEffect(meta ? meta.name_ja : '', meta ? meta.name_en : '', k),
-      deepOnly: meta ? !!meta.deepOnly : false,
-      stackable: meta ? meta.stackable : undefined,
-      stackNotes: meta ? (meta.stackNotes || '') : '',
-      stackNotesFull: meta ? (meta.stackNotesFull || '') : '',
-      count: ue.count || 0,
+  const owned = new Map((allUniqueEffects || []).map(ue => [ue.key, ue]));
+  const effects = releasedEffectsCache.list
+    .map(e => ({ ...e, count: owned.has(e.key) ? (owned.get(e.key).count || 0) : 0 }));
+  // an owned effect is released even if the data has no released relic id for it
+  const listed = new Set(effects.map(e => e.key));
+  for (const ue of owned.values()) {
+    if (!ue.key || listed.has(ue.key)) continue;
+    effects.push({
+      key: ue.key, name_ja: ue.name_ja || ue.key, name_en: ue.name_en || ue.key, category: ue.category,
+      deepOnly: !!ue.deepOnly, stackable: undefined, stackNotes: '', stackNotesFull: '', variants: null, count: ue.count || 0,
     });
   }
-  return Array.from(effectsByKey.values())
-    .sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));
+  return effects.sort((a, b) => a.name_ja.localeCompare(b.name_ja, 'ja'));
 }
 
 function populateCatalogCategoryFilter() {
@@ -1312,6 +1214,7 @@ function renderCatalog() {
   const catFilter = catalogFilterCategory.value;
   const deepFilter = catalogFilterDeep.value;
   const stackFilter = catalogFilterStack.value;
+  const ownedFilter = catalogFilterOwned.value;
 
   const filtered = effects.filter(e => {
     if (searchTerm) {
@@ -1325,6 +1228,9 @@ function renderCatalog() {
     if (stackFilter === 'yes' && e.stackable !== true) return false;
     if (stackFilter === 'no' && e.stackable !== false) return false;
     if (stackFilter === 'conditional' && e.stackable !== 'conditional') return false;
+    // Owned
+    if (ownedFilter === 'yes' && !e.count) return false;
+    if (ownedFilter === 'no' && e.count) return false;
     return true;
   });
 
@@ -1353,43 +1259,9 @@ function renderCatalog() {
     html += `</div>`;
     html += `<div class="catalog-group-tiles${isCollapsed ? ' collapsed' : ''}" data-cat="${cat.id}" style="${isCollapsed ? '' : `max-height: ${items.length * 100 + 200}px`}">`;
 
+    // Card: name, stacking / 深層のみ / デメリット badges, notes (normal and deep values when they differ); relic-guide.js
     items.forEach(e => {
-      const name = ja ? e.name_ja : e.name_en;
-      const deepClass = e.deepOnly ? ' deep-only' : '';
-      html += `<div class="catalog-card${deepClass}">`;
-      html += `<div class="catalog-card-name">${escapeHtml(name)}</div>`;
-      html += `<div class="catalog-card-meta">`;
-
-      if (e.stackable === true) {
-        html += `<span class="catalog-stack-badge yes">${ja ? '○ 重複可' : '○ Stackable'}</span>`;
-      } else if (e.stackable === false) {
-        html += `<span class="catalog-stack-badge no">${ja ? '× 重複不可' : '× No Stack'}</span>`;
-      } else if (e.stackable === 'conditional') {
-        html += `<span class="catalog-stack-badge conditional">${ja ? '△ 条件付き' : '△ Conditional'}</span>`;
-      }
-
-      if (e.deepOnly) {
-        html += `<span class="catalog-deep-badge">${ja ? '深層' : 'Deep'}</span>`;
-      }
-
-      html += `</div>`;
-
-      // Stack notes (summary); full remarks open on hover (title) or tap / click
-      const hasFull = e.stackNotesFull && e.stackNotesFull !== e.stackNotes;
-      if (e.stackNotes) {
-        const title = hasFull ? ` title="${escapeHtml(e.stackNotesFull.split(' / ').join('\n'))}"` : '';
-        html += `<div class="catalog-card-notes"${title}>${escapeHtml(e.stackNotes)}</div>`;
-      }
-      if (hasFull) {
-        html += `<div class="catalog-card-notes-full" hidden>${e.stackNotesFull.split(' / ').map(escapeHtml).join('<br>')}</div>`;
-        html += `<div class="catalog-card-more">${ja ? '詳細' : 'Details'}</div>`;
-      }
-
-      if (hasSaveData) {
-        html += `<div class="catalog-card-count">${ja ? '所持数' : 'Owned'}: ${e.count}</div>`;
-      }
-
-      html += `</div>`;
+      html += renderEffectCard(e, { ja, count: hasSaveData ? e.count : null });
     });
 
     html += `</div>`;
@@ -1400,7 +1272,6 @@ function renderCatalog() {
   // Tap / click a card to show or hide its full remarks
   catalogList.querySelectorAll('.catalog-card-notes-full').forEach(full => {
     const card = full.closest('.catalog-card');
-    card.classList.add('has-full');
     card.addEventListener('click', () => {
       full.hidden = !full.hidden;
       card.classList.toggle('expanded', !full.hidden);
@@ -1679,6 +1550,7 @@ catalogSearchClear.addEventListener('click', () => {
 catalogFilterCategory.addEventListener('change', renderCatalog);
 catalogFilterDeep.addEventListener('change', renderCatalog);
 catalogFilterStack.addEventListener('change', renderCatalog);
+catalogFilterOwned.addEventListener('change', renderCatalog);
 
 // Inspector event listeners
 btnInspector.addEventListener('click', openInspector);
@@ -1834,6 +1706,29 @@ function renderTabBar() {
     tabBar.appendChild(tab);
   }
 
+  // Add the character guide tab if open
+  if (guideTabOpen) {
+    const ja = displayLang === 'ja';
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (activeTab === 'guide' ? ' active' : '');
+    tab.dataset.tab = 'guide';
+    tab.insertAdjacentHTML('beforeend', `<span class="icon">${iconSvg('book-user', 14)}</span>`);
+    const label = document.createElement('span');
+    label.className = 'tab-label';
+    label.textContent = ja ? 'キャラ図鑑' : 'Characters';
+    tab.appendChild(label);
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'tab-close';
+    closeBtn.innerHTML = iconSvg('x', 12);
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeTab('guide');
+    });
+    tab.appendChild(closeBtn);
+    tab.addEventListener('click', () => switchTab('guide'));
+    tabBar.appendChild(tab);
+  }
+
   // Update main tab active state
   const mainTab = tabBar.querySelector('[data-tab="main"]');
   if (mainTab) mainTab.className = 'tab' + (activeTab === 'main' ? ' active' : '');
@@ -1848,6 +1743,7 @@ function switchTab(tabId) {
   // Toggle content visibility
   contentArea.classList.toggle('hidden', tabId !== 'main');
   catalogContent.classList.toggle('hidden', tabId !== 'catalog');
+  guideContent.classList.toggle('hidden', tabId !== 'guide');
 
   // Show/hide optimizer tab wrappers
   optimizerTabs.forEach((info, tid) => {
@@ -1869,6 +1765,7 @@ function switchTab(tabId) {
   if (tabId === 'catalog') {
     renderCatalog();
   }
+  if (tabId === 'guide') renderGuide();
 
   renderTabBar();
 }
@@ -1970,6 +1867,10 @@ function closeTab(tabId) {
     closeCatalogTab();
     return;
   }
+  if (tabId === 'guide') {
+    closeGuideTab();
+    return;
+  }
 
   optimizerTabs.delete(tabId);
   const wrapper = document.getElementById(`opt-wrapper-${tabId}`);
@@ -1995,10 +1896,7 @@ async function openOptimizerInspector() {
   optimizerBackdrop.classList.remove('hidden');
   optimizerInspector.classList.add('open');
 
-  // Load vessels data if not cached
-  if (!vesselsData) {
-    vesselsData = await window.api.loadVesselsData();
-  }
+  await loadVesselsData();
 
   renderOptimizerCharacterSelect();
   renderOptimizerVesselList();
@@ -2108,7 +2006,7 @@ function renderOptEffectsTags() {
     html += `<div class="opt-effect-group-cards">`;
     keys.forEach((key, idx) => {
       const eff = allUniqueEffects.find(e => e.key === key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(key, ja);
       const rankHtml = `<span class="opt-effect-rank">${idx + 1}</span>`;
       const dragHandle = `<span class="opt-effect-drag-handle">${iconSvg('grip-vertical', 14)}</span>`;
       html += `<div class="opt-effect-tag" data-key="${key}" data-priority="${gp}" draggable="true">
@@ -2291,7 +2189,8 @@ function collectOptimizerParams() {
   return { character, vessel: vesselStr, combined, effects, candidates, top };
 }
 
-async function runOptimization() {
+// options: { label, suggestion } when run from the build suggestion panel
+async function runOptimization(options = {}) {
   if (!relicData) return;
 
   const params = collectOptimizerParams();
@@ -2307,12 +2206,11 @@ async function runOptimization() {
     (vesselsData && vesselsData.characters[params.character]
       ? vesselsData.characters[params.character].nameEn
       : params.character);
-  const label = ja
-    ? `${charName} #${nextTabId}`
-    : `${charName} #${nextTabId}`;
+  const label = options.label || `${charName} #${nextTabId}`;
 
   // Create tab immediately with loading state
   const tabId = addOptimizerTabLoading(label, params);
+  if (options.suggestion) optimizerTabs.get(tabId).suggestion = options.suggestion;
 
   closeOptimizerInspector();
 
@@ -2330,6 +2228,11 @@ async function runOptimization() {
         stackingData[key] = 'conditional';
       }
     }
+  }
+  // Effects that only work from the leftmost relic (key -> group), see relic-optimizer.js
+  const leftmostData = {};
+  for (const entry of Object.values((effectsData && effectsData.effects) || {})) {
+    if (entry.leftmost && !(entry.key in leftmostData)) leftmostData[entry.key] = entry.leftmost;
   }
 
   // Terminate previous worker if running
@@ -2371,7 +2274,7 @@ async function runOptimization() {
     }
 
     if (data.result) {
-      optimizerTabs.set(tabId, { label, data: data.result, params });
+      optimizerTabs.set(tabId, { label, data: data.result, params, suggestion: options.suggestion });
       const container = document.getElementById(`opt-result-${tabId}`);
       if (container) {
         container.classList.remove('opt-loading');
@@ -2411,6 +2314,7 @@ async function runOptimization() {
     effectSpecs: params.effects,
     vesselsData: vesselsData,
     stackingData: stackingData,
+    leftmostData: leftmostData,
     params: {
       character: params.character,
       vessel: params.vessel,
@@ -2426,7 +2330,7 @@ btnOptimizer.addEventListener('click', openOptimizerInspector);
 optimizerClose.addEventListener('click', closeOptimizerInspector);
 optimizerBackdrop.addEventListener('click', closeOptimizerInspector);
 optAddEffect.addEventListener('click', openEffectSelectInspector);
-optimizerRunBtn.addEventListener('click', runOptimization);
+optimizerRunBtn.addEventListener('click', () => runOptimization());
 optimizerClearBtn.addEventListener('click', () => {
   optSelectedEffects.clear();
   renderOptEffectsTags();
@@ -2512,6 +2416,497 @@ optPresetLoad.addEventListener('click', async () => {
   if (preset.candidates) optCandidates.value = preset.candidates;
   if (preset.top) optTop.value = preset.top;
 });
+
+// ============================================================
+// === Build Suggestion (experimental) ===
+// ============================================================
+// Pick a character, weapon types, playstyles (型) and a 火力↔生存 balance (optionally start from a known
+// build). relic-suggest.js turns the choices into build-search conditions, which are put into the build
+// search panel and run as a normal search, so they can be fine-tuned there afterwards.
+const suggestInspector = document.getElementById('suggest-inspector');
+const suggestBackdrop = document.getElementById('suggest-backdrop');
+const btnSuggest = document.getElementById('btn-suggest');
+const sgCharacter = document.getElementById('sg-character');
+const sgVessel = document.getElementById('sg-vessel');
+const sgMode = document.getElementById('sg-mode');
+const sgBuild = document.getElementById('sg-build');
+const sgFocus = document.getElementById('sg-focus');
+const SUGGEST_AXES = [
+  ['style', '戦い方', 'Playstyle'],
+  ['magic', '魔術・祈祷', 'Sorceries / Incantations'],
+  ['status', '状態異常・属性', 'Status ailments / Elements'],
+  ['role', '役割', 'Role'],
+];
+const SUGGEST_PRIORITY_LABELS = {
+  required: ['必須', 'Required'], preferred: ['推奨', 'Preferred'], nice_to_have: ['任意', 'Nice to have'], exclude: ['除外', 'Exclude'],
+};
+let suggestData = null;
+let suggestInfoCache = null;
+let effectNameCache = null;
+const suggestPicks = { weapons: new Set(), types: new Set() };
+
+function suggestInfo() {
+  if (!suggestInfoCache) suggestInfoCache = suggestEffectInfo(effectsData);
+  return suggestInfoCache;
+}
+
+// Effect name by key from the data files (the build search can ask for effects the player does not own yet)
+function effectNameByKey(key, ja) {
+  if (!effectNameCache) {
+    effectNameCache = {};
+    for (const e of Object.values((effectsData && effectsData.effects) || {})) {
+      if (!effectNameCache[e.key]) effectNameCache[e.key] = e;
+    }
+  }
+  const e = effectNameCache[key];
+  return e ? (ja ? e.name_ja : e.name_en) || key : key;
+}
+
+async function loadVesselsData() {
+  if (!vesselsData) vesselsData = await window.api.loadVesselsData();
+  return !!vesselsData;
+}
+
+async function loadSuggestData() {
+  if (suggestData) return true;
+  try {
+    suggestData = await window.api.loadSuggestData();
+    if (!suggestData) throw new Error('build_suggest.json');
+    return true;
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? 'ビルド提案のデータの読み込みに失敗' : 'Could not load the build suggestion data'}: ${err}`);
+    return false;
+  }
+}
+
+async function loadProfilesData() {
+  if (profilesData) return true;
+  try {
+    profilesData = await window.api.loadProfilesData();
+    if (!profilesData) throw new Error('character_profiles.json');
+    return true;
+  } catch (err) {
+    alert(`${displayLang === 'ja' ? 'キャラ図鑑のデータの読み込みに失敗' : 'Could not load the character guide data'}: ${err}`);
+    return false;
+  }
+}
+
+function charDisplayName(charJa, ja) {
+  const c = vesselsData && vesselsData.characters[charJa];
+  return ja || !c ? charJa : (c.nameEn || charJa);
+}
+
+function vesselDisplayName(key, ja) {
+  const all = [...((vesselsData && vesselsData.vesselTypes) || []), ...((vesselsData && vesselsData.universalVessels) || [])];
+  const v = all.find((x) => x.key === key);
+  return v ? (ja ? v.nameJa : v.nameEn) : key;
+}
+
+function renderSuggestText() {
+  const ja = displayLang === 'ja';
+  const t = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+  t('btn-suggest-label', ja ? 'ビルド提案' : 'Build Suggestion');
+  t('btn-suggest-badge', ja ? '試験的' : 'Beta');
+  t('suggest-title', ja ? 'ビルド提案' : 'Build Suggestion');
+  t('suggest-badge', ja ? '試験的' : 'Beta');
+  t('suggest-lead', ja
+    ? '型や武器種などを選ぶと、手持ちの遺物から大まかなビルドの方向性を提案します。最適解を出すものではないので、結果をたたき台にして、ビルド探索で詳細を詰めてください（条件はビルド探索の画面に引き継がれます）。型や効果の対応は神攻略wikiの情報をもとにしています。'
+    : 'Pick playstyles, weapon types and more to get a rough direction for a build from your relics. It is not an optimal answer: use the result as a starting point and fine-tune it in the build search (the conditions are carried over). Based on the Japanese Kamikouryaku wiki (names are in Japanese).');
+  t('sg-character-label', ja ? 'キャラクター' : 'Character');
+  t('sg-vessel-label', ja ? '献器' : 'Vessel');
+  t('sg-mode-label', ja ? 'モード' : 'Mode');
+  sgMode.options[0].textContent = suggestModeText('combined', ja);
+  sgMode.options[1].textContent = suggestModeText('normal', ja);
+  t('sg-build-label', ja ? 'ビルドのテンプレートから始める（任意）' : 'Start from a build template (optional)');
+  t('sg-weapons-label', ja ? '武器種' : 'Weapon types');
+  t('sg-focus-label', ja ? '重視すること' : 'Focus');
+  t('sg-focus-keep', ja
+    ? '選んだ型やビルドのテンプレートの効果は、つまみの位置に関係なく残ります。つまみは、それに足す汎用の効果を決めるだけです。'
+    : 'The effects of the playstyles and the build template you picked stay wherever the slider is. The slider only decides which general effects are added on top.');
+  t('sg-focus-guide-label', ja ? '選び方の目安' : 'How to choose');
+  document.getElementById('sg-focus-guide').innerHTML = (ja ? [
+    '夜の王や強敵に倒されることが多い → 生存側へ',
+    '倒されはしないが、倒すのに時間がかかる → 火力側へ',
+    '守ってくれる味方がいる → 火力側も選びやすい',
+    '迷ったら → バランス',
+  ] : [
+    'You often go down against Nightlords and strong enemies → toward Survival',
+    'You survive, but kills take long → toward Damage',
+    'A teammate protects you → Damage is easier to pick',
+    'Not sure → Balanced',
+  ]).map((x) => `<li>${escapeHtml(x)}</li>`).join('');
+  renderSuggestFocus();
+  t('sg-preview-label', ja ? '探索する条件' : 'Search conditions');
+  t('suggest-clear-label', ja ? 'クリア' : 'Clear');
+  t('suggest-run-label', ja ? '提案を探す' : 'Find builds');
+}
+
+// Deep relics only work in Deep of Night, so the relic slots double as the expedition mode
+function suggestModeText(mode, ja) {
+  if (mode === 'normal') return ja ? '通常モード（通常の遺物のみ）' : 'Normal mode (normal relics only)';
+  return ja ? '深き夜（通常+深層の遺物）' : 'Deep of Night (normal + deep relics)';
+}
+
+// The 生存 ↔ 火力 slider: slider value -2 (left, 生存) .. 2 (right, 火力). suggestConditions takes the
+// opposite sign (negative = 火力)
+const SUGGEST_FOCUS_STEPS = {
+  '-2': {
+    ja: ['生存特化', '守りの効果（最大HP・カット率・強靭度・リゲイン）を「推奨」にします。攻撃力の効果は足しません。'],
+    en: ['Survival', 'Defensive effects (max HP, damage negation, poise, HP regain on attack) become Preferred. No attack effects are added.'],
+  },
+  '-1': {
+    ja: ['生存寄り', '守りの効果を「推奨」にし、攻撃力の効果を「任意」で少し足します。'],
+    en: ['Lean survival', 'Defensive effects become Preferred; attack effects are added as Nice to have.'],
+  },
+  0: {
+    ja: ['バランス', '守りと攻撃力の効果を、両方「任意」で少し足します（迷ったらここ）。'],
+    en: ['Balanced', 'Both defensive and attack effects are added as Nice to have (pick this if unsure).'],
+  },
+  1: {
+    ja: ['火力寄り', '攻撃力の効果（物理攻撃力・封牢／夜の侵入者を倒す度）を「推奨」にし、守りの効果を「任意」で少し足します。'],
+    en: ['Lean damage', 'Attack effects (physical attack, evergaol / Night Invader buffs) become Preferred; defensive effects are added as Nice to have.'],
+  },
+  2: {
+    ja: ['火力特化', '攻撃力の効果を「推奨」にします。守りの効果は足しません。'],
+    en: ['Damage', 'Attack effects become Preferred. No defensive effects are added.'],
+  },
+};
+
+function suggestFocusStep(value, ja) {
+  const step = SUGGEST_FOCUS_STEPS[Math.max(-2, Math.min(2, Number(value) || 0))];
+  return ja ? step.ja : step.en;
+}
+
+function renderSuggestFocus() {
+  const ja = displayLang === 'ja';
+  const value = Number(sgFocus.value) || 0;
+  const steps = document.getElementById('sg-focus-steps');
+  steps.innerHTML = [-2, -1, 0, 1, 2].map((v, i) => `<button type="button" class="suggest-focus-step" style="--i:${i}" data-value="${v}" aria-pressed="${v === value}">${escapeHtml(suggestFocusStep(v, ja)[0])}</button>`).join('');
+  const [name, desc] = suggestFocusStep(value, ja);
+  document.getElementById('sg-focus-desc').innerHTML = `<strong>${escapeHtml(name)}</strong>: ${escapeHtml(desc)}`;
+  sgFocus.setAttribute('aria-valuetext', name);
+}
+
+function suggestChip(kind, id, title) {
+  const on = suggestPicks[kind].has(id);
+  return `<button type="button" class="suggest-chip" data-kind="${kind}" data-id="${escapeHtml(id)}" aria-pressed="${on}"${
+    title ? ` title="${escapeHtml(title)}"` : ''}>${escapeHtml(id)}</button>`;
+}
+
+function renderSuggestPanel() {
+  if (!vesselsData || !suggestData) return;
+  const ja = displayLang === 'ja';
+  renderSuggestText();
+
+  const prevChar = sgCharacter.value || optCharacter.value;
+  sgCharacter.innerHTML = Object.keys(vesselsData.characters || {})
+    .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(charDisplayName(c, ja))}</option>`).join('');
+  if (prevChar && vesselsData.characters[prevChar]) sgCharacter.value = prevChar;
+
+  const prevVessel = sgVessel.value;
+  const vessels = [...(vesselsData.vesselTypes || []), ...(vesselsData.universalVessels || [])];
+  sgVessel.innerHTML = `<option value="">${ja ? 'おまかせ（すべての献器を比べる）' : 'Any (compare all vessels)'}</option>` +
+    vessels.map((v) => `<option value="${escapeHtml(v.key)}">${escapeHtml(ja ? v.nameJa : v.nameEn)}</option>`).join('');
+  if (vessels.some((v) => v.key === prevVessel)) sgVessel.value = prevVessel;
+
+  renderSuggestBuilds();
+  document.getElementById('sg-weapons').innerHTML = suggestData.weapons.map((w) => suggestChip('weapons', w.id)).join('');
+  document.getElementById('sg-types').innerHTML = SUGGEST_AXES.map(([axis, labelJa, labelEn]) => `
+    <h4>${ja ? labelJa : labelEn}</h4>
+    <div class="suggest-chips">${suggestData.types.filter((t) => t.axis === axis).map((t) => suggestChip('types', t.id, t.summary)).join('')}</div>`).join('');
+  updateSuggestPreview();
+}
+
+function renderSuggestBuilds() {
+  const ja = displayLang === 'ja';
+  const prev = sgBuild.value;
+  const builds = suggestData.builds.filter((b) => b.character === sgCharacter.value);
+  const option = (b) => `<option value="${escapeHtml(b.id)}">${escapeHtml(b.name)}${b.target ? escapeHtml(`（${b.target}）`) : ''}</option>`;
+  const general = builds.filter((b) => !b.target);
+  const targeted = builds.filter((b) => b.target);
+  sgBuild.innerHTML = `<option value="">${ja ? '使わない' : 'None'}</option>` +
+    (general.length ? `<optgroup label="${ja ? '汎用' : 'General'}">${general.map(option).join('')}</optgroup>` : '') +
+    (targeted.length ? `<optgroup label="${ja ? '特定の相手向け' : 'For a specific boss'}">${targeted.map(option).join('')}</optgroup>` : '');
+  if (builds.some((b) => b.id === prev)) sgBuild.value = prev;
+  renderSuggestBuildInfo();
+}
+
+function renderSuggestBuildInfo() {
+  const ja = displayLang === 'ja';
+  const b = suggestData && suggestData.builds.find((x) => x.id === sgBuild.value);
+  const el = document.getElementById('sg-build-info');
+  if (!b) {
+    el.textContent = ja ? `${sgCharacter.value} のビルドのテンプレート ${suggestData.builds.filter((x) => x.character === sgCharacter.value).length} 件から選べます。` : '';
+    return;
+  }
+  el.innerHTML = [
+    b.aim && `${ja ? '狙い' : 'Aim'}: ${escapeHtml(b.aim)}`,
+    b.mode && `${ja ? 'モード' : 'Mode'}: ${escapeHtml(b.mode)}`,
+    b.target && `${ja ? '相手' : 'Target'}: ${escapeHtml(b.target)}`,
+    b.sources[0] && `<a href="${escapeHtml(b.sources[0])}" target="_blank" rel="noopener noreferrer">${ja ? '出典（神攻略wiki）' : 'Source (wiki)'}</a>`,
+  ].filter(Boolean).join(' ／ ');
+}
+
+function collectSuggestInput() {
+  return {
+    character: sgCharacter.value,
+    vessel: sgVessel.value,
+    mode: sgMode.value,
+    buildId: sgBuild.value || null,
+    weapons: [...suggestPicks.weapons],
+    types: [...suggestPicks.types],
+    // the slider has 生存 on the left and 火力 on the right; suggestConditions takes negative = 火力
+    focus: -(Number(sgFocus.value) || 0) || 0,
+  };
+}
+
+function suggestionCounts(cond) {
+  const counts = { required: 0, preferred: 0, nice_to_have: 0, exclude: 0 };
+  cond.effects.forEach((e) => { counts[e.exclude ? 'exclude' : e.priority]++; });
+  return counts;
+}
+
+function suggestionCountsText(cond, ja) {
+  const counts = suggestionCounts(cond);
+  return Object.entries(counts).filter(([, n]) => n)
+    .map(([k, n]) => `${SUGGEST_PRIORITY_LABELS[k][ja ? 0 : 1]} ${n}`).join(ja ? '・' : ', ');
+}
+
+function conflictText(c, ja) {
+  const name = effectNameByKey(c.key, ja);
+  return ja
+    ? `「${name}」は ${c.wantedBy.join('・')} では使いたい効果、${c.avoidedBy.join('・')} では避けたい効果です（使いたい側を優先しました）`
+    : `"${name}" is wanted by ${c.wantedBy.join(', ')} but avoided by ${c.avoidedBy.join(', ')} (kept)`;
+}
+
+function suggestNoteText(n, input, ja) {
+  const q = (key) => (ja ? `「${effectNameByKey(key, true)}」` : `"${effectNameByKey(key, false)}"`);
+  if (n.kind === 'findFavored') {
+    return ja ? `${n.weapons.join('・')}は${input.character}がもともと見つけやすい武器種なので、「見つけやすくなる」効果は使いません`
+      : `${n.weapons.join(', ')}: already found more often by this character, so the "helps discover" effect is not used`;
+  }
+  if (n.kind === 'findReplaces') {
+    return ja ? `「${n.weapon}を見つけやすくなる」は、もともと見つけやすい${n.favored.join('・')}と置き換わります（${n.favored.join('・')}は見つけやすくなくなります）`
+      : `"Helps discover ${n.weapon}" replaces the type this character finds more often (${n.favored.join(', ')})`;
+  }
+  if (n.kind === 'findOnlyOne') {
+    return ja ? `「見つけやすくなる」は複数付けても1つしか効かない（最も左の遺物のもの）ため、最初に選んだ${n.first}を推奨、${n.rest.join('・')}を任意にしました`
+      : `Only one "helps discover" effect works (the leftmost relic's): ${n.first} (picked first) is preferred, ${n.rest.join(', ')} nice to have`;
+  }
+  if (n.kind === 'character') {
+    // why texts are short Japanese notes from the wiki research; the English UI keeps the effect names only
+    if (!ja) return `Effects you may want to avoid with this character (added as exclusions): ${n.items.map((x) => q(x.key)).join(', ')}`;
+    const groups = new Map();   // effects with the same reason share one note
+    for (const x of n.items) {
+      const why = `${x.why}${x.tier === 'comment' ? '、コメント欄の多数意見' : ''}`;
+      if (!groups.has(why)) groups.set(why, []);
+      groups.get(why).push(q(x.key));
+    }
+    const list = [...groups].map(([why, names]) => `${names.join('')}（${why}）`);
+    return `${n.character}の特性で避けたい効果（除外に入れました）: ${list.join('、')}`;
+  }
+  if (n.kind === 'mode') {
+    const why = input.mode === 'normal'
+      ? (ja ? '通常モードでは災域が発生しないことがあるため' : 'in normal mode there may be no Night Invaders')
+      : (ja ? '深き夜では災域が必ず発生し、封牢には変異体が出ることがあるため' : 'in Deep of Night Night Invaders always appear and evergaols can have augmented bosses');
+    return ja ? `${n.first.map(q).join('')}を${n.second.map(q).join('')}より優先しました（${why}）`
+      : `${n.first.map(q).join(', ')} is ranked above ${n.second.map(q).join(', ')} (${why})`;
+  }
+  return '';
+}
+
+function updateSuggestPreview() {
+  if (!suggestData) return;
+  const ja = displayLang === 'ja';
+  const input = collectSuggestInput();
+  const el = document.getElementById('sg-preview');
+  const runBtn = document.getElementById('suggest-run');
+  const picked = input.buildId || input.weapons.length || input.types.length;
+  if (!picked) {
+    el.innerHTML = `<p class="suggest-hint">${ja ? 'ビルドのテンプレート・武器種・型のどれかを選んでください。' : 'Pick a build template, a weapon type or a playstyle.'}</p>`;
+    runBtn.disabled = true;
+    return;
+  }
+  const cond = suggestConditions(suggestData, input, suggestInfo());
+  runBtn.disabled = !cond.effects.length;
+  const rows = cond.effects.map((e) => {
+    const p = e.exclude ? 'exclude' : e.priority;
+    return `<li><span class="sg-pri sg-pri-${p}">${SUGGEST_PRIORITY_LABELS[p][ja ? 0 : 1]}</span>${escapeHtml(effectNameByKey(e.key, ja))}<span class="sg-why">${escapeHtml(e.reasons.join('・'))}</span></li>`;
+  }).join('');
+  el.innerHTML = `<p class="sg-counts">${escapeHtml(suggestionCountsText(cond, ja))}</p>` +
+    cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('') +
+    (cond.notes || []).map((n) => `<p class="sg-note">${escapeHtml(suggestNoteText(n, input, ja))}</p>`).join('') +
+    `<details class="sg-detail"><summary>${ja ? '効果の一覧と理由' : 'Effects and why'}</summary><ul>${rows}</ul></details>`;
+}
+
+async function openSuggest() {
+  suggestBackdrop.classList.remove('hidden');
+  suggestInspector.classList.add('open');
+  if (!(await loadVesselsData()) || !(await loadSuggestData())) return;
+  renderSuggestPanel();
+}
+
+// === キャラ図鑑 (character guide tab) ===
+// One character's numbers, traits, how the build suggestion treats them and the build templates (relic-guide.js)
+const btnGuide = document.getElementById('btn-guide');
+const guideContent = document.getElementById('guide-content');
+
+function renderGuide() {
+  if (!profilesData || !suggestData) return;
+  const ja = displayLang === 'ja';
+  if (!guideCharacter) guideCharacter = (typeof optCharacter !== 'undefined' && optCharacter.value) || Object.keys(profilesData.characters)[0];
+  guideContent.innerHTML = `<div class="guide-scroll-area">${renderCharacterGuide({
+    character: guideCharacter, profiles: profilesData, suggest: suggestData, ja,
+    effectName: (key) => effectNameByKey(key, true), charName: (c) => charDisplayName(c, ja),
+  })}</div>`;
+}
+
+async function openGuideTab() {
+  if (!(await loadVesselsData()) || !(await loadSuggestData()) || !(await loadProfilesData())) return;
+  guideTabOpen = true;
+  switchTab('guide');
+}
+
+function closeGuideTab() {
+  guideTabOpen = false;
+  guideContent.classList.add('hidden');
+  if (activeTab === 'guide') switchTab('main');
+  else renderTabBar();
+}
+
+// Start the build suggestion from a build template picked in the guide
+async function suggestFromGuide(character, buildId) {
+  await openSuggest();
+  if (!suggestData || !vesselsData) return;
+  sgCharacter.value = character;
+  renderSuggestBuilds();
+  sgBuild.value = buildId;
+  renderSuggestBuildInfo();
+  updateSuggestPreview();
+}
+
+btnGuide.addEventListener('click', () => (guideTabOpen ? switchTab('guide') : openGuideTab()));
+guideContent.addEventListener('click', (e) => {
+  const chip = e.target.closest('.guide-char');
+  if (chip) {
+    guideCharacter = chip.dataset.character;
+    renderGuide();
+    guideContent.querySelector('.guide-scroll-area').scrollTop = 0;
+    return;
+  }
+  const toggle = e.target.closest('.guide-toggle-builds');
+  if (toggle) {
+    guideContent.querySelectorAll('.guide-build').forEach((d) => { d.open = toggle.dataset.open === '1'; });
+    return;
+  }
+  const btn = e.target.closest('.guide-suggest');
+  if (btn) suggestFromGuide(guideCharacter, btn.dataset.build);
+});
+
+function closeSuggest() {
+  suggestBackdrop.classList.add('hidden');
+  suggestInspector.classList.remove('open');
+}
+
+// Put a suggestion's conditions into the build search panel
+function applySuggestionToOptimizer(sug) {
+  renderOptimizerCharacterSelect();
+  optCharacter.value = sug.input.character;
+  renderOptimizerVesselList();
+  optVesselList.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.checked = !sug.input.vessel || cb.value === sug.input.vessel;
+  });
+  updateOptVesselCount();
+  optMode.value = sug.input.mode;
+  optSelectedEffects = new Map(sug.cond.effects.map((e) => [e.key, e.exclude ? `exclude_${e.priority}` : e.priority]));
+  renderOptEffectsTags();
+  updateOptEffectsCount();
+}
+
+function runSuggestion() {
+  if (!suggestData || !relicData) return;
+  const ja = displayLang === 'ja';
+  const input = collectSuggestInput();
+  const cond = suggestConditions(suggestData, input, suggestInfo());
+  if (!cond.effects.length) return;
+  const sug = { input, cond };
+  applySuggestionToOptimizer(sug);
+  closeSuggest();
+  runOptimization({ label: `${ja ? '提案' : 'Suggest'}: ${charDisplayName(input.character, ja)} #${nextTabId}`, suggestion: sug });
+}
+
+// Summary shown at the top of a suggestion's result tab
+function renderSuggestionSummary(sug) {
+  const ja = displayLang === 'ja';
+  const { input, cond } = sug;
+  const build = suggestData && input.buildId ? suggestData.builds.find((b) => b.id === input.buildId) : null;
+  const focusText = suggestFocusStep(-input.focus, ja)[0];   // input.focus: negative = 火力
+  const choices = [
+    [ja ? 'キャラ' : 'Character', charDisplayName(input.character, ja)],
+    [ja ? '献器' : 'Vessel', input.vessel ? vesselDisplayName(input.vessel, ja) : (ja ? 'おまかせ' : 'Any')],
+    [ja ? 'モード' : 'Mode', suggestModeText(input.mode, ja)],
+    build && [ja ? 'テンプレート' : 'Template', `${build.name}${build.target ? `（${build.target}）` : ''}`],
+    input.weapons.length && [ja ? '武器種' : 'Weapons', input.weapons.join('・')],
+    input.types.length && [ja ? '型' : 'Playstyles', input.types.join('・')],
+    [ja ? '重視' : 'Focus', focusText],
+  ].filter(Boolean);
+  const leftmost = cond.effects.some((e) => /^(潜在する力から|出撃時の武器)/.test(effectNameByKey(e.key, true)));
+  const notOnRelics = cond.notOnRelics.length
+    ? `<p class="sg-note">${ja ? 'この型で大事だが遺物では得られない効果（武器の付帯効果などで狙います）' : 'Important for these playstyles but not available on relics (weapon passives etc.)'}: ${
+      cond.notOnRelics.map((n) => `${escapeHtml(n.name)}（${escapeHtml(n.type)}）`).join('、')}</p>` : '';
+  return `<div class="sg-summary">
+    <div class="sg-summary-head">${iconSvg('lightbulb', 16)}<span>${ja ? 'ビルド提案' : 'Build Suggestion'}</span><span class="experimental-badge">${ja ? '試験的' : 'Beta'}</span></div>
+    <dl class="sg-choices">${choices.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('')}</dl>
+    <p class="sg-note">${ja ? '大まかな方向性の提案です。結果をたたき台にして、ビルド探索で詳細を詰めてください。' : 'A rough direction, not an optimal answer. Fine-tune it in the build search.'}</p>
+    <p class="sg-counts">${ja ? '探索した条件' : 'Searched with'}: ${escapeHtml(suggestionCountsText(cond, ja))}
+      <button type="button" class="btn-secondary sg-open-optimizer">${iconSvg('wand-sparkles', 14)}<span>${ja ? 'ビルド探索で細かく調整' : 'Fine-tune in Build Search'}</span></button></p>
+    ${cond.conflicts.map((c) => `<p class="sg-note warn">${escapeHtml(conflictText(c, ja))}</p>`).join('')}
+    ${(cond.notes || []).map((n) => `<p class="sg-note">${escapeHtml(suggestNoteText(n, input, ja))}</p>`).join('')}
+    ${notOnRelics}
+    ${leftmost ? `<p class="sg-note">${ja ? '「潜在する力から…」「出撃時の武器の…」の効果は、同じ種類を複数付けると献器の最も左の遺物のものしか発動しません。探索はこれを考慮して遺物の並び（左から）を決めます。結果の並び順どおりにセットしてください。' : 'When several "dormant power…" or "starting armament…" effects of the same kind are equipped, only the one on the leftmost relic of the vessel works. The search takes this into account and lists the relics left to right: set them in that order.'}</p>` : ''}
+  </div>`;
+}
+
+btnSuggest.addEventListener('click', openSuggest);
+document.getElementById('suggest-close').addEventListener('click', closeSuggest);
+suggestBackdrop.addEventListener('click', closeSuggest);
+document.getElementById('suggest-run').addEventListener('click', runSuggestion);
+document.getElementById('suggest-clear').addEventListener('click', () => {
+  suggestPicks.weapons.clear();
+  suggestPicks.types.clear();
+  sgBuild.value = '';
+  sgFocus.value = '0';
+  renderSuggestFocus();
+  renderSuggestPanel();
+});
+sgCharacter.addEventListener('change', () => { renderSuggestBuilds(); updateSuggestPreview(); });
+sgBuild.addEventListener('change', () => { renderSuggestBuildInfo(); updateSuggestPreview(); });
+[sgVessel, sgMode, sgFocus].forEach((el) => el.addEventListener('input', updateSuggestPreview));
+sgFocus.addEventListener('input', renderSuggestFocus);
+document.getElementById('sg-focus-steps').addEventListener('click', (e) => {
+  const step = e.target.closest('.suggest-focus-step');
+  if (!step) return;
+  sgFocus.value = step.dataset.value;
+  sgFocus.dispatchEvent(new Event('input'));
+});
+suggestInspector.addEventListener('click', (e) => {
+  const chip = e.target.closest('.suggest-chip');
+  if (!chip) return;
+  const set = suggestPicks[chip.dataset.kind];
+  if (set.has(chip.dataset.id)) set.delete(chip.dataset.id);
+  else set.add(chip.dataset.id);
+  chip.setAttribute('aria-pressed', String(set.has(chip.dataset.id)));
+  updateSuggestPreview();
+});
+// "Fine-tune in Build Search" on a suggestion's result tab: restore that suggestion's conditions
+document.getElementById('main-content').addEventListener('click', (e) => {
+  if (!e.target.closest('.sg-open-optimizer')) return;
+  const tab = optimizerTabs.get(activeTab);
+  if (!tab || !tab.suggestion) return;
+  applySuggestionToOptimizer(tab.suggestion);
+  openOptimizerInspector();
+});
+renderSuggestText();
 
 // ============================================================
 // === Effect Selection Inspector ===
@@ -2764,6 +3159,9 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
 
   let html = '';
 
+  const suggestion = (optimizerTabs.get(tabId) || {}).suggestion;
+  if (suggestion) html += renderSuggestionSummary(suggestion);
+
   // Summary header
   if (bestResult) {
     const best = bestResult.result;
@@ -2814,7 +3212,7 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
     html += `<div class="opt-conditions-effects">`;
     params.effects.forEach(e => {
       const eff = allUniqueEffects.find(u => u.key === e.key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(e.key, ja);
       const displayPriority = e.exclude ? `exclude_${e.priority}` : e.priority;
       const pLabel = PRIORITY_LABELS[displayPriority]
         ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
@@ -2884,6 +3282,7 @@ function renderOptimizerResults(tabId, data, params, sortKey, sortDir) {
 }
 
 function renderResultCard(res, ja, isBest, params, idx) {
+  markWastedDuplicates(res);
   const cardClass = `opt-result-card${isBest ? ' best' : ''}`;
   const vesselName = ja ? res._vesselNameJa : res._vesselNameEn;
   const matchedSet = new Set(res.matchedEffects || []);
@@ -2928,7 +3327,9 @@ function renderResultCard(res, ja, isBest, params, idx) {
         } else if (isSpec) {
           cls += ' spec-miss';
         }
-        html += `<span class="${cls}">${effName}</span>`;
+        if (eff._wasted || eff.inactive) cls += ' wasted';
+        const note = eff.inactive ? inactiveLabel(ja) : eff._wasted ? wastedLabel(ja) : '';
+        html += `<span class="${cls}"${note ? ` title="${note}"` : ''}>${effName}</span>`;
       });
       html += `</div>`;
       html += `</div>`;
@@ -2941,7 +3342,59 @@ function renderResultCard(res, ja, isBest, params, idx) {
   return html;
 }
 
+// Stackability per effect kind, the way the build search decides it (any stackable id makes the kind stackable)
+let keyStackabilityCache = null;
+function keyStackability() {
+  if (keyStackabilityCache) return keyStackabilityCache;
+  const map = {};
+  for (const info of Object.values(stackingLookup || {})) {
+    if (!info.key) continue;
+    const s = info.stackable;
+    if (!(info.key in map)) map[info.key] = s === true ? true : s === 'conditional' ? 'conditional' : false;
+    else if (s === true) map[info.key] = true;
+    else if (s === 'conditional' && map[info.key] === false) map[info.key] = 'conditional';
+  }
+  keyStackabilityCache = map;
+  return map;
+}
+
+// A non-stackable effect on more than one relic of a result works only once. Marks the other copies
+// `_wasted` (shown as 「重複・効果なし」). Like the build search, the copy that counts is the one on the
+// relic with the most matched effects (the earliest on ties); outside the conditions, the first one.
+function markWastedDuplicates(res) {
+  if (res._wastedMarked) return;
+  res._wastedMarked = true;
+  const relics = [...(res.normalRelics || []), ...(res.deepRelics || []), ...(res.relics || [])];
+  const stack = keyStackability();
+  const matchedCount = relics.map(r => (r.effects || []).filter(e => e.matched).length);
+  const holders = new Map();
+  relics.forEach((r, ri) => (r.effects || []).forEach(eff => {
+    if (eff.isDebuff || eff.inactive || stack[eff.key] !== false) return;
+    if (!holders.has(eff.key)) holders.set(eff.key, []);
+    holders.get(eff.key).push({ ri, eff });
+  }));
+  for (const list of holders.values()) {
+    if (list.length < 2) continue;
+    let keep = list[0];
+    if (keep.eff.matched) {
+      for (const h of list) if (matchedCount[h.ri] > matchedCount[keep.ri]) keep = h;
+    }
+    for (const h of list) if (h !== keep) h.eff._wasted = true;
+  }
+}
+
+function wastedLabel(ja) {
+  return ja ? '重複・効果なし' : 'Duplicate (no effect)';
+}
+
+// An effect that only works from the leftmost relic, overridden by one of the same kind further left
+// (marked `inactive` by the build search; relics are listed left to right)
+function inactiveLabel(ja) {
+  return ja ? '左の遺物が優先・効果なし' : 'Overridden by a relic on the left (no effect)';
+}
+
 function computeScoreBreakdown(res, params) {
+  markWastedDuplicates(res);
   const allRelics = [...(res.normalRelics || []), ...(res.deepRelics || [])];
   const matchedKeys = new Set(res.matchedEffects || []);
   const excludedKeys = new Set(res.excludedPresent || []);
@@ -2960,11 +3413,7 @@ function computeScoreBreakdown(res, params) {
     }
   }
 
-  // Build key -> stackable lookup
-  const keyToStackable = {};
-  for (const [id, info] of Object.entries(stackingLookup)) {
-    if (info.key) keyToStackable[info.key] = info.stackable;
-  }
+  const keyToStackable = keyStackability();
 
   // Compute per-effect score contribution
   const effects = [];
@@ -2997,7 +3446,7 @@ function computeScoreBreakdown(res, params) {
     let matchedOnRelic = 0;
     const matchedNames = [];
     for (const eff of relic.effects) {
-      if (eff.matched && matchedKeys.has(eff.key)) {
+      if (eff.matched && matchedKeys.has(eff.key) && !eff._wasted) {   // a wasted duplicate earns no bonus
         matchedOnRelic++;
         matchedNames.push(eff.key);
       }
@@ -3044,6 +3493,7 @@ function computeScoreBreakdown(res, params) {
 function showOptResultDetail(tabId, res, params, idx) {
   const panel = document.getElementById(`opt-detail-${tabId}`);
   if (!panel) return;
+  markWastedDuplicates(res);
   panel.classList.remove('hidden');
   const ja = displayLang === 'ja';
 
@@ -3112,7 +3562,7 @@ function showOptResultDetail(tabId, res, params, idx) {
   // Missing required
   (res.missingRequired || []).forEach(key => {
     const eff = allUniqueEffects.find(e => e.key === key);
-    const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+    const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(key, ja);
     html += `<div class="detail-score-row" style="opacity:0.5">`;
     html += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
     html += `<div class="detail-effect-meta">${ja ? '未達' : 'Missing'}</div>`;
@@ -3211,7 +3661,8 @@ function renderOptDetailRelic(relic, ja) {
     if (excluded) effCls += ' excluded';
     else if (matched) effCls += ' matched';
     html += `<div class="opt-detail-effect-item">`;
-    html += `<div class="${effCls}">${mainName}</div>`;
+    const badge = group.main.inactive ? inactiveLabel(ja) : group.main._wasted ? wastedLabel(ja) : '';
+    html += `<div class="${effCls}">${mainName}${badge ? `<span class="opt-wasted-badge">${badge}</span>` : ''}</div>`;
     group.debuffs.forEach(d => {
       const dName = ja ? (d.name_ja || d.name_en || d.key) : (d.name_en || d.key);
       const isDemerit = classifyEffect(d.name_ja, d.name_en, d.key) === 'demerit';
@@ -3344,6 +3795,8 @@ tbody tr:hover { background: var(--bg-hover); }
 .opt-card-effect.matched.nice_to_have { background: rgba(241,196,15,0.2); color: var(--color-yellow); font-weight: 600; }
 .opt-card-effect.excluded { background: rgba(231,76,60,0.15); color: #e07070; text-decoration: line-through; }
 .opt-card-effect.excluded.exclude_required { background: rgba(231,76,60,0.25); font-weight: 600; }
+.opt-card-effect.wasted { opacity: 0.55; text-decoration: line-through; }
+.opt-wasted-badge { margin-left: 6px; padding: 0 4px; border: 1px solid currentColor; border-radius: 3px; font-size: 10px; color: #a0a0a0; font-weight: 400; }
 /* Detail / Score breakdown */
 .detail-section { margin-bottom: 18px; }
 .detail-section h3 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
@@ -3515,7 +3968,7 @@ function exportOptimizerResultsToHTML(tabId) {
     bodyHTML += `<div class="opt-conditions-row"><span class="opt-conditions-label">${ja ? '効果' : 'Effects'}:</span><div class="opt-conditions-effects">`;
     params.effects.forEach(e => {
       const eff = allUniqueEffects.find(u => u.key === e.key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : e.key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(e.key, ja);
       const displayPriority = e.exclude ? `exclude_${e.priority}` : e.priority;
       const pLabel = PRIORITY_LABELS[displayPriority]
         ? (ja ? PRIORITY_LABELS[displayPriority].ja : PRIORITY_LABELS[displayPriority].en) : displayPriority;
@@ -3572,7 +4025,7 @@ function exportOptimizerResultsToHTML(tabId) {
     }
     (res.missingRequired || []).forEach(key => {
       const eff = allUniqueEffects.find(e => e.key === key);
-      const name = eff ? (ja ? eff.name_ja : eff.name_en) : key;
+      const name = eff ? (ja ? eff.name_ja : eff.name_en) : effectNameByKey(key, ja);
       bodyHTML += `<div class="detail-score-row" style="opacity:0.5">`;
       bodyHTML += `<div class="detail-effect-main" style="color:#e07070">${name}</div>`;
       bodyHTML += `<div class="detail-effect-meta">${ja ? '未達' : 'Missing'}</div>`;
@@ -3647,15 +4100,21 @@ updateLangUI = function() {
 
   // Catalog button & labels
   btnCatalogLabel.textContent = ja ? '効果カタログ' : 'Effect Catalog';
+  document.getElementById('btn-guide-label').textContent = ja ? 'キャラ図鑑' : 'Characters';
+  if (guideTabOpen && activeTab === 'guide') renderGuide();
   catalogSearch.placeholder = ja ? '効果名で検索...' : 'Search effects...';
   document.getElementById('catalog-label-category').textContent = ja ? 'カテゴリ:' : 'Category:';
   document.getElementById('catalog-label-deep').textContent = ja ? '通常/深層:' : 'Normal/Deep:';
   document.getElementById('catalog-label-stack').textContent = ja ? '重複:' : 'Stack:';
-  document.getElementById('catalog-owned-note').textContent = ja ? '※ 所持効果のみ表示' : '* Owned effects only';
+  document.getElementById('catalog-label-owned').textContent = ja ? '所持:' : 'Owned:';
   const deepOpts = catalogFilterDeep.options;
   deepOpts[0].textContent = ja ? 'すべて' : 'All';
-  deepOpts[1].textContent = ja ? '深層' : 'Deep';
-  deepOpts[2].textContent = ja ? '通常' : 'Normal';
+  deepOpts[1].textContent = ja ? '通常の遺物にも付く' : 'Also on normal relics';
+  deepOpts[2].textContent = ja ? '深層のみ' : 'Deep only';
+  const ownedOpts = catalogFilterOwned.options;
+  ownedOpts[0].textContent = ja ? 'すべて' : 'All';
+  ownedOpts[1].textContent = ja ? '所持している' : 'Owned';
+  ownedOpts[2].textContent = ja ? '所持していない' : 'Not owned';
   const stackOpts = catalogFilterStack.options;
   stackOpts[0].textContent = ja ? 'すべて' : 'All';
   stackOpts[1].textContent = ja ? '○ 重複可' : '○ Stackable';

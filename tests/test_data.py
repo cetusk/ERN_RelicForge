@@ -59,6 +59,9 @@ class TestEffectsData(unittest.TestCase):
                     self.assertTrue(eff['stackNotesFull'])
                 if 'deepOnly' in eff:
                     self.assertIsInstance(eff['deepOnly'], bool)
+                # unreleased: in the game data but not in the current game (never offered to users)
+                if 'unreleased' in eff:
+                    self.assertIs(eff['unreleased'], True)
 
 
 class TestVesselsData(unittest.TestCase):

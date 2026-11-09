@@ -150,12 +150,31 @@ ipcMain.handle('load-stacking-data', async () => {
         name_ja: entry.name_ja || '',
         name_en: entry.name_en || '',
         deepOnly: entry.deepOnly || false,
+        unreleased: entry.unreleased || false,
       };
     }
     return lookup;
   } catch (e) {
     console.error('Failed to load stacking data:', e.message);
     return {};
+  }
+});
+
+ipcMain.handle('load-suggest-data', async () => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(resourcesDir, 'build_suggest.json'), 'utf-8'));
+  } catch (e) {
+    console.error('Failed to load build suggestion data:', e.message);
+    return null;
+  }
+});
+
+ipcMain.handle('load-profiles-data', async () => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(resourcesDir, 'character_profiles.json'), 'utf-8'));
+  } catch (e) {
+    console.error('Failed to load character guide data:', e.message);
+    return null;
   }
 });
 

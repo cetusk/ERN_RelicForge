@@ -28,6 +28,15 @@ def _expand(wiki_name):
     return [n], []
 
 
+def _listed_values(notes):
+    """The values a '○○' row lists in its notes ('短剣・直剣・…' on one line), or None when it lists none"""
+    for line in notes.split('\n'):
+        items = [x.strip() for x in line.split('・')]
+        if len(items) >= 3 and all(items) and all(len(x) <= 12 for x in items):
+            return {norm(x) for x in items}
+    return None
+
+
 def _level_range(wiki_name):
     m = re.match(r'^(.*?)\+(\d)~(\d)$', norm(wiki_name))
     return (int(m.group(2)), int(m.group(3))) if m else None
@@ -52,12 +61,22 @@ class Matcher:
         self.rows = wiki_rows
         self.exact = collections.defaultdict(list)
         self.patterns = []
+        self.normal_by_name = {norm(r['name']): r for r in wiki_rows if not r['deep']}
         for i, r in enumerate(wiki_rows):
             names, pats = _expand(r['name'])
             for n in names:
                 self.exact[n].append(i)
-            self.patterns += [(p, i) for p in pats]
-        self.normal_by_name = {norm(r['name']): r for r in wiki_rows if not r['deep']}
+            # a '○○' row matches only the values it lists (e.g. the weapon types of 「○○の攻撃力上昇」). A row that
+            # lists nothing (a deep 「既存効果」 row, or the normal 「見つけやすくなる」 row) uses the list of the
+            # same row in the other table
+            listed = _listed_values(r['notes'])
+            if listed is None and pats:
+                for other in wiki_rows:
+                    if other is not r and norm(other['name']) == norm(r['name']):
+                        listed = _listed_values(other['notes'])
+                        if listed is not None:
+                            break
+            self.patterns += [(p, i, listed) for p in pats]
 
     def match(self, name_ja):
         """Return (candidate row indexes, how)."""
@@ -69,7 +88,11 @@ class Matcher:
             n2 = n2.replace(norm(a), norm(b))
         if n2 != n and self.exact.get(n2):
             return self.exact[n2], 'alias'
-        cand = [i for p, i in self.patterns if p.match(n)]
+        cand = []
+        for p, i, listed in self.patterns:
+            m = p.match(n)
+            if m and (listed is None or norm(m.group(1)) in listed):
+                cand.append(i)
         if cand:
             return cand, 'pattern'
         for rx, _, _ in rules.SECTION_RULES:

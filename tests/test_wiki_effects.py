@@ -115,5 +115,57 @@ class TestProposal(unittest.TestCase):
         self.assertFalse(match.apply_proposal(e, none))
 
 
+class TestLeftmostGroups(unittest.TestCase):
+    """effects_data.json の "leftmost" が rules.LEFTMOST_GROUPS と一致すること（sync.py --apply が付ける）"""
+
+    def test_effects_data_matches_rules(self):
+        import json
+        import rules
+        import sync
+        with open(os.path.join(ROOT_DIR, 'resources', 'effects_data.json'), encoding='utf-8') as f:
+            effects = json.load(f)['effects']
+        for eid, e in effects.items():
+            want = sync.leftmost_group(e['name_ja']) if rules.in_scope(int(eid)) else None
+            self.assertEqual(e.get('leftmost'), want, f'{eid} {e["name_ja"]}')
+        groups = {e.get('leftmost') for e in effects.values()}
+        self.assertEqual(groups, {None, 'find', 'skill', 'spell', 'imbue'})
+
+
+class TestListedPatterns(unittest.TestCase):
+    """A '○○' row applies only to the values its notes list (one line, separated by '・')"""
+    PAGE = '''
+<h2>遺物に付与される効果</h2>
+<h3>特定武器のみ</h3>
+<table>
+<tr><th>効果</th><th>重ね掛け</th><th>備考</th></tr>
+<tr><td>○○の攻撃力上昇</td><td>◯</td><td>短剣・直剣・大剣・弓・クロスボウ</td></tr>
+<tr><td>出撃時の武器の戦技を「○○」にする</td><td>✕</td><td>献器の最も左の遺物の効果のみ発動</td></tr>
+</table>
+<h2>深層の遺物に付与される効果</h2>
+<h3>特定武器のみ</h3>
+<table>
+<tr><th>効果</th><th>重ね掛け</th><th>デメリット</th><th>備考</th></tr>
+<tr><td>○○の攻撃力上昇</td><td>◯</td><td>無し</td><td>既存効果</td></tr>
+</table>
+'''
+
+    def setUp(self):
+        self.m = match.Matcher(wiki.parse_effect_rows(self.PAGE))
+
+    def test_only_listed_values(self):
+        self.assertEqual(self.m.match('直剣の攻撃力上昇')[1], 'pattern')
+        self.assertEqual(self.m.match('クロスボウの攻撃力上昇')[1], 'pattern')
+        self.assertEqual(self.m.match('架空武器の攻撃力上昇')[0], [])   # not in the list
+        self.assertEqual(self.m.match('槍の攻撃力上昇')[0], [])
+
+    def test_row_without_list_uses_the_other_tables_list(self):
+        rows = [self.m.rows[i] for i in self.m.match('大剣の攻撃力上昇')[0]]
+        self.assertTrue(any(r['deep'] for r in rows), 'the deep row (no list) matches listed values')
+        self.assertFalse(any(self.m.rows[i]['deep'] for i in self.m.match('架空武器の攻撃力上昇')[0]))
+
+    def test_row_that_lists_nothing_matches_any_value(self):
+        self.assertEqual(self.m.match('出撃時の武器の戦技を「我慢」にする')[1], 'pattern')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -55,6 +55,8 @@ ICONS = [
     'rotate-ccw',      # スマホのメニュー: 絞り込みを解除
     'qr-code',         # QR コードで渡す
     'scan-qr-code',    # QR コードを読み取る
+    'lightbulb',       # ビルド提案
+    'book-user',       # キャラ図鑑
 ]
 
 HEADER = '''/**

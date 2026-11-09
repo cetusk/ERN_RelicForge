@@ -9,17 +9,17 @@
   },
   "effects": [
    {
-    "key": "gestureCrossedLegsBuildsUpMadness",
+    "key": "madnessContinuallyRecoversFP",
     "priority": "required",
     "rank": 0
    },
    {
-    "key": "attacksInflictSleepPlus1",
+    "key": "attacksInflictSleepPlus2",
     "priority": "required",
     "rank": 1
    },
    {
-    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "key": "gestureCrossedLegsBuildsUpMadness",
     "priority": "preferred",
     "rank": 0
    },
@@ -50,17 +50,17 @@
   },
   "effects": [
    {
-    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "key": "gestureCrossedLegsBuildsUpMadness",
     "priority": "required",
     "rank": 0
    },
    {
-    "key": "starlightShardsInPossessionAtStartOfExpedition",
+    "key": "maxHpUpWith3PlusMediumShieldsEquipped",
     "priority": "required",
     "rank": 1
    },
    {
-    "key": "guardianDamageNegationForAlliesImproved",
+    "key": "smallPouchInPossessionAtStartOfExpedition",
     "priority": "preferred",
     "rank": 0
    },
@@ -93,7 +93,7 @@
     "rank": 1
    },
    {
-    "key": "improvedAttackPowerWith3PlusHalberdsEquipped",
+    "key": "hpRestorationUponCurvedGreatswordAttacks",
     "priority": "nice_to_have",
     "exclude": true,
     "rank": 0
@@ -110,32 +110,32 @@
   },
   "effects": [
    {
-    "key": "attacksInflictSleepPlus1",
+    "key": "attacksInflictSleepPlus2",
     "priority": "required",
     "rank": 0
    },
    {
-    "key": "maxFpUpWith3PlusSacredSealsEquipped",
+    "key": "gestureCrossedLegsBuildsUpMadness",
     "priority": "required",
     "rank": 1
    },
    {
-    "key": "starlightShardsInPossessionAtStartOfExpedition",
+    "key": "maxHpUpWith3PlusMediumShieldsEquipped",
     "priority": "preferred",
     "rank": 0
    },
    {
-    "key": "guardianDamageNegationForAlliesImproved",
+    "key": "smallPouchInPossessionAtStartOfExpedition",
     "priority": "preferred",
     "rank": 1
    },
    {
-    "key": "hpRestorationUponAxeAttacks",
+    "key": "criticalHitHPRestoration",
     "priority": "nice_to_have",
     "rank": 0
    },
    {
-    "key": "hpRestorationUponReaperAttacks",
+    "key": "hpRestorationUponClawAttacks",
     "priority": "nice_to_have",
     "rank": 1
    }
@@ -156,7 +156,7 @@
     "rank": 0
    },
    {
-    "key": "gestureCrossedLegsBuildsUpMadness",
+    "key": "madnessContinuallyRecoversFP",
     "priority": "preferred",
     "rank": 0
    },
@@ -179,12 +179,12 @@
   },
   "effects": [
    {
-    "key": "gestureCrossedLegsBuildsUpMadness",
+    "key": "madnessContinuallyRecoversFP",
     "priority": "preferred",
     "rank": 0
    },
    {
-    "key": "attacksInflictSleepPlus1",
+    "key": "attacksInflictSleepPlus2",
     "priority": "preferred",
     "rank": 1
    },
@@ -225,6 +225,97 @@
     "key": "increasedMaximumFP",
     "priority": "required",
     "rank": 2
+   }
+  ]
+ },
+ {
+  "name": "wylder_normal_nonstack_duplicate",
+  "pool": "relic_pool_nonstack_dup.json",
+  "params": {
+   "character": "追跡者",
+   "vessel": "urn",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "duchessDaggerChainAttackReprises",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "partialHpRestorationUponPostDamageAttacks",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "flaskAlsoHealsAllies",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "wylderArtActivationSpreadsFireInArea",
+    "priority": "preferred",
+    "rank": 2
+   },
+   {
+    "key": "guardianIncreasedDurationForCharacterSkill",
+    "priority": "preferred",
+    "rank": 3
+   },
+   {
+    "key": "raiderCharacterSkillDamageUp",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+    "priority": "nice_to_have",
+    "rank": 1
+   }
+  ]
+ },
+ {
+  "name": "wylder_normal_leftmost_skill",
+  "pool": "relic_pool_leftmost.json",
+  "params": {
+   "character": "追跡者",
+   "vessel": "urn,sealedUrn",
+   "combined": false,
+   "candidates": 30,
+   "top": 10
+  },
+  "effects": [
+   {
+    "key": "changesCompatibleArmamentsSkillToGlintbladePhalanxAtStartOfExpedition",
+    "priority": "required",
+    "rank": 0
+   },
+   {
+    "key": "partialHpRestorationUponPostDamageAttacks",
+    "priority": "preferred",
+    "rank": 0
+   },
+   {
+    "key": "flaskAlsoHealsAllies",
+    "priority": "preferred",
+    "rank": 1
+   },
+   {
+    "key": "slowlyRestoreHpForSelfAndNearbyAlliesWhenHpIsLow",
+    "priority": "preferred",
+    "rank": 2
+   },
+   {
+    "key": "improvedPoiseNearTotemStela",
+    "priority": "nice_to_have",
+    "rank": 0
+   },
+   {
+    "key": "hpRestoredWhenUsingMedicinalBolusesEtc",
+    "priority": "nice_to_have",
+    "rank": 1
    }
   ]
  }

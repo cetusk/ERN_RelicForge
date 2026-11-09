@@ -1,0 +1,126 @@
+{
+ "characterName": "Synthetic",
+ "totalRelics": 4,
+ "relics": [
+  {
+   "id": 3229745153,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7005600,
+      "key": "partialHpRestorationUponPostDamageAttacks",
+      "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+      "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復"
+     }
+    ],
+    [
+     {
+      "id": 7010200,
+      "key": "flaskAlsoHealsAllies",
+      "name_en": "Flask Also Heals Allies",
+      "name_ja": "聖杯瓶の回復を、周囲の味方に分配"
+     }
+    ],
+    [
+     {
+      "id": 7010500,
+      "key": "wylderArtActivationSpreadsFireInArea",
+      "name_en": "Wylder Art Activation Spreads Fire In Area",
+      "name_ja": "【追跡者】アーツ発動時、周囲を延焼"
+     }
+    ]
+   ],
+   "sortKey": 4
+  },
+  {
+   "id": 3229745154,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7005600,
+      "key": "partialHpRestorationUponPostDamageAttacks",
+      "name_en": "Partial Hp Restoration Upon Post Damage Attacks",
+      "name_ja": "ダメージを受けた直後、攻撃によりHPの一部を回復"
+     }
+    ],
+    [
+     {
+      "id": 7010700,
+      "key": "duchessDaggerChainAttackReprises",
+      "name_en": "Duchess Dagger Chain Attack Reprises",
+      "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演"
+     }
+    ],
+    [
+     {
+      "id": 7010800,
+      "key": "raiderCharacterSkillDamageUp",
+      "name_en": "Raider Character Skill Damage Up",
+      "name_ja": "【無頼漢】スキル中に攻撃を受けると攻撃力と最大スタミナ上昇"
+     }
+    ]
+   ],
+   "sortKey": 3
+  },
+  {
+   "id": 3229745155,
+   "itemId": 100,
+   "itemKey": "delicateBurningScene",
+   "itemNameEn": "Delicate Burning Scene",
+   "itemNameJa": "繊細な燃える景色",
+   "itemColor": "Red",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7010700,
+      "key": "duchessDaggerChainAttackReprises",
+      "name_en": "Duchess Dagger Chain Attack Reprises",
+      "name_ja": "【レディ】短剣による攻撃連続時、周囲の敵に直近の出来事を再演"
+     }
+    ],
+    [
+     {
+      "id": 7010900,
+      "key": "revenantExpendOwnHPToFullyHealNearbyAllies",
+      "name_en": "Revenant Expend Own Hpto Fully Heal Nearby Allies",
+      "name_ja": "【復讐者】自身のHPと引き換えに周囲の味方のHPを全回復"
+     }
+    ]
+   ],
+   "sortKey": 2
+  },
+  {
+   "id": 3229745156,
+   "itemId": 109,
+   "itemKey": "delicateDrizzlyScene",
+   "itemNameEn": "Delicate Drizzly Scene",
+   "itemNameJa": "繊細な滴る景色",
+   "itemColor": "Blue",
+   "itemType": "Relic",
+   "effects": [
+    [
+     {
+      "id": 7011000,
+      "key": "guardianIncreasedDurationForCharacterSkill",
+      "name_en": "Guardian Increased Duration For Character Skill",
+      "name_ja": "【守護者】スキルの持続時間延長"
+     }
+    ]
+   ],
+   "sortKey": 1
+  }
+ ]
+}

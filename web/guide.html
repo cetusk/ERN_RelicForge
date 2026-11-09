@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>キャラ図鑑・効果カタログ</title>
+  <meta name="description" content="ELDEN RING NIGHTREIGN のキャラ図鑑・効果カタログ・ビルド一覧">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="guide-page">
+  <!-- Public guide page: キャラ図鑑, 効果カタログ, ビルド一覧 and キャラ別の評価, without a save file (web/guide-page.js) -->
+  <header id="app-header">
+    <div class="header-left">
+      <h1>キャラ図鑑・効果カタログ</h1>
+      <div class="header-meta">
+        <span class="header-meta-item">参照: <a href="https://kamikouryaku.net/nightreign_eldenring/" class="header-meta-link" target="_blank" rel="noopener noreferrer">神攻略wiki</a></span>
+      </div>
+    </div>
+  </header>
+
+  <nav id="tab-bar" class="tab-bar gp-tabs" aria-label="ページ">
+    <a class="tab" data-tab="characters" href="#characters"><span class="icon" data-icon="book-user" data-size="14"></span><span class="tab-label" id="gp-tab-characters">キャラ図鑑</span></a>
+    <a class="tab" data-tab="effects" href="#effects"><span class="icon" data-icon="book-open" data-size="14"></span><span class="tab-label" id="gp-tab-effects">効果カタログ</span></a>
+    <a class="tab" data-tab="builds" href="#builds"><span class="icon" data-icon="table" data-size="14"></span><span class="tab-label" id="gp-tab-builds">ビルド一覧</span></a>
+    <a class="tab" data-tab="evaluations" href="#evaluations"><span class="icon" data-icon="file-text" data-size="14"></span><span class="tab-label" id="gp-tab-evaluations">キャラ別の評価と数値</span></a>
+  </nav>
+
+  <main class="gp-main">
+    <section id="gp-characters" class="guide-content gp-view" hidden></section>
+
+    <section id="gp-effects" class="catalog-content gp-view" hidden>
+      <div class="catalog-toolbar">
+        <div class="catalog-search-wrapper">
+          <input type="text" id="gp-effects-search" class="catalog-search-input" placeholder="効果名で検索..." aria-label="効果名で検索">
+        </div>
+        <!-- Phones: the filters fold away behind this button (same as the app) -->
+        <button id="gp-effects-filter-toggle" class="catalog-filter-toggle" type="button" aria-expanded="false"><span class="icon" data-icon="list-filter" data-size="16"></span><span>絞り込み</span><span id="gp-effects-filter-badge" class="menu-badge" hidden></span></button>
+        <div class="catalog-filters gp-effects-filters">
+          <div class="catalog-filter-group">
+            <label for="gp-effects-category" id="gp-effects-category-label">カテゴリ:</label>
+            <select id="gp-effects-category"></select>
+          </div>
+          <div class="catalog-filter-group">
+            <label for="gp-effects-deep" id="gp-effects-deep-label">通常/深層:</label>
+            <select id="gp-effects-deep">
+              <option value="">すべて</option>
+              <option value="no">通常の遺物にも付く</option>
+              <option value="yes">深層のみ</option>
+            </select>
+          </div>
+          <div class="catalog-filter-group">
+            <label for="gp-effects-stack" id="gp-effects-stack-label">重複:</label>
+            <select id="gp-effects-stack">
+              <option value="">すべて</option>
+              <option value="yes">○ 重複可</option>
+              <option value="no">× 重複不可</option>
+              <option value="conditional">△ 条件付き</option>
+            </select>
+          </div>
+        </div>
+        <span id="gp-effects-count" class="result-count"></span>
+      </div>
+      <div id="gp-effects-list" class="catalog-list"></div>
+    </section>
+
+    <section id="gp-builds" class="guide-content gp-view" hidden></section>
+    <section id="gp-evaluations" class="guide-content gp-view" hidden></section>
+  </main>
+
+  <script src="lib/icons.js"></script>
+  <script src="relic-effects.js"></script>
+  <script src="relic-guide.js"></script>
+  <script src="guide-page.js"></script>
+</body>
+</html>

@@ -62,3 +62,8 @@ package.json
 debugs/
 # Local sandbox launcher
 claude_sandbox.bat
+
+# ビルド提案の調査レポート（tools/build_suggest/research/*_gen.py で生成）
+tools/build_suggest/research/archetypes.md
+tools/build_suggest/research/characters.md
+tools/build_suggest/research/__pycache__/
